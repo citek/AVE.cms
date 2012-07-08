@@ -1,0 +1,7 @@
+body { background: #eceeef url(../images/backgrounds/pat4.png) repeat left top; }
+
+/* ===== Footer ===== */
+#footer { clear: both; /*height: 36px;*/ background: url(theme_color_blue/topNav.jpg) repeat; width: 100%; color: #eeeeee; margin-top: 42px; position: absolute; bottom: 0; }
+
+/* ===== Top navigation ===== */
+.fixed { position: fixed; background: url(theme_color_blue/topNav.jpg) repeat; width: 100%; color: #eeeeee; border-bottom: 1px solid #4a4f51; z-index: 999; }

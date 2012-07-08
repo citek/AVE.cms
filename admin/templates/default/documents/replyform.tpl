@@ -1,0 +1,36 @@
+<div class="widget first"></div>
+
+<div class="title"><h5>{#DOC_NEW_NOTICE_TITLE#}</h5></div>
+
+<div class="widget" style="margin-top: 0px;">
+    <div class="body">
+		{#DOC_SEND_NOTICE_INFO#}
+    </div>
+</div>
+
+<div class="widget first">
+<form method="post" action="{$formaction}" class="mainForm">
+	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+		<tr>
+			<td width="135"><strong>{#DOC_NOTICE_TITLE#}</strong></td>
+			<td>
+				<div class="pr12"><input name="remark_title" type="text" id="remark_title" style="width:100%" value=""></div>
+			</td>
+		</tr>
+
+		<tr>
+			<td width="135"><strong>{#DOC_NOTICE_TEXT#}</strong></td>
+			<td>
+				<div class="pr12"><textarea name="remark_text" style="width:100%;height:100px" id="remark_text"></textarea></div>
+			</td>
+		</tr>
+
+		<tr>
+			<td colspan="2">
+				<input type="submit" class="basicBtn" value="{#DOC_BUTTON_ADD_NOTICE#}" />
+				<a name="comment"></a>
+			</td>
+		</tr>
+	</table>
+</form>
+</div>

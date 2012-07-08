@@ -1,0 +1,6 @@
+RATING_TXT       = 'Рейтинг'
+RATING_VOTES     = ' голоса'
+RATING_STARS_ONE = 'из'
+RATING_STARS     = 'из'
+RATING_THANKS    = 'Спасибо, ваш голос учтён!'
+RATING_ALREADY   = 'C вашего IP адреса уже голосовали'

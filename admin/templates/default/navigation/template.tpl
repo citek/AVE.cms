@@ -1,0 +1,561 @@
+<link rel="stylesheet" href="{$ABS_PATH}admin/codemirror/lib/codemirror.css">
+
+<script src="{$ABS_PATH}admin/codemirror/lib/codemirror.js" type="text/javascript"></script>
+    <script src="{$ABS_PATH}admin/codemirror/mode/xml/xml.js"></script>
+    <script src="{$ABS_PATH}admin/codemirror/mode/javascript/javascript.js"></script>
+    <script src="{$ABS_PATH}admin/codemirror/mode/css/css.js"></script>
+    <script src="{$ABS_PATH}admin/codemirror/mode/clike/clike.js"></script>
+    <script src="{$ABS_PATH}admin/codemirror/mode/php/php.js"></script>
+
+{literal}
+    <style type="text/css">
+      .activeline {background: #e8f2ff !important;}
+      .CodeMirror-scroll {height: 200px;}
+    </style>
+{/literal}
+
+
+{if $smarty.request.action == 'new'}
+<div class="title"><h5>{#NAVI_SUB_TITLE4#}</h5></div>
+{else}
+<div class="title"><h5>{#NAVI_SUB_TITLE3#}</h5></div>
+{/if}
+<div class="widget" style="margin-top: 0px;"><div class="body">{#NAVI_TIP_TEMPLATE2#}</div></div>
+
+
+<div class="breadCrumbHolder module">
+	<div class="breadCrumb module">
+	    <ul>
+			<li class="firstB"><a href="index.php" title="{#MAIN_PAGE#}">{#MAIN_PAGE#}</a></li>
+	        <li><a href="index.php?do=navigation&amp;cp={$sess}" title="">{#NAVI_SUB_TITLE#}</a></li>
+			{if $smarty.request.action == 'new'}
+	        <li>{#NAVI_SUB_TITLE4#}</li>
+			{else}
+	        <li>{#NAVI_SUB_TITLE3#}</li>
+	        <li><strong class="code">{$nav->navi_titel|escape}</strong></li>
+			{/if}
+	    </ul>
+	</div>
+</div>
+
+<form name="navitemplate" method="post" action="{$formaction}" class="mainForm">
+
+<div class="widget first">
+<div class="head"><h5 class="iFrames">{#NAVI_SUB_TITLE3#}</h5><div class="num"><a class="basicNum" href="index.php?do=navigation&amp;action=entries&amp;cp={$sess}&amp;id={$smarty.request.id}">{#NAVI_EDIT_ITEMS#}</a></div></div>
+
+	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+		<tr class="noborder">
+			<td width="200"><strong>{#NAVI_TITLE#}</strong></td>
+			<td><input style="width:400px" name="navi_titel" type="text" id="navi_titel" value="{$nav->navi_titel|default:$smarty.request.NaviName|escape}"></td>
+		</tr>
+
+		<tr>
+			<td width="200"><strong>{#NAVI_EXPAND#}</strong></td>
+			<td><input name="navi_expand" type="checkbox" id="navi_expand" value="1" {if $nav->navi_expand==1}checked{/if} class="float" /> <label>&nbsp;</label></td>
+		</tr>
+
+		<tr>
+			<td width="200">{#NAVI_GROUPS#}</td>
+			<td>
+				<select  name="navi_user_group[]" multiple="multiple" size="5" style="width:200px">
+					{if $smarty.request.action=='new'}
+						{foreach from=$row->AvGroups item=g}
+							<option value="{$g->user_group}" selected="selected">{$g->user_group_name|escape}</option>
+						{/foreach}
+					{else}
+						{foreach from=$nav->AvGroups item=g}
+							{assign var='sel' value=''}
+							{if $g->user_group}
+								{if (in_array($g->user_group, $nav->navi_user_group))}
+									{assign var='sel' value=' selected="selected"'}
+								{/if}
+							{/if}
+							<option value="{$g->user_group}"{$sel}>{$g->user_group_name|escape}</option>
+						{/foreach}
+					{/if}
+				</select>
+			</td>
+		</tr>
+
+		<tr>
+			<td width="200"><strong>{#NAVI_HEADER_START#}</strong><br />{#NAVI_HEADER_TIP#}</td>
+			<td><div class="pr12"><textarea style="width:100%; height: 80px" name="navi_begin" rows="12" id="navi_begin">{$nav->navi_begin|escape}</textarea></div></td>
+		</tr>
+
+		<tr>
+			<td width="200"><strong>{#NAVI_FOOTER_END#}</strong><br />{#NAVI_FOOTER_TIP#}</td>
+			<td><div class="pr12"><textarea style="width:100%; height: 80px" name="navi_end" rows="12" id="navi_end">{$nav->navi_end|escape}</textarea></div></td>
+		</tr>
+
+	</table>
+</div>
+
+<div class="widget first">
+<div class="head"><h5 class="iFrames">{#NAVI_LEVEL1#}</h5></div>
+
+	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+
+
+		<tr class="noborder">
+			<td><strong>{#NAVI_HTML_START#}</strong></td>
+			<td><input style="width:400px" name="navi_level1begin" type="text" id="navi_level1begin" value="{$nav->navi_level1begin|escape}" /></td>
+		</tr>
+
+		<tr>
+			<td><strong>{#NAVI_HTML_END#}</strong></td>
+			<td><input style="width:400px" name="navi_level1end" type="text" id="navi_level1end" value="{$nav->navi_level1end|escape}" /></td>
+		</tr>
+
+		<tr>
+			<td width="200">
+				<strong>{#NAVI_LINK_INACTIVE#}</strong><br />
+				<a class="rightDir" style="cursor: pointer;" title="{#NAVI_LINK_ID#}" onclick="textSelection1('[tag:linkid]','');">[tag:linkid]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection1('[tag:target]','');">[tag:target]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection1('[tag:link]','');">[tag:link]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection1('[tag:linkname]','');">[tag:linkname]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection1('[tag:desc]','');">[tag:desc]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection1('[tag:img]','');">[tag:img]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection1('[tag:linkid]','');">[tag:img_act]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection1('[tag:img_id]','');">[tag:img_id]</a>
+			</td>
+			<td><div class="pr12"><textarea style="width:100%" name="navi_level1" rows="12" id="navi_level1">{$nav->navi_level1|escape}</textarea></div></td>
+		</tr>
+		<tr>
+			<td>HTML Tags</td>
+			<td>
+		        |&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection1('<ol>', '</ol>');"><strong>OL</strong></a>&nbsp;|&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection1('<ul>', '</ul>');"><strong>UL</strong></a>&nbsp;|&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection1('<li>', '</li>');"><strong>LI</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection1('<p class=&quot;&quot;>', '</p>');"><strong>P</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection1('<strong>', '</strong>');"><strong>B</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection1('<em>', '</em>');"><strong>I</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection1('<h1>', '</h1>');"><strong>H1</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection1('<h2>', '</h2>');"><strong>H2</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection1('<h3>', '</h3>');"><strong>H3</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection1('<h4>', '</h4>');"><strong>H4</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection1('<h5>', '</h5>');"><strong>H5</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection1('<div class=&quot;&quot; id=&quot;&quot;>', '</div>');"><strong>DIV</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection1('<a href=&quot;&quot; title=&quot;&quot;>', '</a>');"><strong>A</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection1('<img src=&quot;&quot; alt=&quot;&quot; />', '');"><strong>IMG</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection1('<span>', '</span>');"><strong>SPAN</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection1('<pre>', '</pre>');"><strong>PRE</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection1('<br />', '');"><strong>BR</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection1('\t', '');"><strong>TAB</strong></a>&nbsp;|
+			</td>
+		</tr>
+		<tr>
+			<td width="200">
+				<strong>{#NAVI_LINK_ACTIVE#}</strong><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_ID#}" onclick="textSelection2('[tag:linkid]','');">[tag:linkid]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection2('[tag:target]','');">[tag:target]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection2('[tag:link]','');">[tag:link]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection2('[tag:linkname]','');">[tag:linkname]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection2('[tag:desc]','');">[tag:desc]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection2('[tag:img]','');">[tag:img]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection2('[tag:img_act]','');">[tag:img_act]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection2('[tag:img_id]','');">[tag:img_id]</a>
+			</td>
+			<td><div class="pr12"><textarea style="width:100%" name="navi_level1active" rows="12" id="navi_level1active">{$nav->navi_level1active|escape}</textarea></div></td>
+		</tr>
+		<tr>
+			<td>HTML Tags</td>
+			<td>
+		        |&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection2('<ol>', '</ol>');"><strong>OL</strong></a>&nbsp;|&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection2('<ul>', '</ul>');"><strong>UL</strong></a>&nbsp;|&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection2('<li>', '</li>');"><strong>LI</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection2('<p class=&quot;&quot;>', '</p>');"><strong>P</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection2('<strong>', '</strong>');"><strong>B</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection2('<em>', '</em>');"><strong>I</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection2('<h1>', '</h1>');"><strong>H1</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection2('<h2>', '</h2>');"><strong>H2</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection2('<h3>', '</h3>');"><strong>H3</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection2('<h4>', '</h4>');"><strong>H4</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection2('<h5>', '</h5>');"><strong>H5</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection2('<div class=&quot;&quot; id=&quot;&quot;>', '</div>');"><strong>DIV</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection2('<a href=&quot;&quot; title=&quot;&quot;>', '</a>');"><strong>A</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection2('<img src=&quot;&quot; alt=&quot;&quot; />', '');"><strong>IMG</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection2('<span>', '</span>');"><strong>SPAN</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection2('<pre>', '</pre>');"><strong>PRE</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection2('<br />', '');"><strong>BR</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection2('\t', '');"><strong>TAB</strong></a>&nbsp;|
+			</td>
+		</tr>
+	</table>
+</div>
+
+<div class="widget first">
+<div class="head"><h5 class="iFrames">{#NAVI_LEVEL2#}</h5></div>
+
+	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+
+		<tr class="noborder">
+			<td><strong>{#NAVI_HTML_START#}</strong></td>
+			<td><input style="width:400px" name="navi_level2begin" type="text" id="navi_level2begin" value="{$nav->navi_level2begin|escape}" /></td>
+		</tr>
+
+		<tr>
+			<td><strong>{#NAVI_HTML_END#}</strong></td>
+			<td><input style="width:400px" name="navi_level2end" type="text" id="navi_level2end" value="{$nav->navi_level2end|escape}" /></td>
+		</tr>
+
+		<tr>
+			<td width="200">
+				<strong>{#NAVI_LINK_INACTIVE#}</strong><br />
+				<a class="rightDir"  style="cursor: pointer;"  title="{#NAVI_LINK_ID#}" onclick="textSelection3('[tag:linkid]','');">[tag:linkid]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection3('[tag:target]','');">[tag:target]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection3('[tag:link]','');">[tag:link]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection3('[tag:linkname]','');">[tag:linkname]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection3('[tag:desc]','');">[tag:desc]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection3('[tag:img]','');">[tag:img]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection3('[tag:img_act]','');">[tag:img_act]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection3('[tag:img_id]','');">[tag:img_id]</a>
+			</td>
+			<td><div class="pr12"><textarea style="width:100%" name="navi_level2" rows="12" id="navi_level2">{$nav->navi_level2|escape}</textarea></div></td>
+		</tr>
+		<tr>
+			<td>HTML Tags</td>
+			<td>
+		        |&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection3('<ol>', '</ol>');"><strong>OL</strong></a>&nbsp;|&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection3('<ul>', '</ul>');"><strong>UL</strong></a>&nbsp;|&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection3('<li>', '</li>');"><strong>LI</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection3('<p class=&quot;&quot;>', '</p>');"><strong>P</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection3('<strong>', '</strong>');"><strong>B</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection3('<em>', '</em>');"><strong>I</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection3('<h1>', '</h1>');"><strong>H1</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection3('<h2>', '</h2>');"><strong>H2</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection3('<h3>', '</h3>');"><strong>H3</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection3('<h4>', '</h4>');"><strong>H4</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection3('<h5>', '</h5>');"><strong>H5</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection3('<div class=&quot;&quot; id=&quot;&quot;>', '</div>');"><strong>DIV</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection3('<a href=&quot;&quot; title=&quot;&quot;>', '</a>');"><strong>A</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection3('<img src=&quot;&quot; alt=&quot;&quot; />', '');"><strong>IMG</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection3('<span>', '</span>');"><strong>SPAN</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection3('<pre>', '</pre>');"><strong>PRE</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection3('<br />', '');"><strong>BR</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection3('\t', '');"><strong>TAB</strong></a>&nbsp;|
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<strong>{#NAVI_LINK_ACTIVE#}</strong><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_ID#}" onclick="textSelection4('[tag:linkid]','');">[tag:linkid]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection4('[tag:target]','');">[tag:target]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection4('[tag:link]','');">[tag:link]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection4('[tag:linkname]','');">[tag:linkname]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection4('[tag:desc]','');">[tag:desc]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection4('[tag:img]','');">[tag:img]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection4('[tag:img_act]','');">[tag:img_act]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection4('[tag:img_id]','');">[tag:img_id]</a>
+			</td>
+			<td><div class="pr12"><textarea style="width:100%" name="navi_level2active" rows="12" id="navi_level2active">{$nav->navi_level2active|escape}</textarea></div></td>
+		</tr>
+		<tr>
+			<td>HTML Tags</td>
+			<td>
+		        |&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection4('<ol>', '</ol>');"><strong>OL</strong></a>&nbsp;|&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection4('<ul>', '</ul>');"><strong>UL</strong></a>&nbsp;|&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection4('<li>', '</li>');"><strong>LI</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection4('<p class=&quot;&quot;>', '</p>');"><strong>P</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection4('<strong>', '</strong>');"><strong>B</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection4('<em>', '</em>');"><strong>I</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection4('<h1>', '</h1>');"><strong>H1</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection4('<h2>', '</h2>');"><strong>H2</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection4('<h3>', '</h3>');"><strong>H3</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection4('<h4>', '</h4>');"><strong>H4</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection4('<h5>', '</h5>');"><strong>H5</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection4('<div class=&quot;&quot; id=&quot;&quot;>', '</div>');"><strong>DIV</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection4('<a href=&quot;&quot; title=&quot;&quot;>', '</a>');"><strong>A</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection4('<img src=&quot;&quot; alt=&quot;&quot; />', '');"><strong>IMG</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection4('<span>', '</span>');"><strong>SPAN</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection4('<pre>', '</pre>');"><strong>PRE</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection4('<br />', '');"><strong>BR</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection4('\t', '');"><strong>TAB</strong></a>&nbsp;|
+			</td>
+		</tr>
+	</table>
+</div>
+
+<div class="widget first">
+<div class="head"><h5 class="iFrames">{#NAVI_LEVEL3#}</h5></div>
+
+	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+
+		<tr class="noborder">
+			<td width="200"><strong>{#NAVI_HTML_START#}</strong></td>
+			<td><input style="width:400px" name="navi_level3begin" type="text" id="navi_level3begin" value="{$nav->navi_level3begin|escape}" /></td>
+		</tr>
+
+		<tr>
+			<td><strong>{#NAVI_HTML_END#}</strong></td>
+			<td><input style="width:400px" name="navi_level3end" type="text" id="navi_level3end" value="{$nav->navi_level3end|escape}" /></td>
+		</tr>
+
+		<tr>
+			<td>
+				<strong>{#NAVI_LINK_INACTIVE#}</strong><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_ID#}" onclick="textSelection5('[tag:linkid]','');">[tag:linkid]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection5('[tag:target]','');">[tag:target]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection5('[tag:link]','');">[tag:link]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection5('[tag:linkname]','');">[tag:linkname]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection5('[tag:desc]','');">[tag:desc]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection5('[tag:img]','');">[tag:img]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection5('[tag:img_act]','');">[tag:img_act]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection5('[tag:img_id]','');">[tag:img_id]</a>
+			</td>
+			<td><div class="pr12"><textarea style="width:100%" name="navi_level3" rows="12" id="navi_level3">{$nav->navi_level3|escape}</textarea></div></td>
+		</tr>
+		<tr>
+			<td>HTML Tags</td>
+			<td>
+		        |&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection5('<ol>', '</ol>');"><strong>OL</strong></a>&nbsp;|&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection5('<ul>', '</ul>');"><strong>UL</strong></a>&nbsp;|&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection5('<li>', '</li>');"><strong>LI</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection5('<p class=&quot;&quot;>', '</p>');"><strong>P</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection5('<strong>', '</strong>');"><strong>B</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection5('<em>', '</em>');"><strong>I</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection5('<h1>', '</h1>');"><strong>H1</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection5('<h2>', '</h2>');"><strong>H2</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection5('<h3>', '</h3>');"><strong>H3</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection5('<h4>', '</h4>');"><strong>H4</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection5('<h5>', '</h5>');"><strong>H5</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection5('<div class=&quot;&quot; id=&quot;&quot;>', '</div>');"><strong>DIV</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection5('<a href=&quot;&quot; title=&quot;&quot;>', '</a>');"><strong>A</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection5('<img src=&quot;&quot; alt=&quot;&quot; />', '');"><strong>IMG</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection5('<span>', '</span>');"><strong>SPAN</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection5('<pre>', '</pre>');"><strong>PRE</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection5('<br />', '');"><strong>BR</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection5('\t', '');"><strong>TAB</strong></a>&nbsp;|
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<strong>{#NAVI_LINK_ACTIVE#}</strong><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_ID#}" onclick="textSelection6('[tag:linkid]','');">[tag:linkid]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection6('[tag:target]','');">[tag:target]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection6('[tag:link]','');">[tag:link]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection6('[tag:linkname]','');">[tag:linkname]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection6('[tag:desc]','');">[tag:desc]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection6('[tag:img]','');">[tag:img]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection6('[tag:img_act]','');">[tag:img_act]</a><br />
+				<a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection6('[tag:img_id]','');">[tag:img_id]</a>
+			</td>
+			<td><div class="pr12"><textarea style="width:100%" name="navi_level3active" rows="12" id="navi_level3active">{$nav->navi_level3active|escape}</textarea></div></td>
+		</tr>
+		<tr>
+			<td>HTML Tags</td>
+			<td>
+		        |&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection6('<ol>', '</ol>');"><strong>OL</strong></a>&nbsp;|&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection6('<ul>', '</ul>');"><strong>UL</strong></a>&nbsp;|&nbsp;
+		        <a href="javascript:void(0);" onclick="textSelection6('<li>', '</li>');"><strong>LI</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection6('<p class=&quot;&quot;>', '</p>');"><strong>P</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection6('<strong>', '</strong>');"><strong>B</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection6('<em>', '</em>');"><strong>I</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection6('<h1>', '</h1>');"><strong>H1</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection6('<h2>', '</h2>');"><strong>H2</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection6('<h3>', '</h3>');"><strong>H3</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection6('<h4>', '</h4>');"><strong>H4</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection6('<h5>', '</h5>');"><strong>H5</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection6('<div class=&quot;&quot; id=&quot;&quot;>', '</div>');"><strong>DIV</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection6('<a href=&quot;&quot; title=&quot;&quot;>', '</a>');"><strong>A</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection6('<img src=&quot;&quot; alt=&quot;&quot; />', '');"><strong>IMG</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection6('<span>', '</span>');"><strong>SPAN</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection6('<pre>', '</pre>');"><strong>PRE</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection6('<br />', '');"><strong>BR</strong></a>&nbsp;|&nbsp;
+				<a href="javascript:void(0);" onclick="textSelection6('\t', '');"><strong>TAB</strong></a>&nbsp;|
+			</td>
+		</tr>
+	</table>
+
+<div class="rowElem">
+	<input accesskey="s" type="submit" class="basicBtn" value="{#NAVI_BUTTON_SAVE#}" />
+</div>
+
+<div class="fix"></div>
+
+</div>
+
+</form>
+
+{literal}
+    <script>
+      var editor_1 = CodeMirror.fromTextArea(document.getElementById("navi_level1"), {
+        lineNumbers: true,
+        height: "200px",
+		lineWrapping: true,
+        matchBrackets: true,
+        mode: "application/x-httpd-php",
+        indentUnit: 4,
+        indentWithTabs: true,
+        enterMode: "keep",
+        tabMode: "shift",
+        onChange: function(){editor_1.save();},
+		onCursorActivity: function() {
+		  editor_1.setLineClass(hlLine1, null, null);
+		  hlLine1 = editor_1.setLineClass(editor_1.getCursor().line, null, "activeline");
+		}
+      });
+
+      function getSelectedRange1() {
+        return { from: editor_1.getCursor(true), to: editor_1.getCursor(false) };
+      }
+
+      function textSelection1(startTag,endTag) {
+        var range = getSelectedRange1();
+        editor_1.replaceRange(startTag + editor_1.getRange(range.from, range.to) + endTag, range.from, range.to)
+        editor_1.setCursor(range.from.line, range.from.ch + startTag.length);
+      }
+
+
+
+
+	var editor_2 = CodeMirror.fromTextArea(document.getElementById("navi_level1active"), {
+	  lineNumbers: true,
+	  height: "200px",
+		lineWrapping: true,
+	  matchBrackets: true,
+	  mode: "application/x-httpd-php",
+	  indentUnit: 4,
+	  indentWithTabs: true,
+	  enterMode: "keep",
+	  tabMode: "shift",
+	  onChange: function(){editor_2.save();},
+		onCursorActivity: function() {
+		  editor_2.setLineClass(hlLine2, null, null);
+		  hlLine2 = editor_2.setLineClass(editor_2.getCursor().line, null, "activeline");
+		}
+	});
+      function getSelectedRange2() {
+        return { from: editor_2.getCursor(true), to: editor_2.getCursor(false) };
+      }
+
+      function textSelection2(startTag,endTag) {
+        var range = getSelectedRange2();
+        editor_2.replaceRange(startTag + editor_2.getRange(range.from, range.to) + endTag, range.from, range.to)
+        editor_2.setCursor(range.from.line, range.from.ch + startTag.length);
+      }
+
+
+
+	var editor_3 = CodeMirror.fromTextArea(document.getElementById("navi_level2"), {
+	  lineNumbers: true,
+	  height: "200px",
+		lineWrapping: true,
+	  matchBrackets: true,
+	  mode: "application/x-httpd-php",
+	  indentUnit: 4,
+	  indentWithTabs: true,
+	  enterMode: "keep",
+	  tabMode: "shift",
+	  onChange: function(){editor_3.save();},
+		onCursorActivity: function() {
+		  editor_3.setLineClass(hlLine3, null, null);
+		  hlLine3 = editor_3.setLineClass(editor_3.getCursor().line, null, "activeline");
+		}
+	});
+      function getSelectedRange3() {
+        return { from: editor_3.getCursor(true), to: editor_3.getCursor(false) };
+      }
+
+      function textSelection3(startTag,endTag) {
+        var range = getSelectedRange3();
+        editor_3.replaceRange(startTag + editor_3.getRange(range.from, range.to) + endTag, range.from, range.to)
+        editor_3.setCursor(range.from.line, range.from.ch + startTag.length);
+      }
+      
+      	
+	var editor_4 = CodeMirror.fromTextArea(document.getElementById("navi_level2active"), {
+	  lineNumbers: true,
+	  height: "200px",
+		lineWrapping: true,
+	  matchBrackets: true,
+	  mode: "application/x-httpd-php",
+	  indentUnit: 4,
+	  indentWithTabs: true,
+	  enterMode: "keep",
+	  tabMode: "shift",
+	  onChange: function(){editor_4.save();},
+		onCursorActivity: function() {
+		  editor_4.setLineClass(hlLine4, null, null);
+		  hlLine4 = editor_4.setLineClass(editor_4.getCursor().line, null, "activeline");
+		}
+	});
+      function getSelectedRange4() {
+        return { from: editor_4.getCursor(true), to: editor_4.getCursor(false) };
+      }
+
+      function textSelection4(startTag,endTag) {
+        var range = getSelectedRange4();
+        editor_4.replaceRange(startTag + editor_4.getRange(range.from, range.to) + endTag, range.from, range.to)
+        editor_4.setCursor(range.from.line, range.from.ch + startTag.length);
+      }
+      
+	var editor_5 = CodeMirror.fromTextArea(document.getElementById("navi_level3"), {
+	  lineNumbers: true,
+	  height: "200px",
+		lineWrapping: true,
+	  matchBrackets: true,
+	  mode: "application/x-httpd-php",
+	  indentUnit: 4,
+	  indentWithTabs: true,
+	  enterMode: "keep",
+	  tabMode: "shift",
+	  onChange: function(){editor_5.save();},
+		onCursorActivity: function() {
+		  editor_5.setLineClass(hlLine5, null, null);
+		  hlLine5 = editor_5.setLineClass(editor_5.getCursor().line, null, "activeline");
+		}
+	});
+      function getSelectedRange5() {
+        return { from: editor_5.getCursor(true), to: editor_5.getCursor(false) };
+      }
+
+      function textSelection5(startTag,endTag) {
+        var range = getSelectedRange5();
+        editor_5.replaceRange(startTag + editor_5.getRange(range.from, range.to) + endTag, range.from, range.to)
+        editor_5.setCursor(range.from.line, range.from.ch + startTag.length);
+      }	
+	var editor_6 = CodeMirror.fromTextArea(document.getElementById("navi_level3active"), {
+	  lineNumbers: true,
+	  height: "200px",
+		lineWrapping: true,
+	  matchBrackets: true,
+	  mode: "application/x-httpd-php",
+	  indentUnit: 4,
+	  indentWithTabs: true,
+	  enterMode: "keep",
+	  tabMode: "shift",
+	  onChange: function(){editor_6.save();},
+		onCursorActivity: function() {
+		  editor_6.setLineClass(hlLine6, null, null);
+		  hlLine6 = editor_6.setLineClass(editor_6.getCursor().line, null, "activeline");
+		}
+	});
+      function getSelectedRange6() {
+        return { from: editor_6.getCursor(true), to: editor_6.getCursor(false) };
+      }
+
+      function textSelection6(startTag,endTag) {
+        var range = getSelectedRange6();
+        editor_6.replaceRange(startTag + editor_6.getRange(range.from, range.to) + endTag, range.from, range.to)
+        editor_6.setCursor(range.from.line, range.from.ch + startTag.length);
+      }	
+
+var hlLine1 = editor_1.setLineClass(0, "activeline");
+var hlLine2 = editor_2.setLineClass(0, "activeline");
+var hlLine3 = editor_3.setLineClass(0, "activeline");
+var hlLine4 = editor_4.setLineClass(0, "activeline");
+var hlLine5 = editor_5.setLineClass(0, "activeline");
+var hlLine6 = editor_6.setLineClass(0, "activeline");
+
+
+
+
+
+    </script>
+{/literal}
