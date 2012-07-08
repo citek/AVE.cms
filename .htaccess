@@ -4,7 +4,7 @@ AddDefaultCharset utf-8
 
 php_value error_reporting E_NONE
 
-<FilesMatch "\.(class|functions|inc|modules|templates|templates_c|cache|lib)$">
+<FilesMatch "\.(class|functions|inc|modules|templates|templates_c|cache|lib|session)$">
     Order allow,deny
 </FilesMatch>
 

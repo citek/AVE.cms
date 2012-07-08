@@ -74,6 +74,10 @@ switch($_REQUEST['action'])
 					if (isset($_REQUEST['sqlCacheClear'])) $AVE_Template->sqlCacheClear();
 					if (isset($_REQUEST['sessionClear'])) $AVE_Template->sessionClear();
 					exit;
+
+				case 'showcache':
+					cacheShow();
+					exit;
 			}
 		}
 		break;

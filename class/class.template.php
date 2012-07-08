@@ -59,7 +59,7 @@ class AVE_Template extends Smarty
         /**
          * Имя каталога, в котором хранится сессии пользователей.
          */
-        $this->session_dir = BASE_DIR . '/cache/session';  
+        $this->session_dir = BASE_DIR . '/session';  
          
         /**
          * Имя каталога, в котором хранится сессии пользователей.
@@ -301,7 +301,7 @@ class AVE_Template extends Smarty
 
 		reportLog($_SESSION['user_name'] . ' - удалил сессии пользователей', 2, 2);
     }
-    
+
     /**
 	 * Метод удаления кэша запросов
 	 *

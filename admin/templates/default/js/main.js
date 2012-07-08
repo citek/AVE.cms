@@ -170,6 +170,7 @@ $(document).ready(function(){
 				}
 			);
 	});
+
     //===== Окно очистки кэша + Сессий =====//
 	$(".clearCacheSess").click( function(e) {
 		e.preventDefault();
@@ -190,6 +191,30 @@ $(document).ready(function(){
 				}
 			);
 	});
+
+
+    //===== Окно очистки кэша =====//
+	$("#cacheShow").click( function(e) {
+		e.preventDefault();
+		var title = "Показать размер кеша";
+		var confirm = "Вы уверены, что хотите очистить кэш? Это может занять какое-то время.";
+		jConfirm(
+				confirm,
+				title,
+				function(b){
+					if (b){
+                        $.alerts._overlay('hide');
+                        $.alerts._overlay('show');
+            		    $.post(ave_path+'admin/index.php?do=settings&sub=showcache&showCache=1', function(data){
+                            $.alerts._overlay('hide');
+                            $('#cachesize').html(data);
+                        });
+            		}
+				}
+			);
+	});
+
+
 
 	//===== ToTop =====//
 	$().UItoTop({ easingType: 'easeOutQuart' });

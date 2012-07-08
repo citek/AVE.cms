@@ -454,4 +454,12 @@ function showuserName($id) {
     $row = $sql->fetchrow();
     return $row->user_name;
 }
+
+function cacheShow() {
+	global $AVE_Template;
+
+    $showCache = format_size(get_dir_size($AVE_Template->compile_dir)+get_dir_size($AVE_Template->cache_dir_root));
+	echo $showCache;
+}
+
 ?>

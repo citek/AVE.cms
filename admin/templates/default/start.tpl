@@ -186,9 +186,8 @@
                             </tr>
                             <tr>
                                 <td>{#MAIN_STAT_CACHE#}</td>
-                                <td align="right"><span class="webStatsLink" id="cachesize">{$cache_size}</span></td>
+                                <td align="right"><span class="webStatsLink" id="cachesize"><a href="javascript:void(0);" id="cacheShow">Показать</a></span></td>
                             </tr>
-
                         </tbody>
                     </table>
                 </div>

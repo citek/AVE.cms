@@ -5,7 +5,7 @@ ini_set('session.save_handler', 'user');
 function sess_open($sess_save_path, $session_name){
   global $sess_save_path, $sess_session_name;
        
-  $sess_save_path = BASE_DIR.'/cache/session';
+  $sess_save_path = BASE_DIR.'/session';
   $sess_session_name = $session_name;
   return(true);
 }
@@ -43,7 +43,6 @@ function sess_write ($id, $sess_data) {
 	}
 }
 
-
 function sess_destroy ($id) {
 	global $sess_save_path, $sess_session_name, $sess_session_id;
 
@@ -59,7 +58,7 @@ function sess_destroy ($id) {
  *******************************************************************/
 function sess_gc ($maxlifetime) {
 	global $sess_save_path, $sess_session_id;
-	
+
 	$sess_dir=$sess_save_path.'/'.mb_substr($sess_session_id,0,2).'/'.mb_substr($sess_session_id,2,2).'/'.mb_substr($sess_session_id,4,2);
 	foreach (glob($sess_dir."/*.sess") as $filename) {
 		if((filemtime($filename)+$maxlifetime)<time())unlink($filename);
