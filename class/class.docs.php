@@ -807,6 +807,7 @@ class AVE_Document
 								rubric_id                 = '" . $rubric_id . "',
 								document_parent           = '" . (int)$data['document_parent'] . "',
 								document_title            = '" . clean_no_print_char($data['doc_title']) . "',
+								document_breadcrum_title  = '" . clean_no_print_char($data['doc_breadcrum_title']) . "',
 								document_alias            = '" . $data['document_alias'] . "',
 								document_published        = '" . $docstart . "',
 								document_expire           = '" . $docend . "',
