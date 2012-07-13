@@ -146,6 +146,29 @@ class AVE_Rubric
 						");
 						$iid = $AVE_DB->InsertId();
 
+						// Выставляем всем право на просмотр рубрики, админу - все права
+						$sql_user = $AVE_DB->Query("
+							SELECT
+								grp.*,
+								COUNT(usr.Id) AS UserCount
+							FROM
+								" . PREFIX . "_user_groups AS grp
+							LEFT JOIN
+								" . PREFIX . "_users AS usr
+									ON usr.user_group = grp.user_group
+							GROUP BY grp.user_group
+						");
+						while ($row = $sql_user->FetchRow())
+						{
+							$AVE_DB->Query("
+								INSERT " . PREFIX . "_rubric_permissions
+								SET
+									rubric_id         = '" . $iid . "',
+									user_group_id     = '" . $row->user_group . "',
+									rubric_permission = '". (($row->user_group == 1) ? "alles|docread|new|newnow|editown|editall" : "docread")."'
+							");
+						}
+
 						reportLog($_SESSION['user_name'] . ' - добавил рубрику (' . stripslashes($_POST['rubric_title']) . ')', 2, 2);
 
 						header('Location:index.php?do=rubs&action=edit&Id=' . $iid . '&cp=' . SESSION);

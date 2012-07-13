@@ -36,7 +36,7 @@ if (defined('ACP') && !(isset($_REQUEST['action']) && $_REQUEST['action'] == 'de
 }
 
 /**
- * Обработка тэга модуля
+ * Обработка тега модуля
  *
  */
 function mod_rubnav($data)

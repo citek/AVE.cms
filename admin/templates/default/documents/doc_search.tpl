@@ -27,6 +27,20 @@
 		    {rdelim}
 		{rdelim});
 
+		{literal}
+		$('.collapsible').collapsible({
+			defaultOpen: 'opened',
+			cssOpen: 'inactive',
+			cssClose: 'normal',
+			cookieName: 'collaps_doc',
+			cookieOptions: {
+		        expires: 7,
+				domain: ''
+	    	},
+			speed: 200
+		});
+		{/literal}
+
 		$('#document_expire').datepicker({ldelim}
 			timeOnlyTitle: 'Выберите время',
 			timeText: 'Время',
@@ -70,7 +84,7 @@
 	{/if}<input type="hidden" name="TimeSelect" value="1" />
 
 <div class="widget first">
-	<div class="head closed active"><h5>{#MAIN_SEARCH_DOCUMENTS#}</h5></div>
+	<div class="head collapsible" id="opened"><h5>{#MAIN_SEARCH_DOCUMENTS#}</h5></div>
 	<div style="display: block;">
 
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">

@@ -12,6 +12,31 @@ $(document).ready(function(){ldelim}
 		{rdelim}
 	{rdelim});
 
+	$(".selall").click(function(){ldelim}
+		if ($(this).is(":checked")) {ldelim}
+			$("tr."+this.id).find(".checkbox").removeAttr("checked");
+			$("tr."+this.id).find("a.jqTransformCheckbox").removeClass("jqTransformChecked");
+		{rdelim}
+		else {ldelim}
+			$("tr."+this.id).find(".checkbox").attr("checked","checked");
+			$("tr."+this.id).find("a.jqTransformCheckbox").addClass("jqTransformChecked");
+		{rdelim}
+	{rdelim});
+
+	{literal}
+	$('.collapsible').collapsible({
+		defaultOpen: 'opened',
+		cssOpen: 'inactive',
+		cssClose: 'normal',
+		cookieName: 'collaps_rub',
+		cookieOptions: {
+	        expires: 7,
+			domain: ''
+    	},
+		speed: 200
+	});
+	{/literal}
+
 {rdelim});
 </script>
 
@@ -79,7 +104,7 @@ $(document).ready(function(){ldelim}
 				</td>
 				<td><div class="pr12"><input name="rubric_field_default[{$rf->Id}]" type="text" id="rubric_field_default[{$rf->Id}]" value="{$rf->rubric_field_default}" style="width:100%;" /></div></td>
 				<td>
-					<div class="pr12"><input name="rubric_field_position[{$rf->Id}]" type="text" id="rubric_field_position[{$rf->Id}]" value="{$rf->rubric_field_position}" size="4" maxlength="5" /></div>
+					<div class="pr12"><input name="rubric_field_position[{$rf->Id}]" type="text" id="rubric_field_position[{$rf->Id}]" value="{$rf->rubric_field_position}" size="4" maxlength="5" autocomplete="off" /></div>
 				</td>
 				<td align="center">
 					<a class="topleftDir icon_sprite ico_template" title="{#RUBRIK_TEMPLATE_TOGGLE#}" href="javascript:void(0);" onclick="$('#tpl_{$rf->Id}').toggle();"></a>
@@ -160,7 +185,7 @@ $(document).ready(function(){ldelim}
 {/if}
 
 <div class="widget first">
-	<div class="head closed active"><h5>{#RUBRIK_NEW_FIELD#}</h5></div>
+	<div class="head collapsible" id="opened"><h5>{#RUBRIK_NEW_FIELD#}</h5></div>
 	<div style="display: block;">
 	<form id="newfld" action="index.php?do=rubs&amp;action=edit&amp;Id={$smarty.request.Id|escape}&amp;cp={$sess}" method="post" class="mainForm">
 	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
@@ -195,7 +220,7 @@ $(document).ready(function(){ldelim}
 			</td>
 
 			<td>
-				<div class="pr12"><input name="rubric_field_position_new" type="text" id="rubric_field_position_new" value="10" size="4" maxlength="5" /></div>
+				<div class="pr12"><input name="rubric_field_position_new" type="text" id="rubric_field_position_new" value="100" size="4" maxlength="5" autocomplete="off" /></div>
 			</td>
 		</tr>
 
@@ -230,8 +255,8 @@ $(document).ready(function(){ldelim}
 		<thead>
 		<tr>
 			<td>{#RUBRIK_USER_GROUP#}</td>
-			<td align="center">{#RUBRIK_DOC_READ#} <div align="center"><a title="{#RUBRIK_VIEW_TIP#}" href="javascript:void(0);" class="toprightDir icon_sprite ico_info_no"></a></div></td>
 			<td align="center">{#RUBRIK_ALL_PERMISSION#} <div align="center"><a title="{#RUBRIK_ALL_TIP#}" href="javascript:void(0);" class="toprightDir icon_sprite ico_info_no"></a></div></td>
+			<td align="center">{#RUBRIK_DOC_READ#} <div align="center"><a title="{#RUBRIK_VIEW_TIP#}" href="javascript:void(0);" class="toprightDir icon_sprite ico_info_no"></a></div></td>
 			<td align="center">{#RUBRIK_CREATE_DOC#} <div align="center"><a title="{#RUBRIK_DOC_TIP#}" href="javascript:void(0);" class="toprightDir icon_sprite ico_info_no"></a></div></td>
 			<td align="center">{#RUBRIK_CREATE_DOC_NOW#} <div align="center"><a title="{#RUBRIK_DOC_NOW_TIP#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_info_no"></a></div></td>
 			<td align="center">{#RUBRIK_EDIT_OWN#} <div align="center"><a title="{#RUBRIK_OWN_TIP#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_info_no"></a></div></td>
@@ -241,63 +266,64 @@ $(document).ready(function(){ldelim}
 		<tbody>
 		{foreach from=$groups item=group}
 			{assign var=doall value=$group->doall}
-			<tr>
+			<tr class="perm_group_{$group->user_group}">
 				<td>
 					{$group->user_group_name|escape:html}
 				</td>
 
 				<td align="center">
 					{if $group->doall_h==1}
-						<input type="hidden" name="perm[{$group->user_group}][]" value="docread" />
-						<input name="perm[{$group->user_group}][]" type="checkbox" value="docread" checked="checked" disabled="disabled" />
-					{else}
-						<input name="perm[{$group->user_group}][]" type="checkbox" value="docread"{if in_array('docread', $group->permissions) || in_array('alles', $group->permissions)} checked="checked"{/if} />
-					{/if}
-				</td>
-
-				<td align="center">
-					{if $group->doall_h==1}
 						<input type="hidden" name="perm[{$group->user_group}][]" value="alles" />
-						<input name="perm[{$group->user_group}][]" type="checkbox" value="alles" checked="checked" disabled="disabled" />
+						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
 					{else}
-						<input name="perm[{$group->user_group}][]" type="checkbox" value="alles"{if in_array('alles', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
+						<input id="perm_group_{$group->user_group}" class="selall" name="perm[{$group->user_group}][]" type="checkbox" value="alles"{if in_array('alles', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
+					{/if}
+				</td>
+
+				<td align="center">
+					{if $group->doall_h==1}
+						<input type="hidden" name="perm[{$group->user_group}][]" value="docread" />
+						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
+					{else}
+						<input class="checkbox" name="perm[{$group->user_group}][]" type="checkbox" value="docread"{if in_array('docread', $group->permissions)} checked="checked"{/if} />
 					{/if}
 				</td>
 
 				<td align="center">
 					<input type="hidden" name="user_group[{$group->user_group}]" value="{$group->user_group}" />
 					{if $group->doall_h==1}
-						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
 						<input type="hidden" name="perm[{$group->user_group}][]" value="new" />
+						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
 					{else}
-						<input onclick="document.getElementById('newnow_{$group->user_group}').checked = '';" id="new_{$group->user_group}" name="perm[{$group->user_group}][]" type="checkbox" value="new"{if in_array('new', $group->permissions) || in_array('alles', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
+						<input class="checkbox" onclick="document.getElementById('newnow_{$group->user_group}').checked = '';" id="new_{$group->user_group}" name="perm[{$group->user_group}][]" type="checkbox" value="new"{if in_array('new', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
 					{/if}
 				</td>
 
 				<td align="center">
 					<input type="hidden" name="user_group[{$group->user_group}]" value="{$group->user_group}" />
 					{if $group->doall_h==1}
-						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
 						<input type="hidden" name="perm[{$group->user_group}][]" value="newnow" />
+						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
 					{else}
-						<input onclick="document.getElementById('new_{$group->user_group}').checked = '';" id="newnow_{$group->user_group}" name="perm[{$group->user_group}][]" type="checkbox" value="newnow"{if in_array('newnow', $group->permissions) || in_array('alles', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
+						<input class="checkbox" onclick="document.getElementById('new_{$group->user_group}').checked = '';" id="newnow_{$group->user_group}" name="perm[{$group->user_group}][]" type="checkbox" value="newnow"{if in_array('newnow', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
 					{/if}
 				</td>
 
 				<td align="center">
 					{if $group->doall_h==1}
-						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
 						<input type="hidden" name="perm[{$group->user_group}][]" value="editown" />
+						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
 					{else}
-						<input id="editown_{$group->user_group}" name="perm[{$group->user_group}][]" type="checkbox" value="editown"{if in_array('editown', $group->permissions) || in_array('alles', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
+						<input class="checkbox" id="editown_{$group->user_group}" name="perm[{$group->user_group}][]" type="checkbox" value="editown"{if in_array('editown', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
 					{/if}
 				</td>
 
 				<td align="center">
 					{if $group->doall_h==1}
+						<input type="hidden" name="perm[{$group->user_group}][]" value="editall" />
 						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
 					{else}
-						<input name="perm[{$group->user_group}][]" type="checkbox" value="editall"{if in_array('editall', $group->permissions) || in_array('alles', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
+						<input class="checkbox" name="perm[{$group->user_group}][]" type="checkbox" value="editall"{if in_array('editall', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
 					{/if}
 				</td>
 			</tr>

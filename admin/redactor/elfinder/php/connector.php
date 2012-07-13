@@ -10,6 +10,7 @@ include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinder.class.php';
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeDriver.class.php';
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeLocalFileSystem.class.php';
 include_once dirname(__FILE__).DIRECTORY_SEPARATOR.'elFinderVolumeMySQL.class.php';
+include_once '../../../../inc/config.inc.php';
 
 function debug($o) {
 	echo '<pre>';
@@ -183,9 +184,9 @@ $opts = array(
 	'roots' => array(
 		array(
 			'driver'  => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-			'path'    => '../../../../uploads',         // path to files (REQUIRED)
-			'URL'     => '/uploads/', // URL to files (REQUIRED)
-			'alias'  => 'Uploads',
+			'path'    => '../../../../'.UPLOAD_DIR,         // path to files (REQUIRED)
+			'URL'     => '/'.UPLOAD_DIR.'/', // URL to files (REQUIRED)
+			'alias'  => UPLOAD_DIR,
 			'disabled' => array(),
 			'acceptedName' => 'validName',
 			'uploadAllow' => array('all'),
@@ -213,7 +214,7 @@ $opts = array(
 			'driver'  => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
 			'path'    => '../../../../templates',         // path to files (REQUIRED)
 			'URL'     => '/templates/', // URL to files (REQUIRED)
-			'alias'  => 'Templates',
+			'alias'  => 'templates',
 			'disabled' => array(),
 			'acceptedName' => 'validName',
 			'uploadAllow' => array('all'),

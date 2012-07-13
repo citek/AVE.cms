@@ -3,7 +3,7 @@ SYSBLOCK_EDIT_TIP    = "В данном разделе предоставлен�
 SYSBLOCK_ID          = "Id"
 SYSBLOCK_NAME        = "Имя системного блока"
 SYSBLOCK_HTML        = "Код системного блока"
-SYSBLOCK_TAGS        = "Тэг"
+SYSBLOCK_TAGS        = "Тег"
 SYSBLOCK_TAGS_2      = "HTML Tags"
 
 SYSBLOCK_MEDIAPATH   = "Системный тег, путь к папке дизайна"

@@ -3,36 +3,46 @@ header("Content-type: text/xml");
 @date_default_timezone_set('Europe/Moscow');
 
 define('START_MICROTIME', microtime());
-define('BASE_DIR', str_replace("\\", "/", dirname(dirname(__FILE__))));
+define('BASE_DIR', str_replace("\\", "/", rtrim($_SERVER['DOCUMENT_ROOT'],'/')));
+define('ABS_PATH',str_ireplace(BASE_DIR,'/',str_replace("\\", "/",dirname(dirname(__FILE__)))));
 if (! @filesize(BASE_DIR . '/inc/db.config.php')) { header('Location:install.php'); exit; }
 if (! empty($_REQUEST['thumb'])) {require(BASE_DIR . '/functions/func.thumbnail.php'); exit; }
 if(substr($_SERVER['REQUEST_URI'],0,strlen('/index.php?'))!='/index.php?'){$_SERVER['REQUEST_URI']=str_ireplace('_','-',$_SERVER['REQUEST_URI']);}
-$domain='http://'.str_ireplace('www.','',$_SERVER['SERVER_NAME']).'/';
 require(BASE_DIR . '/inc/init.php');
+$domain='http://'.$_SERVER['SERVER_NAME'];
 echo '<?xml version="1.0" encoding="UTF-8"?>';
 
 ?>
 
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc><?php echo $domain;?></loc>
+    <loc><?php echo $domain.'/';?></loc>
     <lastmod><?php echo date("Y-m-d");?></lastmod>
     <changefreq>always</changefreq>
   </url>
   <?
 $sql="SELECT 
- document_alias,
- document_changed 
-FROM ".PREFIX."_documents 
+ doc.Id,
+ doc.document_alias,
+ doc.document_changed 
+FROM ".PREFIX."_documents doc
+left join ".PREFIX."_rubrics rub
+ on rub.Id=doc.rubric_id
+left join ".PREFIX."_rubric_permissions rubperm
+  on rubperm.rubric_id=doc.rubric_id
 where 
- document_status=1
- AND document_expire>UNIX_TIMESTAMP()
+ rub.rubric_template>' '
+ AND doc.document_status=1
+ AND doc.document_expire>UNIX_TIMESTAMP()
+ AND doc.Id != 2
+ AND (rubperm.user_group_id=2 AND rubperm.rubric_permission LIKE '%docread%')
+ORDER BY document_changed DESC 
 ";
 $res=$AVE_DB->Query($sql);
 while($row=$res->FetchAssocArray()){
 ?>
   <url>
-    <loc><?php echo $domain.$row['document_alias'];?>/</loc>
+    <loc><?php echo $domain.ABS_PATH.$row['document_alias'].URL_SUFF;?></loc>
     <lastmod><?php echo date("Y-m-d",$row["document_changed"])?></lastmod>
     <changefreq>weekly</changefreq>
   </url>
