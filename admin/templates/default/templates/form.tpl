@@ -63,7 +63,7 @@
 
 <div class="rowElem noborder">
 	<label>{#TEMPLATES_NAME#}</label>
-	<div class="formRight"><input name="template_title" type="text" value="{$row->template_title|escape:html}{$smarty.request.TempName|escape:html}" maxlength="50" style="width: 250px;" /></div>
+	<div class="formRight"><input name="template_title" type="text" value="{$row->template_title|escape:html}{$smarty.request.TempName|escape:html}" maxlength="50" style="width: 250px;" class="mousetrap" /></div>
 	<div class="fix"></div>
 </div>
 
@@ -229,7 +229,7 @@
 		{/if}
       	&nbsp;или&nbsp;
 		{if $smarty.request.action=='edit'}
-			<input type="submit" class="blackBtn" name="next_edit" value="{#TEMPLATES_BUTTON_SAVE_NEXT#}" />
+			<input type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#TEMPLATES_BUTTON_SAVE_NEXT#}" />
 		{else}
 			<input type="submit" class="blackBtn" name="next_edit" value="{#TEMPLATES_BUTTON_ADD_NEXT#}" />
 		{/if}
@@ -237,9 +237,52 @@
 
 </div>
 </form>
+
+    <script language="Javascript" type="text/javascript">
+    var sett_options = {ldelim}
+		url: '{$formaction}',
+		beforeSubmit: Request,
+        success: Response
+	{rdelim}
+
+	function Request(){ldelim}
+		$.alerts._overlay('show');
+	{rdelim}
+
+	function Response(){ldelim}
+		$.alerts._overlay('hide');
+		$.jGrowl('{#TEMPLATES_SAVED#}');
+	{rdelim}
+
+	$(document).ready(function(){ldelim}
+
+		Mousetrap.bind(['ctrl+s', 'meta+s'], function(e) {ldelim}
+		    if (e.preventDefault) {ldelim}
+		        e.preventDefault();
+		    {rdelim} else {ldelim}
+		        // internet explorer
+		        e.returnValue = false;
+		    {rdelim}
+		    $("#f_tpl").ajaxSubmit(sett_options);
+			return false;
+		{rdelim});
+
+	    $(".SaveEdit").click(function(e){ldelim}
+		    if (e.preventDefault) {ldelim}
+		        e.preventDefault();
+		    {rdelim} else {ldelim}
+		        // internet explorer
+		        e.returnValue = false;
+		    {rdelim}
+		    $("#f_tpl").ajaxSubmit(sett_options);
+			return false;
+		{rdelim});
+
+	{rdelim});
+
 {literal}
-    <script>
       var editor = CodeMirror.fromTextArea(document.getElementById("template_text"), {
+      	extraKeys: {"Ctrl-S": function(cm){$("#f_tpl").ajaxSubmit(sett_options);}},
         lineNumbers: true,
 		lineWrapping: true,
         matchBrackets: true,
@@ -266,6 +309,7 @@
       }
 
 	  var hlLine = editor.setLineClass(0, "activeline");
-    </script>
 {/literal}
+    </script>
+
 

@@ -1,102 +1,3 @@
-<script language="javascript">
-
-$(document).ready(function(){ldelim}
-
-    if($("#mail_type option[#mail]:selected")){ldelim}
-		$('input:text[name=mail_port]').attr('disabled', true);
-		$('input:text[name=mail_host]').attr('disabled', true);
-		$('input:text[name=mail_smtp_login]').attr('disabled', true);
-		$('input:text[name=mail_smtp_pass]').attr('disabled', true);
-		$('input:text[name=mail_sendmail_path]').attr('disabled', true);
-          {rdelim}else if($("#mail_type option[#smtp]:selected")){ldelim}
-		$('input:text[name=mail_port]').attr('disabled', false);
-		$('input:text[name=mail_host]').attr('disabled', false);
-		$('input:text[name=mail_smtp_login]').attr('disabled', false);
-		$('input:text[name=mail_smtp_pass]').attr('disabled', false);
-		$('input:text[name=mail_sendmail_path]').attr('disabled', true);
-          {rdelim}else if($("#mail_type option[#sendmail]:selected")){ldelim}
-		$('input:text[name=mail_port]').attr('disabled', true);
-		$('input:text[name=mail_host]').attr('disabled', true);
-		$('input:text[name=mail_smtp_login]').attr('disabled', true);
-		$('input:text[name=mail_smtp_pass]').attr('disabled', true);
-		$('input:text[name=mail_sendmail_path]').attr('disabled', false);
-	{rdelim}
-
-    var sett_options = {ldelim}
-		url: 'index.php?do=settings&cp={$sess}&sub=save',
-		{*target: '#contentPage',*}
-		beforeSubmit: Request,
-        success: Response
-	{rdelim}
-
-    $(".ConfirmSettings").click(function(e){ldelim}
-		e.preventDefault();
-		var title = '{#SETTINGS_BUTTON_SAVE#}';
-		var confirm = '{#SETTINGS_SAVE_CONFIRM#}';
-		jConfirm(
-				confirm,
-				title,
-				function(b){ldelim}
-					if (b){ldelim}
-        				$("#settings").ajaxSubmit(sett_options);
-					{rdelim}
-				{rdelim}
-			);
-	{rdelim});
-
-{rdelim});
-
-function Request(){ldelim}
-	$.alerts._overlay('show');
-	$('html, body').animate({ldelim}scrollTop:0{rdelim});
-{rdelim}
-
-function Response(){ldelim}
-
-	$.alerts._overlay('hide');
-	$.jGrowl('{#SETTINGS_SAVED#}');
-{rdelim}
-
-function presel() {ldelim}
-	document.getElementById('mail_port').disabled = false;
-	document.getElementById('mail_host').disabled = false;
-	document.getElementById('mail_smtp_login').disabled = false;
-	document.getElementById('mail_smtp_pass').disabled = false;
-	document.getElementById('mail_sendmail_path').disabled = false;
-
-	if(document.getElementById('mail').selected == true) {ldelim}
-		document.getElementById('mail_port').disabled = true;
-		document.getElementById('mail_host').disabled = true;
-		document.getElementById('mail_smtp_login').disabled = true;
-		document.getElementById('mail_smtp_pass').disabled = true;
-		document.getElementById('mail_sendmail_path').disabled = true;
-	{rdelim}
-
-	if(document.getElementById('sendmail').selected == true) {ldelim}
-		document.getElementById('mail_port').disabled = true;
-		document.getElementById('mail_host').disabled = true;
-		document.getElementById('mail_smtp_login').disabled = true;
-		document.getElementById('mail_smtp_pass').disabled = true;
-	{rdelim}
-
-	if(document.getElementById('smtp').selected == true) {ldelim}
-		document.getElementById('mail_sendmail_path').disabled = true;
-	{rdelim}
-{rdelim}
-
-function openLinkWindow(target,doc) {ldelim}
-	if (typeof width=='undefined' || width=='') var width = screen.width * 0.6;
-	if (typeof height=='undefined' || height=='') var height = screen.height * 0.6;
-	if (typeof doc=='undefined') var doc = 'title';
-	if (typeof scrollbar=='undefined') var scrollbar=1;
-	var left = ( screen.width - width ) / 2;
-	var top = ( screen.height - height ) / 2;
-	window.open('index.php?idonly=1&doc='+doc+'&target='+target+'&do=docs&action=showsimple&cp={$sess}&pop=1','pop','left='+left+',top='+top+',width='+width+',height='+height+',scrollbars='+scrollbar+',resizable=1');
-{rdelim}
-
-</script>
-
-
 <div class="title"><h5>{#SETTINGS_MAIN_TITLE#}</h5></div>
 
 
@@ -136,7 +37,7 @@ function openLinkWindow(target,doc) {ldelim}
 	<tbody>
 <tr class="noborder">
     <td width="300">{#SETTINGS_SITE_NAME#}</td>
-    <td><div class="pr12"><input type="text" name="site_name" id="site_name" value="{$row.site_name}" maxlength="200"></div></td>
+    <td><div class="pr12"><input type="text" name="site_name" id="site_name" value="{$row.site_name}" maxlength="200" class="mousetrap"></div></td>
 </tr>
 
 <tr>
@@ -182,7 +83,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_EMAIL_NAME#}</td>
     <td>
         <div class="pr12">
-          <input type="text" name="mail_from_name" id="mail_from_name" value="{$row.mail_from_name}" style="width: 250px;">
+          <input type="text" name="mail_from_name" id="mail_from_name" value="{$row.mail_from_name}" style="width: 250px;" class="mousetrap">
         </div>
     </td>
 </tr>
@@ -191,7 +92,8 @@ function openLinkWindow(target,doc) {ldelim}
 	<td width="300">{#SETTINGS_EMAIL_SENDER#}</td>
 	<td>
         <div class="pr12">
-			<input type="text" name="mail_from" id="mail_from" value="{$row.mail_from}" style="width: 250px;"><input type="hidden" name="mail_content_type" id="mail_content_type" value="text/plain" />
+			<input type="text" name="mail_from" id="mail_from" value="{$row.mail_from}" style="width: 250px;" class="mousetrap">
+			<input type="hidden" name="mail_content_type" id="mail_content_type" value="text/plain" />
         </div>
     </td>
 </tr>
@@ -213,7 +115,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_MAIL_PORT#}</td>
     <td>
         <div class="pr12">
-			<input type="text" name="mail_port" id="mail_port" value="{$row.mail_port}" maxlength="5" style="width: 250px;">
+			<input type="text" name="mail_port" id="mail_port" value="{$row.mail_port}" maxlength="5" style="width: 250px;" class="mousetrap">
         </div>
     </td>
 </tr>
@@ -222,7 +124,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_SMTP_SERVER#}</td>
     <td>
         <div class="pr12">
-			<input type="text" name="mail_host" id="mail_host" value="{$row.mail_host}" style="width: 250px;">
+			<input type="text" name="mail_host" id="mail_host" value="{$row.mail_host}" style="width: 250px;" class="mousetrap">
         </div>
     </td>
 </tr>
@@ -231,7 +133,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_SMTP_NAME#}</td>
     <td>
         <div class="pr12">
-			<input type="text" name="mail_smtp_login" id="mail_smtp_login" value="{$row.mail_smtp_login}" style="width: 250px;">
+			<input type="text" name="mail_smtp_login" id="mail_smtp_login" value="{$row.mail_smtp_login}" style="width: 250px;" class="mousetrap">
         </div>
     </td>
 </tr>
@@ -240,7 +142,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_SMTP_PASS#}</td>
     <td>
         <div class="pr12">
-			<input type="text" name="mail_smtp_pass" id="mail_smtp_pass" value="{$row.mail_smtp_pass}" style="width: 250px;">
+			<input type="text" name="mail_smtp_pass" id="mail_smtp_pass" value="{$row.mail_smtp_pass}" style="width: 250px;" class="mousetrap">
         </div>
     </td>
 </tr>
@@ -249,7 +151,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_MAIL_PATH#}</td>
     <td>
         <div class="pr12">
-			<input type="text" name="mail_sendmail_path" id="mail_sendmail_path" value="{$row.mail_sendmail_path}" style="width: 250px;">
+			<input type="text" name="mail_sendmail_path" id="mail_sendmail_path" value="{$row.mail_sendmail_path}" style="width: 250px;" class="mousetrap">
         </div>
     </td>
 </tr>
@@ -276,7 +178,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_SYMBOL_BREAK#}</td>
     <td>
         <div class="pr12">
-			<input type="text" name="mail_word_wrap" id="mail_word_wrap" value="{$row.mail_word_wrap}" maxlength="3" style="width: 50px;">
+			<input type="text" name="mail_word_wrap" id="mail_word_wrap" value="{$row.mail_word_wrap}" maxlength="3" style="width: 50px;" class="mousetrap">
         </div>
     </td>
 </tr>
@@ -285,7 +187,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_TEXT_EMAIL#}<br /><small>{#SETTINGS_TEXT_INFO#}</small></td>
     <td>
         <div class="pr12">
-			<textarea name="mail_new_user" id="mail_new_user" rows="12" cols>{$row.mail_new_user|stripslashes}</textarea>
+			<textarea name="mail_new_user" id="mail_new_user" rows="12" cols class="mousetrap">{$row.mail_new_user|stripslashes}</textarea>
         </div>
     </td>
 </tr>
@@ -294,7 +196,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_EMAIL_FOOTER#}</td>
     <td>
         <div class="pr12">
-			<textarea name="mail_signature" id="mail_signature" rows="8" cols>{$row.mail_signature|stripslashes}</textarea>
+			<textarea name="mail_signature" id="mail_signature" rows="8" cols class="mousetrap">{$row.mail_signature|stripslashes}</textarea>
         </div>
     </td>
 </tr>
@@ -303,7 +205,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_ERROR_PAGE#}</td>
     <td>
         <div class="pr12">
-			<input name="page_not_found_id" type="text" id="page_not_found_id" value="{$row.page_not_found_id}" size="4" maxlength="10" readonly="readonly" style="width: 200px" />&nbsp;<input onClick="openLinkWindow('page_not_found_id','page_not_found_id');" type="button" class="basicBtn" value="... " />&nbsp;&nbsp;&nbsp;{#SETTINGS_PAGE_DEFAULT#}
+			<input name="page_not_found_id" type="text" id="page_not_found_id" value="{$row.page_not_found_id}" size="4" maxlength="10" readonly="readonly" style="width: 200px" class="mousetrap" />&nbsp;<input onClick="openLinkWindow('page_not_found_id','page_not_found_id');" type="button" class="basicBtn" value="... " />&nbsp;&nbsp;&nbsp;{#SETTINGS_PAGE_DEFAULT#}
         </div>
     </td>
 </tr>
@@ -312,7 +214,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_TEXT_PERM#}</td>
     <td>
         <div class="pr12">
-			<textarea name="message_forbidden" id="message_forbidden" rows="8" cols>{$row.message_forbidden|stripslashes}</textarea>
+			<textarea name="message_forbidden" id="message_forbidden" rows="8" cols class="mousetrap">{$row.message_forbidden|stripslashes}</textarea>
         </div>
     </td>
 </tr>
@@ -321,7 +223,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_HIDDEN_TEXT#}</td>
     <td>
         <div class="pr12">
-			<textarea name="hidden_text" id="hidden_text" rows="8" cols>{$row.hidden_text|stripslashes}</textarea>
+			<textarea name="hidden_text" id="hidden_text" rows="8" cols class="mousetrap">{$row.hidden_text|stripslashes}</textarea>
         </div>
     </td>
 </tr>
@@ -330,7 +232,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_NAVI_BOX#}</td>
     <td>
         <div class="pr12">
-			<input type="text" name="navi_box" id="navi_box" value="{$row.navi_box|escape|stripslashes}">
+			<input type="text" name="navi_box" id="navi_box" value="{$row.navi_box|escape|stripslashes}" class="mousetrap">
         </div>
     </td>
 </tr>
@@ -339,7 +241,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_PAGE_BEFORE#}</td>
     <td>
         <div class="pr12">
-			<input type="text" name="total_label" id="total_label" value="{$row.total_label|escape|stripslashes}" style="width: 250px;">
+			<input type="text" name="total_label" id="total_label" value="{$row.total_label|escape|stripslashes}" style="width: 250px;" class="mousetrap">
         </div>
     </td>
 </tr>
@@ -348,7 +250,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_PAGE_START#}</td>
     <td>
         <div class="pr12">
-			<input type="text" name="start_label" id="start_label" value="{$row.start_label|stripslashes}" style="width: 250px;">
+			<input type="text" name="start_label" id="start_label" value="{$row.start_label|stripslashes}" style="width: 250px;" class="mousetrap">
         </div>
     </td>
 </tr>
@@ -357,7 +259,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_PAGE_END#}</td>
     <td>
         <div class="pr12">
-			<input type="text" name="end_label" id="end_label" value="{$row.end_label|stripslashes}" style="width: 250px;">
+			<input type="text" name="end_label" id="end_label" value="{$row.end_label|stripslashes}" style="width: 250px;" class="mousetrap">
         </div>
     </td>
 </tr>
@@ -366,7 +268,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_PAGE_SEPARATOR#}</td>
     <td>
         <div class="pr12">
-			<input type="text" name="separator_label" id="separator_label" value="{$row.separator_label|stripslashes}" style="width: 250px;">
+			<input type="text" name="separator_label" id="separator_label" value="{$row.separator_label|stripslashes}" style="width: 250px;" class="mousetrap">
         </div>
     </td>
 </tr>
@@ -375,7 +277,7 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_PAGE_NEXT#}</td>
     <td>
         <div class="pr12">
-			<input type="text" name="next_label" id="next_label" value="{$row.next_label|stripslashes}" style="width: 250px;">
+			<input type="text" name="next_label" id="next_label" value="{$row.next_label|stripslashes}" style="width: 250px;" class="mousetrap">
         </div>
     </td>
 </tr>
@@ -384,13 +286,13 @@ function openLinkWindow(target,doc) {ldelim}
     <td width="300">{#SETTINGS_PAGE_PREV#}</td>
     <td>
         <div class="pr12">
-			<input type="text" name="prev_label" id="prev_label" value="{$row.prev_label|stripslashes}" style="width: 250px;">
+			<input type="text" name="prev_label" id="prev_label" value="{$row.prev_label|stripslashes}" style="width: 250px;" class="mousetrap">
         </div>
     </td>
 </tr>
 
 <tr>
-    <td colspan="2"><input type="submit" class="basicBtn ConfirmSettings" value="{#SETTINGS_BUTTON_SAVE#}" /></td>
+    <td colspan="2"><input type="submit" class="basicBtn SaveSettings" value="{#SETTINGS_BUTTON_SAVE#}" /></td>
 </tr>
 
 
@@ -404,6 +306,112 @@ function openLinkWindow(target,doc) {ldelim}
 
 </form>
 
+<script language="javascript">
 
+$(document).ready(function(){ldelim}
+
+    if($("#mail_type option[#mail]:selected")){ldelim}
+		$('input:text[name=mail_port]').attr('disabled', true);
+		$('input:text[name=mail_host]').attr('disabled', true);
+		$('input:text[name=mail_smtp_login]').attr('disabled', true);
+		$('input:text[name=mail_smtp_pass]').attr('disabled', true);
+		$('input:text[name=mail_sendmail_path]').attr('disabled', true);
+          {rdelim}else if($("#mail_type option[#smtp]:selected")){ldelim}
+		$('input:text[name=mail_port]').attr('disabled', false);
+		$('input:text[name=mail_host]').attr('disabled', false);
+		$('input:text[name=mail_smtp_login]').attr('disabled', false);
+		$('input:text[name=mail_smtp_pass]').attr('disabled', false);
+		$('input:text[name=mail_sendmail_path]').attr('disabled', true);
+          {rdelim}else if($("#mail_type option[#sendmail]:selected")){ldelim}
+		$('input:text[name=mail_port]').attr('disabled', true);
+		$('input:text[name=mail_host]').attr('disabled', true);
+		$('input:text[name=mail_smtp_login]').attr('disabled', true);
+		$('input:text[name=mail_smtp_pass]').attr('disabled', true);
+		$('input:text[name=mail_sendmail_path]').attr('disabled', false);
+	{rdelim}
+
+    var sett_options = {ldelim}
+		url: 'index.php?do=settings&cp={$sess}&sub=save',
+		{*target: '#contentPage',*}
+		beforeSubmit: Request,
+        success: Response
+	{rdelim}
+
+    $(".SaveSettings").click(function(e){ldelim}
+		e.preventDefault();
+		var title = '{#SETTINGS_BUTTON_SAVE#}';
+		var confirm = '{#SETTINGS_SAVE_CONFIRM#}';
+		jConfirm(
+				confirm,
+				title,
+				function(b){ldelim}
+					if (b){ldelim}
+        				$("#settings").ajaxSubmit(sett_options);
+					{rdelim}
+				{rdelim}
+			);
+	{rdelim});
+
+		Mousetrap.bind(['ctrl+s', 'meta+s'], function(e) {ldelim}
+		    if (e.preventDefault) {ldelim}
+		        e.preventDefault();
+		    {rdelim} else {ldelim}
+		        // internet explorer
+		        e.returnValue = false;
+		    {rdelim}
+		    $("#settings").ajaxSubmit(sett_options);
+			return false;
+		{rdelim});
+
+{rdelim});
+
+function Request(){ldelim}
+	$.alerts._overlay('show');
+	$('html, body').animate({ldelim}scrollTop:0{rdelim});
+{rdelim}
+
+function Response(){ldelim}
+	$.alerts._overlay('hide');
+	$.jGrowl('{#SETTINGS_SAVED#}');
+{rdelim}
+
+function presel() {ldelim}
+	document.getElementById('mail_port').disabled = false;
+	document.getElementById('mail_host').disabled = false;
+	document.getElementById('mail_smtp_login').disabled = false;
+	document.getElementById('mail_smtp_pass').disabled = false;
+	document.getElementById('mail_sendmail_path').disabled = false;
+
+	if(document.getElementById('mail').selected == true) {ldelim}
+		document.getElementById('mail_port').disabled = true;
+		document.getElementById('mail_host').disabled = true;
+		document.getElementById('mail_smtp_login').disabled = true;
+		document.getElementById('mail_smtp_pass').disabled = true;
+		document.getElementById('mail_sendmail_path').disabled = true;
+	{rdelim}
+
+	if(document.getElementById('sendmail').selected == true) {ldelim}
+		document.getElementById('mail_port').disabled = true;
+		document.getElementById('mail_host').disabled = true;
+		document.getElementById('mail_smtp_login').disabled = true;
+		document.getElementById('mail_smtp_pass').disabled = true;
+	{rdelim}
+
+	if(document.getElementById('smtp').selected == true) {ldelim}
+		document.getElementById('mail_sendmail_path').disabled = true;
+	{rdelim}
+{rdelim}
+
+function openLinkWindow(target,doc) {ldelim}
+	if (typeof width=='undefined' || width=='') var width = screen.width * 0.6;
+	if (typeof height=='undefined' || height=='') var height = screen.height * 0.6;
+	if (typeof doc=='undefined') var doc = 'title';
+	if (typeof scrollbar=='undefined') var scrollbar=1;
+	var left = ( screen.width - width ) / 2;
+	var top = ( screen.height - height ) / 2;
+	window.open('index.php?idonly=1&doc='+doc+'&target='+target+'&do=docs&action=showsimple&cp={$sess}&pop=1','pop','left='+left+',top='+top+',width='+width+',height='+height+',scrollbars='+scrollbar+',resizable=1');
+{rdelim}
+
+</script>
 
 

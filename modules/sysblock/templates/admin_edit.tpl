@@ -13,46 +13,6 @@
     </style>
 {/literal}
 
-<script language="javascript">
-
-$(document).ready(function(){ldelim}
-
-    var sett_options = {ldelim}
-		url: 'index.php?do=modules&action=modedit&mod=sysblock&moduleaction=saveedit&cp={$sess}',
-		beforeSubmit: Request,
-        success: Response
-	{rdelim}
-
-    $(".ConfirmSettings").click(function(e){ldelim}
-		e.preventDefault();
-		var title = '{#SYSBLOCK_SAVEDIT#}';
-		var confirm = '{#SYSBLOCK_SAVE_CONFIRM#}';
-		jConfirm(
-				confirm,
-				title,
-				function(b){ldelim}
-					if (b){ldelim}
-        				$("#sysblock").ajaxSubmit(sett_options);
-					{rdelim}
-				{rdelim}
-			);
-	{rdelim});
-
-{rdelim});
-
-function Request(){ldelim}
-	$.alerts._overlay('show');
-	$('html, body').animate({ldelim}scrollTop:0{rdelim});
-{rdelim}
-
-function Response(){ldelim}
-
-	$.alerts._overlay('hide');
-	$.jGrowl('{#SYSBLOCK_SAVED#}');
-{rdelim}
-
-</script>
-
 <div class="title"><h5>{#SYSBLOCK_INSERT_H#}</h5></div>
 
 <div class="widget" style="margin-top: 0px;">
@@ -81,7 +41,7 @@ function Response(){ldelim}
 
 <div class="rowElem noborder">
 	<label>{#SYSBLOCK_NAME#}</label>
-	<div class="formRight"><input name="sysblock_name" type="text" value="{if $smarty.request.id != ''}{$sysblock_name|escape}{else}{$smarty.request.sysblock_name}{/if}" size="80" /></div>
+	<div class="formRight"><input name="sysblock_name" class="mousetrap" type="text" value="{if $smarty.request.id != ''}{$sysblock_name|escape}{else}{$smarty.request.sysblock_name}{/if}" size="80" /></div>
 	<div class="fix"></div>
 </div>
 
@@ -102,7 +62,7 @@ function Response(){ldelim}
 			<td>
 				<a class="rightDir" title="{#SYSBLOCK_MEDIAPATH#}" href="javascript:void(0);" onclick="textSelection('[tag:mediapath]','');"><strong>[tag:mediapath]</strong></a>
 			</td>
-                     <td rowspan="6"><textarea id="sysblock_text" name="sysblock_text" style="width: 100%; height: 400px;">{$sysblock_text}</textarea></td>
+                     <td rowspan="6"><textarea class="mousetrap" id="sysblock_text" name="sysblock_text" style="width: 100%; height: 400px;">{$sysblock_text}</textarea></td>
 		</tr>
 
 		<tr>
@@ -171,9 +131,9 @@ function Response(){ldelim}
 				&nbsp;или&nbsp;
 
 				{if $smarty.request.moduleaction=='edit'}
-					<input type="submit" class="blackBtn ConfirmSettings" name="next_edit" value="{#SYSBLOCK_SAVEDIT_NEXT#}" />
+					<input type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#SYSBLOCK_SAVEDIT_NEXT#}" />
 				{else}
-					<input type="submit" class="blackBtn ConfirmSettings" name="next_edit" value="{#SYSBLOCK_SAVE_NEXT#}" />
+					<input type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#SYSBLOCK_SAVE_NEXT#}" />
 				{/if}
 
 	<div class="fix"></div>
@@ -182,10 +142,52 @@ function Response(){ldelim}
 </div>
 
 </form>
+<script language="javascript">
 
-{literal}
-    <script>
+    var sett_options = {ldelim}
+		url: 'index.php?do=modules&action=modedit&mod=sysblock&moduleaction=saveedit&cp={$sess}',
+		beforeSubmit: Request,
+        success: Response
+	{rdelim}
+
+	function Request(){ldelim}
+		$.alerts._overlay('show');
+	{rdelim}
+
+	function Response(){ldelim}
+		$.alerts._overlay('hide');
+		$.jGrowl('{#SYSBLOCK_SAVED#}');
+	{rdelim}
+
+	$(document).ready(function(){ldelim}
+
+		Mousetrap.bind(['ctrl+s', 'meta+s'], function(e) {ldelim}
+		    if (e.preventDefault) {ldelim}
+		        e.preventDefault();
+		    {rdelim} else {ldelim}
+		        // internet explorer
+		        e.returnValue = false;
+		    {rdelim}
+		    $("#sysblock").ajaxSubmit(sett_options);
+			return false;
+		{rdelim});
+
+	    $(".SaveEdit").click(function(e){ldelim}
+		    if (e.preventDefault) {ldelim}
+		        e.preventDefault();
+		    {rdelim} else {ldelim}
+		        // internet explorer
+		        e.returnValue = false;
+		    {rdelim}
+		    $("#sysblock").ajaxSubmit(sett_options);
+			return false;
+		{rdelim});
+
+	{rdelim});
+
+	{literal}
       var editor = CodeMirror.fromTextArea(document.getElementById("sysblock_text"), {
+      	extraKeys: {"Ctrl-S": function(cm){$("#sysblock").ajaxSubmit(sett_options);}},
         lineNumbers: true,
 		lineWrapping: true,
         matchBrackets: true,
@@ -212,5 +214,7 @@ function Response(){ldelim}
       }
 
 	  var hlLine = editor.setLineClass(0, "activeline");
-    </script>
-{/literal}
+	{/literal}
+
+</script>
+

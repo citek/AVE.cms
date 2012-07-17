@@ -174,7 +174,7 @@
 			<input type="hidden" name="Id" value="{$smarty.request.Id|escape}" />
 			<input class="basicBtn" type="submit" value="{#RUBRIK_BUTTON_TPL#}" />
 			&nbsp;или&nbsp;
-			<input type="submit" class="blackBtn" name="next_edit" value="{#RUBRIK_BUTTON_TPL_NEXT#}" />
+			<input type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#RUBRIK_BUTTON_TPL_NEXT#}" />
 		</div>
 
 
@@ -182,9 +182,52 @@
 	<div class="fix"></div>
 
 </form>
+
+    <script language="Javascript" type="text/javascript">
+    var sett_options = {ldelim}
+		url: '{$formaction}',
+		beforeSubmit: Request,
+        success: Response
+	{rdelim}
+
+	function Request(){ldelim}
+		$.alerts._overlay('show');
+	{rdelim}
+
+	function Response(){ldelim}
+		$.alerts._overlay('hide');
+		$.jGrowl('{#RUBRIK_TEMPLATE_SAVED#}');
+	{rdelim}
+
+	$(document).ready(function(){ldelim}
+
+		Mousetrap.bind(['ctrl+s', 'meta+s'], function(e) {ldelim}
+		    if (e.preventDefault) {ldelim}
+		        e.preventDefault();
+		    {rdelim} else {ldelim}
+		        // internet explorer
+		        e.returnValue = false;
+		    {rdelim}
+		    $("#f_tpl").ajaxSubmit(sett_options);
+			return false;
+		{rdelim});
+
+	    $(".SaveEdit").click(function(e){ldelim}
+		    if (e.preventDefault) {ldelim}
+		        e.preventDefault();
+		    {rdelim} else {ldelim}
+		        // internet explorer
+		        e.returnValue = false;
+		    {rdelim}
+		    $("#f_tpl").ajaxSubmit(sett_options);
+			return false;
+		{rdelim});
+
+	{rdelim});
+
 {literal}
-    <script>
       var editor = CodeMirror.fromTextArea(document.getElementById("rubric_template"), {
+      	extraKeys: {"Ctrl-S": function(cm){$("#f_tpl").ajaxSubmit(sett_options);}},
         lineNumbers: true,
 		lineWrapping: true,
         matchBrackets: true,
@@ -211,5 +254,6 @@
       }
 
 	  var hlLine = editor.setLineClass(0, "activeline");
-    </script>
 {/literal}
+    </script>
+

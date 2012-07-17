@@ -59,13 +59,18 @@ $(document).ready(function(){ldelim}
 
 		<div class="tab_container">
 			<div id="tab1" class="tab_content" style="display: block;">
+<div class="body">
+<strong>{#RUBRIK_FORMAT#}</strong><br />
+<strong>%d-%m-%Y</strong> - {#RUBRIK_FORMAT_TIME#}<br />
+<strong>%id</strong> - {#RUBRIK_FORMAT_ID#}
+</div>
 <form class="mainForm" method="post" action="index.php?do=rubs&amp;cp={$sess}&amp;sub=quicksave{if $smarty.request.page!=''}&amp;page={$smarty.request.page|escape}{/if}">
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 	<col width="20">
 	<col>
 	<col width="200">
 	<col width="200">
-	<col width="100">
+	<col width="140">
 	<col width="50">
 	<col width="20">
 	<col width="20">

@@ -69,7 +69,7 @@ function changeRub(select) {ldelim}
 {/if}
 
 
-<form name="f_tpl" method="post" action="{$formaction}" class="mainForm">
+<form name="f_tpl" id="f_tpl" method="post" action="{$formaction}" class="mainForm">
 <div class="widget first">
 	<input name="pop" type="hidden" id="pop" value="{$smarty.request.pop|escape}" />
 	{assign var=js_form value='f_tpl'}
@@ -79,12 +79,12 @@ function changeRub(select) {ldelim}
 
 		<tr class="noborder">
 			<td>{#REQUEST_NAME2#}</td>
-			<td><input {$dis} style="width:250px" name="request_title" type="text" id="l_Titel" value="{$smarty.request.request_title_new|stripslashes|default:$row->request_title|escape}"></td>
+			<td><input {$dis} class="mousetrap" style="width:250px" name="request_title" type="text" id="l_Titel" value="{$smarty.request.request_title_new|stripslashes|default:$row->request_title|escape}"></td>
 		</tr>
 
 		<tr>
 			<td>{#REQUEST_CACHE#}</td>
-			<td><input {$dis} style="width:250px" name="request_cache_lifetime" type="text" id="request_cache_lifetime" value="{$smarty.request.request_cache_lifetime|stripslashes|default:$row->request_cache_lifetime|escape}"></td>
+			<td><input {$dis} class="mousetrap" style="width:250px" name="request_cache_lifetime" type="text" id="request_cache_lifetime" value="{$smarty.request.request_cache_lifetime|stripslashes|default:$row->request_cache_lifetime|escape}"></td>
 		</tr>
 
 		<tr>
@@ -103,7 +103,7 @@ function changeRub(select) {ldelim}
 
 		<tr>
 			<td>{#REQUEST_DESCRIPTION#}<br /><small>{#REQUEST_INTERNAL_INFO#}</small></td>
-			<td><textarea {$dis} style="width:350px; height:60px" name="request_description" id="request_description">{$row->request_description|escape}</textarea></td>
+			<td><textarea class="mousetrap" {$dis} style="width:350px; height:60px" name="request_description" id="request_description">{$row->request_description|escape}</textarea></td>
 		</tr>
 
 		<tr>
@@ -169,7 +169,7 @@ function changeRub(select) {ldelim}
 
 		<tr>
 			<td>{#REQUEST_SHOW_NAVI#}</td>
-			<td><input name="request_show_pagination" type="checkbox" id="request_show_pagination" value="1"{if $row->request_show_pagination=='1'} checked="checked"{/if} class="float" /><label>&nbsp;</label></td>
+			<td><input class="mousetrap float" name="request_show_pagination" type="checkbox" id="request_show_pagination" value="1"{if $row->request_show_pagination=='1'} checked="checked"{/if} /><label>&nbsp;</label></td>
 		</tr>
 </table>
 	<div class="fix"></div>
@@ -363,7 +363,7 @@ function changeRub(select) {ldelim}
 	{/if}
 	&nbsp;или&nbsp;
 	{if $smarty.request.action=='edit'}
-		<input {$dis} type="submit" class="blackBtn" name="next_edit" value="{#REQUEST_BUTTON_SAVE_NEXT#}" />
+		<input {$dis} type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#REQUEST_BUTTON_SAVE_NEXT#}" />
 	{else}
 		<input {$dis} type="submit" class="blackBtn" name="next_edit" value="{#REQUEST_BUTTON_ADD_NEXT#}" />
 	{/if}
@@ -374,9 +374,52 @@ function changeRub(select) {ldelim}
 </div>
 
 </form>
+
+    <script language="Javascript" type="text/javascript">
+    var sett_options = {ldelim}
+		url: "{$formaction}",
+		beforeSubmit: Request,
+        success: Response
+	{rdelim}
+
+	function Request(){ldelim}
+		$.alerts._overlay('show');
+	{rdelim}
+
+	function Response(){ldelim}
+		$.alerts._overlay('hide');
+		$.jGrowl('{#REQUEST_TEMPLATE_SAVED#}');
+	{rdelim}
+
+	$(document).ready(function(){ldelim}
+
+		Mousetrap.bind(['ctrl+s', 'meta+s'], function(e) {ldelim}
+		    if (e.preventDefault) {ldelim}
+		        e.preventDefault();
+		    {rdelim} else {ldelim}
+		        // internet explorer
+		        e.returnValue = false;
+		    {rdelim}
+		    $("#f_tpl").ajaxSubmit(sett_options);
+			return false;
+		{rdelim});
+
+	    $(".SaveEdit").click(function(e){ldelim}
+		    if (e.preventDefault) {ldelim}
+		        e.preventDefault();
+		    {rdelim} else {ldelim}
+		        // internet explorer
+		        e.returnValue = false;
+		    {rdelim}
+		    $("#f_tpl").ajaxSubmit(sett_options);
+			return false;
+		{rdelim});
+
+	{rdelim});
+
 {literal}
-    <script>
       var editor = CodeMirror.fromTextArea(document.getElementById("request_template_main"), {
+      	extraKeys: {"Ctrl-S": function(cm){$("#f_tpl").ajaxSubmit(sett_options);}},
         lineNumbers: true,
 		lineWrapping: true,
         matchBrackets: true,
@@ -405,6 +448,7 @@ function changeRub(select) {ldelim}
 	  var hlLine = editor.setLineClass(0, "activeline");
 
       var editor2 = CodeMirror.fromTextArea(document.getElementById("request_template_item"), {
+      	extraKeys: {"Ctrl-S": function(cm){$("#f_tpl").ajaxSubmit(sett_options);}},
         lineNumbers: true,
 		lineWrapping: true,
         matchBrackets: true,
@@ -431,6 +475,5 @@ function changeRub(select) {ldelim}
       }
 
       var hlLine = editor2.setLineClass(0, "activeline");
-
-    </script>
 {/literal}
+    </script>

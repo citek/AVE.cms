@@ -28,8 +28,6 @@ $(document).ready(function(){ldelim}
 {rdelim});
 </script>
 
-<div class="widget first"></div>
-
 <div class="title"><h5>{if $smarty.request.moduleaction=='new'}{#CONTACT_CREATE_FORM2#}{else}{#CONTACT_FORM_FIELDS#}{/if}</h5></div>
 
 <div class="widget" style="margin-top: 0px;">

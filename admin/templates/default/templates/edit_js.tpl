@@ -28,7 +28,7 @@
 	</div>
 </div>
 
-<form method="post" action="{$formaction}" class="mainForm">
+<form id="code_templ" method="post" action="{$formaction}" class="mainForm">
 
 <div class="widget first">
 <div class="head"><h5 class="iFrames">{$smarty.request.name_file|escape}</h5></div>
@@ -41,16 +41,58 @@
 <div class="rowElem">
 <button class="basicBtn">{if $smarty.request.action=='new'}{#TEMPLATES_BUTTON_ADD#}{else}{#TEMPLATES_BUTTON_SAVE#}{/if}</button>
 &nbsp;или&nbsp;
-<input type="submit" class="basicBtn" name="next_edit" value="{#TEMPLATES_BUTTON_SAVE_NEXT#}" />
+<input type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#TEMPLATES_BUTTON_SAVE_NEXT#}" />
 	<div class="fix"></div>
 </div>
 
 </div>
 </form>
 
+    <script language="Javascript" type="text/javascript">
+    var sett_options = {ldelim}
+		url: '{$formaction}',
+		beforeSubmit: Request,
+        success: Response
+	{rdelim}
+
+	function Request(){ldelim}
+		$.alerts._overlay('show');
+	{rdelim}
+
+	function Response(){ldelim}
+		$.alerts._overlay('hide');
+		$.jGrowl('{#TEMPLATES_FILE_SAVED#}');
+	{rdelim}
+
+	$(document).ready(function(){ldelim}
+
+		Mousetrap.bind(['ctrl+s', 'meta+s'], function(e) {ldelim}
+		    if (e.preventDefault) {ldelim}
+		        e.preventDefault();
+		    {rdelim} else {ldelim}
+		        // internet explorer
+		        e.returnValue = false;
+		    {rdelim}
+		    $("#code_templ").ajaxSubmit(sett_options);
+			return false;
+		{rdelim});
+
+	    $(".SaveEdit").click(function(e){ldelim}
+		    if (e.preventDefault) {ldelim}
+		        e.preventDefault();
+		    {rdelim} else {ldelim}
+		        // internet explorer
+		        e.returnValue = false;
+		    {rdelim}
+		    $("#code_templ").ajaxSubmit(sett_options);
+			return false;
+		{rdelim});
+
+	{rdelim});
+
 {literal}
-    <script>
       var editor = CodeMirror.fromTextArea(document.getElementById("code_text"), {
+      	extraKeys: {"Ctrl-S": function(cm){$("#code_templ").ajaxSubmit(sett_options);}},
         lineNumbers: true,
 		lineWrapping: true,
         matchBrackets: true,
@@ -65,6 +107,17 @@
 		  hlLine = editor.setLineClass(editor.getCursor().line, null, "activeline");
 		}
       });
+
+      function getSelectedRange() {
+        return { from: editor.getCursor(true), to: editor.getCursor(false) };
+      }
+
+      function textSelection(startTag,endTag) {
+        var range = getSelectedRange();
+        editor.replaceRange(startTag + editor.getRange(range.from, range.to) + endTag, range.from, range.to)
+        editor.setCursor(range.from.line, range.from.ch + startTag.length);
+      }
+
 	  var hlLine = editor.setLineClass(0, "activeline");
-    </script>
 {/literal}
+    </script>

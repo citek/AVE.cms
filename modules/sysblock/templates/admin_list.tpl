@@ -63,7 +63,7 @@ $(document).ready(function(){ldelim}
 		<tbody>
 		{if $sysblocks}
 		{foreach from=$sysblocks item=sysblock}
-			<tr>
+			<tr id="tr{$sysblock->id}">
 				<td class="itcen">{$sysblock->id}</td>
 				<td>
 					<a class="topDir" title="{#SYSBLOCK_EDIT_HINT#}" href="index.php?do=modules&action=modedit&mod=sysblock&moduleaction=edit&cp={$sess}&id={$sysblock->id}">
@@ -77,7 +77,7 @@ $(document).ready(function(){ldelim}
 					<a class="topleftDir icon_sprite ico_edit" title="{#SYSBLOCK_EDIT_HINT#}" href="index.php?do=modules&action=modedit&mod=sysblock&moduleaction=edit&cp={$sess}&id={$sysblock->id}"></a>
 				</td>
 				<td align="center">
-					<a class="topleftDir ConfirmDelete icon_sprite ico_delete" title="{#SYSBLOCK_DELETE_HINT#}" dir="{#SYSBLOCK_DELETE_HINT#}" name="{#SYSBLOCK_DEL_HINT#}" href="index.php?do=modules&action=modedit&mod=sysblock&moduleaction=del&cp={$sess}&id={$sysblock->id}"></a>
+					<a class="topleftDir ConfirmDeleteNew icon_sprite ico_delete" title="{#SYSBLOCK_DELETE_HINT#}" dir="{#SYSBLOCK_DELETE_HINT#}" name="{#SYSBLOCK_DEL_HINT#}" href="index.php?do=modules&action=modedit&mod=sysblock&moduleaction=del&cp={$sess}&id={$sysblock->id}" id="{$sysblock->id}"></a>
 				</td>
 			</tr>
 		{/foreach}

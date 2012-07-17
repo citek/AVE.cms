@@ -22,21 +22,22 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
   </url>
   <?
 $sql="SELECT 
- doc.Id,
- doc.document_alias,
- doc.document_changed 
-FROM ".PREFIX."_documents doc
-left join ".PREFIX."_rubrics rub
- on rub.Id=doc.rubric_id
-left join ".PREFIX."_rubric_permissions rubperm
-  on rubperm.rubric_id=doc.rubric_id
-where 
- rub.rubric_template>' '
- AND doc.document_status=1
- AND doc.document_expire>UNIX_TIMESTAMP()
- AND doc.Id != 2
- AND (rubperm.user_group_id=2 AND rubperm.rubric_permission LIKE '%docread%')
-ORDER BY document_changed DESC 
+			doc.Id,
+			doc.document_alias,
+			doc.document_changed
+		FROM ".PREFIX."_documents doc
+		left join ".PREFIX."_rubrics rub
+			on rub.Id=doc.rubric_id
+		left join ".PREFIX."_rubric_permissions rubperm
+			on rubperm.rubric_id=doc.rubric_id
+		where
+			rub.rubric_template>' '
+			AND doc.document_status=1
+			AND doc.document_expire>UNIX_TIMESTAMP()
+			AND doc.Id != 2
+			AND (document_meta_robots NOT LIKE '%noindex%' or document_meta_robots NOT LIKE '%nofollow%')
+			AND (rubperm.user_group_id=2 AND rubperm.rubric_permission LIKE '%docread%')
+		ORDER BY document_changed DESC
 ";
 $res=$AVE_DB->Query($sql);
 while($row=$res->FetchAssocArray()){

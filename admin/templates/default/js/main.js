@@ -197,7 +197,7 @@ $(document).ready(function(){
 	$("#cacheShow").click( function(e) {
 		e.preventDefault();
 		var title = "Показать размер кеша";
-		var confirm = "Вы уверены, что хотите очистить кэш? Это может занять какое-то время.";
+		var confirm = "Вы уверены, что хотите посмотреть размер кэша?<br />Это может занять какое-то время.";
 		jConfirm(
 				confirm,
 				title,
