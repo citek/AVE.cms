@@ -473,30 +473,113 @@ function get_field_docfromrub($field_value,$type,$field_id='',$rubric_field_temp
 	$res=0;
 	switch ($type)
 	{
+	case 'edit' :
+	    $field  = '<a name="' . $field_id . '"></a>';
+	    $sql="SELECT Id, document_parent, document_title from ". PREFIX ."_documents WHERE rubric_id='".$dropdown."' order by document_parent, document_title";
+	    $res=$AVE_DB->Query($sql);
+	    $field = "<select name=\"feld[" . $field_id . "]\">";
+	    $array=array();
+	    $items=array();
+		while($row = $res->FetchRow()){
+			$row->document_title=($array[$row->document_parent] >'' ? $array[$row->document_parent].' > '.$row->document_title: $row->document_title);
+			$items[$row->document_title]="<option value=\"" . htmlspecialchars($row->Id, ENT_QUOTES) . "\"" . ((trim($field_value) == trim($row->Id)) ? " selected=\"selected\"" : "") . ">" . htmlspecialchars($row->document_title, ENT_QUOTES) . "</option>";
+			$array[$row->Id]=$row->document_title;
+		}
+	    ksort($items);
+	    $field.= implode(chr(10),$items);
+
+	    $field .= "</select>";
+
+	    $res=$field;
+	break;
+
+	case 'doc' :
+		$sql="SELECT document_title from ". PREFIX ."_documents WHERE Id='".$field_value."' LIMIT 1";
+		$field_value=$AVE_DB->Query($sql)->GetCell();
+		$field_value = htmlspecialchars($field_value, ENT_QUOTES);
+		$field_value = pretty_chars($field_value);
+		$field_value = clean_php($field_value);
+		$field_value = str_replace('"', '&quot;', $field_value);
+		if (!$tpl_field_empty)
+		{
+			$field_param = explode('|', $field_value);
+			$field_value = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_param[\\1]', $rubric_field_template);
+		}
+		$res=$field_value;
+	break;
+
+	case 'req' :
+		$res=get_field_default($field_value,$type,$field_id,$rubric_field_template,$tpl_field_empty,$maxlength,$document_fields,$rubric_id);
+	break;
+
+	case 'name' :
+		$res='FIELD_DOCFROMRUB';
+	break;
+	}
+	return ($res ? $res : $field_value);
+}
+
+
+//Документ из рубрики(CHECKBOX)
+function get_field_docfromrubcheck($field_value,$type,$field_id='',$rubric_field_template='',$tpl_field_empty=0,&$maxlength = '',$document_fields=0,$rubric_id=0,$dropdown=''){
+	global $AVE_DB,$AVE_Template, $AVE_Core, $AVE_Document;
+
+	$res=0;
+	switch ($type)
+	{
 		case 'edit' :
-				$field  = '<a name="' . $field_id . '"></a>';
-				$sql="SELECT Id,document_title from ". PREFIX ."_documents WHERE rubric_id='".$dropdown."' ORDER BY document_title ASC";
+				$array=array();
+				$items=array();
+				$sql="SELECT Id, document_parent, document_title from ". PREFIX ."_documents WHERE rubric_id='".$dropdown."' order by document_parent, document_title";
+				$field_value1=explode(',',$field_value);
 				$res=$AVE_DB->Query($sql);
-				$field = "<select name=\"feld[" . $field_id . "]\">";
+				$field = "<input id=\"feld_" . $field_id . "\" name=\"feld[" . $field_id . "]\" value=\"".$field_value."\" type=\"hidden\">";
 				while($row = $res->FetchRow()){
-					$field.="<option value=\"" . htmlspecialchars($row->Id, ENT_QUOTES) . "\"" . ((trim($field_value) == trim($row->Id)) ? " selected=\"selected\"" : "") . ">" . htmlspecialchars($row->document_title, ENT_QUOTES) . "</option>";
+					$row->document_title=($array[$row->document_parent] >'' ? $array[$row->document_parent].' > '.$row->document_title: $row->document_title);
+					$items[$row->document_title]="<div class=\"fix\"><input class=\"float\" value='".$row->Id."' type='checkbox' ".((in_array($row->Id, $field_value1)==false) ? "" : "checked=checked").
+					" onclick=\"
+						$('#feld_" . $field_id ."').val('');
+						var n = $('.field_docfromrubcheck:checked').each(
+							function() {
+								$('#feld_" . $field_id . "').val($('#feld_" . $field_id . "').val() > '' ?  $('#feld_" . $field_id . "').val()+',' + $(this).val() : $(this).val())
+							}
+						);
+						\"><label>".htmlspecialchars($row->document_title, ENT_QUOTES)."</label></div>";
+
+					$array[$row->Id]=$row->document_title;
 				}
-				$field .= "</select>";
+
+				ksort($items);
+				$field.= implode(chr(10),$items);
 
 				$res=$field;
 			break;
 
 		case 'doc' :
-			$field_value = htmlspecialchars($field_value, ENT_QUOTES);
-			$field_value = pretty_chars($field_value);
-			$field_value = clean_php($field_value);
-			$field_value = str_replace('"', '&quot;', $field_value);
-			if (!$tpl_field_empty)
-			{
-				$field_param = explode('|', $field_value);
-				$field_value = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_param[\\1]', $rubric_field_template);
+			$field_value1=explode(',',$field_value);
+			if(is_array($field_value1)){
+				$res=$AVE_DB->Query("SELECT Id,document_title FROM " . PREFIX . "_documents WHERE Id IN (".implode(', ',$field_value1).")");
+				$result=Array();
+				while ($mfa=$res->FetchArray())$result[$mfa['Id']]=$mfa['document_title'];
+				$res='';
+				if ($tpl_field_empty)$res.='<ul>';
+				foreach($field_value1 as $k=>$v){
+					$field_value = htmlspecialchars($v, ENT_QUOTES);
+					$field_value = pretty_chars($field_value);
+					$field_value = clean_php($field_value);
+					if (!$tpl_field_empty)
+					{
+						$field_param = explode('|', $field_value);
+						$field_value = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_param[\\1]', $rubric_field_template);
+					}
+					else
+					{
+					  $field_value="<li>".$result[$field_value]."</li>";
+					}
+					$res.=$field_value;
+				}
+				if ($tpl_field_empty)$res.='</ul>';
 			}
-			$res=$field_value;
 			break;
 
 			case 'req' :
@@ -504,15 +587,12 @@ function get_field_docfromrub($field_value,$type,$field_id='',$rubric_field_temp
 
 			break;
 		case 'name' :
-			$res='FIELD_DOCFROMRUB';
+			$res='FIELD_DOCFROMRUB_CHECK';
 		break;
-	}
-	return ($res ? $res : $field_value);
+	}	return ($res ? $res : $field_value);
 
 }
-
-//Документ из рубрики(CHECKBOX)
-function get_field_docfromrubcheck($field_value,$type,$field_id='',$rubric_field_template='',$tpl_field_empty=0,&$maxlength = '',$document_fields=0,$rubric_id=0,$dropdown=''){
+/*function get_field_docfromrubcheck($field_value,$type,$field_id='',$rubric_field_template='',$tpl_field_empty=0,&$maxlength = '',$document_fields=0,$rubric_id=0,$dropdown=''){
 	global $AVE_DB,$AVE_Template, $AVE_Core, $AVE_Document;
 
 	$res=0;
@@ -567,7 +647,7 @@ function get_field_docfromrubcheck($field_value,$type,$field_id='',$rubric_field
 		break;
 	}	return ($res ? $res : $field_value);
 
-}
+}*/
 
 //Пользовательские поля
 if(file_exists(BASE_DIR . '/functions/user.fields.php'))

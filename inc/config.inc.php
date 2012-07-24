@@ -74,7 +74,7 @@
 	define('Memcached_Port','');
 
 	//Версия сборки
-	define('BILD_VERSION',70);
+	define('BILD_VERSION',84);
 
 	//Проверка обновлений
 	define('SVN_ACTIVE',false);

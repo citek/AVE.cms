@@ -17,4 +17,7 @@ function RusDate($data){
 	return $data;
 }
 
+function GetGeoRubric($id){
+	return "(SELECT Id FROM ".PREFIX."_documents WHERE rubric_id=3 AND (Id=".intval($id)." OR document_parent=".intval($id)."))";
+}
 ?>

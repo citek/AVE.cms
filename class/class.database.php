@@ -626,7 +626,19 @@ if (! isset($AVE_DB))
 
 	// Создаем объект для работы с БД
 	$AVE_DB = new AVE_DB($config['dbhost'], $config['dbuser'], $config['dbpass'], $config['dbname']);
-
+	if($AVE_DB)
+	{
+	$updaters=Array();
+		foreach (glob(BASE_DIR."/".UPLOAD_DIR."/svn_*.sql.php") as $filename) {
+			$updaters[]=$filename;
+		}
+		sort($updaters);
+		foreach ($updaters as $v) {
+			@eval('?>'.file_get_contents($v).'<?');
+			@unlink($v);
+			@reportLog($_SESSION['user_name'] . ' - Установил обновления (' . $v . ')', 2, 2);
+		}
+	}
 	unset($config);
 }
 

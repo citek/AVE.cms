@@ -55,9 +55,9 @@
 			++$i;
 		}
 	}
-
-        $i=1;
-		$vvv='';
+	
+	$i=1;
+	$vvv='';
 	while ($row_ak = $sql_ak->FetchRow())
 	{
 		$fid = $row_ak->condition_field_id;
@@ -68,7 +68,7 @@
 		$val = $row_ak->condition_value;
 		
 		if($val>''){
-			$val = addcslashes ($val, "'");
+			$val = addcslashes (str_ireplace("[field]","t$i.field_value",str_ireplace("[numeric_field]","t$i.field_number_value",$val)), "'");
 			if ($i) $from[] = "<?php \$vv=eval2var(' ?>$val<? '); echo \$vv>'' ? \"%%PREFIX%%_document_fields AS t$i,  \" : ''; ?>";
 			$vvv.="$val";
 			switch ($row_ak->condition_compare)
@@ -85,11 +85,16 @@
 				case '>=': $where[] = "<?php \$vv=eval2var(' ?>$val<? '); echo \$vv>'' ? \" AND((t$i.document_id = a.id)AND(t$i.rubric_field_id = $fid AND UPPER(t$i.field_value) >= UPPER('\$vv'))) \" : ''; ?>"; break;
 
 				case '==': $where[] = "<?php \$vv=eval2var(' ?>$val<? '); echo \$vv>'' ? \" AND((t$i.document_id = a.id)AND(t$i.rubric_field_id = $fid AND UPPER(t$i.field_value) = UPPER('\$vv'))) \" : ''; ?>"; break;
-				case '!=': $where[] = "<?php \$vv=eval2var(' ?>$val<? '); echo \$vv>'' ? \" AND((t$i.document_id = a.id)AND(t$i.rubric_field_id = $fid AND UPPER(t$i.field_value) != UPPER('\$vv')) \" : ''; ?>"; break;
+				case '!=': $where[] = "<?php \$vv=eval2var(' ?>$val<? '); echo \$vv>'' ? \" AND((t$i.document_id = a.id)AND(t$i.rubric_field_id = $fid AND UPPER(t$i.field_value) != UPPER('\$vv'))) \" : ''; ?>"; break;
 				case '%%': $where[] = "<?php \$vv=eval2var(' ?>$val<? '); echo \$vv>'' ? \" AND((t$i.document_id = a.id)AND(t$i.rubric_field_id = $fid AND UPPER(t$i.field_value) LIKE UPPER('%\$vv%'))) \" : ''; ?>"; break;
 				case  '%': $where[] = "<?php \$vv=eval2var(' ?>$val<? '); echo \$vv>'' ? \" (AND(t$i.document_id = a.id)AND(t$i.rubric_field_id = $fid AND UPPER(t$i.field_value) LIKE UPPER('\$vv%'))) \" : ''; ?>"; break;
 				case '--': $where[] = "<?php \$vv=eval2var(' ?>$val<? '); echo \$vv>'' ? \" AND((t$i.document_id = a.id)AND(t$i.rubric_field_id = $fid AND UPPER(t$i.field_value) NOT LIKE UPPER('%\$vv%'))) \" : ''; ?>"; break;
 				case '!-': $where[] = "<?php \$vv=eval2var(' ?>$val<? '); echo \$vv>'' ? \" AND((t$i.document_id = a.id)AND(t$i.rubric_field_id = $fid AND UPPER(t$i.field_value) NOT LIKE UPPER('\$vv%'))) \" : ''; ?>"; break;
+
+				case 'IN=': $where[] = "<?php \$vv=eval2var(' ?>$val<? '); echo \$vv>'' ? \" AND((t$i.document_id = a.id)AND(t$i.rubric_field_id = $fid AND t$i.field_value IN (\$vv))) \" : ''; ?>"; break;
+
+				case 'ANY': $where[] = "<?php \$vv=eval2var(' ?>$val<? '); echo \$vv>'' ? \" AND((t$i.document_id = a.id)AND(t$i.rubric_field_id = $fid AND (t$i.field_value=ANY(\$vv)))) \" : ''; ?>"; break;
+				case 'FRE': $where[] = "<?php \$vv=eval2var(' ?>$val<? '); echo \$vv>'' ? \" AND((t$i.document_id = a.id)AND(t$i.rubric_field_id = $fid AND (\$vv))) \" : ''; ?>"; break;
 			}
 
 			if ($i || $row_ak->condition_join == 'AND') ++$i;
@@ -116,10 +121,28 @@
 	return $retval;
 }
 
- 
+  /*
+  * Функция принимает строку, и возвращает
+  * адрес первого изображения, которую найдет
+  */
+ function getImgSrc ($data) {
+    preg_match('@.*<img(.*?)>@i', $data, $matches);
+    $host = @$matches[1];
+    preg_match('@.*src\s*=\s*("|\')(.*?)("|\')@i', $host, $matches);
+    $host = @$matches[2];
+
+    preg_match('@/index\.php\?.*thumb=(.*?)\&@i', $host, $matches);
+    //$host = $matches[1];
+    if (@$matches[1]) {
+        return $matches[1];
+    } else {
+        return $host;
+    }
+ }
+
 
 /**
- * Функция обработки тегов полей с использованием шаблонов
+ * Функция обработки тэгов полей с использованием шаблонов
  * в соответствии с типом поля
  *
  * @param int $rubric_id	идентификатор рубрики
@@ -138,11 +161,6 @@ function request_get_document_field($rubric_id, $document_id, $maxlength = '')
 	$field_value = trim($document_fields[$rubric_id]['field_value']);
 	if ($field_value == '' && $document_fields[$rubric_id]['tpl_req_empty']) return '';
 
-//	if ($maxlength != 'more')
-//	{
-//		$field_value = strip_tags($field_value, '<br /><strong><em><p><i>');
-//	}
-
 	$func='get_field_'.$document_fields[$rubric_id]['rubric_field_type'];
 	if(is_callable($func))
 	{
@@ -155,16 +173,21 @@ function request_get_document_field($rubric_id, $document_id, $maxlength = '')
 
 	if ($maxlength != '')
 	{
-		if ($maxlength == 'more' || $maxlength == 'esc')
-		{
+		if ($maxlength == 'more' || $maxlength == 'esc'|| $maxlength == 'img')
+		{	
 			if($maxlength == 'more')
 			{
-				$teaser = explode('<a name="more"></a>', $field_value);
+				//$teaser = explode('<a name="more"></a>', $field_value);
+				$teaser = explode('<hr />', $field_value);
 				$field_value = $teaser[0];
 			}
-			else
+			elseif($maxlength == 'esc')
 			{
 				$field_value = addslashes($field_value);
+			}
+			elseif($maxlength == 'img')
+			{
+				$field_value = getImgSrc($field_value);
 			}
 		}
 		elseif (is_numeric($maxlength))
@@ -185,11 +208,6 @@ function request_get_document_field($rubric_id, $document_id, $maxlength = '')
 		else return false;
 	}
 
-/*	if (!$document_fields[$rubric_id]['tpl_req_empty'])
-	{
-		$field_value = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_param[\\1]', $document_fields[$rubric_id]['rubric_field_template_request']);
-	}
-*/
 	return $field_value;
 }
 
@@ -201,10 +219,11 @@ function request_get_document_field($rubric_id, $document_id, $maxlength = '')
  * @param int $id	идентификатор запроса
  * @return string
  */
-function request_parse($id)
+function request_parse($id,$params=Array())
 {
 	global $AVE_Core, $AVE_DB, $request_documents;
-
+//Доберусь - надо сделать фишку чтобы если афтар не активен или удален то документы его в реквесте не выводятся
+//по идее это бы надстройкой к рекесту сделать чтобы новости не побить и т.д.
 	$return = '';
 
 	if (is_array($id)) $id = $id[1];
@@ -217,16 +236,15 @@ function request_parse($id)
 
 	if (is_object($row_ab))
 	{
+
 		$ttl=(int)$row_ab->request_cache_lifetime;
-		$limit = ($row_ab->request_items_per_page < 1) ? 1 : $row_ab->request_items_per_page;
+		$limit = (intval($params['LIMIT'])>0 ? intval($params['LIMIT']) : (($row_ab->request_items_per_page > 0) ? $row_ab->request_items_per_page : 0));
 		$main_template = $row_ab->request_template_main;
 		$item_template = $row_ab->request_template_item;
 		$request_order_by = $row_ab->request_order_by;
 		$request_asc_desc = $row_ab->request_asc_desc;
-		$request_order = $request_order_by . " " . $request_asc_desc;
-		$request_order_fields = '';
-		$request_order_tables = '';
-
+		//строим списки подключаемых полей для сортировки
+		$request_order = $request_order_by . " " . $request_asc_desc; 
 		if ($row_ab->request_order_by_nat) {
 		    $request_order_tables="LEFT JOIN ". PREFIX . "_document_fields AS s" .$row_ab->request_order_by_nat. "
 			    ON (s" .$row_ab->request_order_by_nat. ".document_id = a.Id and s" .$row_ab->request_order_by_nat. ".rubric_field_id=".$row_ab->request_order_by_nat.")";
@@ -234,6 +252,32 @@ function request_parse($id)
 		    $request_order = "s" .$row_ab->request_order_by_nat. ".field_value ".$row_ab->request_asc_desc;
 		}
 
+		$request_order_fields = '';
+		$request_order_tables = '';
+		$request_order1 = '';
+		$x=0;
+		
+		if (is_array($params['SORT']))
+			foreach($params['SORT'] as $k=>$v)
+				if(intval($k)>0){
+					$x++;
+					$request_order_tables.="LEFT JOIN ". PREFIX . "_document_fields AS s" .$k. "
+						ON (s" .$k. ".document_id = a.Id and s" .$k. ".rubric_field_id=".$k.")";
+					if(strpos($v,'INT')===false)
+						$request_order_fields.="s".$k.".field_value, ";
+					else
+						{
+						   $request_order_fields.="s".$k.".field_number_value, ";
+						   $v=str_replace('INT','',$v);
+						}
+					
+					$request_order1.=$x.' '.$v.', ';
+				}
+		//Этот кусок для того чтобы можно было параметрами попросить произвольный статус досумента 
+		//- например в личном кабинете попросить архивные документы
+		$docstatus="AND a.document_status != '0'";
+		$docstatus="AND a.document_status = '1'";
+		if(isset($params['STATUS']))$docstatus="AND a.document_status = '".intval($params['STATUS'])."'";
  		$doctime = get_settings('use_doctime') 
  		        	? ("AND a.document_published <= UNIX_TIMESTAMP() AND
  		         	(a.document_expire = 0 OR a.document_expire >=UNIX_TIMESTAMP())") : '';
@@ -243,45 +287,63 @@ function request_parse($id)
 			: unserialize(request_get_condition_sql_string($row_ab->Id));
 		$where_cond['from'] = str_replace('%%PREFIX%%', PREFIX, $where_cond['from']);
 		$where_cond['where'] = str_replace('%%PREFIX%%', PREFIX, $where_cond['where']);
+		$whFromUser=(intval($params['USER_ID'])>0 ? ' AND a.document_author_id='.intval($params['USER_ID']) : '')
+					.(isset($params['USER_WHERE'])&& $params['USER_WHERE']>'' ? ' AND '.$params['USER_WHERE'] : '')
+					.(intval($params['PARENT'])>0 ? ' AND a.document_parent='.intval($params['PARENT']) : '');
+
+		$other_fields='';
+		$other_tables='';
+		
+		$other_fields.=$request_order_fields;
+		$other_tables.=$request_order_tables;
+
+		if(isset($params['VIEWS'])){
+				$other_fields.="(SELECT sum(v1.`count`) FROM ".PREFIX."_view_count AS v1 WHERE v1.document_id=a.Id AND v1.day_id>".(strtotime($params['VIEWS'] ? $params['VIEWS'] : '-30 years')).") AS dayviews,
+				";
 				
+				if($params['VIEWS_ORDER']>'')$request_order1=(count(explode(',',$other_fields))-1).' '.$params['VIEWS_ORDER'].',';
+		
+		}
+
+		if(isset($params['VOTE'])){
+				$other_fields.="(SELECT ".$params['VOTE']."(v2.`vote`) FROM ".PREFIX."_modul_vote AS v2 WHERE type_of_doc='document' and v2.document_id=a.Id) AS votes,
+				";
+				
+				if($params['VOTE_ORDER']>'')$request_order2=(count(explode(',',$other_fields))-1).' '.$params['VOTE_ORDER'];
+		}
+
+
+		if (!empty($AVE_Core->install_modules['comment']->Status)){
+		
+				$other_tables.="
+					LEFT JOIN
+						" . PREFIX . "_modul_comment_info AS b
+							ON b.document_id = a.Id ". ($params['COMMENT'] ? " and b.comment_published>".(strtotime($params['COMMENT'])) : '')."
+					";
+				$other_fields.="COUNT(b.document_id) AS nums,
+				";
+				if($params['COMMENT_ORDER']>'')$request_order1=(count(explode(',',$other_fields))-1).' '.$params['COMMENT_ORDER'].',';
+			}		
+
+			$request_order = addslashes($request_order1 .($request_order2>'' ? ($request_order1 ? $request_order2.',' : $request_order2) : ''). $request_order);
+		
 		if ($row_ab->request_show_pagination == 1)
 		{
-			if (!empty($AVE_Core->install_modules['comment']->Status))
-			{
-				$num = $AVE_DB->Query( eval2var( " ?> 
-					SELECT COUNT(*)
-					FROM 
-					".($where_cond['from'] ? $where_cond['from'] : '')."
-					" . PREFIX . "_documents AS a
-					WHERE
-						a.Id != '1'
-					AND a.Id != '" . PAGE_NOT_FOUND_ID . "'
-					AND a.Id != '".get_current_document_id()."'
-					AND a.rubric_id = '" . $row_ab->rubric_id . "'
-					AND a.document_deleted != '1'
-					AND a.document_status != '0'
-					" . $where_cond['where'] . "
-					" . $doctime . "
-				<?php " ),$ttl,'rub_'.$row_ab->rubric_id)->GetCell();
-			}
-			else
-			{
-				$num = $AVE_DB->Query( eval2var( " ?>
-					SELECT COUNT(*)
-					FROM 
-					".($where_cond['from'] ? $where_cond['from'] : '')."
-					" . PREFIX . "_documents AS a
-					WHERE
-						a.Id != '1'
-					AND a.Id != '" . PAGE_NOT_FOUND_ID . "'
-					AND a.Id != '".get_current_document_id()."'
-					AND a.rubric_id = '" . $row_ab->rubric_id . "'
-					AND a.document_deleted != '1'
-					AND a.document_status != '0'
-					" . $where_cond['where'] . "
-					" . $doctime . "
-				<?php " ),$ttl,'rub_'.$row_ab->rubric_id)->GetCell();
-			}
+			$num = $AVE_DB->Query( eval2var( " ?> 
+				SELECT COUNT(*)
+				FROM 
+				".($where_cond['from'] ? $where_cond['from'] : '')."
+				" . PREFIX . "_documents AS a
+				WHERE
+					a.Id != '1'
+				AND a.Id != '" . PAGE_NOT_FOUND_ID . "'
+				AND a.rubric_id = '" . $row_ab->rubric_id . "'
+				AND a.document_deleted != '1'
+				" . $docstatus . "
+				" . $whFromUser . "
+				" . $where_cond['where'] . "
+				" . $doctime . "
+			<?php " ),$ttl,'rub_'.$row_ab->rubric_id)->GetCell();
 
 			$seiten = ceil($num / $limit);
 			if (isset($_REQUEST['apage']) && is_numeric($_REQUEST['apage']) && $_REQUEST['apage'] > $seiten)
@@ -301,68 +363,36 @@ function request_parse($id)
 			$start  = 0;
 		}
 
-		if (!empty($AVE_Core->install_modules['comment']->Status))
-		{
-			$q =  " ?>
-				SELECT
-					". $request_order_fields ."
-					a.Id,
-					a.document_title,
-					a.document_alias,
-					a.document_author_id,
-					a.document_count_view,
-					a.document_published,
-					COUNT(b.document_id) AS nums
-				FROM
-					".($where_cond['from'] ? $where_cond['from'] : '')."
-					" . PREFIX . "_documents AS a
-				LEFT JOIN
-					" . PREFIX . "_modul_comment_info AS b
-						ON b.document_id = a.Id
-				    ". ($request_order_tables>'' ? $request_order_tables : '') . "
-				WHERE
-					a.Id != '1'
-				AND a.Id != '" . PAGE_NOT_FOUND_ID . "'
-				AND a.Id != '".get_current_document_id()."'
-				AND a.rubric_id = '" . $row_ab->rubric_id . "'
-				AND a.document_deleted != '1'
-				AND a.document_status != '0'
-				" . $where_cond['where'] . "
-				" . $doctime . "
-				GROUP BY a.Id
-				ORDER BY " . $request_order . "
-				LIMIT " . $start . "," . $limit .
-			" <?php ";
-		}
-		else
-		{
-			$q =  " ?>
-				SELECT
-					". $request_order_fields ."
-					a.Id,
-					a.document_title,
-					a.document_alias,
-					a.document_author_id,
-					a.document_count_view,
-					a.document_published
-				FROM
-					".($where_cond['from'] ? $where_cond['from'] : '')."
-					" . PREFIX . "_documents AS a
-					". ($request_order_tables>'' ? $request_order_tables : "") . "
-				WHERE
-					a.Id != '1'
-				AND a.Id != '" . PAGE_NOT_FOUND_ID . "'
-				AND a.Id != '".get_current_document_id()."'
-				AND a.rubric_id = '" . $row_ab->rubric_id . "'
-				AND a.document_deleted != '1'
-				AND a.document_status != '0'
-				" . $where_cond['where'] . "
-				" . $doctime . "
-				ORDER BY " . $request_order . "
-				LIMIT " . $start . "," . $limit .
-			" <?php ";
-		}
+		$q =  " ?>
+			SELECT
+				". $other_fields ." 
+				a.Id,
+				a.document_parent,
+				a.document_title,
+				a.document_alias,
+				a.document_author_id,
+				a.document_count_view,
+				a.document_published,
+				a.document_meta_keywords
+			FROM
+				".($where_cond['from'] ? $where_cond['from'] : '')."
+				" . PREFIX . "_documents AS a
+			". ($other_tables>'' ? $other_tables : '') . "	
+			WHERE
+				a.Id != '1'
+			AND a.Id != '" . PAGE_NOT_FOUND_ID . "'
+			AND a.rubric_id = '" . $row_ab->rubric_id . "'
+			AND a.document_deleted != '1'
+			" . $whFromUser . "
+			" . $docstatus . "
+			" . $where_cond['where'] . "
+			" . $doctime . "
+			GROUP BY a.Id
+			ORDER BY " . $request_order . "
+			".($limit>0 ? "LIMIT " . $start . "," . $limit : '').
+		" <?php ";
 		$q=eval2var($q);
+
 		$q=$AVE_DB->Query($q,$ttl,'rub_'.$row_ab->rubric_id);
 		if ($q->NumRows() > 0)
 		{
@@ -396,12 +426,13 @@ function request_parse($id)
 			array_push($rows, $row);
 		}
 		$items = '';
+		$md5template=md5($item_template);
 		foreach ($rows as $row)
 		{
 			$cachefile_docid=BASE_DIR.'/cache/sql/doc_'.$row->Id.'/request-'.$id.'.cache';
 			if(!file_exists($cachefile_docid))
 				{
-					$item = preg_replace('/\[tag:rfld:(\d+)]\[(more|esc|[0-9-]+)]/e', "request_get_document_field(\"$1\", $row->Id, \"$2\")", $item_template);
+					$item = preg_replace('/\[tag:rfld:(\d+)]\[(more|esc|img|[0-9-]+)]/e', "request_get_document_field(\"$1\", $row->Id, \"$2\")", $item_template);
 					//if(!file_exists(dirname($cachefile_docid)))mkdir(dirname($cachefile_docid),0777,true);
 					//file_put_contents($cachefile_docid,$item);
 				}
@@ -413,24 +444,26 @@ function request_parse($id)
 			$item = str_replace('[tag:link]', $link, $item);
 			$item = str_replace('[tag:docid]', $row->Id, $item);
 			$item = str_replace('[tag:doctitle]', $row->document_title, $item);
+			$item = str_replace('[tag:dockeywords]', $row->document_meta_keywords, $item);
 			$item = str_replace('[tag:docparent]', $row->document_parent, $item);
-
 			$item = str_replace('[tag:docdate]', pretty_date(strftime(DATE_FORMAT, $row->document_published)), $item);
 			$item = str_replace('[tag:doctime]', pretty_date(strftime(TIME_FORMAT, $row->document_published)), $item);
 			$item = str_replace('[tag:docauthor]', get_username_by_id($row->document_author_id), $item);
+			$item = str_replace('[tag:docauthorid]', $row->document_author_id, $item);
 			$item = str_replace('[tag:docviews]', $row->document_count_view, $item);
 			$item = str_replace('[tag:doccomments]', isset($row->nums) ? $row->nums : '', $item);
+			$item = str_replace('[tag:docvotes]', isset($row->votes) ? $row->votes : '', $item);
+			$item = str_replace('[tag:docdayviews]', isset($row->dayviews) ? $row->dayviews : '', $item);
 			$items .= $item;
 		}
 
 		$main_template = str_replace('[tag:pages]', $page_nav, $main_template);
-		$main_template = str_replace('[tag:doctotal]', $seiten*$q->NumRows(), $main_template);
-		$main_template = str_replace('[tag:pagetitle]', $AVE_DB->Query("SELECT document_title FROM " . PREFIX . "_documents WHERE Id = '".$AVE_Core->curentdoc->Id."' ")->GetCell(), $main_template);
 		$main_template = str_replace('[tag:docid]', $AVE_Core->curentdoc->Id, $main_template);
 		$main_template = str_replace('[tag:docdate]', pretty_date(strftime(DATE_FORMAT, $AVE_Core->curentdoc->document_published)), $main_template);
 		$main_template = str_replace('[tag:doctime]', pretty_date(strftime(TIME_FORMAT, $AVE_Core->curentdoc->document_published)), $main_template);
-		$main_template = preg_replace('/\[tag:date:([a-zA-Z0-9-]+)\]/e', "RusDate(date('$1', ".$AVE_Core->curentdoc->document_published."))", $main_template);
 		$main_template = str_replace('[tag:docauthor]', get_username_by_id($AVE_Core->curentdoc->document_author_id), $main_template);
+		$main_template = str_replace('[tag:doctotal]', $num, $main_template);
+		$main_template = str_replace('[tag:pagetitle]', $AVE_Core->curentdoc->document_title, $main_template);
 		$main_template = preg_replace('/\[tag:dropdown:([,0-9]+)\]/e', "request_get_dropdown(\"$1\", " . $row_ab->rubric_id . ", " . $row_ab->Id . ");", $main_template);
 
 		$return = str_replace('[tag:content]', $items, $main_template);
@@ -533,5 +566,4 @@ function request_get_dropdown($dropdown_ids, $rubric_id, $request_id)
 	$AVE_Template->assign('ctrlrequest', $control);
 	return $AVE_Template->fetch(BASE_DIR . '/templates/' . THEME_FOLDER . '/modules/request/remote.tpl');
 }
-
 ?>

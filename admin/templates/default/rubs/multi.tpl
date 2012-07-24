@@ -1,3 +1,4 @@
+<div class="first"></div>
 <div class="title"><h5>{#RUBRIK_MULTIPLY2#}</h5></div>
 <div class="widget" style="margin-top: 0px;"><div class="body">{#RUBRIK_MULTIPLY_TIP#}</div></div>
 
