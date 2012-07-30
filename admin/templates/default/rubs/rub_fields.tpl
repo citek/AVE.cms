@@ -1,3 +1,19 @@
+<link rel="stylesheet" href="{$ABS_PATH}admin/codemirror/lib/codemirror.css">
+
+<script src="{$ABS_PATH}admin/codemirror/lib/codemirror.js" type="text/javascript"></script>
+    <script src="{$ABS_PATH}admin/codemirror/mode/xml/xml.js"></script>
+    <script src="{$ABS_PATH}admin/codemirror/mode/javascript/javascript.js"></script>
+    <script src="{$ABS_PATH}admin/codemirror/mode/css/css.js"></script>
+    <script src="{$ABS_PATH}admin/codemirror/mode/clike/clike.js"></script>
+    <script src="{$ABS_PATH}admin/codemirror/mode/php/php.js"></script>
+
+{literal}
+    <style type="text/css">
+      .activeline {background: #e8f2ff !important;}
+      .CodeMirror-scroll {height: 300px;}
+    </style>
+{/literal}
+
 <script language="Javascript" type="text/javascript">
 $(document).ready(function(){ldelim}
 	$('tr.tpls').hide();
@@ -11,31 +27,6 @@ $(document).ready(function(){ldelim}
 			$("#Fields a.jqTransformCheckbox").addClass("jqTransformChecked");
 		{rdelim}
 	{rdelim});
-
-	$(".selall").click(function(){ldelim}
-		if ($(this).is(":checked")) {ldelim}
-			$("tr."+this.id).find(".checkbox").removeAttr("checked");
-			$("tr."+this.id).find("a.jqTransformCheckbox").removeClass("jqTransformChecked");
-		{rdelim}
-		else {ldelim}
-			$("tr."+this.id).find(".checkbox").attr("checked","checked");
-			$("tr."+this.id).find("a.jqTransformCheckbox").addClass("jqTransformChecked");
-		{rdelim}
-	{rdelim});
-
-	{literal}
-	$('.collapsible').collapsible({
-		defaultOpen: 'opened',
-		cssOpen: 'inactive',
-		cssClose: 'normal',
-		cookieName: 'collaps_rub',
-		cookieOptions: {
-	        expires: 7,
-			domain: ''
-    	},
-		speed: 200
-	});
-	{/literal}
 
 {rdelim});
 </script>
@@ -104,7 +95,7 @@ $(document).ready(function(){ldelim}
 				</td>
 				<td><div class="pr12"><input name="rubric_field_default[{$rf->Id}]" type="text" id="rubric_field_default[{$rf->Id}]" value="{$rf->rubric_field_default}" style="width:100%;" /></div></td>
 				<td>
-					<div class="pr12"><input name="rubric_field_position[{$rf->Id}]" type="text" id="rubric_field_position[{$rf->Id}]" value="{$rf->rubric_field_position}" size="4" maxlength="5" autocomplete="off" /></div>
+					<div class="pr12"><input name="rubric_field_position[{$rf->Id}]" type="text" id="rubric_field_position[{$rf->Id}]" value="{$rf->rubric_field_position}" size="4" maxlength="5" /></div>
 				</td>
 				<td align="center">
 					<a class="topleftDir icon_sprite ico_template" title="{#RUBRIK_TEMPLATE_TOGGLE#}" href="javascript:void(0);" onclick="$('#tpl_{$rf->Id}').toggle();"></a>
@@ -185,7 +176,7 @@ $(document).ready(function(){ldelim}
 {/if}
 
 <div class="widget first">
-	<div class="head collapsible" id="opened"><h5>{#RUBRIK_NEW_FIELD#}</h5></div>
+	<div class="head closed active"><h5>{#RUBRIK_NEW_FIELD#}</h5></div>
 	<div style="display: block;">
 	<form id="newfld" action="index.php?do=rubs&amp;action=edit&amp;Id={$smarty.request.Id|escape}&amp;cp={$sess}" method="post" class="mainForm">
 	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
@@ -220,7 +211,7 @@ $(document).ready(function(){ldelim}
 			</td>
 
 			<td>
-				<div class="pr12"><input name="rubric_field_position_new" type="text" id="rubric_field_position_new" value="100" size="4" maxlength="5" autocomplete="off" /></div>
+				<div class="pr12"><input name="rubric_field_position_new" type="text" id="rubric_field_position_new" value="10" size="4" maxlength="5" /></div>
 			</td>
 		</tr>
 
@@ -228,6 +219,47 @@ $(document).ready(function(){ldelim}
 			<td colspan="4" class="third">
 				<input type="hidden" name="submit" value="" id="nf_hidd" />
 				<input class="basicBtn" type="submit" value="{#RUBRIK_BUTTON_ADD#}" onclick="document.getElementById('nf_hidd').value='newfield'" /><br />
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</form>
+</div>
+</div>
+
+
+<div class="widget first">
+	<div class="head closed active"><h5>{#RUBRIK_CODE#}</h5></div>
+	<div style="display: block;">
+	<form id="newfld" action="index.php?do=rubs&amp;action=edit&amp;Id={$smarty.request.Id|escape}&amp;cp={$sess}" method="post" class="mainForm">
+	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+		<col width="50%">
+		<col width="50%">
+		<thead>
+		<tr>
+			<td>{#RUBRIK_CODE_START#}</td>
+			<td>{#RUBRIK_CODE_END#}</td>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td>
+				<div class="pr12">
+					<textarea name="rubric_code_start" type="text" id="code_start" value="" style="height:300px;" />{$rubric->rubric_code_start}</textarea>
+				</div>
+			</td>
+
+			<td>
+				<div class="pr12">
+					<textarea name="rubric_code_end" type="text" id="code_end" value="" style="height:300px;" />{$rubric->rubric_code_end}</textarea>
+				</div>
+			</td>
+		</tr>
+
+		<tr>
+			<td colspan="4" class="third">
+				<input type="hidden" name="submit" value="code" id="code" />
+				<input class="basicBtn" type="submit" value="{#RUBRIK_BUTTON_SAVE#}" /><br />
 			</td>
 		</tr>
 		</tbody>
@@ -255,8 +287,8 @@ $(document).ready(function(){ldelim}
 		<thead>
 		<tr>
 			<td>{#RUBRIK_USER_GROUP#}</td>
-			<td align="center">{#RUBRIK_ALL_PERMISSION#} <div align="center"><a title="{#RUBRIK_ALL_TIP#}" href="javascript:void(0);" class="toprightDir icon_sprite ico_info_no"></a></div></td>
 			<td align="center">{#RUBRIK_DOC_READ#} <div align="center"><a title="{#RUBRIK_VIEW_TIP#}" href="javascript:void(0);" class="toprightDir icon_sprite ico_info_no"></a></div></td>
+			<td align="center">{#RUBRIK_ALL_PERMISSION#} <div align="center"><a title="{#RUBRIK_ALL_TIP#}" href="javascript:void(0);" class="toprightDir icon_sprite ico_info_no"></a></div></td>
 			<td align="center">{#RUBRIK_CREATE_DOC#} <div align="center"><a title="{#RUBRIK_DOC_TIP#}" href="javascript:void(0);" class="toprightDir icon_sprite ico_info_no"></a></div></td>
 			<td align="center">{#RUBRIK_CREATE_DOC_NOW#} <div align="center"><a title="{#RUBRIK_DOC_NOW_TIP#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_info_no"></a></div></td>
 			<td align="center">{#RUBRIK_EDIT_OWN#} <div align="center"><a title="{#RUBRIK_OWN_TIP#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_info_no"></a></div></td>
@@ -266,64 +298,63 @@ $(document).ready(function(){ldelim}
 		<tbody>
 		{foreach from=$groups item=group}
 			{assign var=doall value=$group->doall}
-			<tr class="perm_group_{$group->user_group}">
+			<tr>
 				<td>
 					{$group->user_group_name|escape:html}
 				</td>
 
 				<td align="center">
 					{if $group->doall_h==1}
-						<input type="hidden" name="perm[{$group->user_group}][]" value="alles" />
-						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
-					{else}
-						<input id="perm_group_{$group->user_group}" class="selall" name="perm[{$group->user_group}][]" type="checkbox" value="alles"{if in_array('alles', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
-					{/if}
-				</td>
-
-				<td align="center">
-					{if $group->doall_h==1}
 						<input type="hidden" name="perm[{$group->user_group}][]" value="docread" />
-						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
+						<input name="perm[{$group->user_group}][]" type="checkbox" value="docread" checked="checked" disabled="disabled" />
 					{else}
-						<input class="checkbox" name="perm[{$group->user_group}][]" type="checkbox" value="docread"{if in_array('docread', $group->permissions)} checked="checked"{/if} />
+						<input name="perm[{$group->user_group}][]" type="checkbox" value="docread"{if in_array('docread', $group->permissions) || in_array('alles', $group->permissions)} checked="checked"{/if} />
+					{/if}
+				</td>
+
+				<td align="center">
+					{if $group->doall_h==1}
+						<input type="hidden" name="perm[{$group->user_group}][]" value="alles" />
+						<input name="perm[{$group->user_group}][]" type="checkbox" value="alles" checked="checked" disabled="disabled" />
+					{else}
+						<input name="perm[{$group->user_group}][]" type="checkbox" value="alles"{if in_array('alles', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
 					{/if}
 				</td>
 
 				<td align="center">
 					<input type="hidden" name="user_group[{$group->user_group}]" value="{$group->user_group}" />
 					{if $group->doall_h==1}
+						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
 						<input type="hidden" name="perm[{$group->user_group}][]" value="new" />
-						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
 					{else}
-						<input class="checkbox" onclick="document.getElementById('newnow_{$group->user_group}').checked = '';" id="new_{$group->user_group}" name="perm[{$group->user_group}][]" type="checkbox" value="new"{if in_array('new', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
+						<input onclick="document.getElementById('newnow_{$group->user_group}').checked = '';" id="new_{$group->user_group}" name="perm[{$group->user_group}][]" type="checkbox" value="new"{if in_array('new', $group->permissions) || in_array('alles', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
 					{/if}
 				</td>
 
 				<td align="center">
 					<input type="hidden" name="user_group[{$group->user_group}]" value="{$group->user_group}" />
 					{if $group->doall_h==1}
+						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
 						<input type="hidden" name="perm[{$group->user_group}][]" value="newnow" />
-						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
 					{else}
-						<input class="checkbox" onclick="document.getElementById('new_{$group->user_group}').checked = '';" id="newnow_{$group->user_group}" name="perm[{$group->user_group}][]" type="checkbox" value="newnow"{if in_array('newnow', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
+						<input onclick="document.getElementById('new_{$group->user_group}').checked = '';" id="newnow_{$group->user_group}" name="perm[{$group->user_group}][]" type="checkbox" value="newnow"{if in_array('newnow', $group->permissions) || in_array('alles', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
 					{/if}
 				</td>
 
 				<td align="center">
 					{if $group->doall_h==1}
+						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
 						<input type="hidden" name="perm[{$group->user_group}][]" value="editown" />
-						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
 					{else}
-						<input class="checkbox" id="editown_{$group->user_group}" name="perm[{$group->user_group}][]" type="checkbox" value="editown"{if in_array('editown', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
+						<input id="editown_{$group->user_group}" name="perm[{$group->user_group}][]" type="checkbox" value="editown"{if in_array('editown', $group->permissions) || in_array('alles', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
 					{/if}
 				</td>
 
 				<td align="center">
 					{if $group->doall_h==1}
-						<input type="hidden" name="perm[{$group->user_group}][]" value="editall" />
 						<input name="{$group->user_group}" type="checkbox" value="1"{$doall} />
 					{else}
-						<input class="checkbox" name="perm[{$group->user_group}][]" type="checkbox" value="editall"{if in_array('editall', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
+						<input name="perm[{$group->user_group}][]" type="checkbox" value="editall"{if in_array('editall', $group->permissions) || in_array('alles', $group->permissions)} checked="checked"{/if}{if $group->user_group==2} disabled="disabled"{/if} />
 					{/if}
 				</td>
 			</tr>
@@ -340,3 +371,63 @@ $(document).ready(function(){ldelim}
 </div></div>
 
 {/if}
+
+    <script language="Javascript" type="text/javascript">
+{literal}
+      var editor = CodeMirror.fromTextArea(document.getElementById("code_start"), {
+        lineNumbers: true,
+		lineWrapping: true,
+        matchBrackets: true,
+        mode: "application/x-httpd-php",
+        indentUnit: 4,
+        indentWithTabs: true,
+        enterMode: "keep",
+        tabMode: "shift",
+        onChange: function(){editor.save();},
+		onCursorActivity: function() {
+		  editor.setLineClass(hlLine, null, null);
+		  hlLine = editor.setLineClass(editor.getCursor().line, null, "activeline");
+		}
+      });
+
+      function getSelectedRange() {
+        return { from: editor.getCursor(true), to: editor.getCursor(false) };
+      }
+
+      function textSelection(startTag,endTag) {
+        var range = getSelectedRange();
+        editor.replaceRange(startTag + editor.getRange(range.from, range.to) + endTag, range.from, range.to)
+        editor.setCursor(range.from.line, range.from.ch + startTag.length);
+      }
+
+	  var hlLine = editor.setLineClass(0, "activeline");
+
+      var editor2 = CodeMirror.fromTextArea(document.getElementById("code_end"), {
+        lineNumbers: true,
+		lineWrapping: true,
+        matchBrackets: true,
+        mode: "application/x-httpd-php",
+        indentUnit: 4,
+        indentWithTabs: true,
+        enterMode: "keep",
+        tabMode: "shift",
+        onChange: function(){editor2.save();},
+		onCursorActivity: function() {
+		  editor2.setLineClass(hlLine, null, null);
+		  hlLine = editor2.setLineClass(editor2.getCursor().line, null, "activeline");
+		}
+      });
+
+      function getSelectedRange2() {
+        return { from: editor2.getCursor(true), to: editor2.getCursor(false) };
+      }
+
+      function textSelection2(startTag,endTag) {
+        var range = getSelectedRange2();
+        editor2.replaceRange(startTag + editor2.getRange(range.from, range.to) + endTag, range.from, range.to)
+        editor2.setCursor(range.from.line, range.from.ch + startTag.length);
+      }
+
+      var hlLine = editor2.setLineClass(0, "activeline");
+{/literal}
+    </script>

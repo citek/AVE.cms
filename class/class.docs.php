@@ -664,6 +664,33 @@ class AVE_Document
 	 }
 
 	/**
+	* Функция предназначенна для анализа ключевых слов и разненсения их по табличке _document_keyword
+	*
+	*/
+	function generateKeywords($document_id,$keywords=null){
+		global $AVE_DB;
+		if(!$keywords)$keywords=$AVE_DB->Query("SELECT document_meta_keywords FROM ".PREFIX."_documents WHERE Id=".intval($document_id)." LIMIT 1")->GetCell();
+		$keywords=explode(',',$keywords);
+		$res=$AVE_DB->Query("DELETE FROM ".PREFIX."_document_keywords where document_id=".intval($document_id)." LIMIT 1");
+		foreach($keywords as $k=>$v){
+			if(trim($v)>''){
+				$key=trim(mb_substr($v,0,254));
+				$res=$AVE_DB->Query("INSERT INTO ".PREFIX."_document_keywords
+					(
+						document_id,
+						keyword
+					)
+					VALUES
+					(
+						'".intval($document_id)."',
+						UPPER('".clean_no_print_char($key)."')
+					)
+					");
+			}
+		}
+	}
+
+	/**
 	 * Метод, предназначенный для сохранения документа в БД
 	 *
 	 * @param int $rubric_id	идентификатор Рубрики
@@ -683,13 +710,17 @@ class AVE_Document
 		//определяем тип опреации
 		$oper='INSERT';
 
+		// выполняем стартовый код рубрики
+		$code = $AVE_DB->Query("SELECT rubric_code_start, rubric_code_end FROM " . PREFIX . "_rubrics WHERE Id = '" . $rubric_id . "'")->FetchRow();
+		eval ('?>' . $code->rubric_code_start . '<?');
+
 		if($document_id>0)$oper='UPDATE';
 		// Если пользователь имеет права на добавление документов в указанную рубрику, тогда
 		if ($oper=='INSERT' && !( (isset($_SESSION[$rubric_id . '_newnow'])  && $_SESSION[$rubric_id . '_newnow'] == 1)
 			|| (isset($_SESSION[$rubric_id . '_new'])   && $_SESSION[$rubric_id . '_new']    == 1)
 			|| (isset($_SESSION[$rubric_id . '_alles']) && $_SESSION[$rubric_id . '_alles']  == 1)
 			|| (defined('UGROUP') && UGROUP == 1) )) return false;
-		
+
 		if($oper=='UPDATE'){
 			// Выполняем запрос к БД на получение автора документа и id Рубрики
 				$row = $AVE_DB->Query("
@@ -758,15 +789,6 @@ class AVE_Document
 					$document_status = !empty($data['document_status']) ? (int)$data['document_status'] : '0';
 					$document_status = ($document_id == 1 || $document_id == PAGE_NOT_FOUND_ID) ? '1' : $document_status;
 
-					if ( preg_replace('/%id/', '', $data['document_alias']) ) {
-						$max = $AVE_DB->Query("
-							SELECT MAX(Id)
-							FROM " . PREFIX . "_documents
-						")->GetCell();
-
-						$data['document_alias'] = preg_replace('/%id/', $max+1, $data['document_alias']);
-					} else {
-
 					$data['document_alias'] = $_url = prepare_url(empty($data['document_alias']) ? trim($data['prefix'] . '/' . $data['doc_title'], '/') : $data['document_alias']);
 
 					$cnt = 1;
@@ -778,12 +800,10 @@ class AVE_Document
 							LIMIT 1
 						")->NumRows())
 					{
-
 						$data['document_alias'] = $_url . '-' . $cnt;
 						$cnt++;
 					}
 
-			}
 
 		}
 					$docstart	= ($document_id == 1 || $document_id == PAGE_NOT_FOUND_ID) ? '0' : $this->_documentStart($data['document_published']);
@@ -909,9 +929,13 @@ class AVE_Document
 						FROM " . PREFIX . "_rubric_template_cache
 						WHERE doc_id = '" . $document_id . "'
 					");
+		// выполняем финишный код рубрики
+		eval ('?>' . $code->rubric_code_end . '<?');
+
 		//чистим кеш
-		$AVE_DB->clearcache('rub_'.$rubric_id);			
-		$AVE_DB->clearcache('doc_'.$document_id);			
+		$AVE_DB->clearcache('rub_'.$rubric_id);
+		$AVE_DB->clearcache('doc_'.$document_id);
+		$this->generateKeywords($document_id);
 		return $document_id;
 	}
 
@@ -1048,11 +1072,19 @@ class AVE_Document
 						$document->dontChangeStatus = 1;
 					}
 
+					$max = $AVE_DB->Query("
+						SELECT MAX(Id)
+						FROM " . PREFIX . "_documents
+					")->GetCell();
 
 					// Формируем данные и передаем в шаблон
 					$document->fields = $fields;
 					$document->rubric_title = $AVE_Rubric->rubricNameByIdGet($rubric_id)->rubric_title;
-					$document->rubric_url_prefix = strftime($AVE_Rubric->rubricNameByIdGet($rubric_id)->rubric_alias);
+					if (preg_match('/%id/i',  $AVE_Rubric->rubricNameByIdGet($rubric_id)->rubric_alias)) {
+						$document->rubric_url_prefix = str_ireplace("%id", $max+1, $AVE_Rubric->rubricNameByIdGet($rubric_id)->rubric_alias);
+					} else {
+						$document->rubric_url_prefix = strftime($AVE_Rubric->rubricNameByIdGet($rubric_id)->rubric_alias);
+					}
 					$document->formaction = 'index.php?do=docs&action=new&sub=save&rubric_id=' . $rubric_id . ((isset($_REQUEST['pop']) && $_REQUEST['pop']==1) ? 'pop=1' : '') . '&cp=' . SESSION;
 					$document->document_published = time();
 					$document->document_expire = mktime(date("H"), date("i"), 0, date("m"), date("d"), date("Y") + 10);
@@ -1177,6 +1209,8 @@ class AVE_Document
 					$document->rubric_title = $AVE_Rubric->rubricNameByIdGet($document->rubric_id)->rubric_title;
 					$document->rubric_url_prefix = $AVE_Rubric->rubricNameByIdGet($document->rubric_id)->rubric_alias;
 					$document->formaction = 'index.php?do=docs&action=edit&sub=save&Id=' . $document_id . '&cp=' . SESSION;
+
+					if ($document->document_parent != 0) $document->parent = $AVE_DB->Query("SELECT document_title, Id FROM " . PREFIX . "_documents WHERE Id = '".$document->document_parent."' ")->FetchRow();
 
 					$AVE_Template->assign('document', $document);
 //					$AVE_Template->assign('DEF_DOC_END_YEAR', mktime(date("H"), date("i"), 0, date("m"), date("d"), date("Y") + 10));

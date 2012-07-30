@@ -647,16 +647,46 @@ class AVE_Core
 				}
 				else
 				{
-					if (!isset ($_SESSION['doc_view[' . $id . ']']))
-					{	// увеличиваем счетчик просмотров (1 раз в пределах сессии)
-						$AVE_DB->Query("
-							UPDATE " . PREFIX . "_documents
-							SET document_count_view = document_count_view+1
-							WHERE Id = '" . $id . "'
+				if (!isset ($_SESSION['doc_view[' . $id . ']']))
+				{ // увеличиваем счетчик просмотров (1 раз в пределах сессии)
+					$AVE_DB->Query("
+						UPDATE " . PREFIX . "_documents
+						SET document_count_view = document_count_view+1
+						WHERE Id = '" . $id . "'
 						");
-						$_SESSION['doc_view[' . $id . ']'] = 1;
-					}
+					$_SESSION['doc_view[' . $id . ']'] = 1;
 				}
+				$curdate=mktime(0, 0, 0, date("m")  , date("d"), date("Y"));
+				if (!isset ($_SESSION['doc_view_dayly'][$curdate][$id]))
+				{
+
+					// и подневный счетчик просмотров тоже увеличиваем
+					$curdate=mktime(0, 0, 0, date("m")  , date("d"), date("Y"));
+					$AVE_DB->Query("
+						UPDATE
+						" . PREFIX . "_view_count
+						SET
+						count = count + 1
+						WHERE
+						document_id = '" . $id . "' AND
+						day_id = '".$curdate."'
+						");
+					if (!$AVE_DB->_handle->affected_rows) {
+						$AVE_DB->Query("
+							INSERT INTO " . PREFIX . "_view_count (
+							document_id,
+							day_id,
+							count
+							)
+							VALUES (
+							'" . $id . "',  '".$curdate."', '1'
+							)
+							");
+					}
+					$_SESSION['doc_view_dayly'][$curdate][$id] = 1;
+				}
+
+			}
 
 				if (CACHE_DOC_TPL && empty ($_POST) && !(isset ($_SESSION['user_adminmode']) && $_SESSION['user_adminmode'] == 1))
 				{	// кэширование разрешено

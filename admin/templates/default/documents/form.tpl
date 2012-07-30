@@ -322,7 +322,7 @@ $(document).ready(function(){ldelim}
 			<td>{#DOC_USE_BREADCRUMB#}</td>
 			<td colspan="3">
 				<input name="document_parent" type="text" id="document_parent" value="{$document->document_parent}" size="4" maxlength="10" style="width: 50px;" />&nbsp;
-				<span class="button basicBtn" onClick="openLinkWinId('document_parent','document_parent');">выбрать</span>
+				<span class="button basicBtn" onClick="openLinkWinId('document_parent','document_parent');">выбрать</span> {if $document->parent}Связан с «<a href="{$ABS_PATH}index.php?id={$document->parent->Id}" target="_blank">{$document->parent->document_title}</a>»{/if}
 			</td>
 		</tr>
 		</tbody>
