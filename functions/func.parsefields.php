@@ -86,18 +86,14 @@ function document_get_field($field_id)
 
 		if ($wysmode)
 		{
-			$field_value .= '<a href="javascript:;" onclick=window.open("'.ABS_PATH.'admin/index.php?do=docs&action=edit&closeafter=1&RubrikId=' . RUB_ID . '&Id=' . ((int)$_REQUEST['id'])
-				. '&pop=1&feld=' . $document_fields[$field_id]['Id'] . '#' . $document_fields[$field_id]['Id'] . '","EDIT","left=0,top=0,width=1300,height=900,scrollbars=1");><img style="vertical-align:middle" src="' . ABS_PATH . 'inc/stdimage/edit.gif" border="0" alt="" /></a>';
-			if ($field_type == 'bild')
-			{
-				$field_value =	'<p style="width:100%;float:left;border:1px dashed #ccc;border-top:0px;line-heigth:0.1em;padding:3px">'
-								. $field_value .
-								'</p><p style="line-height:0.1em;clear:both"></p>';
-			}
+			$f_value .= '<link rel="stylesheet" href="inc/stdimage/gear.css" type="text/css" />';
+			$f_value .= '<div class="contextual-links-wrapper contextual-links-processed">';
+			$f_value .= '<a class="contextual-links-trigger" href="javascript:void(0);" onclick=window.open("'.ABS_PATH.'admin/index.php?do=docs&action=edit&closeafter=1&RubrikId=' . RUB_ID . '&Id=' . ((int)$_REQUEST['id'])
+				. '&pop=1&feld=' . $field_id . '#' . $field_id . '","EDIT","left=0,top=0,width=1300,height=900,scrollbars=1");></a>';
+			$f_value_end .= '</div>';
 		}
 	}
-
-	return $field_value;
+	return $f_value.$field_value.$f_value_end;
 }
 
 /**

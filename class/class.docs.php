@@ -1072,7 +1072,7 @@ class AVE_Document
 						$document->dontChangeStatus = 1;
 					}
 
-					$max = $AVE_DB->Query("
+					$maxId = $AVE_DB->Query("
 						SELECT MAX(Id)
 						FROM " . PREFIX . "_documents
 					")->GetCell();
@@ -1080,11 +1080,7 @@ class AVE_Document
 					// Формируем данные и передаем в шаблон
 					$document->fields = $fields;
 					$document->rubric_title = $AVE_Rubric->rubricNameByIdGet($rubric_id)->rubric_title;
-					if (preg_match('/%id/i',  $AVE_Rubric->rubricNameByIdGet($rubric_id)->rubric_alias)) {
-						$document->rubric_url_prefix = str_ireplace("%id", $max+1, $AVE_Rubric->rubricNameByIdGet($rubric_id)->rubric_alias);
-					} else {
-						$document->rubric_url_prefix = strftime($AVE_Rubric->rubricNameByIdGet($rubric_id)->rubric_alias);
-					}
+					$document->rubric_url_prefix = strftime(str_ireplace("%id", $maxId+1, $AVE_Rubric->rubricNameByIdGet($rubric_id)->rubric_alias));
 					$document->formaction = 'index.php?do=docs&action=new&sub=save&rubric_id=' . $rubric_id . ((isset($_REQUEST['pop']) && $_REQUEST['pop']==1) ? 'pop=1' : '') . '&cp=' . SESSION;
 					$document->document_published = time();
 					$document->document_expire = mktime(date("H"), date("i"), 0, date("m"), date("d"), date("Y") + 10);
