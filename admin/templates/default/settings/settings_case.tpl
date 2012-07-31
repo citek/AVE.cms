@@ -1,43 +1,3 @@
-<script language="javascript">
-
-$(document).ready(function(){ldelim}
-
-    var sett_options = {ldelim}
-		url: 'index.php?do=settings&cp={$sess}&sub=save&dop=case',
-		beforeSubmit: Request,
-        success: Response
-	{rdelim}
-
-    $(".ConfirmSettings").click(function(e){ldelim}
-		e.preventDefault();
-		var title = '{#SETTINGS_BUTTON_SAVE#}';
-		var confirm = '{#SETTINGS_SAVE_CONFIRM#}';
-		jConfirm(
-				confirm,
-				title,
-				function(b){ldelim}
-					if (b){ldelim}
-        				$("#settings").ajaxSubmit(sett_options);
-					{rdelim}
-				{rdelim}
-			);
-	{rdelim});
-
-{rdelim});
-
-function Request(){ldelim}
-	$.alerts._overlay('show');
-	$('html, body').animate({ldelim}scrollTop:0{rdelim});
-{rdelim}
-
-function Response(){ldelim}
-
-	$.alerts._overlay('hide');
-	$.jGrowl('{#SETTINGS_SAVED#}');
-{rdelim}
-
-</script>
-
 <div class="title"><h5>{#SETTINGS_CASE_TITLE#}</h5></div>
 
 <div class="widget" style="margin-top: 0px;">
@@ -89,10 +49,10 @@ function Response(){ldelim}
 				</select>
 			{/if}
 			{if $def.TYPE=="string"}
-				<input name="GLOB[{$_var}]" type="text" id="{$_var}" style="width:550px" value="{php} echo(constant  ($this->_tpl_vars['_var']));{/php}" size="100" />
+				<input class="mousetrap" name="GLOB[{$_var}]" type="text" id="{$_var}" style="width:550px" value="{php} echo(constant  ($this->_tpl_vars['_var']));{/php}" size="100" />
 			{/if}
 			{if $def.TYPE=="integer"}
-				<input name="GLOB[{$_var}]" type="text" id="{$_var}" style="width:550px" value="{php} echo(constant  ($this->_tpl_vars['_var']));{/php}" size="100" />
+				<input class="mousetrap" name="GLOB[{$_var}]" type="text" id="{$_var}" style="width:550px" value="{php} echo(constant  ($this->_tpl_vars['_var']));{/php}" size="100" />
 			{/if}
 			{if $def.TYPE=="bool"}
 				<input type="radio" name="GLOB[{$_var}]" value="1" {php} echo(constant($this->_tpl_vars['_var']) ? 'checked' : "");{/php} /><label style="cursor: pointer;">{#SETTINGS_YES#}</label>
@@ -107,7 +67,7 @@ function Response(){ldelim}
 
 
 <div class="rowElem">
-	<input type="submit" class="basicBtn ConfirmSettings" value="{#SETTINGS_BUTTON_SAVE#}" />
+	<input type="submit" class="basicBtn SaveSettings" value="{#SETTINGS_BUTTON_SAVE#}" />
 </div>
 
 
@@ -117,4 +77,53 @@ function Response(){ldelim}
 
 </form>
 
+<script language="javascript">
 
+$(document).ready(function(){ldelim}
+
+    var sett_options = {ldelim}
+		url: 'index.php?do=settings&cp={$sess}&sub=save&dop=case',
+		{*target: '#contentPage',*}
+		beforeSubmit: Request,
+        success: Response
+	{rdelim}
+
+    $(".SaveSettings").click(function(e){ldelim}
+		e.preventDefault();
+		var title = '{#SETTINGS_BUTTON_SAVE#}';
+		var confirm = '{#SETTINGS_SAVE_CONFIRM#}';
+		jConfirm(
+				confirm,
+				title,
+				function(b){ldelim}
+					if (b){ldelim}
+        				$("#settings").ajaxSubmit(sett_options);
+					{rdelim}
+				{rdelim}
+			);
+	{rdelim});
+
+		Mousetrap.bind(['ctrl+s', 'meta+s'], function(e) {ldelim}
+		    if (e.preventDefault) {ldelim}
+		        e.preventDefault();
+		    {rdelim} else {ldelim}
+		        // internet explorer
+		        e.returnValue = false;
+		    {rdelim}
+		    $("#settings").ajaxSubmit(sett_options);
+			return false;
+		{rdelim});
+
+{rdelim});
+
+function Request(){ldelim}
+	$.alerts._overlay('show');
+	$('html, body').animate({ldelim}scrollTop:0{rdelim});
+{rdelim}
+
+function Response(){ldelim}
+	$.alerts._overlay('hide');
+	$.jGrowl('{#SETTINGS_SAVED#}');
+{rdelim}
+
+</script>

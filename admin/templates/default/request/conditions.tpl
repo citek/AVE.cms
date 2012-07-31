@@ -70,7 +70,7 @@
 					</select>
 				</td>
 
-				<td><input style="width:200px" name="condition_value[{$condition->Id}]" type="text" id="Wert_{$condition->Id}" value="{$condition->condition_value|escape}" /> {if !$smarty.foreach.cond.last}{if $condition->condition_join=='AND'}{#REQUEST_CONR_AND#}{else}{#REQUEST_CONR_OR#}{/if}{/if}</td>
+				<td><div class="pr12"><input name="condition_value[{$condition->Id}]" type="text" id="Wert_{$condition->Id}" value="{$condition->condition_value|escape}" /> {if !$smarty.foreach.cond.last}{if $condition->condition_join=='AND'}{#REQUEST_CONR_AND#}{else}{#REQUEST_CONR_OR#}{/if}{/if}</div></td>
 			</tr>
 		{/foreach}
 	</table>
@@ -85,7 +85,7 @@
 		<tr>
 			<td>{#REQUEST_FROM_FILED#}</td>
 			<td>{#REQUEST_OPERATOR#}</td>
-			<td>{#REQUEST_VALUE#}</td>
+			<td colspan="2">{#REQUEST_VALUE#}</td>
 		</tr>
 		</thead>
 		<tbody>
@@ -121,17 +121,19 @@
 				</select>
 			</td>
 
-			<td>
-				<input style="width:200px" name="Wert_Neu" type="text" id="Wert_Neu" value="" />
+			<td style="width:60px">
 				<select style="width:60px" name="Oper_Neu" id="Oper_Neu">
 					<option value="OR" {if $condition->condition_join=='OR'}selected{/if}>{#REQUEST_CONR_OR#}</option>
 					<option value="AND" {if $condition->condition_join=='AND'}selected{/if}>{#REQUEST_CONR_AND#}</option>
 				</select>
 			</td>
+			<td>
+				<div class="pr12"><input name="Wert_Neu" type="text" id="Wert_Neu" value="" /></div>
+			</td>
 		</tr>
 
 		<tr>
-			<td colspan="3">
+			<td colspan="4">
 				<input type="submit" value="{#BUTTON_SAVE#}" class="basicBtn" />
 				<input onclick="self.close();" type="button" class="redBtn" value="{#REQUEST_BUTTON_CLOSE#}" />
 			</td>

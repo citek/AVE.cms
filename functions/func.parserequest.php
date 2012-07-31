@@ -244,7 +244,12 @@ function request_parse($id,$params=Array())
 		$request_order_by = $row_ab->request_order_by;
 		$request_asc_desc = $row_ab->request_asc_desc;
 		//строим списки подключаемых полей для сортировки
-		$request_order = $request_order_by . " " . $request_asc_desc; 
+		$request_order = $request_order_by . " " . $request_asc_desc;
+
+		$request_order_fields = '';
+		$request_order_tables = '';
+		$request_order1 = '';
+
 		if ($row_ab->request_order_by_nat) {
 		    $request_order_tables="LEFT JOIN ". PREFIX . "_document_fields AS s" .$row_ab->request_order_by_nat. "
 			    ON (s" .$row_ab->request_order_by_nat. ".document_id = a.Id and s" .$row_ab->request_order_by_nat. ".rubric_field_id=".$row_ab->request_order_by_nat.")";
@@ -252,11 +257,8 @@ function request_parse($id,$params=Array())
 		    $request_order = "s" .$row_ab->request_order_by_nat. ".field_value ".$row_ab->request_asc_desc;
 		}
 
-		$request_order_fields = '';
-		$request_order_tables = '';
-		$request_order1 = '';
 		$x=0;
-		
+
 		if (is_array($params['SORT']))
 			foreach($params['SORT'] as $k=>$v)
 				if(intval($k)>0){
@@ -270,7 +272,7 @@ function request_parse($id,$params=Array())
 						   $request_order_fields.="s".$k.".field_number_value, ";
 						   $v=str_replace('INT','',$v);
 						}
-					
+
 					$request_order1.=$x.' '.$v.', ';
 				}
 		//Этот кусок для того чтобы можно было параметрами попросить произвольный статус досумента 

@@ -413,5 +413,3 @@ function openLinkWindow(target,doc) {ldelim}
 {rdelim}
 
 </script>
-
-
