@@ -251,8 +251,8 @@ INSERT INTO `%%PRFX%%_navigation` VALUES
   (1, 'Основное меню', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');#inst#
 
 INSERT INTO `%%PRFX%%_rubric_fields` VALUES
-  (1, 1, 'Заголовок', 'kurztext', 5, '', '', ''),
-  (2, 1, 'Текст', 'langtext', 10, '', '', '');#inst#
+  (1, 1, 'Заголовок', 'kurztext', 1, '', '', ''),
+  (2, 1, 'Текст', 'langtext', 2, '', '', '');#inst#
 
 INSERT INTO `%%PRFX%%_rubric_permissions` VALUES
   (1, 1, 1, 'alles'),
