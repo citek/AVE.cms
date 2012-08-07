@@ -28,6 +28,18 @@ $(document).ready(function(){ldelim}
 		{rdelim}
 	{rdelim});
 
+	$('.collapsible').collapsible({ldelim}
+		defaultOpen: 'opened',
+		cssOpen: 'inactive',
+		cssClose: 'normal',
+		cookieName: 'collaps_rub',
+		cookieOptions: {ldelim}
+	        expires: 7,
+			domain: ''
+    	{rdelim},
+		speed: 200
+	{rdelim});
+
 {rdelim});
 </script>
 
@@ -95,7 +107,7 @@ $(document).ready(function(){ldelim}
 				</td>
 				<td><div class="pr12"><input name="rubric_field_default[{$rf->Id}]" type="text" id="rubric_field_default[{$rf->Id}]" value="{$rf->rubric_field_default}" style="width:100%;" /></div></td>
 				<td>
-					<div class="pr12"><input name="rubric_field_position[{$rf->Id}]" type="text" id="rubric_field_position[{$rf->Id}]" value="{$rf->rubric_field_position}" size="4" maxlength="5" /></div>
+					<div class="pr12"><input name="rubric_field_position[{$rf->Id}]" type="text" id="rubric_field_position[{$rf->Id}]" value="{$rf->rubric_field_position}" size="4" maxlength="5" autocomplete="off" /></div>
 				</td>
 				<td align="center">
 					<a class="topleftDir icon_sprite ico_template" title="{#RUBRIK_TEMPLATE_TOGGLE#}" href="javascript:void(0);" onclick="$('#tpl_{$rf->Id}').toggle();"></a>
@@ -176,7 +188,7 @@ $(document).ready(function(){ldelim}
 {/if}
 
 <div class="widget first">
-	<div class="head closed active"><h5>{#RUBRIK_NEW_FIELD#}</h5></div>
+	<div class="head collapsible" id="opened"><h5>{#RUBRIK_NEW_FIELD#}</h5></div>
 	<div style="display: block;">
 	<form id="newfld" action="index.php?do=rubs&amp;action=edit&amp;Id={$smarty.request.Id|escape}&amp;cp={$sess}" method="post" class="mainForm">
 	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
@@ -211,7 +223,7 @@ $(document).ready(function(){ldelim}
 			</td>
 
 			<td>
-				<div class="pr12"><input name="rubric_field_position_new" type="text" id="rubric_field_position_new" value="10" size="4" maxlength="5" /></div>
+				<div class="pr12"><input name="rubric_field_position_new" type="text" id="rubric_field_position_new" value="100" size="4" maxlength="5" autocomplete="off" /></div>
 			</td>
 		</tr>
 
