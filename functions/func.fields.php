@@ -532,32 +532,33 @@ function get_field_docfromrubcheck($field_value,$type,$field_id='',$rubric_field
 	switch ($type)
 	{
 		case 'edit' :
-				$array=array();
-				$items=array();
-				$sql="SELECT Id, document_parent, document_title from ". PREFIX ."_documents WHERE rubric_id='".$dropdown."' order by document_parent, document_title";
-				$field_value1=explode(',',$field_value);
-				$res=$AVE_DB->Query($sql);
+			$array=array();
+			$items=array();
+			$sql="SELECT Id, document_parent, document_title from ". PREFIX ."_documents WHERE rubric_id='".$dropdown."' order by document_parent, document_title";
+			$field_value1=explode(',',$field_value);
+			$res=$AVE_DB->Query($sql);
+				//$field = "<input id=\"feld_" . $field_id . "\" name=\"feld[" . $field_id . "]\" value=\"".$field_value."\" type=\"hidden\">";
 				$field = "<input id=\"feld_" . $field_id . "\" name=\"feld[" . $field_id . "]\" value=\"".$field_value."\" type=\"hidden\">";
 				while($row = $res->FetchRow()){
 					$row->document_title=($array[$row->document_parent] >'' ? $array[$row->document_parent].' > '.$row->document_title: $row->document_title);
-					$items[$row->document_title]="<div class=\"fix\"><input class=\"float\" value='".$row->Id."' type='checkbox' ".((in_array($row->Id, $field_value1)==false) ? "" : "checked=checked").
-					" onclick=\"
-						$('#feld_" . $field_id ."').val('');
-						var n = $('.field_docfromrubcheck:checked').each(
-							function() {
-								$('#feld_" . $field_id . "').val($('#feld_" . $field_id . "').val() > '' ?  $('#feld_" . $field_id . "').val()+',' + $(this).val() : $(this).val())
-							}
-						);
-						\"><label>".htmlspecialchars($row->document_title, ENT_QUOTES)."</label></div>";
+					$items[$row->document_title]="<div class=\"fix\"><input class=\"float field_docfromrubcheck\" value='".$row->Id."' type='checkbox' ".((in_array($row->Id, $field_value1)==false) ? "" : "checked=checked").
+					" onchange=\"
+					$('#feld_" . $field_id ."').val('');
+					var n = $('.field_docfromrubcheck:checked').each(
+					function() {
+					$('#feld_" . $field_id . "').val($('#feld_" . $field_id . "').val() > '' ?  $('#feld_" . $field_id . "').val()+',' + $(this).val() : $(this).val())
+					}
+					);
+					\"><label>".htmlspecialchars($row->document_title, ENT_QUOTES)."</label></div>";
 
 					$array[$row->Id]=$row->document_title;
 				}
 
-				ksort($items);
-				$field.= implode(chr(10),$items);
+		ksort($items);
+		$field.= implode(chr(10),$items);
 
-				$res=$field;
-			break;
+		$res=$field;
+		break;
 
 		case 'doc' :
 			$field_value1=explode(',',$field_value);
@@ -596,6 +597,8 @@ function get_field_docfromrubcheck($field_value,$type,$field_id='',$rubric_field
 	}	return ($res ? $res : $field_value);
 
 }
+
+//Документ из рубрики(CHECKBOX) Old edition
 /*function get_field_docfromrubcheck($field_value,$type,$field_id='',$rubric_field_template='',$tpl_field_empty=0,&$maxlength = '',$document_fields=0,$rubric_id=0,$dropdown=''){
 	global $AVE_DB,$AVE_Template, $AVE_Core, $AVE_Document;
 

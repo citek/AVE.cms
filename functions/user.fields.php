@@ -76,8 +76,8 @@ function get_field_gps($field_value,$type,$field_id='',$rubric_field_template=''
 	switch ($type)
 	{
 		case 'edit' :
-			$res=get_field_default($field_value,$type,$field_id,$rubric_field_template,$tpl_field_empty,$maxlength).'<input type="button" value="+" onclick="SetPlaceMarkCoords();return false;"/><input type="button" value="X" onclick="ErasePlaceMarkCoords();return false;"/>';
-			$code='    <script src="http://api-maps.yandex.ru/1.1/index.xml?key='.YANDEX_MAP_API_KEY.'" type="text/javascript"></script>
+			$res=get_field_default($field_value,$type,$field_id,$rubric_field_template,$tpl_field_empty,$maxlength).'<input type="button" class="basicBtn" value="+" onclick="SetPlaceMarkCoords();return false;"/>&nbsp;<input type="button" class="basicBtn" value="X" onclick="ErasePlaceMarkCoords();return false;"/>';
+			$code='<script src="http://api-maps.yandex.ru/1.1/index.xml?key='.YANDEX_MAP_API_KEY.'" type="text/javascript"></script>
     <script type="text/javascript">
         var map, geoResult, placemark;
 
@@ -234,7 +234,7 @@ google.maps.event.addDomListener(window, "load", initialize);
 ';
             $code.='<p>
 			<input type="text" id="address" style="width:525px;" value="" />
-            <input type="button" value="Искать" onclick="showAddress(document.getElementById(\'address\').value);return false;"/>
+            <input class="basicBtn" type="button" value="Искать" onclick="showAddress(document.getElementById(\'address\').value);return false;"/>
             <div id="Map" style="width:600px;height:400px"></div>';
 			$res.=str_ireplace('<#--FIELD_ID--#>',$field_id,str_ireplace('<#--FIELD_VALUE--#>',$field_value,$code));
 			break;
