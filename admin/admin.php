@@ -18,6 +18,8 @@ if (! @filesize(BASE_DIR . '/inc/db.config.php')) { header('Location:../install.
 
 require(BASE_DIR . '/admin/init.php');
 
+unset ($captcha_ok);
+
 if (isset($_REQUEST['do']) && $_REQUEST['do'] == 'logout')
 {
 	// Завершение работы в админке
@@ -40,9 +42,21 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'login')
 	// Авторизация
 	if (!empty($_POST['user_login']) && !empty($_POST['user_pass']))
 	{	
-		if (isset($_SESSION['captcha_keystring']) && isset($_POST['securecode']) && $_SESSION['captcha_keystring'] == $_POST['securecode'])
+		if (ADMIN_CAPTCHA)
 		{
-	
+			if (isset($_SESSION['captcha_keystring']) && isset($_POST['securecode']) && $_SESSION['captcha_keystring'] == $_POST['securecode']) $captcha_ok = 1;
+			else
+			{
+				unset($_SESSION['user_id'], $_SESSION['user_pass']);
+				unset($_SESSION['captcha_keystring']);
+				$error = "<strong>Ошибка:</strong><br />Неправильный защитный код";
+				$AVE_Template->assign('error', $error);
+			}
+		}
+		else $captcha_ok = 1;
+		
+		if ($captcha_ok)
+		{
 			if (true === user_login($_POST['user_login'], $_POST['user_pass'], 1))
 			{
 			
@@ -58,7 +72,8 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'login')
 	
 	            header('Location:index.php');
 	            exit;
-			}else{
+			}
+			else{
 		        reportLog('Ошибка при входе в Панель управления - '
 		        			. stripslashes($_POST['user_login']) . ' / '
 		        			. stripslashes($_POST['user_pass']), 2, 2);
@@ -69,16 +84,12 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'login')
 				$AVE_Template->assign('error', $error);
 			}
 			
-		}else{
-			unset($_SESSION['user_id'], $_SESSION['user_pass']);
-			unset($_SESSION['captcha_keystring']);
-			$error = "<strong>Ошибка:</strong><br />Неправильный защитный код";
-			$AVE_Template->assign('error', $error);
 		}
+
 	}
 }
 
-
+$AVE_Template->assign('captcha',ADMIN_CAPTCHA);
 $AVE_Template->display('login.tpl');
 
 ?>

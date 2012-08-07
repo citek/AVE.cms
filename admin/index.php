@@ -23,6 +23,7 @@ require(BASE_DIR . '/admin/init.php');
 
 if (!isset($_SESSION['user_id'])){
 	@session_destroy();
+	$AVE_Template->assign('captcha',ADMIN_CAPTCHA);
 	$AVE_Template->display('login.tpl');
 	exit;
 }

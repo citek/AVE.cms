@@ -345,6 +345,7 @@ function get_field_bild_multi($field_value,$type,$field_id='',$rubric_field_temp
 			function field_image_multi_opimport(field_id){
 				$("#on"+field_id).hide();
 				var html='<br>Указывать нужно папку (Формат: uploads/images/samepath/)<br><input type="text" style="width:{$AVE_Document->_field_width}" value="uploads/images/" id="img_importfeld__' + field_id +'" />&nbsp;'+
+					'<input type="button" class="basicBtn topDir" value="..." onclick="browse_uploads(&quot;img_importfeld__' + field_id +'&quot;);" />&nbsp;'+
 					'<input type="button" class="basicBtn" onclick="field_image_multi_import(' + field_id + ');" value="Импорт" />';
 					element=document.createElement("div");
 					element.id=img_id;

@@ -1,18 +1,31 @@
+{literal}
 <script language="javascript">
-function mark_freemail() {ldelim}
-	if(document.getElementById('free').selected==true)
-		document.getElementById('SendFreeMail').checked=true;
-	else
-		document.getElementById('SendFreeMail').checked=false;
-{rdelim}
-
-function mark_mailpass() {ldelim}
-	if(document.getElementById('password').value!='')
-		document.getElementById('PassChange').checked=true;
-	else
-		document.getElementById('PassChange').checked=false;
-{rdelim}
+function mail_pass(){
+	var val = $("#password").val();
+	if (val) {
+		$("#mail_pass").show();
+		$("#mail_pass input").attr("checked","checked");
+		$("#mail_pass a.jqTransformCheckbox").addClass("jqTransformChecked");
+	}
+	else {
+		$("#mail_pass input").removeAttr("checked");
+		$("#mail_pass a.jqTransformCheckbox").removeClass("jqTransformChecked");
+	}
+}
+function mail_status(){
+	var val = $("#status").val();
+	if (val == 1) {
+		$("#mail_status").show();
+		$("#mail_status input").attr("checked","checked");
+		$("#mail_status a.jqTransformCheckbox").addClass("jqTransformChecked");
+	}
+	else {
+		$("#mail_status input").removeAttr("checked");
+		$("#mail_status a.jqTransformCheckbox").removeClass("jqTransformChecked");
+	}
+}
 </script>
+{/literal}
 
 {if $smarty.request.action=='new'}
 	<div class="title"><h5>{#USER_NEW_TITLE#}</h5></div>
@@ -73,13 +86,16 @@ function mark_mailpass() {ldelim}
 
 <tr>
     <td>{#USER_PASSWORD#}&nbsp;{if $smarty.request.action=='edit'} ({#USER_PASSWORD_CHANGE#}){/if}</td>
-    <td><div class="pr12">
-		{if $smarty.request.action=='edit'}
-			<input onchange="mark_mailpass();" onkeydown="mark_mailpass();" onkeyup="mark_mailpass();" name="password" type="text" id="password" size="40" style="width:250px;" maxlength="50" />
-		{else}
-			<input name="password" type="text" id="password" size="40" style="width:250px;" maxlength="50" />
-		{/if}
-	</div></td>
+    <td>
+        <div class="pr12">
+            <input onchange="mail_pass();" onkeydown="mail_pass();" onkeyup="mail_pass();" name="password" type="text" id="password" size="40" style="width:250px;" maxlength="50" />
+        </div>
+        {if $smarty.request.action=='edit'}
+        <div class="pr12" id="mail_pass" style="display:none">
+            <input name="PassChange" type="checkbox" value="1" class="float" /> <label style="cursor: pointer;">{#USER_SEND_INFO#}</label>
+        </div>
+        {/if}
+	</td>
 </tr>
 
 {if $is_forum==1 && $smarty.request.action=='edit'}
@@ -203,24 +219,22 @@ function mark_mailpass() {ldelim}
 
 <tr>
     <td>{#USER_STATUS#}</td>
-    <td><div class="pr12">
-		<select style="width:250px;" name="status" id="status" onchange="mark_freemail();">
-			<option id="free" value="1"{if $row->status==1 || $smarty.request.action=='new'} selected="selected"{/if}>{#USER_ACTIVE#}</option>
-			<option id="notfree" value="0"{if $row->Id==1 && $g->user_group!=1} disabled="disabled"{else}{if $row->status==0 && $smarty.request.action!='new'} selected="selected"{/if}{if $ItsGroup=='1' && $smarty.session.user_group=='1'} disabled="disabled"{/if}{/if}>{#USER_INACTIVE#}</option>
-		</select>
-	</div></td>
+    <td>
+        <div class="pr12">
+          <select style="width:250px;" name="status" id="status" onchange="mail_status();">
+              <option id="free" value="1"{if $row->status==1 || $smarty.request.action=='new'} selected="selected"{/if}>{#USER_ACTIVE#}</option>
+              <option id="notfree" value="0"{if $row->Id==1 && $g->user_group!=1} disabled="disabled"{else}{if $row->status==0 && $smarty.request.action!='new'} selected="selected"{/if}{if $ItsGroup=='1' && $smarty.session.user_group=='1'} disabled="disabled"{/if}{/if}>{#USER_INACTIVE#}</option>
+          </select>
+        </div>
+        {if $smarty.request.action=='edit'}
+          <div class="pr12" id="mail_status" style="display:none;clear:left;">
+              <input name="SendFreeMail" type="checkbox" value="1" class="float" /> <label style="cursor: pointer;">{#USER_SEND_INFO#}</label>
+          </div>
+        {/if}
+    </td>
 </tr>
 
 {if $smarty.request.action=='edit'}
-<tr>
-    <td>{#USER_SEND_MESSAGE#}</td>
-    <td><div class="pr12"><input name="SendFreeMail" type="checkbox" id="SendFreeMail" value="1" class="float" /> <label style="cursor: pointer;">{#USER_MESSAGE_INFO#}</label></div></td>
-</tr>
-
-<tr>
-    <td>{#USER_SEND_PASSWORD#}</td>
-    <td><div class="pr12"><input name="PassChange" type="checkbox" id="PassChange" value="1" class="float" /> <label style="cursor: pointer;">{#USER_PASSWORD_INFO#}</label></div></td>
-</tr>
 
 <tr>
     <td>{#USER_MESSAGE_SUBJECT#}</td>

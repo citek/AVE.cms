@@ -298,22 +298,26 @@ function get_field_checkbox($field_value,$type,$field_id='',$rubric_field_templa
 	switch ($type)
 	{
 		case 'edit' :
-			$field = "<input type=\"hidden\" name=\"feld[" . $field_id . "]\" value=\"0\"><input type=\"checkbox\" name=\"feld[" . $field_id . "]\" value=\"1\"" . ((trim($field_value) == 1) ? " checked" : "") . ">";
+			$field = "<input type=\"hidden\" name=\"feld[" . $field_id . "]\" value=\"\">
+				      <input type=\"checkbox\" name=\"feld[" . $field_id . "]\" value=\"1\"" . (((int)$field_value == 1) ? " checked" : "") . ">";
 			$res=$field;
 			break;
 
 		case 'doc' :
 			$field_value = clean_php($field_value);
+			if ((int)$field_value != 1) $field_value = 0;
 			if (!$tpl_field_empty)
 			{
-				$field_param = explode('|', $field_value);
-				$field_value = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_param[\\1]', $rubric_field_template);
+				$field_value = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_value', $rubric_field_template);
 			}
 			$res=$field_value;
 			break;
 
 		case 'req' :
-			$res=get_field_default($field_value,$type,$field_id,$rubric_field_template,$tpl_field_empty,$maxlength,$document_fields,$rubric_id);
+			$field_value = clean_php($field_value);
+			if ((int)$field_value != 1) $field_value = 0;
+			$field_value = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_value', $document_fields[$rubric_id]['rubric_field_template_request']);
+			$res=$field_value;
 			break;
 
 		case 'name' :

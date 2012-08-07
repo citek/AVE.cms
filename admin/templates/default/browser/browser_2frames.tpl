@@ -93,7 +93,7 @@
 
 <script type="text/javascript">
 function submitTheForm() {ldelim}
-	if (document.bForm.bFileName.value == '' && '{$target}' != 'dir') {ldelim}
+	if (document.bForm.bFileName.value == '' && '{$target}' != 'dir' && '{$target}' != 'img_importfeld') {ldelim}
 		alert('{#MAIN_MP_PLEASE_SELECT#}');
 	{rdelim}
 	else {ldelim}
@@ -123,7 +123,12 @@ function submitTheForm() {ldelim}
 {else}
 		window.opener.document.getElementById('{$target}__{$target_id}').value = '{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
 {/if}
-
+{if $target=='img_importfeld'}
+		var bdn = document.bForm.bDirName.value.split('/').reverse();
+		window.opener.document.getElementById('{$target}__{$target_id}').value = '{$mediapath}/'+bdn[1]+'/';
+{else}
+		window.opener.document.getElementById('{$target}__{$target_id}').value = document.bForm.bDirName.value + document.bForm.bFileName.value;
+{/if}
 {elseif $target!='all'}
 {if $smarty.request.fillout=='dl'}
 		window.opener.document.getElementById('{$smarty.request.target|escape}').value = '{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;

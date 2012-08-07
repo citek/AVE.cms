@@ -174,7 +174,7 @@ input[type=submit], input[type=reset], input[type=button], button, .button {
 
 
 /* ==========  Login page  ========== */
-.loginPanel { width: 340px; background: #fafafa; border: 1px solid #d5d5d5; border-top: 0; display: block; height: 360px; }
+.loginPanel { width: 340px; background: #fafafa; border: 1px solid #d5d5d5; border-top: 0; display: block;}
 .loginWrapper { margin: -156px 0 0 -160px; position: absolute; top: 50%; left: 50%; }
 .loginLogo { position: absolute; width: 190px; height: 44px; display: block; top: -80px; left: 50%; margin-left: -95px; }
 .loginPanel h5 { font-weight: normal; padding: 9px 12px 9px 12px; float: left; }
@@ -185,7 +185,7 @@ input[type=submit], input[type=reset], input[type=button], button, .button {
 .loginInput { width: 200px; float: left; margin-left: 14px; }
 .loginRow { border-top: 1px solid #e7e7e7; padding: 15px 0; position: relative; }
 .loginRow:first-child { border-top: none; }
-.loginRowError{ border-top: none; padding: 15px 0; position: relative; }
+.loginRowError{ border-top: none; position: relative; padding-top:5px }
 
 .backTo a:hover { background: #212121; }
 .backTo span { padding: 8px 14px 8px 8px; display: block; float: left; }
@@ -193,8 +193,8 @@ input[type=submit], input[type=reset], input[type=button], button, .button {
 .backTo a { float: left; color: #eeeeee; font-size: 11px; border-right: 1px solid #3F3F3F; border-left: 1px solid #3F3F3F; }
 
 /* =====  Error messages  ===== */
-.messages{list-style:none;font:11px/11px Verdana, Arial, Tahoma;margin:20px 0 0;padding:0;}
-.messages li{-moz-box-shadow:0 1px 1px rgba(0,0,0,.05);-webkit-box-shadow:0 1px 1px rgba(0,0,0,.05);box-shadow:0 1px 1px rgba(0,0,0,.05);position:relative;margin:0 0 10px;}
+.messages{list-style:none;font:11px/11px Verdana, Arial, Tahoma; padding:0;}
+.messages li{-moz-box-shadow:0 1px 1px rgba(0,0,0,.05);-webkit-box-shadow:0 1px 1px rgba(0,0,0,.05);box-shadow:0 1px 1px rgba(0,0,0,.05);position:relative;margin:0;}
 .highlight{-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;padding:8px;}
 .highlight.grey{background:#fff url(../images/backgrounds/grey.png);border:1px solid #a8adb5;color:#a8adb5;}
 .highlight.green{background:#d3f3c0 url(../images/backgrounds/grey.png);border:1px solid #a5d985;color:#557143;}

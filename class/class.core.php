@@ -647,46 +647,16 @@ class AVE_Core
 				}
 				else
 				{
-				if (!isset ($_SESSION['doc_view[' . $id . ']']))
-				{ // увеличиваем счетчик просмотров (1 раз в пределах сессии)
-					$AVE_DB->Query("
-						UPDATE " . PREFIX . "_documents
-						SET document_count_view = document_count_view+1
-						WHERE Id = '" . $id . "'
-						");
-					$_SESSION['doc_view[' . $id . ']'] = 1;
-				}
-				$curdate=mktime(0, 0, 0, date("m")  , date("d"), date("Y"));
-				if (!isset ($_SESSION['doc_view_dayly'][$curdate][$id]))
-				{
-
-					// и подневный счетчик просмотров тоже увеличиваем
-					$curdate=mktime(0, 0, 0, date("m")  , date("d"), date("Y"));
-					$AVE_DB->Query("
-						UPDATE
-						" . PREFIX . "_view_count
-						SET
-						count = count + 1
-						WHERE
-						document_id = '" . $id . "' AND
-						day_id = '".$curdate."'
-						");
-					if (!$AVE_DB->_handle->affected_rows) {
+					if (!isset ($_SESSION['doc_view[' . $id . ']']))
+					{	// увеличиваем счетчик просмотров (1 раз в пределах сессии)
 						$AVE_DB->Query("
-							INSERT INTO " . PREFIX . "_view_count (
-							document_id,
-							day_id,
-							count
-							)
-							VALUES (
-							'" . $id . "',  '".$curdate."', '1'
-							)
-							");
+							UPDATE " . PREFIX . "_documents
+							SET document_count_view = document_count_view+1
+							WHERE Id = '" . $id . "'
+						");
+						$_SESSION['doc_view[' . $id . ']'] = 1;
 					}
-					$_SESSION['doc_view_dayly'][$curdate][$id] = 1;
 				}
-
-			}
 
 				if (CACHE_DOC_TPL && empty ($_POST) && !(isset ($_SESSION['user_adminmode']) && $_SESSION['user_adminmode'] == 1))
 				{	// кэширование разрешено
@@ -727,7 +697,6 @@ class AVE_Core
 					{
 						// парсим теги полей в шаблоне документа
 						$main_content = preg_replace_callback('/\[tag:fld:(\d+)\]/', 'document_get_field', $rubTmpl);
-                        $main_content = preg_replace_callback('/\[tag:([r|c]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $main_content);
 
 						// удаляем ошибочные теги полей
 						$main_content = preg_replace('/\[tag:fld:\d*\]/', '', $main_content);
@@ -747,7 +716,6 @@ class AVE_Core
 						}
 					}
 				}
-                $main_content = preg_replace('/\[tag:date:([a-zA-Z0-9-]+)\]/e', "RusDate(date('$1', ".$this->curentdoc->document_published."))", $main_content);
 				$main_content = str_replace('[tag:docdate]', pretty_date(strftime(DATE_FORMAT, $this->curentdoc->document_published)), $main_content);
 				$main_content = str_replace('[tag:doctime]', pretty_date(strftime(TIME_FORMAT, $this->curentdoc->document_published)), $main_content);
 				$main_content = str_replace('[tag:docauthor]', get_username_by_id($this->curentdoc->document_author_id), $main_content);
@@ -864,11 +832,11 @@ class AVE_Core
 	function coreUrlParse($get_url = '')
 	{
 		global $AVE_DB;
-
-		if(substr($get_url,0,strlen('/index.php'))!='/index.php'&&strpos($get_url,'?')!==false)$get_url=substr($get_url,0,strpos($get_url,'?'));
-
+		
 		$get_url = rawurldecode($get_url);
 		$get_url = mb_substr($get_url, strlen(ABS_PATH));
+		$test_url = $get_url; // сохранение старого урла для првоерки использования суффикса
+
 		if (mb_substr($get_url, - strlen(URL_SUFF)) == URL_SUFF)
 		{
 			$get_url = mb_substr($get_url, 0, - strlen(URL_SUFF));
@@ -876,8 +844,7 @@ class AVE_Core
 
 		// Разбиваем строку пароаметров на отдельные части
         $get_url = explode('/', $get_url);
-
-		$get_url = array_combine($get_url, $get_url);
+		//$get_url = array_combine($get_url, $get_url);
 
 		if (isset ($get_url['index']))
 		{
@@ -916,6 +883,10 @@ class AVE_Core
 
 //		unset ($pages);
 
+		if(!empty($_REQUEST['id'])) { // проверка на наличие id в запросе
+			$get_url = $AVE_DB->Query("SELECT document_alias FROM " . PREFIX . "_documents WHERE Id = '".(int)$_REQUEST['id']."' ")->GetCell();
+		}
+
         // Выполняем запрос к БД на получение
 		$sql = $AVE_DB->Query("
 			SELECT
@@ -945,6 +916,12 @@ class AVE_Core
 		{
 			$_GET['id']  = $_REQUEST['id']  = $this->curentdoc->Id;
 			$_GET['doc'] = $_REQUEST['doc'] = $this->curentdoc->document_alias;
+
+			// перенаправление на адреса с суффиксом
+			if ($test_url !== $get_url.URL_SUFF && !$pages && $test_url) {
+				header('HTTP/1.1 301 Moved Permanently');
+				header('Location:' . ABS_PATH.$get_url.URL_SUFF);
+			}
 		}
 		else
 		{
