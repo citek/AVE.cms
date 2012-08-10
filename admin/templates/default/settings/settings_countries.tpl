@@ -63,7 +63,7 @@ function Response(){ldelim}
     <div class="body">
 		<a href="index.php?do=settings&amp;cp={$sess}" title="" class="btnIconLeft mr10"><img src="{$tpl_dir}/images/icons/cog3.png" alt="" class="icon" /><span>{#SETTINGS_MAIN#}</span></a>
 		<a href="index.php?do=settings&amp;sub=case&amp;cp={$sess}" title="" class="btnIconLeft mr10"><img src="{$tpl_dir}/images/icons/cog3.png" alt="" class="icon" /><span>{#SETTINGS_CASE_TITLE#}</span></a>
-		<a href="#" title="" class="btnIconLeft mr10 clearCacheSess"><img src="{$tpl_dir}/images/icons/cog3.png" alt="" class="icon"><span>{#MAIN_STAT_CLEAR_CACHE#}</span></a>
+		<a href="#" title="" class="btnIconLeft mr10 clearCacheSess"><img src="{$tpl_dir}/images/icons/cog3.png" alt="" class="icon"><span>{#MAIN_STAT_CLEAR_CACHE_FULL#}</span></a>
     </div>
 </div>
 

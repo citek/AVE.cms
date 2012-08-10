@@ -11,7 +11,7 @@
 	<div class="breadCrumb module">
 	    <ul>
 	        <li class="firstB"><a href="index.php" title="{#MAIN_PAGE#}">{#MAIN_PAGE#}</a></li>
-	        <li><a href="index.php?do=modules&amp;cp={$sess}">{#MODULES_SUB_TITLE#}</a></li>
+	        <li><a href="index.php?do=modules&cp={$sess}">{#MODULES_SUB_TITLE#}</a></li>
 	        <li><a href="index.php?do=modules&action=modedit&mod=gallery&moduleaction=1&cp={$sess}">{#ModName#}</a></li>
 	        <li>{#Overview#}</li>
 	        <li><strong class="code">{$gallery.gallery_title|escape}</strong></li>
@@ -21,12 +21,12 @@
 
 
 
-<form class="mainForm" method="post" name="gallery_form" action="index.php?do=modules&action=modedit&mod=gallery&moduleaction=editgallery&id={$smarty.request.id|escape}&cp={$sess}&sub=save">
+<form class="mainForm" method="post" name="gallery_form" id="gallery_form" action="index.php?do=modules&action=modedit&mod=gallery&moduleaction=editgallery&id={$smarty.request.id|escape}&cp={$sess}&sub=save">
 
 <div class="widget first">
 <div class="head">
 <h5 class="iFrames">{#ModSettingGal#}</h5>
-<div class="num"><a class="basicNum" href="index.php?do=modules&amp;action=modedit&amp;mod=gallery&amp;moduleaction=add&amp;id={$smarty.request.id|escape}&amp;cp={$sess}">{#AddnewImages#}</a></div>
+<div class="num"><a class="basicNum" href="index.php?do=modules&action=modedit&mod=gallery&moduleaction=add&id={$smarty.request.id|escape}&cp={$sess}">{#AddnewImages#}</a></div>
 <div class="num"><a class="basicNum" href="index.php?do=modules&action=modedit&mod=gallery&moduleaction=showimages&id={$smarty.request.id|escape}&cp={$sess}&compile=1">{#ImageView#}</a></div>
 </div>
 
@@ -43,7 +43,7 @@
 		<tr>
 			<td>{#GalleryTitle#}</td>
 			<td>
-				<input placeholder="{#GalleryTitle#}" name="gallery_title" type="text" id="gallery_title" value="{$gallery.gallery_title|escape}" size="40" style="width:500px" />
+				<input class="mousetrap" placeholder="{#GalleryTitle#}" name="gallery_title" type="text" id="gallery_title" value="{$gallery.gallery_title|escape}" size="40" style="width:500px" />
 				<input name="gallery_title_old" type="hidden" value="{$gallery.gallery_title|escape}" />
 			</td>
 		</tr>
@@ -51,7 +51,7 @@
 		<tr>
 			<td>{#GalleryDesc#}</td>
 			<td>
-				<textarea placeholder="{#GalleryDesc#}" name="gallery_description" cols="40" rows="5" id="gallery_description" style="width:500px">{$gallery.gallery_description|escape}</textarea>
+				<textarea class="mousetrap" placeholder="{#GalleryDesc#}" name="gallery_description" cols="40" rows="5" id="gallery_description" style="width:500px">{$gallery.gallery_description|escape}</textarea>
 			</td>
 		</tr>
 
@@ -59,7 +59,7 @@
 			<td>{#GalleryFolder#}</td>
 			<td>
 				<input name="gallery_folder_old" type="hidden" value="{$gallery.gallery_folder|escape}" />
-				<input placeholder="{#GalleryFolderP#}" name="gallery_folder" title="{#GalleryFolderDesc#}" type="text" id="dir__0" size="40" value="{$gallery.gallery_folder|escape}" style="width:500px" />&nbsp;
+				<input class="mousetrap" placeholder="{#GalleryFolderP#}" name="gallery_folder" title="{#GalleryFolderDesc#}" type="text" id="dir__0" size="40" value="{$gallery.gallery_folder|escape}" style="width:500px" />&nbsp;
 				<input type="button" class="basicBtn topDir" value="..." title="{#MAIN_OPEN_MEDIAPATH#}" onclick="browse_uploads('dir__0');" />
 			</td>
 		</tr>
@@ -68,7 +68,7 @@
 			<td>{#Watermark#}</td>
 			<td>
 				<div><img id="preview__0" src="../{$gallery.gallery_watermark|escape}" alt="" border="0" /></div>
-				<input placeholder="{#Watermark#}" name="gallery_watermark" type="text" id="image__0" value="{$gallery.gallery_watermark|escape}" size="40" style="width:500px" />&nbsp;
+				<input class="mousetrap" placeholder="{#Watermark#}" name="gallery_watermark" type="text" id="image__0" value="{$gallery.gallery_watermark|escape}" size="40" style="width:500px" />&nbsp;
 				<input type="button" class="basicBtn topDir" value="..." title="{#MAIN_OPEN_MEDIAPATH#}" onclick="browse_uploads('image__0');" />
 			</td>
 		</tr>
@@ -76,14 +76,14 @@
 		<tr>
 			<td>{#MaxWidth#}</td>
 			<td>
-				<input name="gallery_thumb_width" title="{#MaxWidthWarn#}" type="text" id="gallery_thumb_width" value="{$gallery.gallery_thumb_width}" size="5" maxlength="3" style="width: 35px;" />
+				<input class="mousetrap" name="gallery_thumb_width" title="{#MaxWidthWarn#}" type="text" id="gallery_thumb_width" value="{$gallery.gallery_thumb_width}" size="5" maxlength="3" style="width: 35px;" />
 				<input name="thumb_width_old" type="hidden" value="{$gallery.gallery_thumb_width}" />
 			</td>
 		</tr>
 		<tr>
 			<td>{#MaxHeight#}</td>
 			<td>
-				<input name="gallery_thumb_height" title="{#MaxHeightWarn#}" type="text" id="gallery_thumb_height" value="{$gallery.gallery_thumb_height}" size="5" maxlength="3" style="width: 35px;" />
+				<input class="mousetrap" name="gallery_thumb_height" title="{#MaxHeightWarn#}" type="text" id="gallery_thumb_height" value="{$gallery.gallery_thumb_height}" size="5" maxlength="3" style="width: 35px;" />
 				<input name="gallery_thumb_old" type="hidden" value="{$gallery.gallery_thumb_height}" />
 			</td>
 		</tr>
@@ -99,14 +99,14 @@
 		<tr>
 			<td>{#MaxImagesERow#}</td>
 			<td>
-				<input name="gallery_image_on_line" type="text" id="gallery_image_on_line" value="{$gallery.gallery_image_on_line}" size="5" maxlength="2" style="width: 35px;" />
+				<input class="mousetrap" name="gallery_image_on_line" type="text" id="gallery_image_on_line" value="{$gallery.gallery_image_on_line}" size="5" maxlength="2" style="width: 35px;" />
 			</td>
 		</tr>
 
 		<tr>
 			<td class="first">{#MaxImagesPage#}</td>
 			<td>
-				<input name="gallery_image_on_page" type="text" id="gallery_image_on_page" value="{$gallery.gallery_image_on_page}" size="5" maxlength="4" style="width: 35px;" />
+				<input class="mousetrap" name="gallery_image_on_page" type="text" id="gallery_image_on_page" value="{$gallery.gallery_image_on_page}" size="5" maxlength="4" style="width: 35px;" />
 			</td>
 		</tr>
 
@@ -126,13 +126,14 @@
 		<tr>
 			<td>{#GallerySeppLine#}</td>
 			<td>
-				<textarea placeholder="{#GallerySeppLine#}" name="gallery_sepp_line" cols="40" rows="5" id="gallery_sepp_line" style="width:500px">{$gallery.gallery_sepp_line|escape}</textarea>
+				<textarea class="mousetrap" placeholder="{#GallerySeppLine#}" name="gallery_sepp_line" cols="40" rows="5" id="gallery_sepp_line" style="width:500px">{$gallery.gallery_sepp_line|escape}</textarea>
 			</td>
 		</tr>
 
     		<tr>
     			<td colspan="2">
     				<input type="submit" class="basicBtn" value="{#ButtonSave#}" />
+					<input type="submit" class="blackBtn SaveEdit" value="{#ButtonSaveEdit#}" />
     			</td>
     		</tr>
 	</table>
@@ -264,7 +265,7 @@
 
             <tr>
                 <td>
-                    <strong><a class="rightDir" title="{#GalleryTagPath#}" href="javascript:void(0);" onclick="textSelection('[tag:path]', '');">[tag:path]</a></strong>
+                    <strong><a class="rightDir" title="{#GalleryTagPath#}" href="javascript:void(0);" onclick="textSelection2('[tag:path]', '');">[tag:path]</a></strong>
                 </td>
             </tr>
 
@@ -319,15 +320,59 @@
             </tr>
     		<tr>
     			<td colspan="2">
-    				<input type="submit" class="basicBtn" value="{#ButtonSave#}" />
+    				<input type="submit" class="basicBtn" value="{#ButtonSave#}" />&nbsp;или&nbsp;
+    				<input type="submit" class="blackBtn SaveEdit" value="{#ButtonSaveEdit#}" />
     			</td>
     		</tr>
     </tbody>
 	</table>
 
-{literal}
+
     <script language="javascript">
+    var sett_options = {ldelim}
+		url: 'index.php?do=modules&action=modedit&mod=gallery&moduleaction=editgallery&id={$smarty.request.id|escape}&cp={$sess}&sub=save',
+		beforeSubmit: Request,
+        success: Response
+	{rdelim}
+
+	function Request(){ldelim}
+		$.alerts._overlay('show');
+	{rdelim}
+
+	function Response(){ldelim}
+		$.alerts._overlay('hide');
+		$.jGrowl('{#SavedOk#}');
+	{rdelim}
+
+	$(document).ready(function(){ldelim}
+
+		Mousetrap.bind(['ctrl+s', 'meta+s'], function(e) {ldelim}
+		    if (e.preventDefault) {ldelim}
+		        e.preventDefault();
+		    {rdelim} else {ldelim}
+		        // internet explorer
+		        e.returnValue = false;
+		    {rdelim}
+		    $("#gallery_form").ajaxSubmit(sett_options);
+			return false;
+		{rdelim});
+
+	    $(".SaveEdit").click(function(e){ldelim}
+		    if (e.preventDefault) {ldelim}
+		        e.preventDefault();
+		    {rdelim} else {ldelim}
+		        // internet explorer
+		        e.returnValue = false;
+		    {rdelim}
+		    $("#gallery_form").ajaxSubmit(sett_options);
+			return false;
+		{rdelim});
+
+	{rdelim});
+
+{literal}    
       var editor = CodeMirror.fromTextArea(document.getElementById("gallery_script"), {
+      	extraKeys: {"Ctrl-S": function(cm){$("#gallery_form").ajaxSubmit(sett_options);}},
         lineNumbers: true,
 		lineWrapping: true,
         matchBrackets: true,
@@ -355,6 +400,7 @@
       }
 
       var editor2 = CodeMirror.fromTextArea(document.getElementById("gallery_image_template"), {
+      	extraKeys: {"Ctrl-S": function(cm){$("#gallery_form").ajaxSubmit(sett_options);}},
         lineNumbers: true,
 		lineWrapping: true,
         matchBrackets: true,

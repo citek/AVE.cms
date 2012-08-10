@@ -7,14 +7,14 @@
 			{if $log_svn}
                 <div class="widget">
                     <div class="head">
-                        <h5>Вышла новая версия <a href="http://www.overdoze.ru/index.php?module=forums" target="_blank">{$smarty.const.APP_VERSION}</a>! <a href="http://websvn.avecms.ru" target="_blank">Рекомендуется обновиться</a></h5>
+                        <h5>Вышла новая версия <a href="http://www.overdoze.ru/index.php?module=forums" target="_blank">{$smarty.const.APP_VERSION}</a>! <a href="{$svn_url}" target="_blank">Рекомендуется обновиться!</a></h5>
                     </div>
 
                     <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
                         <tbody>
 							{foreach from=$log_svn item=log_svn}
 			                <tr>
-                                <td width="10%">№ <span class="webStatsLink"><a href="http://code.google.com/p/ave-cms/source/detail?r={$log_svn.version}" target="_blank">{$log_svn.version}</a></span></td>
+                                <td width="10%">№ <span class="webStatsLink"><a href="{$svn_link}{$log_svn.version}" target="_blank">{$log_svn.version}</a></span></td>
                                 <td align="20%"><strong>({$log_svn.author})</strong></td>
                                 <td align="left">{$log_svn.comment}</td>
                             </tr>

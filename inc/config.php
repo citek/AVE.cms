@@ -14,6 +14,7 @@ define('APP_INFO', '&copy; 2008-2012 <a target="_blank" href="http://www.overdoz
 $GLOBALS['CMS_CONFIG']['REWRITE_MODE'] = array('DESCR' =>'Использовать ЧПУ Адреса вида index.php будут преобразованы в /home/','default'=>true,'TYPE'=>'bool','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['TRANSLIT_URL'] = array('DESCR' =>'Использовать транслит в ЧПУ адреса вида /страница/ поменяються на /page/','default'=>true,'TYPE'=>'bool','VARIANT'=>''); 
 $GLOBALS['CMS_CONFIG']['URL_SUFF'] = array('DESCR' =>'Cуффикс ЧПУ','default'=>'/','TYPE'=>'string','VARIANT'=>'');
+$GLOBALS['CMS_CONFIG']['MAILING_LIB'] = array('DESCR' =>'Библиотека для отправки почты','default'=>'PHPMailer','TYPE'=>'dropdown','VARIANT'=>array('SwiftMailer','PHPMailer'));
 
 $themes = array();
 foreach (glob(dirname(dirname(__FILE__))."/templates/*") as $filename) {
@@ -31,8 +32,8 @@ $GLOBALS['CMS_CONFIG']['DEFAULT_THEME_FOLDER_COLOR'] = array('DESCR' =>'Цвет
 $GLOBALS['CMS_CONFIG']['ADMIN_CAPTCHA'] = array('DESCR' =>'Использовать капчу при входе в админку','default'=>true,'TYPE'=>'bool','VARIANT'=>'');
 
 $GLOBALS['CMS_CONFIG']['UPLOAD_DIR'] = array('DESCR' =>'Директория для хранения файлов','default'=>'uploads','TYPE'=>'string','VARIANT'=>'');
-$GLOBALS['CMS_CONFIG']['UPLOAD_SHOP_DIR'] = array('DESCR' =>'Поддиректория для хранения миниатюр Магазина','default'=>'uploads/shop','TYPE'=>'string','VARIANT'=>'');
-$GLOBALS['CMS_CONFIG']['UPLOAD_GALLERY_DIR'] = array('DESCR' =>'Поддиректория для хранения миниатюр Галерей','default'=>'uploads/gallery','TYPE'=>'string','VARIANT'=>'');
+$GLOBALS['CMS_CONFIG']['UPLOAD_SHOP_DIR'] = array('DESCR' =>'Директория для хранения миниатюр Магазина','default'=>'uploads/shop','TYPE'=>'string','VARIANT'=>'');
+$GLOBALS['CMS_CONFIG']['UPLOAD_GALLERY_DIR'] = array('DESCR' =>'Директория для хранения миниатюр Галерей','default'=>'uploads/gallery','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['THUMBNAIL_DIR'] = array('DESCR' =>'Директория для хранения миниатюр изображений','default'=>'thumbnail','TYPE'=>'string','VARIANT'=>'');
 
 $GLOBALS['CMS_CONFIG']['DEFAULT_LANGUAGE'] = array('DESCR' =>'Язык по умолчанию','default'=>'ru','TYPE'=>'dropdown','VARIANT'=>array('ru','en','ua'));
@@ -50,10 +51,11 @@ $GLOBALS['CMS_CONFIG']['YANDEX_MAP_API_KEY'] = array('DESCR' =>'Yandex MAP API R
 $GLOBALS['CMS_CONFIG']['GOOGLE_MAP_API_KEY'] = array('DESCR' =>'Google MAP API REY','default'=>'','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['Memcached_Server'] = array('DESCR' =>'Адрес Memcached сервера','default'=>'','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['Memcached_Port'] = array('DESCR' =>'Порт Memcached сервера','default'=>'','TYPE'=>'string','VARIANT'=>'');
-$GLOBALS['CMS_CONFIG']['BILD_VERSION'] = array('DESCR' =>'Версия сборки','default'=>'','TYPE'=>'integer','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['SVN_ACTIVE'] = array('DESCR' =>'Проверка обновлений','default'=>false,'TYPE'=>'bool','VARIANT'=>'');
-$GLOBALS['CMS_CONFIG']['SVN_LOGIN'] = array('DESCR' =>'Логин от SVN репозитария','default'=>'public','TYPE'=>'string','VARIANT'=>'');
-$GLOBALS['CMS_CONFIG']['SVN_PASSWORD'] = array('DESCR' =>'Пароль от SVN репозитария','default'=>'public','TYPE'=>'string','VARIANT'=>'');
+$GLOBALS['CMS_CONFIG']['SVN_URL'] = array('DESCR' =>'Адрес SVN репозитария (включая папку, изменения которой Вас интересуют, например, trunk)','default'=>'http://ave-cms.googlecode.com/svn/trunk/','TYPE'=>'string','VARIANT'=>'');
+$GLOBALS['CMS_CONFIG']['SVN_LINK'] = array('DESCR' =>'Часть ссылки SVN репозитария до номера ревизии для просмотра информации','default'=>'http://code.google.com/p/ave-cms/source/detail?r=','TYPE'=>'string','VARIANT'=>'');
+$GLOBALS['CMS_CONFIG']['SVN_LOGIN'] = array('DESCR' =>'Логин для SVN репозитария','default'=>'','TYPE'=>'string','VARIANT'=>'');
+$GLOBALS['CMS_CONFIG']['SVN_PASSWORD'] = array('DESCR' =>'Пароль для SVN репозитария','default'=>'','TYPE'=>'string','VARIANT'=>'');
 
 @include(dirname(dirname(__FILE__)).'/inc/config.inc.php');
 foreach($GLOBALS['CMS_CONFIG'] as $k=>$v)

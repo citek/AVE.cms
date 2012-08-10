@@ -57,7 +57,7 @@ $(document).ready(function(){ldelim}
 	        <li class="firstB"><a href="index.php" title="{#MAIN_PAGE#}">{#MAIN_PAGE#}</a></li>
 	        <li><a href="index.php?do=rubs&amp;cp={$sess}">{#RUBRIK_SUB_TITLE#}</a></li>
 	        <li>{#RUBRIK_EDIT_FIELDS#}</li>
-	        <li><strong class="code">{$rubric_title}</strong></li>
+	        <li><strong class="code">{$rubric->rubric_title}</strong></li>
 	    </ul>
 	</div>
 </div>

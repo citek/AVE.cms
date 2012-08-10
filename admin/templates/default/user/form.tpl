@@ -88,7 +88,7 @@ function mail_status(){
     <td>{#USER_PASSWORD#}&nbsp;{if $smarty.request.action=='edit'} ({#USER_PASSWORD_CHANGE#}){/if}</td>
     <td>
         <div class="pr12">
-            <input onchange="mail_pass();" onkeydown="mail_pass();" onkeyup="mail_pass();" name="password" type="text" id="password" size="40" style="width:250px;" maxlength="50" />
+            <input onchange="mail_pass();" onkeydown="mail_pass();" onkeyup="mail_pass();" name="password" type="text" id="password" size="40" style="width:250px;" maxlength="50" autocomplete="off" />
         </div>
         {if $smarty.request.action=='edit'}
         <div class="pr12" id="mail_pass" style="display:none">

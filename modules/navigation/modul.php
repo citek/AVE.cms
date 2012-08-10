@@ -260,7 +260,9 @@ function printNavi(&$navi, &$ebenen, &$way, &$rub, &$nav_items, &$row_ul, $paren
 				if (start_with('www.', $row['navi_item_link'])) $akt = str_replace('www.', 'http://www.', $akt);
 		}
 
-		$navi .= str_replace('[tag:target]', $row['navi_item_target'], $akt);
+		//$navi .= str_replace('[tag:target]', $row['navi_item_target'], $akt);
+		$navi .= str_replace('[tag:target]', (empty($row['navi_item_target']) ? '_self' : $row['navi_item_target']), $akt);
+
 
 		if (isset($nav_items[$row['Id']]))
 		{
