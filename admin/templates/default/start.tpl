@@ -14,9 +14,9 @@
                         <tbody>
 							{foreach from=$log_svn item=log_svn}
 			                <tr>
-                                <td width="10%">№ <span class="webStatsLink"><a href="{$svn_link}{$log_svn.version}" target="_blank">{$log_svn.version}</a></span></td>
-                                <td align="20%"><strong>({$log_svn.author})</strong></td>
-                                <td align="left">{$log_svn.comment}</td>
+                                <td><span class="webStatsLink"><a href="{$svn_link}{$log_svn.version}" target="_blank">{$log_svn.version}</a></span></td>
+                                <td><strong>({$log_svn.author})</strong></td>
+                                <td style="white-space:pre-wrap">{$log_svn.comment|escape}</td>
                             </tr>
 							{/foreach}
                         </tbody>

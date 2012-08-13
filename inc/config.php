@@ -51,7 +51,7 @@ $GLOBALS['CMS_CONFIG']['YANDEX_MAP_API_KEY'] = array('DESCR' =>'Yandex MAP API R
 $GLOBALS['CMS_CONFIG']['GOOGLE_MAP_API_KEY'] = array('DESCR' =>'Google MAP API REY','default'=>'','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['Memcached_Server'] = array('DESCR' =>'Адрес Memcached сервера','default'=>'','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['Memcached_Port'] = array('DESCR' =>'Порт Memcached сервера','default'=>'','TYPE'=>'string','VARIANT'=>'');
-$GLOBALS['CMS_CONFIG']['SVN_ACTIVE'] = array('DESCR' =>'Проверка обновлений','default'=>false,'TYPE'=>'bool','VARIANT'=>'');
+$GLOBALS['CMS_CONFIG']['SVN_ACTIVE'] = array('DESCR' =>'Проверка обновлений','default'=>true,'TYPE'=>'bool','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['SVN_URL'] = array('DESCR' =>'Адрес SVN репозитария (включая папку, изменения которой Вас интересуют, например, trunk)','default'=>'http://ave-cms.googlecode.com/svn/trunk/','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['SVN_LINK'] = array('DESCR' =>'Часть ссылки SVN репозитария до номера ревизии для просмотра информации','default'=>'http://code.google.com/p/ave-cms/source/detail?r=','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['SVN_LOGIN'] = array('DESCR' =>'Логин для SVN репозитария','default'=>'','TYPE'=>'string','VARIANT'=>'');

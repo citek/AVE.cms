@@ -66,7 +66,7 @@
             };
 
             $(self).bind("change", function() {
-                filename.val($(self).val());
+                filename.val($(self).val().replace(/.+[\\\/]/, ""));
             });
       
         });

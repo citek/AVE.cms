@@ -45,7 +45,7 @@
 [Logging]
 
     ; file logging
-    path            = tmp/phpids_log.txt
+    path            = ../../cache/IDS/phpids_log.txt
 
     ; email logging
 
@@ -75,7 +75,7 @@
     expiration_time = 600
 
     ; file cache    
-    path            = tmp/default_filter.cache
+    path            = ../../cache/IDS/default_filter.cache
 
     ; database cache
     wrapper         = "mysql:host=localhost;port=3306;dbname=phpids"   

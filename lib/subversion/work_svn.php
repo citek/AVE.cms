@@ -5,7 +5,7 @@ if (SVN_ACTIVE == true) {
 	$svn =  new phpsvnclient(SVN_URL);
 	$svn -> setAuth(SVN_LOGIN,SVN_PASSWORD);
 	$last_rev = $svn -> getVersion();
-	if ($last_rev != BILD_VERSION) {
+	if ($last_rev > BILD_VERSION) {
 		$log_svn = $svn -> getRepositoryLogs("",(int)BILD_VERSION+1,$last_rev);
 		$AVE_Template->assign('log_svn',$log_svn);
 		$AVE_Template->assign('svn_link',SVN_LINK);
