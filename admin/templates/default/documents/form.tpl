@@ -221,10 +221,14 @@ $(document).ready(function(){ldelim}
 			</td>
 		</tr>
 
+		{if ($smarty.request.Id == 1 || $smarty.request.Id == $PAGE_NOT_FOUND_ID) && $smarty.request.action != 'new'}
+			{assign var=dis value='disabled'}
+		{/if}
+
 		<tr>
 			<td>{#DOC_URL#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir icon_sprite ico_info" title="{#DOC_URL_INFO#}"></a></td>
 			<td nowrap="nowrap" colspan="3">
-				<div class="pr12"><input name="document_alias" type="text" id="document_alias" size="40" style="width:400px;" value="{if $smarty.request.action=='edit'}{$document->document_alias}{else}{$document->rubric_url_prefix}{/if}" />&nbsp;&nbsp;<input type="button" class="basicBtn" id="translit" value="{#DOC_ALIAS_CREATE#}" /></div>
+				<div class="pr12"><input name="document_alias" {$dis} type="text" id="document_alias" size="40" style="width:400px;" value="{if $smarty.request.action=='edit'}{$document->document_alias}{else}{$document->rubric_url_prefix}{/if}" />&nbsp;&nbsp;{if ($smarty.request.Id != 1 || $smarty.request.Id != $PAGE_NOT_FOUND_ID)}<input type="button" class="basicBtn" id="translit" value="{#DOC_ALIAS_CREATE#}" />{/if}</div>
 				<span id="loading" style="display:none"></span>
 				<span id="checkResult"></span>
 			</td>
@@ -258,10 +262,6 @@ $(document).ready(function(){ldelim}
 				</select>
 			</td>
 		</tr>
-
-		{if ($smarty.request.Id == 1 || $smarty.request.Id == $PAGE_NOT_FOUND_ID) && $smarty.request.action != 'new'}
-			{assign var=dis value='disabled'}
-		{/if}
 
 		<tr>
 			<td>{#DOC_START_PUBLICATION#}</td>

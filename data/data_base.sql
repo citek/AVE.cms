@@ -244,7 +244,7 @@ INSERT INTO `%%PRFX%%_document_fields` VALUES
   (4, 2, 2, 0, 'Извините, запрошенный Вами документ не найден.', '0');#inst#
 
 INSERT INTO `%%PRFX%%_documents` VALUES
-  (1, 1, 0, 'home', 'Главная', 'Главная', 0, 0, 0, 1, '0', '', '', 'index,follow', '1', '0', 0, 0, 0),
+  (1, 1, 0, '/', 'Главная', 'Главная страница', 0, 0, 0, 1, '0', '', '', 'index,follow', '1', '0', 0, 0, 0),
   (2, 1, 0, '404-not-found', '404 - Документ не найден', 'Ошибка 404', 0, 0, 0, 1, '0', '', '', 'noindex,nofollow', '1', '0', 0, 0, 0);#inst#
 
 INSERT INTO `%%PRFX%%_navigation` VALUES

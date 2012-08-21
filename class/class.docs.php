@@ -756,7 +756,7 @@ class AVE_Document
 				{
 					$row->cantEdit = 1;
 				}
-				
+
 				//выходим если нельзя редактировать
 				if(!$row->cantEdit==1 )return false;
 					// Обрабатываем все данные, пришедшие в запросе
@@ -767,9 +767,14 @@ class AVE_Document
 					$document_status = ($document_id == 1 || $document_id == PAGE_NOT_FOUND_ID) ? '1' : $docstatus;
 
 					// Формируем/проверяем адрес на уникальность
-					$data['document_alias'] = $_url = prepare_url(empty($data['document_alias'])
-						? trim($_POST['prefix'] . '/' . $data['doc_title'], '/')
-						: $data['document_alias']);
+					if ($document_id != 1)
+					{
+						$data['document_alias'] = $_url = prepare_url(empty($data['document_alias'])
+							? trim($_POST['prefix'] . '/' . $data['doc_title'], '/')
+							: $data['document_alias']);
+					}else{
+						$data['document_alias'] = "/";
+					}
 					$cnt = 1;
 					while ($AVE_DB->Query("
 						SELECT 1
@@ -1117,9 +1122,9 @@ class AVE_Document
 					FROM " . PREFIX . "_documents
 					WHERE Id = '" . $document_id . "'
 				")->FetchRow();
-				
+
 				$this->documentSave($row->rubric_id,$document_id,$_POST,true);
-				
+
 				if(isset($_REQUEST['closeafter']) && $_REQUEST['closeafter']==1) {
 					echo "<script>window.opener.location.reload(); window.close();</script>";
 				} else {
@@ -1669,7 +1674,7 @@ class AVE_Document
 
 		$document_id = (isset($_REQUEST['id']) && is_numeric($_REQUEST['id'])) ? $_REQUEST['id'] : 0;
 		$document_alias = (isset($_REQUEST['alias'])) ? $_REQUEST['alias'] : '';
-		
+
 		$errors = array();
 
 		// Если указанный URL пользователем не пустой
