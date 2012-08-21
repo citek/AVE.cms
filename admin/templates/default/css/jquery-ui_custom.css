@@ -478,7 +478,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 
 /* ===== UI Progress bar ===== */
 
-.ui-progressbar { height: 16px; text-align: left; margin-top: 5px; background: url(../images/ui/progress.png) repeat-x; -moz-box-shadow: 0 1px 0 #363B3E; -webkit-box-shadow: 0 1px 0 #363B3E; box-shadow: 0 1px 0 #363B3E; }
+.ui-progressbar { height: 16px; text-align: left; margin-top: 5px; background: url(../images/ui/progress.png) repeat-x;}
 .ui-progressbar .ui-progressbar-value {margin: 0px; height:100%; overflow: hidden; display: block; background: url(../images/ui/progressOverlay.png) repeat-x; border-right: 1px solid #3c95d8; }
 .pbar .ui-progressbar-value {display:block !important}
 .pbar { overflow: hidden; background: url(../images/ui/progress.png) repeat-x;}

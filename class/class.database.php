@@ -629,7 +629,7 @@ if (! isset($AVE_DB))
 	if($AVE_DB)
 	{
 	$updaters=Array();
-		foreach (glob(BASE_DIR."/".UPLOAD_DIR."/svn_*.sql.php") as $filename) {
+		foreach (glob(BASE_DIR."/cache/svn_*.sql.php") as $filename) {
 			$updaters[]=$filename;
 		}
 		sort($updaters);

@@ -29,8 +29,10 @@ foreach (glob(dirname(dirname(__FILE__))."/admin/templates/*") as $filename) {
 $GLOBALS['CMS_CONFIG']['DEFAULT_ADMIN_THEME_FOLDER'] = array('DESCR' =>'Тема панели администратора','default'=>$themes[0],'TYPE'=>'dropdown','VARIANT'=>$themes);
 
 $GLOBALS['CMS_CONFIG']['DEFAULT_THEME_FOLDER_COLOR'] = array('DESCR' =>'Цвет панели администратора','default'=>'blue','TYPE'=>'dropdown','VARIANT'=>array('blue','darkwood','darkwood_blue','green','orange','purple','red','wood'));
+$GLOBALS['CMS_CONFIG']['ADMIN_FAVICON'] = array('DESCR' =>'Использовать для админки альтернативную admin.favicon.ico вместо favicon.ico','default'=>'true','TYPE'=>'bool','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['ADMIN_CAPTCHA'] = array('DESCR' =>'Использовать капчу при входе в админку','default'=>true,'TYPE'=>'bool','VARIANT'=>'');
 
+$GLOBALS['CMS_CONFIG']['ATTACH_DIR'] = array('DESCR' =>'Директория для хранения вложений','default'=>'attachments','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['UPLOAD_DIR'] = array('DESCR' =>'Директория для хранения файлов','default'=>'uploads','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['UPLOAD_SHOP_DIR'] = array('DESCR' =>'Директория для хранения миниатюр Магазина','default'=>'uploads/shop','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['UPLOAD_GALLERY_DIR'] = array('DESCR' =>'Директория для хранения миниатюр Галерей','default'=>'uploads/gallery','TYPE'=>'string','VARIANT'=>'');

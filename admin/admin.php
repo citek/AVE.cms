@@ -89,6 +89,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'login')
 	}
 }
 
+$AVE_Template->assign('admin_favicon', ADMIN_FAVICON);
 $AVE_Template->assign('captcha',ADMIN_CAPTCHA);
 $AVE_Template->display('login.tpl');
 

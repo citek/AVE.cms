@@ -21,6 +21,8 @@ if (! @filesize(BASE_DIR . '/inc/db.config.php')) { header('Location:../install.
 
 require(BASE_DIR . '/admin/init.php');
 
+$AVE_Template->assign('admin_favicon', ADMIN_FAVICON);
+
 if (!isset($_SESSION['user_id'])){
 	@session_destroy();
 	$AVE_Template->assign('captcha',ADMIN_CAPTCHA);

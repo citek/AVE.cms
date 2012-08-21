@@ -1,7 +1,22 @@
 {literal}
 <script language="javascript">
-function mail_pass(){
-	var val = $("#password").val();
+function pass_show() {
+	if ($("#password_show:checked").val()) {
+		type_hide = "pass";
+		type_show = "text";
+	}
+	else {
+		type_hide = "text";
+		type_show = "pass";
+	}
+	$("#password_"+type_hide).hide();
+	$("#password_"+type_hide).removeAttr("name");
+	$("#password_"+type_show).show();
+	$("#password_"+type_show).attr("name","password");
+	$("#password_"+type_show).val($("#password_"+type_hide).val());
+};
+function mail_pass(input_id){
+	var val = $("#"+input_id).val();
 	if (val) {
 		$("#mail_pass").show();
 		$("#mail_pass input").attr("checked","checked");
@@ -88,10 +103,15 @@ function mail_status(){
     <td>{#USER_PASSWORD#}&nbsp;{if $smarty.request.action=='edit'} ({#USER_PASSWORD_CHANGE#}){/if}</td>
     <td>
         <div class="pr12">
-            <input onchange="mail_pass();" onkeydown="mail_pass();" onkeyup="mail_pass();" name="password" type="text" id="password" size="40" style="width:250px;" maxlength="50" autocomplete="off" />
+          <input onchange="mail_pass(this.id);" onkeydown="mail_pass(this.id);" onkeyup="mail_pass(this.id);" name="password" type="password" id="password_pass" size="40" style="width:250px;" maxlength="50" autocomplete="off" />
+          <input onchange="mail_pass(this.id);" onkeydown="mail_pass(this.id);" onkeyup="mail_pass(this.id);" type="text" id="password_text" size="40" style="width:250px;display:none;" maxlength="50" autocomplete="off" />
+        </div>
+       <div class="pr12">
+         <input class="float" type="checkbox" id="password_show" value="1" onchange="pass_show();" />
+         <label>{#USER_PASSWORD_SHOW#}</label>
         </div>
         {if $smarty.request.action=='edit'}
-        <div class="pr12" id="mail_pass" style="display:none">
+        <div class="pr12" id="mail_pass" style="display:none; clear:left">
             <input name="PassChange" type="checkbox" value="1" class="float" /> <label style="cursor: pointer;">{#USER_SEND_INFO#}</label>
         </div>
         {/if}

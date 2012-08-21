@@ -1318,4 +1318,34 @@ function callback_make_thumbnail($params)
 	return ((is_array($params) && isset($params[2])) ? make_thumbnail(array('size' => $params[1], 'link' => $params[2])) : '');
 }
 
+/**
+ * Функция preg_replace для кириллицы
+ * если заменять русские символы в строке UTF-8 при помощи preg_replace, то появляются вопросы
+ *
+ * @param mixed $pattern     шаблон заменяемой части строки
+ * @param mixed $replacement на что заменяем
+ * @param mixed $string      входящая строка
+ * @param int   $limit       максимум вхождений
+ * mixed preg_replace_alt ( mixed pattern, mixed replacement, mixed subject [, int limit] )
+ *
+ * @return mixed
+ */
+function preg_replace_alt ($pattern, $replacement, $string, $limit)
+{
+	$string = iconv('UTF-8', 'cp1251', $string);
+	$string = preg_replace($pattern, $replacement, $string, $limit);
+	return iconv('cp1251', 'UTF-8', $string);
+}
+
+/**
+ * Функция для вывода на экран переменной (для отладки)
+ *
+ * @param mixed $var     любая переменная
+ */
+function _var($var)
+{
+	echo '<pre style="background:#fff;color:#000;clear:both;padding:10px;border:red solid 2px">';
+	var_dump($var);
+	echo '</pre>';
+}
 ?>

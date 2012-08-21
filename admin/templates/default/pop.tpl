@@ -11,6 +11,12 @@
 	<meta http-equiv="pragma" content="no-cache">
 	<meta name="generator" content="Notepad" >
 	<meta name="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT">
+    
+    <!-- Favicon -->
+    {if $admin_favicon}
+    <link rel="icon" type="image/vnd.microsoft.icon" href="/admin.favicon.ico">
+    <link rel="SHORTCUT ICON" href="/admin.favicon.ico">
+    {/if}
 
 	<!-- CSS Files -->
 	<link href="{$tpl_dir}/css/combine.php?css=reset.css,main.css,data_table.css,jquery-ui_custom.css" rel="stylesheet" type="text/css" media="screen" />

@@ -36,7 +36,7 @@ if (defined('ACP') && !(isset($_REQUEST['action']) && $_REQUEST['action'] == 'de
 }
 
 /**
- * Обработка тега модуля
+ * Обработка тэга модуля
  *
  */
 function mod_rubnav($data)
@@ -113,7 +113,7 @@ function mod_rubnav($data)
 			$row->document_title
 			);
 
-			$prev_link = str_replace($search, $replace, $row_templ->rubnav_tmpl_next);
+			$prev_link = str_replace($search, $replace, $row_templ->rubnav_tmpl_prev);
 		}
 		echo $prev_link;
 	}
