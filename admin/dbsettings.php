@@ -34,7 +34,7 @@ if (!empty($_REQUEST['action']))
 			break;
 
 		case 'dump_top':
-			$AVE_DB_Service->databaseTopDumpExport();
+			$AVE_DB_Service->databaseDumpExport(1);
 			exit;
 
 		case 'dump':

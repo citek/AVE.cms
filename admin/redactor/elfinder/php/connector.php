@@ -55,8 +55,8 @@ function logger($cmd, $voumes, $result) {
 		default:
 			$log = '';
 	}
-	if ($log && is_dir('../files/tmp') || @mkdir('../files/tmp')) {
-		$fp = fopen('../files/tmp/log.txt', 'a');
+	if ($log && is_dir('../../../../cache/redactor') || @mkdir('../../../../cache/redactor')) {
+		$fp = fopen('../../../../cache/redactor/log.txt', 'a');
 		if ($fp) {
 			fwrite($fp, $log."\n");
 			fclose($fp);
@@ -110,8 +110,8 @@ class elFinderSimpleLogger {
 			default:
 				$log = '';
 		}
-		if ($log && is_dir('../files/tmp') || @mkdir('../files/tmp')) {
-			$fp = fopen('../files/tmp/log.txt', 'a');
+		if ($log && is_dir('../../../../cache/redactor') || @mkdir('../../../../cache/redactor')) {
+			$fp = fopen('../../../../cache/redactor/log.txt', 'a');
 			if ($fp) {
 				fwrite($fp, $log."\n");
 				fclose($fp);

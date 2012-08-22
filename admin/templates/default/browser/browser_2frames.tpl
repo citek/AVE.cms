@@ -120,15 +120,13 @@ function submitTheForm() {ldelim}
 {if $target=='dir'}
 		var bdn = document.bForm.bDirName.value.split('/').reverse();
 		window.opener.document.getElementById('{$target}__{$target_id}').value = bdn[1];
-{else}
-		window.opener.document.getElementById('{$target}__{$target_id}').value = '{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
-{/if}
-{if $target=='img_importfeld'}
+{elseif $target=='img_importfeld'}
 		var bdn = document.bForm.bDirName.value.split('/').reverse();
 		window.opener.document.getElementById('{$target}__{$target_id}').value = '{$mediapath}/'+bdn[1]+'/';
 {else}
-		window.opener.document.getElementById('{$target}__{$target_id}').value = document.bForm.bDirName.value + document.bForm.bFileName.value;
+		window.opener.document.getElementById('{$target}__{$target_id}').value = '{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
 {/if}
+
 {elseif $target!='all'}
 {if $smarty.request.fillout=='dl'}
 		window.opener.document.getElementById('{$smarty.request.target|escape}').value = '{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;

@@ -197,43 +197,25 @@ class AVE_DB_Service
 	 * Метод, предназначенный для сохранения файла дампа базы данных на жеский диск
 	 *
 	 */
-	function databaseDumpExport()
+	function databaseDumpExport($top=0)
 	{
 		// Если дамп не удалось создать, тогда завершаем работу
-        if (!$this->_databaseDumpCreate()) exit;
+		if ($top)
+		{
+			if (!$this->_databaseTopDumpCreate()) exit;
+		}
+		else
+		{
+			if (!$this->_databaseDumpCreate()) exit;
+		}
+
+		// Готовим шаблон имени файла
+		$file_name = preg_replace_alt(array("/%SERVER%/","/%DATE%/","/%TIME%/"),array($_SERVER['SERVER_NAME'],date('d.m.y'),date('H.i.s')),DB_EXPORT_TPL);
 
         // Формируем заголовок
 		header('Content-Type: text/plain');
 		header('Expires: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-		header('Content-Disposition: attachment; filename=' . $_SERVER['SERVER_NAME'] . '_' . 'DB_BackUP' .  '_' . date('d.m.y') . '.sql');
-		header('Content-Length: ' . strlen($this->_database_dump));
-		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-		header('Pragma: public');
-
-		// Выводим данные
-        echo $this->_database_dump;
-
-		$this->_database_dump = '';
-
-		// Выполняем запись системного сообщения в журнал
-        reportLog($_SESSION['user_name'] . ' - выполнил резервное копирование базы данных.', 2, 2);
-
-		exit;
-	}
-
-	/**
-	 * Метод, предназначенный для сохранения файла дампа базы данных на жеский диск
-	 *
-	 */
-	function databaseTopDumpExport()
-	{
-		// Если дамп не удалось создать, тогда завершаем работу
-        if (!$this->_databaseTopDumpCreate()) exit;
-
-        // Формируем заголовок
-		header('Content-Type: text/plain');
-		header('Expires: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-		header('Content-Disposition: attachment; filename=' . $_SERVER['SERVER_NAME'] . '_' . 'DB_BackUP' .  '_' . date('d.m.y') . '.sql');
+		header('Content-Disposition: attachment; filename=' . $file_name . '.sql');
 		header('Content-Length: ' . strlen($this->_database_dump));
 		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		header('Pragma: public');

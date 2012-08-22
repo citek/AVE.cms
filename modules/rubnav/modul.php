@@ -58,7 +58,9 @@ function mod_rubnav($data)
 				document_alias,
 				document_title
 			FROM " . PREFIX . "_documents
-		   		WHERE Id > '2'
+		   		WHERE
+				Id != '1'
+				AND Id != '" . PAGE_NOT_FOUND_ID . "'
 				AND Id != '" . $AVE_Core->curentdoc->Id . "'
 				AND rubric_id = '" . $AVE_Core->curentdoc->rubric_id . "'
 				AND document_published >= '" . $AVE_Core->curentdoc->document_published . "'
@@ -93,7 +95,9 @@ function mod_rubnav($data)
 				document_alias,
 				document_title
 			FROM " . PREFIX . "_documents
-		   		WHERE Id > '2'
+		   		WHERE
+				Id != '1'
+				AND Id != '" . PAGE_NOT_FOUND_ID . "'
 				AND Id != '" . $AVE_Core->curentdoc->Id . "'
 				AND rubric_id = '" . $AVE_Core->curentdoc->rubric_id . "'
 				AND document_published <= '" . $AVE_Core->curentdoc->document_published . "'

@@ -564,9 +564,9 @@ function translit_string($st)
  * @param string $st
  * @return string
  */
-function prepare_url($st)
+function prepare_url($url)
 {
-	$st = strip_tags($st);
+	$new_url = strip_tags($url);
 
     $table = array(
                 'А' => 'A',
@@ -638,18 +638,20 @@ function prepare_url($st)
                 'я' => 'ya',
     );
 
-    $st = str_replace(array_keys($table),  array_values($table), $st); 
+    $new_url = str_replace(array_keys($table),  array_values($table), $new_url); 
     
-	if (defined('TRANSLIT_URL') && TRANSLIT_URL) $st = translit_string(trim(strtolower($st)));
+	if (defined('TRANSLIT_URL') && TRANSLIT_URL) $new_url = translit_string(trim(strtolower($new_url)));
 
-	$st = preg_replace(
-		array('/^[\/-]+|[\/-]+$|^[\/_]+|[\/_]+$|[^a-zа-яA-ZА-Я0-9\/_-]/', '/--+/', '/-*\/+-*/', '/\/\/+/'),
+	$new_url = preg_replace(
+		array('/^[\/-]+|[\/-]+$|^[\/_]+|[\/_]+$|[^\.a-zа-яA-ZА-Я0-9\/_-]/', '/--+/', '/-*\/+-*/', '/\/\/+/'),
 		array('-',                                                      '-',     '/',         '/'),
-		$st
+		$new_url
 	);
+	$new_url = trim($new_url, '-');
 
-	return trim($st, '-');
+	if (substr(URL_SUFF, 0, 1) != '/' && substr($url, -1) == '/') $new_url = $new_url . "/";
 	
+	return $new_url;
 }
 
 /**
@@ -682,7 +684,7 @@ function rewrite_link($s)
 {
 	if (!REWRITE_MODE) return $s;
 
-	$doc_regex = '/index.php(?:\?)id=(?:[0-9]+)&(?:amp;)*doc='.(TRANSLIT_URL ? '([a-z0-9\/_-]+)' : '([a-zа-яёїєі0-9\/_-]+)');
+	$doc_regex = '/index.php(?:\?)id=(?:[0-9]+)&(?:amp;)*doc='.(TRANSLIT_URL ? '([\.a-z0-9\/_-]+)' : '([\.a-zа-яёїєі0-9\/_-]+)');
 	$page_regex = '&(?:amp;)*(artpage|apage|page)=([{s}0-9]+)';
 
 	$s = preg_replace($doc_regex.$page_regex.$page_regex.$page_regex.'/', ABS_PATH.'$1/$2-$3/$4-$5/$6-$7'.URL_SUFF, $s);
@@ -1330,7 +1332,7 @@ function callback_make_thumbnail($params)
  *
  * @return mixed
  */
-function preg_replace_alt ($pattern, $replacement, $string, $limit)
+function preg_replace_alt ($pattern="", $replacement="", $string="", $limit=-1)
 {
 	$string = iconv('UTF-8', 'cp1251', $string);
 	$string = preg_replace($pattern, $replacement, $string, $limit);

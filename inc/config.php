@@ -13,7 +13,7 @@ define('APP_INFO', '&copy; 2008-2012 <a target="_blank" href="http://www.overdoz
 
 $GLOBALS['CMS_CONFIG']['REWRITE_MODE'] = array('DESCR' =>'Использовать ЧПУ Адреса вида index.php будут преобразованы в /home/','default'=>true,'TYPE'=>'bool','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['TRANSLIT_URL'] = array('DESCR' =>'Использовать транслит в ЧПУ адреса вида /страница/ поменяються на /page/','default'=>true,'TYPE'=>'bool','VARIANT'=>''); 
-$GLOBALS['CMS_CONFIG']['URL_SUFF'] = array('DESCR' =>'Cуффикс ЧПУ','default'=>'/','TYPE'=>'string','VARIANT'=>'');
+$GLOBALS['CMS_CONFIG']['URL_SUFF'] = array('DESCR' =>'Cуффикс ЧПУ','default'=>'','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['MAILING_LIB'] = array('DESCR' =>'Библиотека для отправки почты','default'=>'PHPMailer','TYPE'=>'dropdown','VARIANT'=>array('SwiftMailer','PHPMailer'));
 
 $themes = array();
@@ -58,6 +58,7 @@ $GLOBALS['CMS_CONFIG']['SVN_URL'] = array('DESCR' =>'Адрес SVN репози
 $GLOBALS['CMS_CONFIG']['SVN_LINK'] = array('DESCR' =>'Часть ссылки SVN репозитария до номера ревизии для просмотра информации','default'=>'http://code.google.com/p/ave-cms/source/detail?r=','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['SVN_LOGIN'] = array('DESCR' =>'Логин для SVN репозитария','default'=>'','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['SVN_PASSWORD'] = array('DESCR' =>'Пароль для SVN репозитария','default'=>'','TYPE'=>'string','VARIANT'=>'');
+$GLOBALS['CMS_CONFIG']['DB_EXPORT_TPL'] = array('DESCR' =>'Шаблон имени файла экспорта бд (%SERVER%,%DATE%,%TIME%)','default'=>'%SERVER%_DB_BackUP_%DATE%_%TIME%','TYPE'=>'string','VARIANT'=>'');
 
 @include(dirname(dirname(__FILE__)).'/inc/config.inc.php');
 foreach($GLOBALS['CMS_CONFIG'] as $k=>$v)

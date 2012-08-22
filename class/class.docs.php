@@ -787,9 +787,9 @@ class AVE_Document
 						$data['document_alias'] = $_url . '-' . $cnt;
 						$cnt++;
 					}
-			}
-			else
-			{
+				}
+				else
+				{
 					$suche = (isset($data['document_in_search']) && $data['document_in_search'] == 1) ? 1 : 0;
 					$document_status = !empty($data['document_status']) ? (int)$data['document_status'] : '0';
 					$document_status = ($document_id == 1 || $document_id == PAGE_NOT_FOUND_ID) ? '1' : $document_status;
@@ -1681,7 +1681,7 @@ class AVE_Document
 		if (!empty($document_alias))
 		{
 			// Проверяем, чтобы данный URL соответствовал требованиям
-			if (preg_match(TRANSLIT_URL ? '/[^a-z0-9\/-]+/' : '/[^a-zа-яёїєі0-9\/-]+/', $document_alias))
+			if (preg_match(TRANSLIT_URL ? '/[^\.a-z0-9\/-]+/' : '/[^\.a-zа-яёїєі0-9\/-]+/', $document_alias))
 			{
 				$errors[] = $AVE_Template->get_config_vars('DOC_URL_ERROR_SYMBOL');
 			}
@@ -1689,14 +1689,14 @@ class AVE_Document
 			// Если URL начинается с "/" - фиксируем ошибку
 			if ($document_alias[0] == '/') $errors[] = $AVE_Template->get_config_vars('DOC_URL_ERROR_START');
 
-			// Если URL заканчивается на "/" - фиксируем ошибку
-			if (substr($document_alias, -1) == '/') $errors[] = $AVE_Template->get_config_vars('DOC_URL_ERROR_END');
+			// Если суффикс URL заканчивается на "/" и URL заканчивается на "/" - фиксируем ошибку
+			if (substr(URL_SUFF, 0, 1) == '/' && substr($document_alias, -1) == '/') $errors[] = $AVE_Template->get_config_vars('DOC_URL_ERROR_END');
 
 			// Если в URL используются слова apage-XX, artpage-XX,page-XX,print, фиксируем ошибку, где ХХ - число
 			$matches = preg_grep('/^(apage-\d+|artpage-\d+|page-\d+|print)$/i', explode('/', $document_alias));
 			if (!empty($matches)) $errors[] = $AVE_Template->get_config_vars('DOC_URL_ERROR_SEGMENT') . implode(', ', $matches);
 
-			// Выполняем запрос к БД на получение ивсе URL и проверку на уникальность
+			// Выполняем запрос к БД на получение всех URL и проверку на уникальность
 			if (empty($errors))
 			{
 				$alias_exist = $AVE_DB->Query("
@@ -1718,11 +1718,11 @@ class AVE_Document
 		// Если ошибок не найдено, формируем сообщение об успешной операции
 		if (empty($errors))
 		{
-			return '<font class="checkUrlOk">' . $AVE_Template->get_config_vars('DOC_URL_CHECK_OK') . '</font>';
+			return $AVE_Template->get_config_vars('DOC_URL_CHECK_OK');
 		}
 		else
 		{ // В противном случае формируем сообщение с ошибкой
-			return '<font class="checkUrlErr">' . implode(', ', $errors) . '</font>';
+			return $AVE_Template->get_config_vars('DOC_URL_CHECK_ER') . implode(',<br />', $errors);
 		}
 	}
 
@@ -2100,5 +2100,4 @@ class AVE_Document
 		$AVE_Template->assign('content', $AVE_Template->fetch('documents/form_after.tpl'));
 	}
 }
-
 ?>
