@@ -223,6 +223,7 @@ function get_field_bild($field_value,$type,$field_id='',$rubric_field_template='
 			else
 			{
 				$field_value = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_param[\\1]', $rubric_field_template);
+				$field_value = preg_replace_callback('/\[tag:([r|c]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $field_value);
 			}
 			$res=$field_value;
 			break;

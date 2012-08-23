@@ -427,11 +427,12 @@ BLOCK;
 					if($v){
 						if ($tpl_field_empty)
 						{
-							$v = '<li><img src="'.ABS_PATH.$field_param[0].'" alt="'.$field_param[1].'"/></li>';
+							$v = '<img src="'.ABS_PATH.$field_param[0].'" alt="'.$field_param[1].'"/>';
 						}
 						else
 						{
 							$v = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_param[\\1]', $rubric_field_template);
+							$v = preg_replace_callback('/\[tag:([r|c]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $v);
 						}
 					}
 					$res.=$v;
@@ -450,11 +451,12 @@ BLOCK;
 					if($v){
 						if (!$rubric_field_template_request)
 						{
-							$v = '<li><img src="'.ABS_PATH.$field_param[0].'" alt="'.$field_param[1].'"/></li>';
+							$v = '<img src="'.ABS_PATH.$field_param[0].'" alt="'.$field_param[1].'"/>';
 						}
 						else
 						{
 							$v = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_param[\\1]', $rubric_field_template_request);
+							$v = preg_replace_callback('/\[tag:([r|c]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $v);
 						}
 					}
 					$res.=$v;

@@ -697,6 +697,7 @@ class AVE_Core
 					{
 						// парсим теги полей в шаблоне документа
 						$main_content = preg_replace_callback('/\[tag:fld:(\d+)\]/', 'document_get_field', $rubTmpl);
+						$main_content = preg_replace_callback('/\[tag:([r|c]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $main_content);
 
 						// удаляем ошибочные теги полей
 						$main_content = preg_replace('/\[tag:fld:\d*\]/', '', $main_content);
@@ -716,6 +717,7 @@ class AVE_Core
 						}
 					}
 				}
+				$main_content = preg_replace('/\[tag:date:([a-zA-Z0-9-]+)\]/e', "RusDate(date('$1', ".$this->curentdoc->document_published."))", $main_content);
 				$main_content = str_replace('[tag:docdate]', pretty_date(strftime(DATE_FORMAT, $this->curentdoc->document_published)), $main_content);
 				$main_content = str_replace('[tag:doctime]', pretty_date(strftime(TIME_FORMAT, $this->curentdoc->document_published)), $main_content);
 				$main_content = str_replace('[tag:docauthor]', get_username_by_id($this->curentdoc->document_author_id), $main_content);
@@ -832,7 +834,9 @@ class AVE_Core
 	function coreUrlParse($get_url = '')
 	{
 		global $AVE_DB;
-		
+
+		if(substr($get_url,0,strlen('/index.php'))!='/index.php'&&strpos($get_url,'?')!==false)$get_url=substr($get_url,0,strpos($get_url,'?'));
+
 		$get_url = rawurldecode($get_url);
 		$get_url = mb_substr($get_url, strlen(ABS_PATH));
 		$test_url = $get_url; // сохранение старого урла для првоерки использования суффикса
