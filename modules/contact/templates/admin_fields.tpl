@@ -166,7 +166,7 @@ $(document).ready(function(){ldelim}
 							<option value="fileupload">{#CONTACT_UPLOAD_FIELD#}</option>
 						</select>
 				</td>
-				<td><input style="width:65px;" placeholder="{#CONTACT_FIELD_POSITION#}" type="text" name="contact_field_position" id="contact_field_position" size="5" maxlength="3" value="" /></td>
+				<td><input style="width:65px;" placeholder="{#CONTACT_FIELD_POSITION#}" type="text" name="contact_field_position" id="contact_field_position" size="5" maxlength="3" value="100" /></td>
 				<td><input style="width:65px;" placeholder="{#CONTACT_FIELD_SIZE#}" type="text" name="contact_field_size" id="contact_field_size" size="5" maxlength="4" value="" /></td>
 				<td>
 						<select style="width:150px;" name="contact_field_datatype" id="contact_field_datatype">

@@ -51,7 +51,7 @@ function insertLink(o) {ldelim}
 				<td>{$item->Id}</td>
 				<td>
 					{if $item->document_published < $smarty.now && ($item->document_expire == '0' || $item->document_expire > $smarty.now)}
-						<a title="{#DOC_SHOW_TITLE#}" href="../index.php?id={$item->Id}&amp;cp={$sess}" target="_blank" class="toprightDir icon_sprite ico_look"></a>
+						<a title="{#DOC_SHOW2_TITLE#}" href="/{if $item->Id!=1}{$item->document_alias}{/if}" target="_blank" class="toprightDir icon_sprite ico_look"></a>
 					{else}
 						<span class="icon_sprite ico_blanc"></span>
 					{/if}

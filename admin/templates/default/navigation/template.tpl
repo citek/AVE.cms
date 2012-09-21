@@ -109,14 +109,14 @@
 		<tr>
 			<td width="200">
 				<strong>{#NAVI_LINK_INACTIVE#}</strong><br />
-				<a class="rightDir" style="cursor: pointer;" title="{#NAVI_LINK_ID#}" onclick="textSelection1('[tag:linkid]','');">[tag:linkid]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection1('[tag:target]','');">[tag:target]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection1('[tag:link]','');">[tag:link]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection1('[tag:linkname]','');">[tag:linkname]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection1('[tag:desc]','');">[tag:desc]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection1('[tag:img]','');">[tag:img]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection1('[tag:linkid]','');">[tag:img_act]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection1('[tag:img_id]','');">[tag:img_id]</a>
+				<strong><a class="rightDir" style="cursor: pointer;" title="{#NAVI_LINK_ID#}" onclick="textSelection1('[tag:linkid]','');">[tag:linkid]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection1('[tag:target]','');">[tag:target]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection1('[tag:link]','');">[tag:link]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection1('[tag:linkname]','');">[tag:linkname]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection1('[tag:desc]','');">[tag:desc]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection1('[tag:img]','');">[tag:img]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection1('[tag:linkid]','');">[tag:img_act]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection1('[tag:img_id]','');">[tag:img_id]</a></strong>
 			</td>
 			<td><div class="pr12"><textarea style="width:100%" name="navi_level1" rows="12" id="navi_level1">{$nav->navi_level1|escape}</textarea></div></td>
 		</tr>
@@ -147,14 +147,14 @@
 		<tr>
 			<td width="200">
 				<strong>{#NAVI_LINK_ACTIVE#}</strong><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_ID#}" onclick="textSelection2('[tag:linkid]','');">[tag:linkid]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection2('[tag:target]','');">[tag:target]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection2('[tag:link]','');">[tag:link]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection2('[tag:linkname]','');">[tag:linkname]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection2('[tag:desc]','');">[tag:desc]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection2('[tag:img]','');">[tag:img]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection2('[tag:img_act]','');">[tag:img_act]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection2('[tag:img_id]','');">[tag:img_id]</a>
+				<strong><a class="rightDir" style="cursor: pointer;" title="{#NAVI_LINK_ID#}" onclick="textSelection2('[tag:linkid]','');">[tag:linkid]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection2('[tag:target]','');">[tag:target]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection2('[tag:link]','');">[tag:link]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection2('[tag:linkname]','');">[tag:linkname]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection2('[tag:desc]','');">[tag:desc]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection2('[tag:img]','');">[tag:img]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection2('[tag:linkid]','');">[tag:img_act]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection2('[tag:img_id]','');">[tag:img_id]</a></strong>
 			</td>
 			<td><div class="pr12"><textarea style="width:100%" name="navi_level1active" rows="12" id="navi_level1active">{$nav->navi_level1active|escape}</textarea></div></td>
 		</tr>
@@ -203,14 +203,14 @@
 		<tr>
 			<td width="200">
 				<strong>{#NAVI_LINK_INACTIVE#}</strong><br />
-				<a class="rightDir"  style="cursor: pointer;"  title="{#NAVI_LINK_ID#}" onclick="textSelection3('[tag:linkid]','');">[tag:linkid]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection3('[tag:target]','');">[tag:target]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection3('[tag:link]','');">[tag:link]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection3('[tag:linkname]','');">[tag:linkname]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection3('[tag:desc]','');">[tag:desc]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection3('[tag:img]','');">[tag:img]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection3('[tag:img_act]','');">[tag:img_act]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection3('[tag:img_id]','');">[tag:img_id]</a>
+				<strong><a class="rightDir" style="cursor: pointer;" title="{#NAVI_LINK_ID#}" onclick="textSelection3('[tag:linkid]','');">[tag:linkid]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection3('[tag:target]','');">[tag:target]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection3('[tag:link]','');">[tag:link]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection3('[tag:linkname]','');">[tag:linkname]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection3('[tag:desc]','');">[tag:desc]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection3('[tag:img]','');">[tag:img]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection3('[tag:linkid]','');">[tag:img_act]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection3('[tag:img_id]','');">[tag:img_id]</a></strong>
 			</td>
 			<td><div class="pr12"><textarea style="width:100%" name="navi_level2" rows="12" id="navi_level2">{$nav->navi_level2|escape}</textarea></div></td>
 		</tr>
@@ -241,14 +241,14 @@
 		<tr>
 			<td>
 				<strong>{#NAVI_LINK_ACTIVE#}</strong><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_ID#}" onclick="textSelection4('[tag:linkid]','');">[tag:linkid]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection4('[tag:target]','');">[tag:target]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection4('[tag:link]','');">[tag:link]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection4('[tag:linkname]','');">[tag:linkname]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection4('[tag:desc]','');">[tag:desc]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection4('[tag:img]','');">[tag:img]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection4('[tag:img_act]','');">[tag:img_act]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection4('[tag:img_id]','');">[tag:img_id]</a>
+				<strong><a class="rightDir" style="cursor: pointer;" title="{#NAVI_LINK_ID#}" onclick="textSelection4('[tag:linkid]','');">[tag:linkid]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection4('[tag:target]','');">[tag:target]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection4('[tag:link]','');">[tag:link]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection4('[tag:linkname]','');">[tag:linkname]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection4('[tag:desc]','');">[tag:desc]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection4('[tag:img]','');">[tag:img]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection4('[tag:linkid]','');">[tag:img_act]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection4('[tag:img_id]','');">[tag:img_id]</a></strong>
 			</td>
 			<td><div class="pr12"><textarea style="width:100%" name="navi_level2active" rows="12" id="navi_level2active">{$nav->navi_level2active|escape}</textarea></div></td>
 		</tr>
@@ -297,14 +297,14 @@
 		<tr>
 			<td>
 				<strong>{#NAVI_LINK_INACTIVE#}</strong><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_ID#}" onclick="textSelection5('[tag:linkid]','');">[tag:linkid]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection5('[tag:target]','');">[tag:target]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection5('[tag:link]','');">[tag:link]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection5('[tag:linkname]','');">[tag:linkname]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection5('[tag:desc]','');">[tag:desc]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection5('[tag:img]','');">[tag:img]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection5('[tag:img_act]','');">[tag:img_act]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection5('[tag:img_id]','');">[tag:img_id]</a>
+				<strong><a class="rightDir" style="cursor: pointer;" title="{#NAVI_LINK_ID#}" onclick="textSelection5('[tag:linkid]','');">[tag:linkid]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection5('[tag:target]','');">[tag:target]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection5('[tag:link]','');">[tag:link]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection5('[tag:linkname]','');">[tag:linkname]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection5('[tag:desc]','');">[tag:desc]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection5('[tag:img]','');">[tag:img]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection5('[tag:linkid]','');">[tag:img_act]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection5('[tag:img_id]','');">[tag:img_id]</a></strong>
 			</td>
 			<td><div class="pr12"><textarea style="width:100%" name="navi_level3" rows="12" id="navi_level3">{$nav->navi_level3|escape}</textarea></div></td>
 		</tr>
@@ -335,14 +335,14 @@
 		<tr>
 			<td>
 				<strong>{#NAVI_LINK_ACTIVE#}</strong><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_ID#}" onclick="textSelection6('[tag:linkid]','');">[tag:linkid]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection6('[tag:target]','');">[tag:target]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection6('[tag:link]','');">[tag:link]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection6('[tag:linkname]','');">[tag:linkname]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection6('[tag:desc]','');">[tag:desc]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection6('[tag:img]','');">[tag:img]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection6('[tag:img_act]','');">[tag:img_act]</a><br />
-				<a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection6('[tag:img_id]','');">[tag:img_id]</a>
+				<strong><a class="rightDir" style="cursor: pointer;" title="{#NAVI_LINK_ID#}" onclick="textSelection6('[tag:linkid]','');">[tag:linkid]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_TARGET#}" onclick="textSelection6('[tag:target]','');">[tag:target]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_URL#}" onclick="textSelection6('[tag:link]','');">[tag:link]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="{#NAVI_LINK_NAME#}" onclick="textSelection6('[tag:linkname]','');">[tag:linkname]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Описание пункта меню" onclick="textSelection6('[tag:desc]','');">[tag:desc]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Изображение" onclick="textSelection6('[tag:img]','');">[tag:img]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Изображение активное, в конце названия изображения должно быть _act" onclick="textSelection6('[tag:linkid]','');">[tag:img_act]</a></strong><br />
+				<strong><a class="rightDir"  style="cursor: pointer;" title="Id изображения" onclick="textSelection6('[tag:img_id]','');">[tag:img_id]</a></strong>
 			</td>
 			<td><div class="pr12"><textarea style="width:100%" name="navi_level3active" rows="12" id="navi_level3active">{$nav->navi_level3active|escape}</textarea></div></td>
 		</tr>

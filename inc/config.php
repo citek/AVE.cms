@@ -1,20 +1,19 @@
 <?php
-
 /**
  * AVE.cms
  *
  * @package AVE.cms
  * @filesource
  */
-
 define('APP_NAME', 'AVE.cms');
 define('APP_VERSION', '2.09RC2');
 define('APP_INFO', '&copy; 2008-2012 <a target="_blank" href="http://www.overdoze.ru/">Overdoze.Ru</a>');
 
+$GLOBALS['CMS_CONFIG']['MAIL_LIB'] = array('DESCR' =>'Библиотека для отправки писем','default'=>'PHPMailer','TYPE'=>'dropdown','VARIANT'=>array('PHPMailer','SwiftMailer'));
+$GLOBALS['CMS_CONFIG']['IDS_LIB'] = array('DESCR' =>'Использовать систему обнаружения вторжений IDS для параноиков<br/>(существенно снижает производительность)','default'=>false,'TYPE'=>'bool','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['REWRITE_MODE'] = array('DESCR' =>'Использовать ЧПУ Адреса вида index.php будут преобразованы в /home/','default'=>true,'TYPE'=>'bool','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['TRANSLIT_URL'] = array('DESCR' =>'Использовать транслит в ЧПУ адреса вида /страница/ поменяються на /page/','default'=>true,'TYPE'=>'bool','VARIANT'=>''); 
 $GLOBALS['CMS_CONFIG']['URL_SUFF'] = array('DESCR' =>'Cуффикс ЧПУ','default'=>'','TYPE'=>'string','VARIANT'=>'');
-$GLOBALS['CMS_CONFIG']['MAILING_LIB'] = array('DESCR' =>'Библиотека для отправки почты','default'=>'PHPMailer','TYPE'=>'dropdown','VARIANT'=>array('SwiftMailer','PHPMailer'));
 
 $themes = array();
 foreach (glob(dirname(dirname(__FILE__))."/templates/*") as $filename) {
@@ -32,7 +31,7 @@ $GLOBALS['CMS_CONFIG']['DEFAULT_THEME_FOLDER_COLOR'] = array('DESCR' =>'Цвет
 $GLOBALS['CMS_CONFIG']['ADMIN_FAVICON'] = array('DESCR' =>'Использовать для админки альтернативную admin.favicon.ico вместо favicon.ico','default'=>'true','TYPE'=>'bool','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['ADMIN_CAPTCHA'] = array('DESCR' =>'Использовать капчу при входе в админку','default'=>true,'TYPE'=>'bool','VARIANT'=>'');
 
-$GLOBALS['CMS_CONFIG']['ATTACH_DIR'] = array('DESCR' =>'Директория для хранения вложений','default'=>'attachments','TYPE'=>'string','VARIANT'=>'');
+$GLOBALS['CMS_CONFIG']['ATTACH_DIR'] = array('DESCR' =>'Директория для хранения вложений','default'=>'cache/attachments','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['UPLOAD_DIR'] = array('DESCR' =>'Директория для хранения файлов','default'=>'uploads','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['UPLOAD_SHOP_DIR'] = array('DESCR' =>'Директория для хранения миниатюр Магазина','default'=>'uploads/shop','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['UPLOAD_GALLERY_DIR'] = array('DESCR' =>'Директория для хранения миниатюр Галерей','default'=>'uploads/gallery','TYPE'=>'string','VARIANT'=>'');
@@ -55,7 +54,7 @@ $GLOBALS['CMS_CONFIG']['Memcached_Server'] = array('DESCR' =>'Адрес Memcach
 $GLOBALS['CMS_CONFIG']['Memcached_Port'] = array('DESCR' =>'Порт Memcached сервера','default'=>'','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['SVN_ACTIVE'] = array('DESCR' =>'Проверка обновлений','default'=>true,'TYPE'=>'bool','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['SVN_URL'] = array('DESCR' =>'Адрес SVN репозитария (включая папку, изменения которой Вас интересуют, например, trunk)','default'=>'http://ave-cms.googlecode.com/svn/trunk/','TYPE'=>'string','VARIANT'=>'');
-$GLOBALS['CMS_CONFIG']['SVN_LINK'] = array('DESCR' =>'Часть ссылки SVN репозитария до номера ревизии для просмотра информации','default'=>'http://code.google.com/p/ave-cms/source/detail?r=','TYPE'=>'string','VARIANT'=>'');
+$GLOBALS['CMS_CONFIG']['SVN_LINK'] = array('DESCR' =>'Ссылка на репозитарий для просмотра информации о ревизии (%num% - номер ревизии)','default'=>'http://code.google.com/p/ave-cms/source/detail?r=%num%','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['SVN_LOGIN'] = array('DESCR' =>'Логин для SVN репозитария','default'=>'','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['SVN_PASSWORD'] = array('DESCR' =>'Пароль для SVN репозитария','default'=>'','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['DB_EXPORT_TPL'] = array('DESCR' =>'Шаблон имени файла экспорта бд (%SERVER%,%DATE%,%TIME%)','default'=>'%SERVER%_DB_BackUP_%DATE%_%TIME%','TYPE'=>'string','VARIANT'=>'');
@@ -66,5 +65,4 @@ foreach($GLOBALS['CMS_CONFIG'] as $k=>$v)
 	if(!defined($k))
 		define($k,$v['default']);
 }
-
 ?>

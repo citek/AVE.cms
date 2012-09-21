@@ -210,7 +210,7 @@ class AVE_DB_Service
 		}
 
 		// Готовим шаблон имени файла
-		$file_name = preg_replace_alt(array("/%SERVER%/","/%DATE%/","/%TIME%/"),array($_SERVER['SERVER_NAME'],date('d.m.y'),date('H.i.s')),DB_EXPORT_TPL);
+		$file_name = preg_replace_ru(array("/%SERVER%/","/%DATE%/","/%TIME%/"),array($_SERVER['SERVER_NAME'],date('d.m.y'),date('H.i.s')),DB_EXPORT_TPL);
 
         // Формируем заголовок
 		header('Content-Type: text/plain');

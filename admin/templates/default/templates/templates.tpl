@@ -116,7 +116,7 @@ $(document).ready(function(){ldelim}
 			</table>
 		</div>
 
-		<div id="tab2" class="tab_content" style="display: block;">
+		<div id="tab2" class="tab_content" style="display:none;">
 		{if check_permission('template_new')}
 			<form id="add_templ" method="post" action="index.php?do=templates&amp;action=new&amp;cp={$sess}" class="mainForm">
 			<div class="rowElem">
@@ -130,7 +130,7 @@ $(document).ready(function(){ldelim}
 		{/if}
 		</div>
 
-		<div id="tab3" class="tab_content" style="display: block;">
+		<div id="tab3" class="tab_content" style="display:none;">
 		<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 		<tbody>
 				{foreach from=$css_files item=css_files}
@@ -151,7 +151,7 @@ $(document).ready(function(){ldelim}
 		</table>
 		</div>
 
-		<div id="tab4" class="tab_content" style="display: block;">
+		<div id="tab4" class="tab_content" style="display:none;">
 		<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 				{foreach from=$js_files item=js_files}
 		<tr class="noborder">
@@ -171,7 +171,7 @@ $(document).ready(function(){ldelim}
 		</table>
 		</div>
 
-		<div id="tab5" class="tab_content" style="display: block;">
+		<div id="tab5" class="tab_content" style="display:none;">
 	<link rel="stylesheet" href="{$ABS_PATH}admin/redactor/elfinder/css/elfinder.full.css" type="text/css" media="screen" charset="utf-8" />
 	<link rel="stylesheet" href="{$ABS_PATH}admin/redactor/elfinder/css/theme.css" type="text/css" media="screen" charset="utf-8" />
 	<script src="{$ABS_PATH}admin/redactor/elfinder/js/elfinder.full.js" type="text/javascript" charset="utf-8"></script>

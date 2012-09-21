@@ -266,13 +266,16 @@ function changeRub(select) {ldelim}
 		<col width="230">
 <tr class="noborder">
 	<td><strong><a title="{#REQUEST_RUB_INFO#}" class="rightDir" href="javascript:void(0);" onclick="jAlert('{#REQUEST_SELECT_IN_LIST#}','{#REQUEST_TEMPLATE_ITEMS#}');">[tag:rfld:ID][XXX]</a></strong></td>
-	<td rowspan="12"><textarea {$dis} name="request_template_item" id="request_template_item" wrap="off" style="width:100%; height:340px">{$row->request_template_item|escape|default:''}</textarea></td>
-</tr>
-<tr>
-	<td><strong><a title="{#REQUEST_LINK_INFO#}" class="rightDir" href="javascript:void(0);" onclick="textSelection2('[tag:link]', '');">[tag:link]</a></strong></td>
+	<td rowspan="14"><textarea {$dis} name="request_template_item" id="request_template_item" wrap="off" style="width:100%; height:340px">{$row->request_template_item|escape|default:''}</textarea></td>
 </tr>
 <tr>
 	<td><strong><a title="{#REQUEST_DOCID_INFO#}" class="rightDir" href="javascript:void(0);" onclick="textSelection2('[tag:docid]', '');">[tag:docid]</a></strong></td>
+</tr>
+<tr>
+	<td><strong><a title="{#REQUEST_DOCTITLE_INFO#}" class="rightDir" href="javascript:void(0);" onclick="textSelection2('[tag:doctitle]', '');">[tag:doctitle]</a></strong></td>
+</tr>
+<tr>
+	<td><strong><a title="{#REQUEST_LINK_INFO#}" class="rightDir" href="javascript:void(0);" onclick="textSelection2('[tag:link]', '');">[tag:link]</a></strong></td>
 </tr>
 <tr>
 	<td><strong><a title="{#REQUEST_DOCDATE_INFO#}" class="rightDir" href="javascript:void(0);" onclick="textSelection2('[tag:docdate]', '');">[tag:docdate]</a></strong></td>
@@ -297,6 +300,9 @@ function changeRub(select) {ldelim}
 </tr>
 <tr>
 	<td><strong><a title="{#REQUEST_MEDIAPATH#}" class="rightDir" href="javascript:void(0);" onclick="textSelection2('[tag:mediapath]', '');">[tag:mediapath]</a></strong></td>
+</tr>
+<tr>
+	<td><strong><a title="{#REQUEST_THUMBNAIL#}" class="rightDir" href="javascript:void(0);" onclick="textSelection2('[tag:X000x000:YYY]', '');">[tag:X000x000:[tag:rfld:XXX[XXX]]</a></strong></td>
 </tr>
 <tr>
 	<td></td>

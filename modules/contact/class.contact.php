@@ -98,7 +98,7 @@ class Contact
 		global $_FILES;
 
 		$attach = '';
-		define('UPDIR', BASE_DIR . '/attachments/');
+		define('UPDIR', BASE_DIR . "/" . ATTACH_DIR . "/");
 
         // Если к сообщению прикреплены файлы - циклически обрабатываем каждый файл,
         // приводя имя файла к нижнему регистру, убирая из имени пробелы,
@@ -827,7 +827,7 @@ class Contact
 			$del = explode(';', $row->contact_form_in_attachment);
 			foreach ($del as $delfile)
 			{
-				@unlink(BASE_DIR . '/attachments/' . $delfile);
+				@unlink(BASE_DIR . "/" . ATTACH_DIR . "/" . $delfile);
 			}
 		}
 
@@ -837,7 +837,7 @@ class Contact
 			$del = explode(';', $row->contact_form_out_attachment);
 			foreach ($del as $delfile)
 			{
-				@unlink(BASE_DIR . '/attachments/' . $delfile);
+				@unlink(BASE_DIR . "/" . ATTACH_DIR . "/" . $delfile);
 			}
 		}
 
@@ -944,7 +944,7 @@ class Contact
 					foreach ($attachments_arr as $attachment)
 					{
 						$row_a->name = $attachment;
-						$row_a->size = round(filesize(BASE_DIR . '/attachments/' . $attachment)/1024 ,2);
+						$row_a->size = round(filesize(BASE_DIR . "/" . ATTACH_DIR . "/" . $attachment)/1024 ,2);
 						array_push($attachments, $row_a);
 						$row_a = '';
 					}
@@ -1017,9 +1017,9 @@ class Contact
 		header('Content-Type: ' . $file_ex);
 		header('Content-Disposition: attachment; filename=' . $file);
 		header('Content-Transfer-Encoding: binary');
-		header('Content-Length: ' . @filesize(BASE_DIR . '/attachments/' . $file));
+		header('Content-Length: ' . @filesize(BASE_DIR . "/" . ATTACH_DIR . "/" . $file));
 		@set_time_limit(0);
-		if (false === file_download(BASE_DIR . '/attachments/' . $file)) die('File not found.');
+		if (false === file_download(BASE_DIR . "/" . ATTACH_DIR . "/" . $file)) die('File not found.');
 	}
 
     /**
@@ -1051,7 +1051,7 @@ class Contact
                     $del = explode(';', $row->contact_form_in_attachment);
 					foreach ($del as $delfile)
 					{
-						@unlink(BASE_DIR . '/attachments/' . $delfile);
+						@unlink(BASE_DIR . "/" . ATTACH_DIR . "/" . $delfile);
 					}
 				}
 
@@ -1063,7 +1063,7 @@ class Contact
                     $del = explode(';', $row->contact_form_out_attachment);
 					foreach ($del as $delfile)
 					{
-						@unlink(BASE_DIR . '/attachments/' . $delfile);
+						@unlink(BASE_DIR . "/" . ATTACH_DIR . "/" . $delfile);
 					}
 				}
 			}

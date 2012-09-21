@@ -772,7 +772,8 @@ class AVE_Document
 						$data['document_alias'] = $_url = prepare_url(empty($data['document_alias'])
 							? trim($_POST['prefix'] . '/' . $data['doc_title'], '/')
 							: $data['document_alias']);
-					}else{
+					}
+					else{
 						$data['document_alias'] = "/";
 					}
 					$cnt = 1;

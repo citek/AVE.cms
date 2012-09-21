@@ -12,7 +12,7 @@
 define('START_MICROTIME', microtime());
 define('BASE_DIR', str_replace("\\", "/", dirname(__FILE__)));
 
-if (! @filesize(BASE_DIR . '/inc/db.config.php')) { header('Location:install.php'); exit; }
+if (! @filesize(BASE_DIR . '/inc/db.config.php')) { header('Location:/install'); exit; }
 if (! empty($_REQUEST['thumb'])) { require(BASE_DIR . '/functions/func.thumbnail.php'); exit; }
 
 ob_start();

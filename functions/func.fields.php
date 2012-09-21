@@ -197,7 +197,6 @@ function get_field_bild($field_value,$type,$field_id='',$rubric_field_template='
 				$massiv = explode('|', $field_value);
 				$field .= "<div><img id=\"preview__" . $field_id . "\" src=\"" . (!empty($field_value) ? '../' . make_thumbnail(array('link' => $massiv[0])) : $blanc) . "\" height=\"120px\" alt=\"\" border=\"0\" /></div>";
 
-
 				switch ($_SESSION['use_editor']) {
 					case '0': // стандартный редактор
 					case '2':
@@ -354,17 +353,47 @@ function get_field_multidropdown($field_value,$type,$field_id='',$rubric_field_t
 			break;
 
 		case 'doc' :
-			$field_value = clean_php($field_value);
-			if (!$tpl_field_empty)
-			{
-				$field_param = explode('|', $field_value);
-				$field_value = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_param[\\1]', $rubric_field_template);
-			}
-			$res=$field_value;
+			$massa=unserialize($field_value);
+			$res='';
+			if($massa!=false)
+				foreach($massa as $k=>$v)
+				{
+					$v = clean_php($v);
+					$field_param = explode('|', $v);
+					if($v){
+						if ($tpl_field_empty)
+						{
+							$v = $field_param[0];
+						}
+						else
+						{
+							$v = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_param[\\1]', $rubric_field_template);
+						}
+					}
+					$res.=$v;
+				}
 			break;
 
 		case 'req' :
-			$res=get_field_default($field_value,$type,$field_id,$rubric_field_template,$tpl_field_empty,$maxlength,$document_fields,$rubric_id);
+			$massa=unserialize($field_value);
+			$res='';
+			if($massa!=false)
+				foreach($massa as $k=>$v)
+				{
+					$v = clean_php($v);
+					$field_param = explode('|', $v);
+					if($v){
+						if ($tpl_field_empty)
+						{
+							$v = $field_param[0];
+						}
+						else
+						{
+							$v = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_param[\\1]', $rubric_field_template);
+						}
+					}
+					$res.=$v;
+				}
 			break;
 
 		case 'name' :

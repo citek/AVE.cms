@@ -183,6 +183,10 @@ MAIN_NO_ADD_NAV           = "Не указано наименование нав
 MAIN_NO_ADD_USER          = "Не указано имя пользователя или действие отменено!"
 MAIN_CLEAR_CACHE_OK       = "Кэш очищен"
 MAIN_FILE_MANAGER_TITLE   = "Файловый менеджер"
+MAIN_SVN_FORUM            = "Перейти на форум"
+MAIN_SVN_REPOS            = "Перейти на сайт репозитория"
+MAIN_SVN_MAILTO           = "Написать письмо"
+MAIN_SVN_LOOK             = "Посмотреть ревизию на сайте репозитория"
 
 
 MAIN_ADD_NEW_GROUP        = "Добавить новую группу"
@@ -205,7 +209,8 @@ MAIN_ADD_NEW_RUB_NAME     = "Наименование рубрики:"
 
 
 DOC_EDIT_TITLE           = "Редактировать данный документ"
-DOC_SHOW_TITLE           = "Просмотр документа"
+DOC_SHOW_TITLE           = "Просмотр документа (ссылка без ЧПУ)"
+DOC_SHOW2_TITLE          = "Просмотр документа (ссылка c ЧПУ)"
 DOC_CREATE_NOTICE_TITLE  = "Создать заметку"
 DOC_REPLY_NOTICE_TITLE   = "Посмотреть/ответить на заметку"
 DOC_ENABLE_TITLE         = "Сделать документ активным"

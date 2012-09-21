@@ -187,7 +187,10 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'logout')
 }
 
 // для параноиков
-require(BASE_DIR . '/inc/ids.php');
+if (IDS_LIB)
+{
+	require(BASE_DIR . '/inc/ids.php');
+}
 require(BASE_DIR . '/class/class.database.php');
 
 if (!defined('ACPL') && !auth_sessions())

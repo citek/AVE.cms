@@ -79,7 +79,7 @@ class Smarty
      *
      * @var string
      */
-    var $compile_dir     =  'templates_c';
+    var $compile_dir     =  'cache/smarty';
 
     /**
      * The directory where config files are located.
@@ -293,7 +293,7 @@ class Smarty
 
     /**
      * This tells Smarty whether or not to use sub dirs in the cache/ and
-     * templates_c/ directories. sub directories better organized, but
+     * cache/smarty/ directories. sub directories better organized, but
      * may not work well with PHP safe mode enabled.
      *
      * @var boolean

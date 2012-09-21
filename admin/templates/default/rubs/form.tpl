@@ -63,7 +63,7 @@
 		<td width="200">
     <a class="rightDir" title="{#RUBRIK_DOCID_INFO#}" href="javascript:void(0);" onclick="textSelection('[tag:docid]', '');"><strong>[tag:docid]</strong></a>
 		</td>
-        <td rowspan="11"><textarea {$read_only} class="{if $php_forbidden==1}tpl_code_readonly{else}{/if}" style="width:100%; height:350px" name="rubric_template" id="rubric_template">{$row->rubric_template|default:$prefab|escape:html}</textarea></td>
+        <td rowspan="14"><textarea {$read_only} class="{if $php_forbidden==1}tpl_code_readonly{else}{/if}" style="width:100%; height:350px" name="rubric_template" id="rubric_template">{$row->rubric_template|default:$prefab|escape:html}</textarea></td>
 	</tr>
 	<tr>
 		<td>
@@ -101,6 +101,9 @@
 		</td>
 	</tr>
 	<tr>
+		<td><strong><a title="{#RUBRIK_LINK_HOME#}" class="rightDir" href="javascript:void(0);" onclick="textSelection('[tag:home]', '');">[tag:home]</a></strong></td>
+	</tr>
+	<tr>
 		<td>
 	<a class="rightDir" title="{#RUBRIK_MEDIAPATH_INFO#}" href="javascript:void(0);" onclick="textSelection('[tag:mediapath]', '');"><strong>[tag:mediapath]</strong></a>
 		</td>
@@ -114,6 +117,12 @@
 		<td>
 	<a class="rightDir" title="{#RUBRIK_BREADCRUMB#}" href="javascript:void(0);" onclick="textSelection('[tag:breadcrumb]', '');"><strong>[tag:breadcrumb]</strong></a>
 		</td>
+	</tr>
+	<tr>
+		<td><strong><a title="{#RUBRIK_THUMBNAIL#}" class="rightDir" href="javascript:void(0);" onclick="textSelection('[tag:X000x000:YYY]', '');">[tag:X000x000:[tag:fld:XXX]]</a></strong></td>
+	</tr>
+	<tr>
+		<td></td>
 	</tr>
     <tr>
     	<td>HTML Tags</td>

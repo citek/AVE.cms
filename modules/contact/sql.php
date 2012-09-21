@@ -40,7 +40,7 @@ $modul_sql_install[] = "CREATE TABLE CPPREFIX_modul_contact_fields (
   `Id` int(10) unsigned NOT NULL auto_increment,
   `contact_form_id` mediumint(5) unsigned NOT NULL default '0',
   `contact_field_type` varchar(25) NOT NULL default 'text',
-  `contact_field_position` smallint(3) unsigned NOT NULL default '10',
+  `contact_field_position` smallint(3) unsigned NOT NULL default '100',
   `contact_field_title` tinytext NOT NULL,
   `contact_field_required` enum('0','1') NOT NULL default '0',
   `contact_field_default` longtext NOT NULL,
@@ -72,11 +72,11 @@ $modul_sql_install[] = "CREATE TABLE CPPREFIX_modul_contact_info (
 
 $modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contacts` VALUES (1, 'Обратная Связь', 5000, 'youremail@yourdomain.ru', '', '1', 120, '0', '', '1,2,3,4', '0', 'У Вас недостаточно прав для использования этой формы.');";
 
-$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (1, 1, 'textfield', 5, 'Сообщение', '1', '', '1', 698, '1', 'anysymbol', '', '');";
-$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (2, 1, 'dropdown', 50, 'Как Вы оцените наш сайт?', '0', 'Плохо,Средне,Супер,Очень мега круто', '1', 200, '1', 'anysymbol', '', '');";
-$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (3, 1, 'fileupload', 50, 'Прикрепить файл', '1', '', '1', 600, '1', 'anysymbol', '', '');";
-$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (4, 1, 'fileupload', 50, 'Прикрепить файл', '0', '', '1', 600, '1', 'anysymbol', '', '');";
-$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (5, 1, 'checkbox', 55, 'Чекбокс', '1', 'Чекбокс деф', '1', 300, '1', 'anysymbol', '', 'Не заполнено обязательное поле');";
+$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (1, 1, 'textfield', 1, 'Сообщение', '1', '', '1', 698, '1', 'anysymbol', '', '');";
+$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (2, 1, 'dropdown', 2, 'Как Вы оцените наш сайт?', '0', 'Плохо,Средне,Супер,Очень мега круто', '1', 200, '1', 'anysymbol', '', '');";
+$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (3, 1, 'fileupload', 3, 'Прикрепить файл', '1', '', '1', 600, '1', 'anysymbol', '', '');";
+$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (4, 1, 'fileupload', 4, 'Прикрепить файл', '0', '', '1', 600, '1', 'anysymbol', '', '');";
+$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (5, 1, 'checkbox', 5, 'Чекбокс', '1', 'Чекбокс деф', '1', 300, '1', 'anysymbol', '', 'Не заполнено обязательное поле');";
 
 
 $modul_sql_update[] = "UPDATE CPPREFIX_module SET CpEngineTag = '" . $modul['CpEngineTag'] . "', CpPHPTag = '" . $modul['CpPHPTag'] . "', Version = '" . $modul['ModulVersion'] . "' WHERE ModulPfad = '" . $modul['ModulPfad'] . "' LIMIT 1;";

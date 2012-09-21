@@ -1058,138 +1058,141 @@ function image_multi_import($path) {
 /**
  * Отправка e-Mail
  *
- * @param string $to
- * @param string $text
- * @param string $subject
- * @param string $from
- * @param string $from_name
- * @param string $content_type
- * @param string $attachments
- * @param string $html
+ * @param string $to - email получателя
+ * @param string $body - текст сообщения
+ * @param string $subject - тема сообщения
+ * @param string $from_email - e-mail отправителя
+ * @param string $from_name - имя отправителя
+ * @param string $type - содержимое (html или text)
+ * @param array $attach - пути файлов вложений
+ * @param bool $saveattach - сохранять вложения после отправки в ATTACH_DIR?
  */
-function send_mail($to, $text, $subject = '', $from = '', $from_name = '', $content_type = '', $attachments = '')
+function send_mail($to,$body='',$subject='',$from_email='',$from_name='',$type='text',$attach=array(),$saveattach=true)
 {
 	ob_start();
-
-	if (MAILING_LIB == "SwiftMailer")
+	switch (MAIL_LIB)
 	{
-		include_once(BASE_DIR . '/lib/SwiftMailer/swift_required.php') ;
-		$message = Swift_Message::newInstance($subject)
-			-> setFrom(array($from => $from_name))
-			-> setTo($to)
-			-> setBody($text)
-			-> setContentType(($content_type == 'html') ? 'text/html' : (($content_type == 'text' || get_settings('mail_content_type') == 'text/plain') ? 'text/plain' : 'text/html'))
-			-> setMaxLineLength(get_settings('mail_word_wrap'));
+		case "PHPMailer":
 
-		if (! empty($attachments)) {
-			$message -> attach(Swift_Attachment::fromPath(implode(",",$attachments)));
-		}
-		
-		switch (get_settings('mail_type')) 
-		{
-			case 'sendmail':
-				$transport = Swift_SendmailTransport::newInstance(get_settings('mail_sendmail_path') . " -bs");
-				break;
-	
-			case 'smtp':
-				$transport = Swift_SmtpTransport::newInstance(get_settings('mail_host'), get_settings('mail_port'))
-					->setUsername(get_settings('mail_smtp_login'))
-					->setPassword(get_settings('mail_smtp_pass'));
-				break;
-	
-			case 'mail':
-				$transport = Swift_MailTransport::newInstance();
-				break;
-
-			default: break;
-		}
-		
-		$mailer = Swift_Mailer::newInstance($transport);
-		$numSent = $mailer->send($message);
-	}
-	elseif (MAILING_LIB == "PHPMailer")
-	{
-		if (!function_exists('version_compare') || version_compare(phpversion(), '5', '<'))
-		{
-			include_once(BASE_DIR . '/lib/PHPMailer/php4/class.phpmailer.php') ;
-		}
-		else
-		{
-			include_once(BASE_DIR . '/lib/PHPMailer/php5/class.phpmailer.php') ;
-		}
-	
-		$PHPMailer = new PHPMailer;
-	
-		$PHPMailer->CharSet     = 'utf-8';
-		$PHPMailer->Mailer      = get_settings('mail_type');
-		$PHPMailer->ContentType = ($content_type == 'html') ? 'text/html' : (($content_type == 'text' || get_settings('mail_content_type') == 'text/plain') ? 'text/plain' : 'text/html');
-		$PHPMailer->WordWrap    = get_settings('mail_word_wrap');
-		$PHPMailer->Subject     = $subject;
-		$PHPMailer->Body        = $text . "\n\n" . ($PHPMailer->ContentType == 'text/html' ? '' : get_settings('mail_signature'));
-		$PHPMailer->From        = ($from != '') ? $from : get_settings('mail_from');
-		$PHPMailer->FromName    = ($from_name != '') ? $from_name : get_settings('mail_from_name');
-		$PHPMailer->AddAddress($to);
-	
-		switch ($PHPMailer->Mailer)
-		{
-			case 'sendmail':
-				$PHPMailer->Sendmail = get_settings('mail_sendmail_path');
-				break;
-	
-			case 'smtp':
-				$PHPMailer->Host       = get_settings('mail_host');
-				$PHPMailer->Port       = get_settings('mail_port');
-				$PHPMailer->Username   = get_settings('mail_smtp_login');
-				$PHPMailer->Password   = get_settings('mail_smtp_pass');
-				$PHPMailer->AddReplyTo($PHPMailer->Username, $PHPMailer->FromName);
-				$PHPMailer->SMTPAuth   = true;  // authentication enabled
-				$PHPMailer->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for Gmail
-	//			$PHPMailer->SMTPDebug  = true;  // enables SMTP debug information (for testing)
-				break;
-	
-			case 'mail':
-			default:
-				break;
-		}
-	
-		if (! empty($attachments))
-		{
-			if (is_array($attachments))
+			if (!function_exists('version_compare') || version_compare(phpversion(), '5', '<'))
 			{
-				foreach ($attachments as $attachment)
-				{
-					$PHPMailer->AddAttachment(BASE_DIR . '/attachments/' . $attachment);
-				}
+				include_once(BASE_DIR . '/lib/PHPMailer/php4/class.phpmailer.php') ;
 			}
 			else
 			{
-				$PHPMailer->AddAttachment(BASE_DIR . '/attachments/' . $attachments);
+				include_once(BASE_DIR . '/lib/PHPMailer/php5/class.phpmailer.php') ;
+			}
+		
+			$PHPMailer = new PHPMailer;
+		
+			$PHPMailer->CharSet     = 'utf-8';
+			$PHPMailer->Mailer      = get_settings('mail_type');
+			$PHPMailer->ContentType = ($type == 'html') ? 'text/html' : (($type == 'text' || get_settings('mail_content_type') == 'text/plain') ? 'text/plain' : 'text/html');
+			$PHPMailer->WordWrap    = get_settings('mail_word_wrap');
+			$PHPMailer->Subject     = $subject;
+			$PHPMailer->Body        = $body . "\n\n" . ($PHPMailer->ContentType == 'text/html' ? '' : get_settings('mail_signature'));
+			$PHPMailer->From        = ($from_email != '') ? $from_email : get_settings('mail_from');
+			$PHPMailer->FromName    = ($from_name != '') ? $from_name : get_settings('mail_from_name');
+			$PHPMailer->AddAddress($to);
+
+			switch ($PHPMailer->Mailer)
+			{
+				case 'sendmail':
+					$PHPMailer->Sendmail = get_settings('mail_sendmail_path');
+					break;
+		
+				case 'smtp':
+					$PHPMailer->Host       = get_settings('mail_host');
+					$PHPMailer->Port       = get_settings('mail_port');
+					$PHPMailer->Username   = get_settings('mail_smtp_login');
+					$PHPMailer->Password   = get_settings('mail_smtp_pass');
+					$PHPMailer->AddReplyTo($PHPMailer->Username, $PHPMailer->FromName);
+					$PHPMailer->SMTPAuth   = true;  // authentication enabled
+					$PHPMailer->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for Gmail
+		//			$PHPMailer->SMTPDebug  = true;  // enables SMTP debug information (for testing)
+					break;
+		
+				case 'mail':
+				default:
+					break;
+			}
+
+			if (! empty($attach))
+			{
+				foreach ($attach as $attachment)
+				{
+					$PHPMailer->AddAttachment($attachment);
+				}
+			}
+
+			$PHPMailer->Send();
+			break;
+
+		case "SwiftMailer":
+
+			include_once(BASE_DIR . '/lib/SwiftMailer/swift_required.php');
+
+			$email = Swift_Message::newInstance($subject)
+				-> setFrom(array($from_email => $from_name))
+				-> setTo($to)
+				-> setBody($body)
+				-> setContentType((strtolower($type) == 'html') ? 'text/html' : 'text/plain')
+				-> setMaxLineLength(get_settings('mail_word_wrap'));
+		
+			if ($attach)
+			{
+				foreach ($attach as $attach_file)
+				{
+					$email -> attach(Swift_Attachment::fromPath(trim($attach_file)));
+				}
+			}
+			
+			switch (get_settings('mail_type')) 
+			{
+				case 'sendmail':
+					$transport = Swift_SendmailTransport::newInstance(get_settings('mail_sendmail_path') . " -bs");
+					break;
+		
+				case 'smtp':
+					$transport = Swift_SmtpTransport::newInstance(get_settings('mail_host'), get_settings('mail_port'))
+						->setUsername(get_settings('mail_smtp_login'))
+						->setPassword(get_settings('mail_smtp_pass'));
+					break;
+		
+				case 'mail':
+					$transport = Swift_MailTransport::newInstance();
+					break;
+		
+				default: break;
+			}
+			
+			$mailer = Swift_Mailer::newInstance($transport);
+			$numSent = $mailer->send($email);
+			break;
+	}
+	
+	if ($saveattach)
+	{
+		$attach_dir = BASE_DIR . "/" . ATTACH_DIR . "/";
+		
+		foreach ($attach as $file_path)
+		{
+			if ($file_path && file_exists($file_path))
+			{
+				$file_name = basename($file_path);
+				$file_name = str_replace(" ","",mb_strtolower(trim($file_name)));
+				if (file_exists($attach_dir . $file_name))
+				{
+					$file_name = rand(1000, 9999) . "_" . $file_name;
+				}
+				$file_path_new = BASE_DIR . "/" . ATTACH_DIR . "/" . $file_name;
+				if (!@move_uploaded_file($file_path,$file_path_new))
+				{
+					copy($file_path,$file_path_new);
+				}
 			}
 		}
-	
-		if ($PHPMailer->Send())
-		{
-	//		if (! empty($attachments))
-	//		{
-	//			if (is_array($attachments))
-	//			{
-	//				foreach ($attachments as $attachment)
-	//				{
-	//					@unlink(BASE_DIR . '/attachments/' . $attachment);
-	//				}
-	//			}
-	//			else
-	//			{
-	//				@unlink(BASE_DIR . '/attachments/' . $attachments);
-	//			}
-	//		}
-		}
-		else
-		{
-			reportLog('PHPMailer Error: ' . $PHPMailer->ErrorInfo);
-		}
 	}
-
 	ob_end_clean();
 }
 
@@ -1328,11 +1331,11 @@ function callback_make_thumbnail($params)
  * @param mixed $replacement на что заменяем
  * @param mixed $string      входящая строка
  * @param int   $limit       максимум вхождений
- * mixed preg_replace_alt ( mixed pattern, mixed replacement, mixed subject [, int limit] )
+ * mixed preg_replace_ru ( mixed pattern, mixed replacement, mixed subject [, int limit] )
  *
  * @return mixed
  */
-function preg_replace_alt ($pattern="", $replacement="", $string="", $limit=-1)
+function preg_replace_ru ($pattern="", $replacement="", $string="", $limit=-1)
 {
 	$string = iconv('UTF-8', 'cp1251', $string);
 	$string = preg_replace($pattern, $replacement, $string, $limit);
@@ -1342,12 +1345,14 @@ function preg_replace_alt ($pattern="", $replacement="", $string="", $limit=-1)
 /**
  * Функция для вывода на экран переменной (для отладки)
  *
- * @param mixed $var     любая переменная
+ * @param mixed $var любая переменная
  */
 function _var($var)
 {
-	echo '<pre style="background:#fff;color:#000;clear:both;padding:10px;border:red solid 2px">';
-	var_dump($var);
-	echo '</pre>';
+	ob_start();
+	var_dump ($var);
+	$debug = '<pre style="background:#eee;color:#000;margin:10px;padding:10px;min-width:600px">' . ob_get_contents() . '</pre>';
+	file_put_contents(BASE_DIR.'/cache/debug.html',$debug);
+	ob_end_clean();
 }
 ?>

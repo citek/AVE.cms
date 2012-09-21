@@ -28,6 +28,7 @@ a { color: #3a91e2; }
 .leftNav ul li a:hover { color: #494949; text-shadow: none; background-position: 0 -78px; border: 1px solid #fafafa; }
 .leftNav ul li a.active {color: #fafafa; background-position: 0 -39px; border: 1px solid #3a91e2; text-shadow: 0 1px 0 #3a91e2; }
 .leftNav ul li a span { padding: 9px 0 9px 15px; display: block; }
+#leftNav_show #toggle-LeftMenu span{ background-image: url(theme_color_darkwood_blue/left_menu_show.png); }
 
 /* Left navigation subnav */
 
@@ -82,7 +83,7 @@ ul.sub_stat li ul li { padding-left: 10px; }
 
 /* ========== Pagination ========== */
 .pagination { margin: auto; width: auto; text-align: center; margin-top: 40px; }
-.pages {  }
+.pages { color: #fff }
 .pages li.prev { margin-right: 15px; }
 .pages li.next { margin-left: 15px; }
 .pages li { display: inline; margin: 0 2px; }

@@ -231,6 +231,7 @@ ul#doclinks a:hover {color: #777; border-bottom: 1px dotted #777;}
 .tableStatic tbody td.level2 {background:transparent url(../images/nav_level_2.gif) no-repeat 8px; padding-left:28px;}
 .tableStatic tbody td.level3 {background:transparent url(../images/nav_level_3.gif) no-repeat 8px; padding-left:48px;}
 
+.tableStatic hr { color:#ddd; background-color:#ddd; border:0px none; height:1px; clear:both; }
 
 /* ==========  Buttons ========== */
 input[type="submit"], input[type="reset"], input[type="button"], button, .button {
@@ -298,7 +299,7 @@ input[type="submit"], input[type="reset"], input[type="button"], button, .button
 /* ========== Pagination ========== */
 .pagination { margin: auto; width: auto; text-align: center; margin-top: 40px; }
 .pages {  }
-.pages span.pages { float:left; font-family: 'Cuprum', sans-serif; font-weight: normal; }
+.pages span.pages { float:left; font-family: 'Cuprum', sans-serif; font-weight: normal; letter-spacing: .5px; font-size: 13px; }
 .pages li.prev { margin-right: 15px; }
 .pages li.next { margin-left: 15px; }
 .pages li { display: inline; margin: 0 2px; }
@@ -410,6 +411,8 @@ a.jqTransformCheckedDisableCheck { background: transparent url(../images/forms/c
 .jqTransformSelectWrapper ul li:first-child { margin-top: 0px; }
 .jqTransformSelectWrapper ul a.selected { background: #336699; color: #fff; }
 .jqTransformSelectWrapper ul a:hover, .jqTransformSelectWrapper ul a.selected:hover { background:#666666; color: #fff; text-decoration: none; }
+
+option:disabled[selected=selected] { color: #fff; }
 
 .jqTransformHidden {display: none;} /* used to hide the original form elements */
 

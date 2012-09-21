@@ -7,20 +7,21 @@
 			{if $log_svn}
                 <div class="widget">
                     <div class="head">
-                        <h5>Вышла новая версия <a href="http://www.overdoze.ru/index.php?module=forums" target="_blank">{$smarty.const.APP_VERSION}</a>! <a href="{$svn_url}" target="_blank">Рекомендуется обновиться!</a></h5>
+                        <h5>Вышла новая версия <a href="http://www.overdoze.ru/index.php?module=forums" target="_blank" class="botDir" title="{#MAIN_SVN_FORUM#}">{$smarty.const.APP_VERSION}</a>! <a href="{$svn_url}" target="_blank" class="rightDir" title="{#MAIN_SVN_REPOS#}">Рекомендуется обновиться!</a></h5>
                     </div>
-
-                    <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
-                        <tbody>
-							{foreach from=$log_svn item=log_svn}
-			                <tr>
-                                <td><span class="webStatsLink"><a href="{$svn_link}{$log_svn.version}" target="_blank">{$log_svn.version}</a></span></td>
-                                <td><strong>({$log_svn.author})</strong></td>
-                                <td style="white-space:pre-wrap">{$log_svn.comment|escape}</td>
-                            </tr>
-							{/foreach}
-                        </tbody>
-                    </table>
+                    <div style="overflow-y:auto;max-height:200px;">
+                      <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+                          <tbody>
+                              {foreach from=$log_svn item=revision}
+                              <tr>
+                                  <td><span class="webStatsLink"><a href="{$revision.url}" target="_blank" class="toprightDir" title="{#MAIN_SVN_LOOK#}">{$revision.version}</a></span></td>
+                                  <td><strong><a href="mailto:{$revision.author|escape}" class="topDir" target="_blank" title="{#MAIN_SVN_MAILTO#}">{$revision.author|escape}</a></strong></td>
+                                  <td style="white-space:pre-wrap">{$revision.comment|escape}</td>
+                              </tr>
+                              {/foreach}
+                          </tbody>
+                      </table>
+                    </div>
                 </div>
 			{/if}
 
@@ -70,7 +71,7 @@
 								{$item->document_title}
 							{/if}
 							</strong><br />
-								<a href="../index.php?id={$item->Id}&amp;cp={$sess}" target="_blank"><span class="dgrey doclink">{$item->document_alias}</span></a>
+								<a href="/{if $item->Id!=1}{$item->document_alias}{/if}" target="_blank"><span class="dgrey doclink">{$item->document_alias}</span></a>
 						</td>
 						<td align="center">
 							{if check_permission('rubric_edit')}

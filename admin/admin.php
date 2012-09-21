@@ -14,7 +14,7 @@ define('ACP', 1);
 define('ACPL', 1);
 define('BASE_DIR', str_replace("\\", "/", dirname(dirname(__FILE__))));
 
-if (! @filesize(BASE_DIR . '/inc/db.config.php')) { header('Location:../install.php'); exit; }
+if (! @filesize(BASE_DIR . '/inc/db.config.php')) { header('Location:/install'); exit; }
 
 require(BASE_DIR . '/admin/init.php');
 

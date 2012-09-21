@@ -123,7 +123,7 @@ $(document).ready(function(){ldelim}
 			</form>
 
 		</div>
-		<div id="tab2" class="tab_content" style="display: block;">
+		<div id="tab2" class="tab_content" style="display:none;">
 		{if check_permission('navigation_new')}
 			<form id="add_nav" method="post" action="index.php?do=navigation&amp;action=new&amp;cp={$sess}" class="mainForm">
 			<div class="rowElem">

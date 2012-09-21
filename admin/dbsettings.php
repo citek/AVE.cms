@@ -42,7 +42,7 @@ if (!empty($_REQUEST['action']))
 			exit;
 
 		case 'restore':
-			$AVE_DB_Service->databaseDumpImport(BASE_DIR . '/attachments/');
+			$AVE_DB_Service->databaseDumpImport(BASE_DIR . "/" . ATTACH_DIR . "/");
 			break;
 	}
 }

@@ -97,7 +97,7 @@
 	<td width="300">{#SETTINGS_ERROR_PAGE#}</td>
 	<td>
 		<div class="pr12">
-			<input name="page_not_found_id" type="text" id="page_not_found_id" value="{$row.page_not_found_id}" size="4" maxlength="10" readonly="readonly" style="width: 200px" class="mousetrap" />&nbsp;<input onClick="openLinkWindow('page_not_found_id','page_not_found_id');" type="button" class="basicBtn" value="... " />&nbsp;&nbsp;&nbsp;{#SETTINGS_PAGE_DEFAULT#}
+			<input name="page_not_found_id" type="text" id="page_not_found_id" value="{$row.page_not_found_id}" size="4" maxlength="10" readonly style="width: 200px" class="mousetrap" />&nbsp;<input onClick="openLinkWindow('page_not_found_id','page_not_found_id');" type="button" class="basicBtn" value="... " />&nbsp;&nbsp;&nbsp;{#SETTINGS_PAGE_DEFAULT#}
 		</div>
 	</td>
 </tr>
@@ -168,7 +168,7 @@
 	<td width="300">{#SETTINGS_SYMBOL_BREAK#}</td>
 	<td>
 		<div class="pr12">
-			<input type="text" name="mail_word_wrap" id="mail_word_wrap" value="{$row.mail_word_wrap}" maxlength="3" style="width: 50px;float:left;" class="mousetrap">
+			<input type="text" name="mail_word_wrap" id="mail_word_wrap" value="{$row.mail_word_wrap}" max="1000" style="width: 50px;float:left;" class="mousetrap">
             <label>{#SETTINGS_SYMBOL_BREAK_INFO#}</label>
 		</div>
 	</td>

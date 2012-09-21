@@ -317,9 +317,9 @@ $(document).ready(function(){
 	$.fn.simpleTabs = function(){
 
 		//Default Action
-		$(this).find(".tab_content").hide(); //Hide all content
-		$(this).find("ul.tabs li:first").addClass("activeTab").show(); //Activate first tab
-		$(this).find(".tab_content:first").show(); //Show first tab content
+//		$(this).find(".tab_content").hide(); //Hide all content
+//		$(this).find("ul.tabs li:first").addClass("activeTab").show(); //Activate first tab
+//		$(this).find(".tab_content:first").show(); //Show first tab content
 
 		//On Click Event
 		$("ul.tabs li").click(function() {

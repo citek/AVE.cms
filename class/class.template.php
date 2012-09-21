@@ -39,7 +39,7 @@ class AVE_Template extends Smarty
         /**
          * Имя каталога, в котором хранятся компилированные шаблоны.
          */
-        $this->compile_dir = BASE_DIR . '/templates_c';
+        $this->compile_dir = BASE_DIR . '/cache/smarty';
 
         /**
          * Имя каталога, в котором хранится кэш.
@@ -104,7 +104,7 @@ class AVE_Template extends Smarty
 
 // плагин позволяющий поставить метки шаблонов
 // для быстрого поиска шаблона отвечающего за вывод
-// перед использованием очистить templates_c
+// перед использованием очистить cache/smarty
 // $this->register_postfilter('add_template_comment');
 
         /**
