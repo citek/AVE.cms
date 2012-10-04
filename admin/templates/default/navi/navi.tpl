@@ -14,6 +14,10 @@
 	{include file='navigation/nav.tpl'}
 {/if}
 
+{if check_permission('sysblocks')}
+	{include file='sysblocks/nav.tpl'}
+{/if}
+
 {if check_permission('template')}
 	{include file='templates/nav.tpl'}
 {/if}

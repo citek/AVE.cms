@@ -10,7 +10,7 @@ if ($mailer -> ModulPfad == "mailer")
 	$check = $AVE_DB->Real_Query("
 		SELECT from_copy
 		FROM " . PREFIX . "_modul_mailer_mails
-	") -> _result;
+	",false) -> _result;
 	if($check === false)
 	{
 		$AVE_DB->Real_Query("
@@ -25,7 +25,7 @@ if ($mailer -> ModulPfad == "mailer")
 	$check = $AVE_DB->Real_Query("
 		SELECT to_add
 		FROM " . PREFIX . "_modul_mailer_mails
-	") -> _result;
+	",false) -> _result;
 	if($check === false)
 	{
 		$AVE_DB->Real_Query("

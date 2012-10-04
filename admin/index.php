@@ -73,7 +73,7 @@ $AVE_Template->assign('navi_top', $AVE_Template->fetch('navi/navi_top.tpl'));
 
 $allowed = array('index',   'start',    'templates',  'rubs', 'user', 'finder',
 				 'groups',  'docs',     'navigation', 'logs', 'request',
-				 'modules', 'settings', 'dbsettings', 'browse'
+				 'modules', 'settings', 'sysblocks', 'dbsettings', 'browse'
 );
 $do = (!empty($_REQUEST['do']) && in_array($_REQUEST['do'], $allowed)) ? $_REQUEST['do'] : 'start';
 

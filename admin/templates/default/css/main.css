@@ -26,6 +26,8 @@ body { margin: 0; padding: 0; background: url(../images/backgrounds/pat4.png) re
 /* ==========  General styles ========== */
 .wrapper { margin: 0 3%; clear: both; }
 .img { border: 1px solid #d5d5d5; }
+.help { cursor:help; }
+.pointer { cursor:pointer; }
 
 
 /* ==========  Typo  ========== */
@@ -187,13 +189,13 @@ ul.sub_stat li ul li { padding-left: 10px; }
 .widget .num a.blueNum:hover { background-position: 0 -21px; }
 .widget .num a.blueNum:active { background-position: 0 -42px; }
 
-.widget .num a.redNum { background-position: 0 -57px; border: 1px solid #9d382f; }
-.widget .num a.redNum:hover { background-position: 0 -76px; }
-.widget .num a.redNum:active { background-position: 0 -95px; }
+.widget .num a.redNum { background-position: 0 -63px; border: 1px solid #9d382f; }
+.widget .num a.redNum:hover { background-position: 0 -84px; }
+.widget .num a.redNum:active { background-position: 0 -105px; }
 
-.widget .num a.greenNum { background-position: 0 -114px; border: 1px solid #218516; }
-.widget .num a.greenNum:hover { background-position: 0 -133px; }
-.widget .num a.greenNum:active { background-position: 0 -152px; }
+.widget .num a.greenNum { background-position: 0 -126px; border: 1px solid #218516; }
+.widget .num a.greenNum:hover { background-position: 0 -147px; }
+.widget .num a.greenNum:active { background-position: 0 -168px; }
 
 .widget .loader { float: right; margin: 14px 12px 0 0; }
 
@@ -232,6 +234,17 @@ ul#doclinks a:hover {color: #777; border-bottom: 1px dotted #777;}
 .tableStatic tbody td.level3 {background:transparent url(../images/nav_level_3.gif) no-repeat 8px; padding-left:48px;}
 
 .tableStatic hr { color:#ddd; background-color:#ddd; border:0px none; height:1px; clear:both; }
+
+.tableStatic tr.red { border-color:#efb1af !important; }
+.tableStatic tr.red+tr { border-top-color:#efb1af !important; }
+.tableStatic tr.red td { background:#ffe3e2 url(../images/backgrounds/grey.png) !important;border-color:#efb1af !important;color:#c00 !important; }
+.tableStatic tr.green { border-color:#a5d985 !important; }
+.tableStatic tr.green+tr { border-top-color:#a5d985 !important; }
+.tableStatic tr.green td { background:#d3f3c0 url(../images/backgrounds/grey.png) !important;border-color:#a5d985 !important;color:#557143 !important; }
+.tableStatic tr.yellow { border-color:#ffe075 !important; }
+.tableStatic tr.yellow+tr { border-top-color:#ffe075 !important; }
+.tableStatic tr.yellow td { background:#fff3c5 url(../images/backgrounds/grey.png) !important;border-color:#ffe075 !important;color:#937f38 !important; }
+
 
 /* ==========  Buttons ========== */
 input[type="submit"], input[type="reset"], input[type="button"], button, .button {
@@ -412,7 +425,7 @@ a.jqTransformCheckedDisableCheck { background: transparent url(../images/forms/c
 .jqTransformSelectWrapper ul a.selected { background: #336699; color: #fff; }
 .jqTransformSelectWrapper ul a:hover, .jqTransformSelectWrapper ul a.selected:hover { background:#666666; color: #fff; text-decoration: none; }
 
-option:disabled[selected=selected] { color: #fff; }
+select[disabled] > option[selected=selected] { color: #BBB !important; }
 
 .jqTransformHidden {display: none;} /* used to hide the original form elements */
 
@@ -654,6 +667,7 @@ li.plupload_droptext { background: transparent; text-align: center; vertical-ali
 .ico_reinstall {background-position: -28px -70px; background-repeat:no-repeat;}
 .ico_start {background-position: -28px -98px; background-repeat:no-repeat;}
 .ico_stop {background-position: -28px -112px; background-repeat:no-repeat;}
+.ico_list {background-position: -28px -140px; background-repeat:no-repeat;}
 
 .ico_copy {background-position: 0px -42px; background-repeat:no-repeat;}
 .ico_copy_no {background-position: -14px -42px; background-repeat:no-repeat;}

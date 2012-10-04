@@ -43,6 +43,7 @@ class AVE_User
 		'navigation', 'navigation_new', 'navigation_edit',													// навигация
 		'mediapool', 'mediapool_del', 'finder',																// файловый менеджер
 		'dbactions',																						// база данных
+		'sysblocks',																						// системные блоки
 		'logs','logs_clear',																				// логи
 		'session_clear'																						// сессии и кеш
 	);
@@ -426,7 +427,7 @@ class AVE_User
 			// для комментариев
 			//$sqla = $AVE_DB->Query("SELECT * FROM " . PREFIX . "_modul_comment_info WHERE comment_author_id = '".(int)$row->Id."'");
 			//$row->comments = $sqla->numrows();
-	
+
 			array_push($users, $row);
 		}
 

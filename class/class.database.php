@@ -390,16 +390,17 @@ class AVE_DB
 	 * Метод, предназначенный для выполнения запроса к MySQL
 	 *
 	 * @param string $query - текст SQL-запроса
+	 * @param bool $log - записать ошибки в лог? по умолчанию включено
 	 * @return object - объект с указателем на результат выполнения запроса
 	 * @access public
 	 */
-	function Real_Query($query)
+	function Real_Query($query,$log=true)
 	{
 		//$this->_time_exec[] = microtime();
 		$res = @mysqli_query($this->_handle,$query);
 		//$this->_time_exec[] = microtime();
 		//$this->_query_list[] = $query;
-		if (!$res) $this->_error('query', $query);
+		if (!$res && $log) $this->_error('query', $query);
 
 		return new AVE_DB_Result($res);
 	}
@@ -415,10 +416,11 @@ class AVE_DB
 	 *
 	 * @param string $query - текст SQL-запроса
 	 * @param integer $TTL - время жизни кеша (-1 безусловный кеш)
+	 * @param bool $log - записать ошибки в лог? по умолчанию включено
 	 * @return array - асоциативный массив с результом запроса
 	 * @access public
 	 */
-	function Query($query,$TTL=null,$cacheid=''){
+	function Query($query,$TTL=null,$cacheid='',$log=true){
 		if(substr($cacheid,0,3)=='doc'){
 			$cacheid=(int)str_replace('doc_','',$cacheid);
 			$cacheid='doc/'.(floor($cacheid/1000)).'/'.$cacheid;
@@ -431,7 +433,7 @@ class AVE_DB
 			$cache_dir=BASE_DIR.'/cache/sql/'.(trim($cacheid)>'' ? trim($cacheid).'/' : substr($cache_file,0,2).'/'.substr($cache_file,2,2).'/'.substr($cache_file,4,2).'/');
 			if(!file_exists($cache_dir))mkdir($cache_dir,0777,true);
 			if(!(file_exists($cache_dir.$cache_file) && ($TTL==-1 ? true : @time()-@filemtime($cache_dir.$cache_file)<$TTL))){
-				$res=$this->Real_Query($query);
+				$res=$this->Real_Query($query,$log);
 				while ($mfa=$res->FetchAssocArray())$result[]=$mfa;
 				file_put_contents($cache_dir.$cache_file,serialize($result));
 			}
@@ -440,7 +442,7 @@ class AVE_DB
 			}
 		return new AVE_DB_Result($result);
 		}
-		else return $this->Real_Query($query);
+		else return $this->Real_Query($query,$log);
 	}
 	
 	 /**

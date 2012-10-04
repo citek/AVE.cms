@@ -35,8 +35,8 @@ php_value error_reporting E_NONE
 #	RewriteCond %{REQUEST_URI} !^/robots\.txt$ [NC]
 
 #	http://site
-#	RewriteCond %{HTTP_HOST} ^www\.(.+) [NC]
-#	RewriteRule (.*) http://%1/$1 [R=permanent,L]
+	RewriteCond %{HTTP_HOST} ^www\.(.+) [NC]
+	RewriteRule (.*) http://%1/$1 [R=permanent,L]
 
 #	http://www.site
 #	RewriteCond %{HTTP_HOST} !^www\. [NC]

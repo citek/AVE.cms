@@ -242,6 +242,13 @@ CREATE TABLE `%%PRFX%%_settings` (
   PRIMARY KEY  (`Id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;#inst#
 
+CREATE TABLE `%%PRFX%%_sysblocks` (
+  `id` mediumint(5) unsigned NOT NULL auto_increment,
+  `sysblock_name` varchar(255) NOT NULL,
+  `sysblock_text` longtext NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE `%%PRFX%%_templates` (
   `Id` smallint(3) unsigned NOT NULL auto_increment,
   `template_title` varchar(255) NOT NULL,

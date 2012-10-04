@@ -755,6 +755,9 @@ class AVE_Core
 			display_notice($this->_module_error);
 		}
 
+		// парсим теги системных блоков
+		$out = preg_replace_callback('/\[tag:sysblock:(\d+)\]/', 'parse_sysblock', $out);
+
 		// парсим теги системы внутренних запросов
 		$out = preg_replace_callback('/\[tag:request:(\d+)\]/', 'request_parse', $out);
 

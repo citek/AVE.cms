@@ -98,7 +98,7 @@ function get_field_smalltext($field_value,$type,$field_id='',$rubric_field_templ
 						
 					case '1': // Elrte и Elfinder 
 						$field  = '<a name="' . $field_id . '"></a>';
-						$field  .='<textarea style="width:' . $AVE_Document->_textarea_width_small . ';height:' . $AVE_Document->_textarea_height_small . '" name="feld[' . $field_id . ']" class="small-editor">' . $field_value . '</textarea></div>';
+						$field  .='<textarea style="width:' . $AVE_Document->_textarea_width_small . ';height:' . $AVE_Document->_textarea_height_small . '" name="feld[' . $field_id . ']" class="small-editor">' . $field_value . '</textarea>';
 						break;
 						
 					case '2': // Innova

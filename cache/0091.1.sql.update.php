@@ -7,7 +7,7 @@ $UpdateSQL[]="ALTER TABLE `".PREFIX."_rubrics`
 	 int(1) NOT NULL default '1' AFTER
 		`rubric_created`
 	";
-$res=$AVE_DB->Real_Query($CheckSQL);
+$res=$AVE_DB->Real_Query($CheckSQL,false);
 if($res->_result===false)
 {
  foreach($UpdateSQL as $v)

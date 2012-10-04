@@ -87,7 +87,7 @@ function get_pagination($total_pages, $type, $template_label, $navi_box = '')
 			if ($curent_page == $val)
 			{
 			    //Текущая
-				$nav .= str_replace(array('{s}', '{t}'), $val, '<li><a href="" class="active">' . $curent_page . '</a></li>');
+				$nav .= str_replace(array('{s}', '{t}'), $val, '<li class="active"><a class="active">' . $curent_page . '</a></li>');
 			}
 			else
 			{

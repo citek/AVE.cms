@@ -13,7 +13,7 @@ $UpdateSQL[]="ALTER TABLE `".PREFIX."_rubrics`
 	TEXT NOT NULL AFTER
 		`rubric_code_start`
   ";
-$res=$AVE_DB->Real_Query($CheckSQL);
+$res=$AVE_DB->Real_Query($CheckSQL,false);
 if($res->_result===false)
 {
  foreach($UpdateSQL as $v)

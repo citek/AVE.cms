@@ -339,6 +339,9 @@ function changeRub(select) {ldelim}
 <div class="head"><h5 class="iFrames">Поля рубрики</h5></div>
 
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+<col width="150" />
+<col />
+<col width="200" />
 	<thead>
 	<tr>
 		<td>{#REQUEST_RUBRIK_FIELD#}</td>

@@ -25,15 +25,14 @@
 	<div class="breadCrumb module">
 	    <ul>
 	        <li class="firstB"><a href="index.php" title="{#MAIN_PAGE#}">{#MAIN_PAGE#}</a></li>
-	        <li><a href="index.php?do=modules&amp;cp={$sess}">{#MODULES_SUB_TITLE#}</a></li>
-	        <li><a href="index.php?do=modules&action=modedit&mod=sysblock&moduleaction=1&cp={$sess}" title="">{#SYSBLOCK_LIST_LINK#}</a></li>
+	        <li><a href="index.php?do=sysblocks&cp={$sess}" title="">{#SYSBLOCK_LIST_LINK#}</a></li>
 	        <li>{if $smarty.request.id != ''}{#SYSBLOCK_EDIT_H#}{else}{#SYSBLOCK_INSERT_H#}{/if}</li>
 	        <li><strong class="code">{if $smarty.request.id != ''}{$sysblock_name|escape}{else}{$smarty.request.sysblock_name}{/if}</strong></li>
 	    </ul>
 	</div>
 </div>
 
-<form id="sysblock" action="index.php?do=modules&action=modedit&mod=sysblock&moduleaction=saveedit&cp={$sess}" method="post" class="mainForm">
+<form id="sysblock" action="index.php?do=sysblocks&action=save&cp={$sess}" method="post" class="mainForm">
 
 <div class="widget first">
 <div class="head"><h5 class="iFrames">{if $smarty.request.id != ''}{#SYSBLOCK_EDIT_H#}{else}{#SYSBLOCK_INSERT_H#}{/if}</h5></div>
@@ -145,7 +144,7 @@
 <script language="javascript">
 
     var sett_options = {ldelim}
-		url: 'index.php?do=modules&action=modedit&mod=sysblock&moduleaction=saveedit&cp={$sess}',
+		url: 'index.php?do=sysblocks&action=save&cp={$sess}',
 		beforeSubmit: Request,
         success: Response
 	{rdelim}

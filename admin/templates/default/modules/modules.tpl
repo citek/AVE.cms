@@ -86,7 +86,7 @@ $(document).ready(function(){ldelim}
 
 				<td nowrap="nowrap">
 					{if $module->adminedit && $module->status}
-						<strong><a href="index.php?do=modules&action=modedit&mod={$module->path}&moduleaction=1&cp={$sess}" title="{#MODULES_SETUP#}" class="topDir docname">{$module->name}</a></strong>
+						<strong><a href="index.php?do=modules&action=modedit&mod={$module->path}&moduleaction=1&cp={$sess}" title="{#MODULES_SETUP#}" class="toprightDir docname">{$module->name}</a></strong>
                         {if $module->taglink != ""}<br /><span class="dgrey doclink">{$module->taglink}</span>{/if}
 					{else}
 						<strong>{$module->name}</strong>
@@ -121,15 +121,15 @@ $(document).ready(function(){ldelim}
 
 					<td align="center" width="20">
 						{if $module->status}
-							<a title="{#MODULES_REINSTALL#}" href="index.php?do=modules&amp;action=reinstall&amp;module={$module->path}&amp;cp={$sess}" class="topDir ConfirmReInstall icon_sprite ico_reinstall"></a>
+							<a title="{#MODULES_REINSTALL#}" href="index.php?do=modules&amp;action=reinstall&amp;module={$module->path}&amp;cp={$sess}" class="topleftDir ConfirmReInstall icon_sprite ico_reinstall"></a>
 						{else}
-							<a title="{#MODULES_DELETE#}" dir="{#MODULES_DELETE#}" name="{#MODULES_DELETE_CONFIRM#}" href="index.php?do=modules&amp;action=delete&amp;module={$module->path}&amp;cp={$sess}" class="topDir ConfirmDelete icon_sprite ico_delete"></a>
+							<a title="{#MODULES_DELETE#}" dir="{#MODULES_DELETE#}" name="{#MODULES_DELETE_CONFIRM#}" href="index.php?do=modules&amp;action=delete&amp;module={$module->path}&amp;cp={$sess}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
 						{/if}
 					</td>
 
 					<td align="center" width="20">
 						{if $module->need_update}
-							<a title="{#MODULES_UPDATE#}" href="index.php?do=modules&amp;action=update&amp;module={$module->path}&amp;cp={$sess}" class="topDir icon_sprite ico_globus"></a>
+							<a title="{#MODULES_UPDATE#}" href="index.php?do=modules&amp;action=update&amp;module={$module->path}&amp;cp={$sess}" class="topleftDir icon_sprite ico_globus"></a>
 						{else}
 							<span title="" class="topleftDir icon_sprite ico_blanc"></span>
 						{/if}

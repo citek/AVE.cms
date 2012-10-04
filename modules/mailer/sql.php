@@ -53,13 +53,14 @@ $modul_sql_install[] = "CREATE TABLE CPPREFIX_modul_mailer_lists (
 
 $modul_sql_install[] = "CREATE TABLE CPPREFIX_modul_mailer_receivers (
   id int(10) unsigned NOT NULL auto_increment,
+  list_id int(10) unsigned NOT NULL,
   status enum('0','1','2') default '1',
   email varchar(255) NOT NULL default '',
   lastname varchar(255) NULL default '',
   firstname varchar(255) NULL default '',
   middlename varchar(255) NULL default '',
-  list_id int(10) unsigned NOT NULL,
   comments text NULL default '',
+  date int(10) unsigned default NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 

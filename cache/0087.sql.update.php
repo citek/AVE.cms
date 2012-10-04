@@ -7,7 +7,7 @@ $UpdateSQL[]="ALTER TABLE `".PREFIX."_documents`
 	 VARCHAR(255) NOT NULL AFTER
 		`document_title`
 	";
-$res=$AVE_DB->Real_Query($CheckSQL);
+$res=$AVE_DB->Real_Query($CheckSQL,false);
 if($res->_result===false)
 {
  foreach($UpdateSQL as $v)

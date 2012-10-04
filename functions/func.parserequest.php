@@ -434,7 +434,8 @@ function request_parse($id,$params=Array())
 			$cachefile_docid=BASE_DIR.'/cache/sql/doc_'.$row->Id.'/request-'.$id.'.cache';
 			if(!file_exists($cachefile_docid))
 				{
-					$item = preg_replace('/\[tag:rfld:(\d+)]\[(more|esc|img|[0-9-]+)]/e', "request_get_document_field(\"$1\", $row->Id, \"$2\")", $item_template);
+					$item = preg_replace_callback('/\[tag:sysblock:(\d+)\]/', 'parse_sysblock', $item_template);
+					$item = preg_replace('/\[tag:rfld:(\d+)]\[(more|esc|img|[0-9-]+)]/e', "request_get_document_field(\"$1\", $row->Id, \"$2\")", $item);
 					$item = preg_replace_callback('/\[tag:([r|c]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $item);
 					//if(!file_exists(dirname($cachefile_docid)))mkdir(dirname($cachefile_docid),0777,true);
 					//file_put_contents($cachefile_docid,$item);
@@ -460,7 +461,7 @@ function request_parse($id,$params=Array())
 			$item = str_replace('[tag:docdayviews]', isset($row->dayviews) ? $row->dayviews : '', $item);
 			$items .= $item;
 		}
-
+		$main_template = preg_replace_callback('/\[tag:sysblock:(\d+)\]/', 'parse_sysblock', $main_template);
 		$main_template = str_replace('[tag:pages]', $page_nav, $main_template);
 		$main_template = preg_replace('/\[tag:date:([a-zA-Z0-9-]+)\]/e', "RusDate(date('$1', ".$AVE_Core->curentdoc->document_published."))", $main_template);
 		$main_template = str_replace('[tag:docid]', $AVE_Core->curentdoc->Id, $main_template);

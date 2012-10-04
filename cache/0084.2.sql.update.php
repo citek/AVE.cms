@@ -8,7 +8,7 @@ $UpdateSQL[]="CREATE TABLE IF NOT EXISTS `".PREFIX."_view_count` (
   `count` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;";
-$res=$AVE_DB->Real_Query($CheckSQL);
+$res=$AVE_DB->Real_Query($CheckSQL,false);
 if($res->_result===false)
 {
  foreach($UpdateSQL as $v)

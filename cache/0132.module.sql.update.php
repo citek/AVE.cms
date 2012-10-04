@@ -10,7 +10,7 @@ if ($mailer -> ModulPfad == "mailer")
 	$check = $AVE_DB->Real_Query("
 		SELECT status
 		FROM " . PREFIX . "_modul_mailer_receivers
-	") -> _result;
+	",false) -> _result;
 	if($check === false)
 	{
 	  $AVE_DB->Real_Query("

@@ -1066,13 +1066,17 @@ function image_multi_import($path) {
  * @param string $type - содержимое (html или text)
  * @param array $attach - пути файлов вложений
  * @param bool $saveattach - сохранять вложения после отправки в ATTACH_DIR?
+ * @param bool $signature - добавлять подпись из общих настроек?
  */
-function send_mail($to,$body='',$subject='',$from_email='',$from_name='',$type='text',$attach=array(),$saveattach=true)
+function send_mail($to,$body,$subject,$from_email,$from_name='',$type='text',$attach=array(),$saveattach=true,$signature=true)
 {
 	ob_start();
+
+	$body = stripslashes($body) . ($signature ? "\n\n".get_settings('mail_signature') : '');
+
 	switch (MAIL_LIB)
 	{
-		case "PHPMailer":
+		case 'PHPMailer':
 
 			if (!function_exists('version_compare') || version_compare(phpversion(), '5', '<'))
 			{
@@ -1090,7 +1094,7 @@ function send_mail($to,$body='',$subject='',$from_email='',$from_name='',$type='
 			$PHPMailer->ContentType = ($type == 'html') ? 'text/html' : (($type == 'text' || get_settings('mail_content_type') == 'text/plain') ? 'text/plain' : 'text/html');
 			$PHPMailer->WordWrap    = get_settings('mail_word_wrap');
 			$PHPMailer->Subject     = $subject;
-			$PHPMailer->Body        = $body . "\n\n" . ($PHPMailer->ContentType == 'text/html' ? '' : get_settings('mail_signature'));
+			$PHPMailer->Body        = $body;
 			$PHPMailer->From        = ($from_email != '') ? $from_email : get_settings('mail_from');
 			$PHPMailer->FromName    = ($from_name != '') ? $from_name : get_settings('mail_from_name');
 			$PHPMailer->AddAddress($to);
@@ -1128,7 +1132,7 @@ function send_mail($to,$body='',$subject='',$from_email='',$from_name='',$type='
 			$PHPMailer->Send();
 			break;
 
-		case "SwiftMailer":
+		case 'SwiftMailer':
 
 			include_once(BASE_DIR . '/lib/SwiftMailer/swift_required.php');
 
@@ -1150,7 +1154,7 @@ function send_mail($to,$body='',$subject='',$from_email='',$from_name='',$type='
 			switch (get_settings('mail_type')) 
 			{
 				case 'sendmail':
-					$transport = Swift_SendmailTransport::newInstance(get_settings('mail_sendmail_path') . " -bs");
+					$transport = Swift_SendmailTransport::newInstance(get_settings('mail_sendmail_path') . ' -bs');
 					break;
 		
 				case 'smtp':
@@ -1173,19 +1177,19 @@ function send_mail($to,$body='',$subject='',$from_email='',$from_name='',$type='
 	
 	if ($saveattach)
 	{
-		$attach_dir = BASE_DIR . "/" . ATTACH_DIR . "/";
+		$attach_dir = BASE_DIR . '/' . ATTACH_DIR . '/';
 		
 		foreach ($attach as $file_path)
 		{
 			if ($file_path && file_exists($file_path))
 			{
 				$file_name = basename($file_path);
-				$file_name = str_replace(" ","",mb_strtolower(trim($file_name)));
+				$file_name = str_replace(' ','',mb_strtolower(trim($file_name)));
 				if (file_exists($attach_dir . $file_name))
 				{
-					$file_name = rand(1000, 9999) . "_" . $file_name;
+					$file_name = rand(1000, 9999) . '_' . $file_name;
 				}
-				$file_path_new = BASE_DIR . "/" . ATTACH_DIR . "/" . $file_name;
+				$file_path_new = BASE_DIR . '/' . ATTACH_DIR . '/' . $file_name;
 				if (!@move_uploaded_file($file_path,$file_path_new))
 				{
 					copy($file_path,$file_path_new);
@@ -1351,8 +1355,9 @@ function _var($var)
 {
 	ob_start();
 	var_dump ($var);
-	$debug = '<pre style="background:#eee;color:#000;margin:10px;padding:10px;min-width:600px">' . ob_get_contents() . '</pre>';
-	file_put_contents(BASE_DIR.'/cache/debug.html',$debug);
+	$var_dump = htmlspecialchars(ob_get_contents());
 	ob_end_clean();
+	$var_dump = '<pre style="background:#eee;color:#000;margin:10px;padding:10px;min-width:600px">' . $var_dump . '</pre>';
+	file_put_contents(BASE_DIR.'/cache/debug.html',$var_dump);
 }
 ?>

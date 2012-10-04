@@ -55,7 +55,7 @@ $(document).ready(function(){ldelim}
 					<tr class="gradeA">
                         <td align="center">{$k}</td>
                         <td align="center">{$log.log_ip}</td>
-                        <td align="center"><span class="date_text dgrey">{$log.log_time|date_format:$DATE_FORMAT|pretty_date}</span></td>
+                        <td align="center"><span class="date_text dgrey">{$log.log_time|date_format:$TIME_FORMAT|pretty_date}</span></td>
                         <td>{$log.log_text}</td>
 					</tr>
          {/foreach}
