@@ -109,7 +109,7 @@ switch ($_REQUEST['action'])
 								sysblock_created   = '" . time() . "'
 						");
 
-						reportLog($_SESSION['user_name'] . ' - создал копию системного блока (' . (int)$_REQUEST['oId'] . ')', 2, 2);
+						reportLog($_SESSION['user_name'] . ' - СЃРѕР·РґР°Р» РєРѕРїРёСЋ СЃРёСЃС‚РµРјРЅРѕРіРѕ Р±Р»РѕРєР° (' . (int)$_REQUEST['id'] . ')', 2, 2);
 
 						header('Location:index.php?do=sysblocks'.'&cp=' . SESSION);
 					}
