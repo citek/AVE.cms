@@ -88,7 +88,7 @@
 						<td>
 							<strong><a class="rightDir" title="{#TEMPLATES_THEME_FOLDER#}" href="javascript:void(0);" onclick="textSelection('[tag:theme:',']');">[tag:theme:folder]</a></strong>
 						</td>
-                        <td rowspan="18"><textarea {$read_only} class="{if $php_forbidden==1}tpl_code_readonly{else}{/if}" wrap="off" style="width:100%; height:600px" name="template_text" id="template_text">{$row->template_text|default:$prefab|escape}</textarea></td>
+                        <td rowspan="19"><textarea {$read_only} class="{if $php_forbidden==1}tpl_code_readonly{else}{/if}" wrap="off" style="width:100%; height:600px" name="template_text" id="template_text">{$row->template_text|default:$prefab|escape}</textarea></td>
 					</tr>
 
 					<tr>
@@ -184,7 +184,7 @@
 
 					<tr>
 						<td>
-							<strong><a class="rightDir" title="{#TEMPLATES_NAVIGATION#}" href="javascript:void(0);" onclick="textSelection('[mod_navigation:]','');">[mod_navigation:XXX]</a></strong>
+							<strong><a class="rightDir" title="{#TEMPLATES_NAVIGATION#}" href="javascript:void(0);" onclick="textSelection('[tag:navigation:]','');">[tag:navigation:XXX]</a></strong>
 						</td>
 					</tr>
 
@@ -192,6 +192,9 @@
 						<td>
 							<strong><a class="rightDir" title="{#TEMPLATES_QUICKFINDER#}" href="javascript:void(0);" onclick="textSelection('[mod_quickfinder:]','');">[mod_quickfinder:XXX]</a></strong>
 						</td>
+					</tr>
+					<tr>
+						<td></td>
 					</tr>
                     <tr>
                     	<td>HTML Tags</td>
