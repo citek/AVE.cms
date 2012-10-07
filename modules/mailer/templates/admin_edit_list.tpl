@@ -66,7 +66,7 @@
     </div>
     <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
       <col width="34" />
-      <col />
+      <col width="34" />
       <col width="150" />
       <col width="150" />
       <col width="150" />

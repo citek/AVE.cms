@@ -70,9 +70,10 @@ $(document).ready(function(){ldelim}
 				alias: $("#document_alias").val()
 				{rdelim}),
 			timeout:3000,
+			dataType: "json",
 			success:
 				function(data){ldelim}
-					$.jGrowl(data);
+					$.jGrowl(data[0],{ldelim}theme: data[1]{rdelim});
 				{rdelim}
 		{rdelim});
 	{rdelim};
@@ -174,10 +175,10 @@ $(document).ready(function(){ldelim}
 {rdelim});
 </script>
 
-
-
 {if $smarty.request.action=='edit'}
 	<div class="title"><h5>{#DOC_EDIT_DOCUMENT#}</h5></div>
+{elseif $smarty.request.action=='copy'}
+	<div class="title"><h5>{#DOC_COPY_DOCUMENT#}</h5></div>
 {else}
 	<div class="title"><h5>{#DOC_ADD_DOCUMENT#}</h5></div>
 {/if}
@@ -194,7 +195,7 @@ $(document).ready(function(){ldelim}
 			{else}
 	        <li>{#DOC_ADD_DOCUMENT#}</li>
 			<li><strong>Рубрика</strong> &gt; {$document->rubric_title|escape}</li>
-			<li><strong class="code">{$document->document_title}</strong></li>
+			<li><strong class="code">{$smarty.request.document_title}</strong></li>
 			{/if}
 	    </ul>
 	</div>
@@ -203,7 +204,7 @@ $(document).ready(function(){ldelim}
 <form method="post" name="formDocOption" action="{$document->formaction}" enctype="multipart/form-data" class="mainForm">
 <input name="closeafter" type="hidden" id="closeafter" value="{$smarty.request.closeafter}">
 <div class="widget first">
-<div class="head {if $smarty.request.action != 'new'}closed{/if}"><h5>{#DOC_OPTIONS#} {if $smarty.request.action != 'new'}({$smarty.request.Id}){/if}</h5></div>
+<div class="head {if $smarty.request.action == 'edit'}closed{/if}"><h5>{#DOC_OPTIONS#} {if $smarty.request.action == 'edit'}({$smarty.request.Id}){/if}</h5></div>
 
 		<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 		<col width="250">
@@ -211,7 +212,7 @@ $(document).ready(function(){ldelim}
 		<tbody>
 		<tr class="noborder">
 			<td>{#DOC_NAME#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir icon_sprite ico_info" title=""></a></td>
-			<td colspan="3"><div class="pr12"><input name="doc_title" type="text" id="doc_title" size="40" value="{$document->document_title|escape}" /></div></td>
+			<td colspan="3"><div class="pr12"><input name="doc_title" type="text" id="doc_title" size="40" value="{if $smarty.request.action == 'edit'}{$document->document_title|escape}{else}{$smarty.request.document_title}{/if}" /></div></td>
 			<td rowspan="11" valign="top" style="vertical-align: top;">
 				<h4>{#DOC_QUERIES#}</h4>
 					<br />
@@ -316,7 +317,7 @@ $(document).ready(function(){ldelim}
 		</tr>
 		<tr>
 			<td>{#DOC_BREADCRUMB_TITLE#}</td>
-			<td colspan="3"><div class="pr12"><input name="doc_breadcrum_title" type="text" id="doc_breadcrum_title" size="40" value="{$document->document_breadcrum_title|escape}" /></div></td>
+			<td colspan="3"><div class="pr12"><input name="doc_breadcrum_title" type="text" id="doc_breadcrum_title" size="40" value="{if $smarty.request.action == 'edit'}{$document->document_breadcrum_title|escape}{/if}" /></div></td>
 		</tr>
 		<tr>
 			<td>{#DOC_USE_BREADCRUMB#}</td>

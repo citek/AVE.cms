@@ -216,8 +216,9 @@ CREATE TABLE `%%PRFX%%_settings` (
   `mail_content_type` enum('text/plain','text/html') NOT NULL default 'text/plain',
   `mail_port` smallint(3) unsigned NOT NULL default '25',
   `mail_host` varchar(255) NOT NULL,
-  `mail_smtp_login` varchar(50) NOT NULL,
-  `mail_smtp_pass` varchar(50) NOT NULL,
+  `mail_smtp_login` varchar(255) NOT NULL,
+  `mail_smtp_pass` varchar(255) NOT NULL,
+  `mail_smtp_encrypt` varchar(255) NULL,
   `mail_sendmail_path` varchar(255) NOT NULL default '/usr/sbin/sendmail',
   `mail_word_wrap` smallint(3) NOT NULL default '50',
   `mail_from` varchar(255) NOT NULL,
@@ -246,6 +247,9 @@ CREATE TABLE `%%PRFX%%_sysblocks` (
   `id` mediumint(5) unsigned NOT NULL auto_increment,
   `sysblock_name` varchar(255) NOT NULL,
   `sysblock_text` longtext NOT NULL,
+  `sysblock_active` enum('0','1') NOT NULL default '1',
+  `sysblock_author_id` int(10) unsigned NOT NULL default '1',
+  `sysblock_created` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

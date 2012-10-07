@@ -28,7 +28,11 @@ function rmkdir($path, $mode = 0777)
 	return is_dir($path) || (mkdir(dirname($path), $mode) && _mkdir($path, $mode));
 }
 
-require('config.inc.php');
+if (! @filesize('config.inc.php')) {
+	require('config.php');
+}else{
+	require('config.inc.php');
+}
 
 define('MAX_SIZE', 600);
 

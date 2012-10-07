@@ -174,10 +174,9 @@ class AVE_Navigation
 
                 // Формируем ряд переменных для использования в шаблоне и отображаем форм с данными для редактирования
                 $AVE_Template->assign('nav', $row);
-				$AVE_Template->assign('formaction', 'index.php?do=navigation&amp;action=templates&amp;sub=save&amp;id=' . $navigation_id . '&amp;cp=' . SESSION);
+				$AVE_Template->assign('formaction', 'index.php?do=navigation&action=templates&sub=save&id=' . $navigation_id . '&cp=' . SESSION);
 				$AVE_Template->assign('content', $AVE_Template->fetch('navigation/template.tpl'));
 				break;
-
 
             // Если пользователь нажал на кнопку Сохранить изменения
             case 'save':
@@ -210,8 +209,12 @@ class AVE_Navigation
 				// Сохраняем системное сообщение в журнал
                 reportLog($_SESSION['user_name'] . ' - изменил шаблон меню навигации (' . stripslashes($_POST['navi_titel']) . ')', 2, 2);
 
-				// Выполянем переход к списку меню навигаций
-                header('Location:index.php?do=navigation&cp=' . SESSION);
+					// В противном случае выполняем переход к списку навигаций
+			      if (!$_REQUEST['next_edit']) {
+						header('Location:index.php?do=navigation&cp=' . SESSION);;
+					} else {
+						header('Location:index.php?do=navigation&action=templates&id=' . $navigation_id . '&cp=' . SESSION);
+					}
 				exit;
 				break;
 		}

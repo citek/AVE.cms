@@ -1215,7 +1215,192 @@ class AVE_Document
 					if ($document->document_parent != 0) $document->parent = $AVE_DB->Query("SELECT document_title, Id FROM " . PREFIX . "_documents WHERE Id = '".$document->document_parent."' ")->FetchRow();
 
 					$AVE_Template->assign('document', $document);
-//					$AVE_Template->assign('DEF_DOC_END_YEAR', mktime(date("H"), date("i"), 0, date("m"), date("d"), date("Y") + 10));
+
+					// Отображаем страницу для редактирования
+					$AVE_Template->assign('content', $AVE_Template->fetch('documents/form.tpl'));
+				}
+				else // Если пользователь не имеет прав на редактирование, формируем сообщение об ошибке
+				{
+					$AVE_Template->assign('content', $AVE_Template->get_config_vars('DOC_NO_PERMISSION'));
+				}
+				break;
+		}
+	}
+
+
+	/**
+	 * Метод, предназначенный для копирования документа
+	 *
+	 * @param int $document_id	идентификатор Документа
+	 */
+	function documentCopy($document_id)
+	{
+		global $AVE_DB, $AVE_Rubric, $AVE_Template;
+
+		// Определяем действие, выбранное пользователем
+		switch ($_REQUEST['sub'])
+		{
+			// Если была нажата кнопка Сохранить изменения
+				case 'save': // Сохранение документа в БД
+					$start  = $this->_documentStart(); // Дата/время начала публикации документа
+					$ende   = $this->_documentEnd();   // Дата/время окончания публикации документа
+					$innavi = check_permission_acp('navigation_new') ? '&innavi=1' : '';
+
+					// Определяем статус документа
+					$document_status = !empty($_REQUEST['document_status']) ? (int)$_REQUEST['document_status'] : '0';
+
+					// Если статус документа не определен
+					if (empty($document_status) && $_SESSION['user_group'] != 1)
+					{
+						$innavi = '';
+						@reset($_POST);
+						$newtext = "\n\n";
+
+						// Формируем текст сообщения, состоящий из данных,
+						// которые пользователь ввел в поля документа
+						foreach ($_POST['feld'] as $val)
+						{
+							if (!empty($val))
+							{
+								$newtext .= $val;
+								$newtext .= "\n---------------------\n";
+							}
+						}
+						$text = strip_tags($newtext);
+
+						// Получаем e-mail адрес из общих настроек системы
+						$system_mail = get_settings('mail_from');
+						$system_mail_name = get_settings('mail_from_name');
+
+						// Отправляем администартору уведомление, о том что необходимо проверить документ
+						$body_to_admin = $AVE_Template->get_config_vars('DOC_MAIL_BODY_CHECK');
+						$body_to_admin = str_replace('%N%', "\n", $body_to_admin);
+						$body_to_admin = str_replace('%TITLE%', stripslashes($_POST['doc_title']), $body_to_admin);
+						$body_to_admin = str_replace('%USER%', "'" . $_SESSION['user_name'] . "'", $body_to_admin);
+						send_mail(
+							$system_mail,
+							$body_to_admin . $text,
+							$AVE_Template->get_config_vars('DOC_MAIL_SUBJECT_CHECK'),
+							$system_mail,
+							$system_mail_name,
+							'text'
+						);
+
+						// Отправляем уведомление автору, о том что документ находится на проверке
+						$body_to_author = str_replace('%N%', "\n", $AVE_Template->get_config_vars('DOC_MAIL_BODY_USER'));
+						$body_to_author = str_replace('%TITLE%', stripslashes($_POST['doc_title']), $body_to_author);
+						$body_to_author = str_replace('%USER%', "'" . $_SESSION['user_name'] . "'", $body_to_author);
+						send_mail(
+							$_SESSION['user_email'],
+							$body_to_author,
+							$AVE_Template->get_config_vars('DOC_MAIL_SUBJECT_USER'),
+							$system_mail,
+							$system_mail_name,
+							'text'
+						);
+					}
+
+					if (! ((isset($_SESSION[$rubric_id . '_newnow']) && $_SESSION[$rubric_id . '_newnow'] == 1)
+						|| (isset($_SESSION[$rubric_id . '_alles']) && $_SESSION[$rubric_id . '_alles'] == 1)
+						|| (defined('UGROUP') && UGROUP == 1)) )
+					{
+						$document_status = 0;
+					}
+					$_POST['document_status']=$document_status;
+					$iid=$this->documentSave($_REQUEST[rubric_id],null,$_POST,true);
+
+					if (!$_REQUEST['next_edit']) {
+						header('Location:index.php?do=docs&action=after&document_id=' . $iid . '&rubric_id=' . $rubric_id . '&cp=' . SESSION . $innavi);
+					} else {
+						header('Location:index.php?do=docs&action=edit&Id=' . $iid . '&rubric_id=' . $rubric_id . '&cp=' . SESSION);
+					}
+					exit;
+
+			// Если пользователь не выполнял никаких действий, а просто открыл документ для копирования
+			// Если пользователь не выполнял никаких действий, а просто открыл документ для редактирования
+			case '':
+				// Выполняем запрос к БД на получение данных о документе
+				$document = $AVE_DB->Query("
+					SELECT *
+					FROM " . PREFIX . "_documents
+					WHERE Id = '" . $document_id . "'
+				")->FetchRow();
+
+				$show = true;
+
+				// Проверяем права доступа к документу
+				$this->documentPermissionFetch($document->rubric_id);
+
+				// запрещаем доступ,
+				// если автору документа не разрешено изменять свои документы в рубрике
+				// или пользователю не разрешено изменять все документы в рубрике
+				if (!( (isset($_SESSION['user_id']) && $document->document_author_id == $_SESSION['user_id']
+					&& isset($_SESSION[$document->rubric_id . '_editown']) && $_SESSION[$document->rubric_id . '_editown'] == 1)
+					|| (isset($_SESSION[$document->rubric_id . '_editall']) && $_SESSION[$document->rubric_id . '_editall'] == 1)))
+				{
+					$show = false;
+				}
+				// запрещаем доступ к главной странице и странице ошибки 404, если требуется одобрение Администратора
+				if ( ($document_id == 1 || $document_id == PAGE_NOT_FOUND_ID) &&
+					!(isset($_SESSION[$document->rubric_id . '_newnow']) && $_SESSION[$document->rubric_id . '_newnow'] == 1) )
+				{
+					$show = false;
+				}
+				// разрешаем доступ, если пользователь принадлежит группе Администраторов или имеет все права на рубрику
+				if ( (defined('UGROUP') && UGROUP == 1)
+					|| (isset($_SESSION[$document->rubric_id . '_alles']) && $_SESSION[$document->rubric_id . '_alles'] == 1) )
+				{
+					$show = true;
+				}
+
+				if ($show)
+				{
+					$fields = array();
+
+					if ( (defined('UGROUP') && UGROUP == 1)
+						|| (isset($_SESSION[$document->rubric_id . '_newnow']) && $_SESSION[$document->rubric_id . '_newnow'] == 1) )
+					{
+						$document->dontChangeStatus = 0;
+					}
+					else
+					{
+						$document->dontChangeStatus = 1;
+					}
+
+					// Выполняем запрос к БД и получаем все данные для полей документа
+					$sql = $AVE_DB->Query("
+						SELECT
+							doc.Id AS df_id,
+							rub.*,
+							rubric_field_default,
+							doc.field_value
+						FROM " . PREFIX . "_rubric_fields AS rub
+						LEFT JOIN " . PREFIX . "_document_fields AS doc ON rubric_field_id = rub.Id
+						WHERE document_id = '" . $document_id . "'
+						ORDER BY rubric_field_position ASC
+					");
+					while ($row = $sql->FetchRow())
+					{
+						$row->Feld = $this->_documentFieldGet($row->rubric_field_type, $row->field_value, $row->Id, $row->rubric_field_default);
+						array_push($fields, $row);
+					}
+
+					$maxId = $AVE_DB->Query("
+						SELECT MAX(Id)
+						FROM " . PREFIX . "_documents
+					")->GetCell();
+
+					// Формируем ряд переменных и передаем их в шаблон для вывода
+					$document->fields = $fields;
+					$document->rubric_title = $AVE_Rubric->rubricNameByIdGet($_REQUEST[rubric_id])->rubric_title;
+					$document->rubric_url_prefix = strftime(str_ireplace("%id", $maxId+1, $AVE_Rubric->rubricNameByIdGet($_REQUEST[rubric_id])->rubric_alias));
+					$document->formaction = 'index.php?do=docs&action=copy&sub=save&rubric_id=' . $_REQUEST[rubric_id] . ((isset($_REQUEST['pop']) && $_REQUEST['pop']==1) ? 'pop=1' : '') . '&cp=' . SESSION;
+					$document->document_published = time();
+					$document->document_expire = mktime(date("H"), date("i"), 0, date("m"), date("d"), date("Y") + 10);
+
+					if ($document->document_parent != 0) $document->parent = $AVE_DB->Query("SELECT document_title, Id FROM " . PREFIX . "_documents WHERE Id = '".$document->document_parent."' ")->FetchRow();
+
+					$AVE_Template->assign('document', $document);
 
 					// Отображаем страницу для редактирования
 					$AVE_Template->assign('content', $AVE_Template->fetch('documents/form.tpl'));
@@ -1719,11 +1904,11 @@ class AVE_Document
 		// Если ошибок не найдено, формируем сообщение об успешной операции
 		if (empty($errors))
 		{
-			return $AVE_Template->get_config_vars('DOC_URL_CHECK_OK');
+			return json_encode(array($AVE_Template->get_config_vars('DOC_URL_CHECK_OK') . implode(',<br />', $errors), accept));
 		}
 		else
 		{ // В противном случае формируем сообщение с ошибкой
-			return $AVE_Template->get_config_vars('DOC_URL_CHECK_ER') . implode(',<br />', $errors);
+			return json_encode(array($AVE_Template->get_config_vars('DOC_URL_CHECK_ER') . implode(',<br />', $errors), error));
 		}
 	}
 

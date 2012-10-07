@@ -458,7 +458,7 @@ select[disabled] > option[selected=selected] { color: #BBB !important; }
 
 
 /* ===== Growl notifications ===== */
-div.jGrowl { z-index: 9999; color: #fff; font-size: 12px; }
+div.jGrowl { z-index: 10; color: #fff; font-size: 12px; }
 
 div.ie6.top-right {
 	right: 				auto;
@@ -515,11 +515,15 @@ div.jGrowl div.jGrowl-notification, div.jGrowl div.jGrowl-closer {
 	display: none;
 }
 
+div.jGrowl div.error { background-color: #FF0000;}
+div.jGrowl div.accept { background-color: #00CC00;}
+
 div.jGrowl div.jGrowl-notification { min-height: 25px; }
 div.jGrowl div.jGrowl-notification, div.jGrowl div.jGrowl-closer { margin: 10px; border-radius: 5px; -moz-border-radius: 5px; -webkit-border-radius:	5px; -khtml-border-radius: 5px; }
 div.jGrowl div.jGrowl-notification div.jGrowl-header { font-weight: bold; font-size: .85em; }
 div.jGrowl div.jGrowl-notification div.jGrowl-close { z-index: 99; float: right; font-weight: bold; font-size: 1em; cursor: pointer; }
-div.jGrowl div.jGrowl-closer { padding-top: 4px; padding-bottom: 4px; cursor: pointer; font-size: .9em; font-weight: bold; text-align: center; }
+div.jGrowl div.jGrowl-closer { padding-top: 4px; padding-bottom: 4px; cursor: pointer; font-size: .9em; font-weight: bold; text-align: center; color: #fff;}
+
 
 /** Hide jGrowl when printing **/
 @media print { div.jGrowl { display: none; } }

@@ -432,7 +432,7 @@ BLOCK;
 						else
 						{
 							$v = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_param[\\1]', $rubric_field_template);
-							$v = preg_replace_callback('/\[tag:([r|c]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $v);
+							$v = preg_replace_callback('/\[tag:([r|c|f]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $v);
 						}
 					}
 					$res.=$v;
@@ -456,7 +456,7 @@ BLOCK;
 						else
 						{
 							$v = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_param[\\1]', $rubric_field_template_request);
-							$v = preg_replace_callback('/\[tag:([r|c]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $v);
+							$v = preg_replace_callback('/\[tag:([r|c|f]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $v);
 						}
 					}
 					$res.=$v;

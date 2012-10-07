@@ -47,7 +47,7 @@
 	                        $.alerts._overlay('show');
 							window.location = ave_path+'admin/index.php?do=groups&action=new&cp={$sess}'+ '&user_group_name=' + b;
 						{rdelim}else{ldelim}
-							$.jGrowl('{#MAIN_NO_ADD_GROUP#}');
+							$.jGrowl("{#MAIN_NO_ADD_GROUP#}", {ldelim}theme: 'error'{rdelim});
 						{rdelim}
 					{rdelim}
 				);
@@ -65,7 +65,7 @@
 	                        $.alerts._overlay('show');
 							window.location = ave_path+'admin/index.php?do=user&action=new&cp={$sess}'+ '&user_name=' + b;
 						{rdelim}else{ldelim}
-							$.jGrowl('{#MAIN_NO_ADD_USER#}');
+							$.jGrowl("{#MAIN_NO_ADD_USER#}", {ldelim}theme: 'error'{rdelim});
 						{rdelim}
 					{rdelim}
 				);
@@ -83,7 +83,7 @@
 	                        $.alerts._overlay('show');
 							window.location = ave_path+'admin/index.php?do=navigation&action=new&cp={$sess}'+ '&NaviName=' + b;
 						{rdelim}else{ldelim}
-							$.jGrowl('{#MAIN_NO_ADD_NAV#}');
+							$.jGrowl("{#MAIN_NO_ADD_NAV#}", {ldelim}theme: 'error'{rdelim});
 						{rdelim}
 					{rdelim}
 				);
@@ -101,7 +101,7 @@
 	                        $.alerts._overlay('show');
 							window.location = ave_path+'admin/index.php?do=templates&action=new&cp={$sess}'+ '&TempName=' + b;
 						{rdelim}else{ldelim}
-							$.jGrowl('{#MAIN_NO_ADD_TEMPL#}');
+							$.jGrowl("{#MAIN_NO_ADD_TEMPL#}", {ldelim}theme: 'error'{rdelim});
 						{rdelim}
 					{rdelim}
 				);
@@ -119,7 +119,7 @@
 	                        $.alerts._overlay('show');
 							window.location = ave_path+'admin/index.php?do=request&action=new&cp={$sess}'+ '&request_title_new=' + b;
 						{rdelim}else{ldelim}
-							$.jGrowl('{#MAIN_NO_ADD_QUERY#}');
+							$.jGrowl("{#MAIN_NO_ADD_QUERY#}", {ldelim}theme: 'error'{rdelim});
 						{rdelim}
 					{rdelim}
 				);
@@ -137,14 +137,30 @@
 	                        $.alerts._overlay('show');
 							window.location = ave_path+'admin/index.php?do=rubs&action=new&cp={$sess}'+ '&rubric_title=' + b;
 						{rdelim}else{ldelim}
-							$.jGrowl('{#MAIN_NO_ADD_RUB#}');
+							$.jGrowl("{#MAIN_NO_ADD_RUB#}", {ldelim}theme: 'error'{rdelim});
 						{rdelim}
 					{rdelim}
 				);
 		{rdelim});
 		{/if}
 
-
+		{if check_permission('sysblock')}
+		$(".ulAddBlock").click( function(e) {ldelim}
+			e.preventDefault();
+			var title = '{#MAIN_ADD_NEW_BLOCK#}';
+			var text = '{#MAIN_ADD_NEW_BLOCK_NAME#}';
+			jPrompt(text, '', title, function(b){ldelim}
+						if (b){ldelim}
+	                        $.alerts._overlay('hide');
+	                        $.alerts._overlay('show');
+							window.location = ave_path+'admin/index.php?do=sysblocks&action=new&cp={$sess}'+ '&sysblock_name=' + b;
+						{rdelim}else{ldelim}
+							$.jGrowl("{#MAIN_NO_ADD_BLOCK#}", {ldelim}theme: 'error'{rdelim});
+						{rdelim}
+					{rdelim}
+				);
+		{rdelim});
+		{/if}
 
     {literal}
 
@@ -210,6 +226,7 @@ var admin = {
 							 {if check_permission('documents')}<li><a onclick="cp_pop('index.php?do=docs&action=add_new&pop=1&cp={$sess}','750','600','1')" href="javascript:void(0);">Документ</a></li>{/if}
 							 {if check_permission('rubric_new')}<li><a class="ulAddRub" href="index.php?do=rubs&action=new&cp={$sess}">Рубрику</a></li>{/if}
 							 {if check_permission('request_new')}<li><a class="ulAddRequest" href="index.php?do=request&action=new&cp={$sess}">Запрос</a></li>{/if}
+							 {if check_permission('sysblocks')}<li><a class="ulAddBlock" href="index.php?do=sysblocks&action=new&cp={$sess}">Системный блок</a></li>{/if}
 							 {if check_permission('template_new')}<li><a class="ulAddTempl" href="index.php?do=templates&action=new&cp={$sess}">Шаблон</a></li>{/if}
 							 {if check_permission('navigation_new')}<li><a class="ulAddNav" href="index.php?do=navigation&action=new&cp={$sess}">Навигацию</a></li>{/if}
 							 {if check_permission('user_new')}<li><a class="ulAddUser" href="index.php?do=user&action=new&cp={$sess}">Пользователя</a></li>{/if}

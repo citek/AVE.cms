@@ -126,6 +126,7 @@ require(BASE_DIR . '/functions/func.login.php');
 require(BASE_DIR . '/functions/func.pagination.php');
 if (!defined('ACP'))
 {
+	require(BASE_DIR . '/functions/func.navigation.php');
 	require(BASE_DIR . '/functions/func.sysblock.php');
 	require(BASE_DIR . '/functions/func.parsefields.php');
 	require(BASE_DIR . '/functions/func.parserequest.php');

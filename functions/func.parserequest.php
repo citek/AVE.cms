@@ -436,7 +436,7 @@ function request_parse($id,$params=Array())
 				{
 					$item = preg_replace_callback('/\[tag:sysblock:(\d+)\]/', 'parse_sysblock', $item_template);
 					$item = preg_replace('/\[tag:rfld:(\d+)]\[(more|esc|img|[0-9-]+)]/e', "request_get_document_field(\"$1\", $row->Id, \"$2\")", $item);
-					$item = preg_replace_callback('/\[tag:([r|c]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $item);
+					$item = preg_replace_callback('/\[tag:([r|c|f]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $item);
 					//if(!file_exists(dirname($cachefile_docid)))mkdir(dirname($cachefile_docid),0777,true);
 					//file_put_contents($cachefile_docid,$item);
 				}

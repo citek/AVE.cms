@@ -223,6 +223,19 @@
 	</td>
 </tr>
 
+<tr class="smtp_group">
+	<td width="300">{#SETTINGS_SMTP_ENCRYPT#}</td>
+	<td>
+		<div class="pr12">
+			<select name="mail_smtp_encrypt" style="width: 250px;" class="mousetrap">
+              <option value="">{#SETTINGS_SMTP_NOENCRYPT#}</option>
+              <option value="tls"{if $row.mail_smtp_encrypt=='tls'} selected="selected"{/if}>TLS</option>
+              <option value="ssl"{if $row.mail_smtp_encrypt=='ssl'} selected="selected"{/if}>SSL</option>
+            </select>
+		</div>
+	</td>
+</tr>
+
 <tr class="sendmail_group">
 	<td width="300">{#SETTINGS_MAIL_PATH#}</td>
 	<td>

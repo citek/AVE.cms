@@ -14,6 +14,22 @@ $(document).ready(function(){ldelim}
 			{rdelim}
 		{rdelim});
 
+	$(".CopyBlock").click( function(e) {ldelim}
+		e.preventDefault();
+		var href = $(this).attr('href');
+		var title = '{#SYSBLOCK_COPY#}';
+		var text = '{#SYSBLOCK_COPY_TIP#}';
+		jPrompt(text, '', title, function(b){ldelim}
+					if (b){ldelim}
+						$.alerts._overlay('show');
+        				window.location = href + '&sysblock_name=' + b;
+						{rdelim}else{ldelim}
+							$.jGrowl("{#MAIN_NO_ADD_BLOCK#}", {ldelim}theme: 'error'{rdelim});
+						{rdelim}
+				{rdelim}
+			);
+	{rdelim});
+
 {rdelim});
 </script>
 
@@ -48,15 +64,20 @@ $(document).ready(function(){ldelim}
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic mainForm">
 		<col width="20">
 		<col>
+		<col width="200">
+		<col width="200">
 		<col width="100">
+		<col width="20">
 		<col width="20">
 		<col width="20">
 		<thead>
 		<tr>
 			<td>{#SYSBLOCK_ID#}</td>
 			<td>{#SYSBLOCK_NAME#}</td>
+			<td>{#SYSBLOCK_AUTHOR#}</td>
+			<td>{#SYSBLOCK_DATE#}</td>
 			<td>{#SYSBLOCK_TAG#}</td>
-			<td colspan="2">{#SYSBLOCK_ACTIONS#}</td>
+			<td colspan="3">{#SYSBLOCK_ACTIONS#}</td>
 		</tr>
 		</thead>
 		<tbody>
@@ -69,20 +90,34 @@ $(document).ready(function(){ldelim}
 						<strong>{$sysblock->sysblock_name|escape}</strong>
 					</a>
 				</td>
+				<td align="center">{$sysblock->sysblock_author_id|escape}</td>
+
+				<td align="center">
+					<span class="date_text dgrey">{$sysblock->sysblock_created|date_format:$TIME_FORMAT|pretty_date}</span>
+				</td>
 				<td>
 					<div><input name="textfield" type="text" value="[tag:sysblock:{$sysblock->id}]" readonly style="width: 150px;" /></div>
 				</td>
-				<td align="center">
-					<a class="topleftDir icon_sprite ico_edit" title="{#SYSBLOCK_EDIT_HINT#}" href="index.php?do=sysblocks&action=edit&cp={$sess}&id={$sysblock->id}"></a>
+				<td nowrap="nowrap" width="1%" align="center">
+				{if check_permission('sysblocks')}
+					<a class="topleftDir CopyBlock icon_sprite ico_copy" title="{#SYSBLOCK_COPY#}" href="index.php?do=sysblocks&action=multi&sub=save&id={$sysblock->id}&cp={$sess}"></a>
+				{/if}
 				</td>
 				<td align="center">
+				{if check_permission('sysblocks')}
+					<a class="topleftDir icon_sprite ico_edit" title="{#SYSBLOCK_EDIT_HINT#}" href="index.php?do=sysblocks&action=edit&cp={$sess}&id={$sysblock->id}"></a>
+				{/if}
+				</td>
+				<td align="center">
+				{if check_permission('sysblocks')}
 					<a class="topleftDir ConfirmDelete icon_sprite ico_delete" title="{#SYSBLOCK_DELETE_HINT#}" dir="{#SYSBLOCK_DELETE_HINT#}" name="{#SYSBLOCK_DEL_HINT#}" href="index.php?do=sysblocks&action=del&cp={$sess}&id={$sysblock->id}" id="{$sysblock->id}"></a>
+				{/if}
 				</td>
 			</tr>
 		{/foreach}
 		{else}
 			<tr>
-				<td colspan="8">
+				<td colspan="9">
 					<ul class="messages">
 						<li class="highlight yellow">{#SYSBLOCK_NO_ITEMS#}</li>
 					</ul>

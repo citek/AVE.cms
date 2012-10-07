@@ -61,13 +61,8 @@ $(document).ready(function(){ldelim}
          {/foreach}
                 </tbody>
             </table>
-</div>
-
-<div class="widget" style="margin-top: 0px;">
-
     <div class="body aligncenter">
         <input href="index.php?do=logs&action=delete&cp={$sess}" type="button" class="basicBtn ConfirmLogClear" value="{#LOGS_BUTTON_DELETE#}" />
         <input onclick="location.href='index.php?do=logs&action=export&cp={$sess}'" class="redBtn" type="button" value="{#LOGS_BUTTON_EXPORT#}" />
     </div>
-
 </div>

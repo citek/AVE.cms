@@ -19,8 +19,11 @@ class AVE_SysBlock
 
 		$sys_blocks = array();
 		$sql = $AVE_DB->Query("SELECT * FROM " . PREFIX . "_sysblocks");
-		while ($result = $sql->FetchRow())
+
+        // Формируем массив из полученных данных
+        while ($result = $sql->FetchRow())
 		{
+			$result->sysblock_author_id = get_username_by_id($result->sysblock_author_id);
 			array_push($sys_blocks, $result);
 		}
 
@@ -58,7 +61,9 @@ class AVE_SysBlock
 				SET
 					id = '',
 					sysblock_name = '" . $_POST['sysblock_name'] . "',
-					sysblock_text = '" . $_POST['sysblock_text'] . "'
+					sysblock_text = '" . $_POST['sysblock_text'] . "',
+					sysblock_author_id = '" . (int)$_SESSION['user_id'] . "',
+					sysblock_created = '" . time() . "'
 			");
 			$sysblock_id = $AVE_DB->Query("SELECT LAST_INSERT_ID(id) FROM " . PREFIX . "_sysblocks ORDER BY id DESC LIMIT 1")->GetCell();
 			// Сохраняем системное сообщение в журнал

@@ -41,6 +41,22 @@ $(document).ready(function(){ldelim}
 			);
 	{rdelim});
 
+	$(".CopyDocs").click( function(e) {ldelim}
+		e.preventDefault();
+		var href = $(this).attr('href');
+		var title = '{#DOC_COPY#}';
+		var text = '{#DOC_COPY_TIP#}';
+		jPrompt(text, '', title, function(b){ldelim}
+					if (b){ldelim}
+						$.alerts._overlay('show');
+        				window.location = href + '&document_title=' + b;
+						{rdelim}else{ldelim}
+							$.jGrowl("{#MAIN_NO_ADD_DOCS#}", {ldelim}theme: 'error'{rdelim});
+						{rdelim}
+				{rdelim}
+			);
+	{rdelim});
+
 {rdelim});
 </script>
 
@@ -136,6 +152,7 @@ $(document).ready(function(){ldelim}
 	<col width="20">
 	<col width="20">
 	<col width="20">
+	<col width="20">
 	<thead>
 	<tr>
 		<td><div align="center"><input type="checkbox" id="selall" value="1" /></div></td>
@@ -151,7 +168,7 @@ $(document).ready(function(){ldelim}
 		<td><a href="{$link}&sort=view{if $smarty.request.sort=='view'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_CLICKS#}</a></td>
 		{*<td><a href="{$link}&sort=print{if $smarty.request.sort=='print'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_PRINTED#}</a></td>*}
 		<td><a href="{$link}&sort=author{if $smarty.request.sort=='author'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_AUTHOR#}</a></td>
-		<td colspan="5" align="center">{#DOC_ACTIONS#}</td>
+		<td colspan="6" align="center">{#DOC_ACTIONS#}</td>
 	</tr>
 	</thead>
 	<tbody>
@@ -204,6 +221,14 @@ $(document).ready(function(){ldelim}
 					{/if}
 				{else}
 					<span title="" class="topleftDir icon_sprite ico_comment_no"></span>
+				{/if}
+			</td>
+
+			<td align="center" nowrap="nowrap">
+				{if $item->cantEdit==1}
+					<a class="topleftDir icon_sprite ico_copy CopyDocs" title="{#DOC_COPY#}" href="index.php?do=docs&action=copy&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
+	 				{else}
+					<span title="" class="topleftDir icon_sprite ico_copy_no"></span>
 				{/if}
 			</td>
 
@@ -279,7 +304,7 @@ $(document).ready(function(){ldelim}
 		<td><a href="{$link}&sort=view{if $smarty.request.sort=='view'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_CLICKS#}</a></td>
 		{*<td><a href="{$link}&sort=print{if $smarty.request.sort=='print'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_PRINTED#}</a></td>*}
 		<td><a href="{$link}&sort=author{if $smarty.request.sort=='author'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_AUTHOR#}</a></td>
-		<td colspan="5" align="center">{#DOC_ACTIONS#}</td>
+		<td colspan="6" align="center">{#DOC_ACTIONS#}</td>
 	</tr>
 	</thead>
 		<tr>

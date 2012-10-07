@@ -103,21 +103,22 @@ class AVE_Settings
 	{
 		global $AVE_DB,  $AVE_Template;
 
-		$muname = (!empty($_REQUEST['mail_smtp_login']))    ? "mail_smtp_login = '" . $_REQUEST['mail_smtp_login'] . "',"       : '';
-		$mpass  = (!empty($_REQUEST['mail_smtp_pass']))     ? "mail_smtp_pass = '" . $_REQUEST['mail_smtp_pass'] . "',"         : '';
-		$msmp   = (!empty($_REQUEST['mail_sendmail_path'])) ? "mail_sendmail_path = '" . $_REQUEST['mail_sendmail_path'] . "'," : '';
-		$mn     = (!empty($_REQUEST['mail_from_name']))     ? "mail_from_name = '" . $_REQUEST['mail_from_name'] . "',"         : '';
-		$ma     = (!empty($_REQUEST['mail_from']))          ? "mail_from = '" . $_REQUEST['mail_from'] . "',"                   : '';
-		$ep     = (!empty($_REQUEST['page_not_found_id']))  ? "page_not_found_id = '" . $_REQUEST['page_not_found_id'] . "',"   : '';
-		$sn     = (!empty($_REQUEST['site_name']))          ? "site_name = '" . $_REQUEST['site_name'] . "',"                   : '';
-		$mp     = (!empty($_REQUEST['mail_port']))          ? "mail_port = '" . $_REQUEST['mail_port'] . "',"                   : '';
-		$mh     = (!empty($_REQUEST['mail_host']))          ? "mail_host = '" . $_REQUEST['mail_host'] . "',"                   : '';
+		$muname = ($_REQUEST['mail_smtp_login'])    ? "mail_smtp_login = '" . $_REQUEST['mail_smtp_login'] . "',"       : '';
+		$mpass  = ($_REQUEST['mail_smtp_pass'])     ? "mail_smtp_pass = '" . $_REQUEST['mail_smtp_pass'] . "',"         : '';
+		$msmp   = ($_REQUEST['mail_sendmail_path']) ? "mail_sendmail_path = '" . $_REQUEST['mail_sendmail_path'] . "'," : '';
+		$mn     = ($_REQUEST['mail_from_name'])     ? "mail_from_name = '" . $_REQUEST['mail_from_name'] . "',"         : '';
+		$ma     = ($_REQUEST['mail_from'])          ? "mail_from = '" . $_REQUEST['mail_from'] . "',"                   : '';
+		$ep     = ($_REQUEST['page_not_found_id'])  ? "page_not_found_id = '" . $_REQUEST['page_not_found_id'] . "',"   : '';
+		$sn     = ($_REQUEST['site_name'])          ? "site_name = '" . $_REQUEST['site_name'] . "',"                   : '';
+		$mp     = ($_REQUEST['mail_port'])          ? "mail_port = '" . $_REQUEST['mail_port'] . "',"                   : '';
+		$mh     = ($_REQUEST['mail_host'])          ? "mail_host = '" . $_REQUEST['mail_host'] . "',"                   : '';
 
 		$AVE_DB->Query("
 			UPDATE " . PREFIX . "_settings
 			SET
 				" . $muname . "
 				" . $mpass . "
+				mail_smtp_encrypt = '" . $_REQUEST['mail_smtp_encrypt'] . "',
 				" . $msmp . "
 				" . $ma . "
 				" . $mn . "
@@ -128,7 +129,7 @@ class AVE_Settings
 				default_country   = '" . $_REQUEST['default_country'] . "',
 				mail_type         = '" . $_REQUEST['mail_type'] . "',
 				mail_content_type = '" . $_REQUEST['mail_content_type'] . "',
-				mail_word_wrap    = '" . $_REQUEST['mail_word_wrap'] . "',
+				mail_word_wrap    = '" . (int)$_REQUEST['mail_word_wrap'] . "',
 				mail_new_user     = '" . $_REQUEST['mail_new_user'] . "',
 				mail_signature    = '" . $_REQUEST['mail_signature'] . "',
             message_forbidden = '" . $_REQUEST['message_forbidden'] . "',

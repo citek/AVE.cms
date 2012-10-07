@@ -129,7 +129,7 @@
 
 				&nbsp;или&nbsp;
 
-				{if $smarty.request.moduleaction=='edit'}
+				{if $smarty.request.action=='edit'}
 					<input type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#SYSBLOCK_SAVEDIT_NEXT#}" />
 				{else}
 					<input type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#SYSBLOCK_SAVE_NEXT#}" />
@@ -144,9 +144,10 @@
 <script language="javascript">
 
     var sett_options = {ldelim}
-		url: 'index.php?do=sysblocks&action=save&cp={$sess}',
+		url: 'index.php?do=sysbloks&action=save&cp={$sess}',
 		beforeSubmit: Request,
-        success: Response
+        success: Response,
+		error: Error
 	{rdelim}
 
 	function Request(){ldelim}
@@ -155,7 +156,12 @@
 
 	function Response(){ldelim}
 		$.alerts._overlay('hide');
-		$.jGrowl('{#SYSBLOCK_SAVED#}');
+		$.jGrowl('{#SYSBLOCK_SAVED#}', {ldelim}theme: 'accept'{rdelim});
+	{rdelim}
+
+	function Error(){ldelim}
+		$.alerts._overlay('hide');
+		$.jGrowl('Запрос не выполнен', {ldelim}theme: 'error'{rdelim});
 	{rdelim}
 
 	$(document).ready(function(){ldelim}

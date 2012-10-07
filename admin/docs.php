@@ -75,6 +75,16 @@ switch($_REQUEST['action'])
 		}
 		break;
 
+	case 'copy':
+		if (check_permission_acp('documents'))
+		{
+			$_SESSION['use_editor'] = get_settings('use_editor');
+			$AVE_Navigation->navigationAllItemList();
+			$AVE_Request->requestListFetch();
+			$AVE_Document->documentCopy((int)$_REQUEST['Id']);
+		}
+		break;
+
 	case 'new':
 		if (check_permission_acp('documents'))
 		{

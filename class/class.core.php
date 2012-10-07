@@ -697,7 +697,7 @@ class AVE_Core
 					{
 						// парсим теги полей в шаблоне документа
 						$main_content = preg_replace_callback('/\[tag:fld:(\d+)\]/', 'document_get_field', $rubTmpl);
-						$main_content = preg_replace_callback('/\[tag:([r|c]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $main_content);
+						$main_content = preg_replace_callback('/\[tag:([r|c|f]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $main_content);
 
 						// удаляем ошибочные теги полей
 						$main_content = preg_replace('/\[tag:fld:\d*\]/', '', $main_content);
@@ -754,6 +754,8 @@ class AVE_Core
 		{
 			display_notice($this->_module_error);
 		}
+		// парсим теги навигации
+		$out = preg_replace_callback('/\[tag:navigation:(\d+)\]/', 'parse_navigation', $out);
 
 		// парсим теги системных блоков
 		$out = preg_replace_callback('/\[tag:sysblock:(\d+)\]/', 'parse_sysblock', $out);

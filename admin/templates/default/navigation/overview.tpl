@@ -83,7 +83,7 @@ $(document).ready(function(){ldelim}
 					{/if}
 				</strong>
 			</td>
-			<td><div class="pr12"><input type="text" value="[mod_navigation:{$item->id}]" size="15" readonly></div></td>
+			<td><div class="pr12"><input type="text" value="[tag:navigation:{$item->id}]" size="15" readonly></div></td>
 			<td width="1%" align="center">
 				{if check_permission('navigation_edit')}
 					<a title="{#NAVI_EDIT_TEMPLATE#}" href="index.php?do=navigation&amp;action=templates&amp;cp={$sess}&amp;id={$item->id}" class="topleftDir icon_sprite ico_template"></a>

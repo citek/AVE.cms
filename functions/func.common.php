@@ -1071,114 +1071,76 @@ function image_multi_import($path) {
 function send_mail($to,$body,$subject,$from_email,$from_name='',$type='text',$attach=array(),$saveattach=true,$signature=true)
 {
 	ob_start();
+	require_once BASE_DIR . '/lib/SwiftMailer/swift_required.php';
+	unset($transport,$message,$mailer);
 
-	$body = stripslashes($body) . ($signature ? "\n\n".get_settings('mail_signature') : '');
-
-	switch (MAIL_LIB)
+	// Определяем тип письма
+	$type = ((strtolower($type) == 'html' || strtolower($type) == 'text/html') ? 'text/html' : 'text/plain');
+	// Добавляем подпись, если просили
+	if ($signature)
 	{
-		case 'PHPMailer':
-
-			if (!function_exists('version_compare') || version_compare(phpversion(), '5', '<'))
-			{
-				include_once(BASE_DIR . '/lib/PHPMailer/php4/class.phpmailer.php') ;
-			}
-			else
-			{
-				include_once(BASE_DIR . '/lib/PHPMailer/php5/class.phpmailer.php') ;
-			}
-		
-			$PHPMailer = new PHPMailer;
-		
-			$PHPMailer->CharSet     = 'utf-8';
-			$PHPMailer->Mailer      = get_settings('mail_type');
-			$PHPMailer->ContentType = ($type == 'html') ? 'text/html' : (($type == 'text' || get_settings('mail_content_type') == 'text/plain') ? 'text/plain' : 'text/html');
-			$PHPMailer->WordWrap    = get_settings('mail_word_wrap');
-			$PHPMailer->Subject     = $subject;
-			$PHPMailer->Body        = $body;
-			$PHPMailer->From        = ($from_email != '') ? $from_email : get_settings('mail_from');
-			$PHPMailer->FromName    = ($from_name != '') ? $from_name : get_settings('mail_from_name');
-			$PHPMailer->AddAddress($to);
-
-			switch ($PHPMailer->Mailer)
-			{
-				case 'sendmail':
-					$PHPMailer->Sendmail = get_settings('mail_sendmail_path');
-					break;
-		
-				case 'smtp':
-					$PHPMailer->Host       = get_settings('mail_host');
-					$PHPMailer->Port       = get_settings('mail_port');
-					$PHPMailer->Username   = get_settings('mail_smtp_login');
-					$PHPMailer->Password   = get_settings('mail_smtp_pass');
-					$PHPMailer->AddReplyTo($PHPMailer->Username, $PHPMailer->FromName);
-					$PHPMailer->SMTPAuth   = true;  // authentication enabled
-					$PHPMailer->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for Gmail
-		//			$PHPMailer->SMTPDebug  = true;  // enables SMTP debug information (for testing)
-					break;
-		
-				case 'mail':
-				default:
-					break;
-			}
-
-			if (! empty($attach))
-			{
-				foreach ($attach as $attachment)
-				{
-					$PHPMailer->AddAttachment($attachment);
-				}
-			}
-
-			$PHPMailer->Send();
+		if ($type == 'text/html')
+		{
+			$signature = '<br><br>' . nl2br(get_settings('mail_signature'));
+		}
+		else
+		{
+			$signature = "\r\n\r\n" . get_settings('mail_signature');
+		}
+	}
+	else $signature = '';
+	// Составляем тело письма
+	$body = stripslashes($body) . $signature;
+	// Формируем письмо
+	$message = Swift_Message::newInstance($subject)
+		-> setFrom(array($from_email => $from_name))
+		-> setTo($to)
+		-> setContentType($type)
+		-> setBody($body)
+		-> setMaxLineLength((int)get_settings('mail_word_wrap'));
+	// Прикрепляем вложения
+	if ($attach)
+	{
+		foreach ($attach as $attach_file)
+		{
+			$message -> attach(Swift_Attachment::fromPath(trim($attach_file)));
+		}
+	}
+	// Выбираем метод отправки и формируем транспорт
+	switch (get_settings('mail_type')) 
+	{
+		case 'mail':
+			$transport = Swift_MailTransport::newInstance();
 			break;
 
-		case 'SwiftMailer':
+		case 'smtp':
+			$transport = Swift_SmtpTransport::newInstance(stripslashes(get_settings('mail_host')), (int)get_settings('mail_port'));
+			// Добавляем шифрование
+			$smtp_encrypt = get_settings('mail_smtp_encrypt');
+			if($smtp_encrypt)
+				$transport
+					->setEncryption(strtolower(stripslashes($smtp_encrypt)));
+			// Имя пользователя/пароль
+			$smtp_user = get_settings('mail_smtp_login');
+			$smtp_pass = get_settings('mail_smtp_pass');
+			if($smtp_user)
+				$transport
+					->setUsername(stripslashes($smtp_user))
+					->setPassword(stripslashes($smtp_pass));
+			break;
 
-			include_once(BASE_DIR . '/lib/SwiftMailer/swift_required.php');
-
-			$email = Swift_Message::newInstance($subject)
-				-> setFrom(array($from_email => $from_name))
-				-> setTo($to)
-				-> setBody($body)
-				-> setContentType((strtolower($type) == 'html') ? 'text/html' : 'text/plain')
-				-> setMaxLineLength(get_settings('mail_word_wrap'));
-		
-			if ($attach)
-			{
-				foreach ($attach as $attach_file)
-				{
-					$email -> attach(Swift_Attachment::fromPath(trim($attach_file)));
-				}
-			}
-			
-			switch (get_settings('mail_type')) 
-			{
-				case 'sendmail':
-					$transport = Swift_SendmailTransport::newInstance(get_settings('mail_sendmail_path') . ' -bs');
-					break;
-		
-				case 'smtp':
-					$transport = Swift_SmtpTransport::newInstance(get_settings('mail_host'), get_settings('mail_port'))
-						->setUsername(get_settings('mail_smtp_login'))
-						->setPassword(get_settings('mail_smtp_pass'));
-					break;
-		
-				case 'mail':
-					$transport = Swift_MailTransport::newInstance();
-					break;
-		
-				default: break;
-			}
-			
-			$mailer = Swift_Mailer::newInstance($transport);
-			$numSent = $mailer->send($email);
+		case 'sendmail':
+			$transport = Swift_SendmailTransport::newInstance(get_settings('mail_sendmail_path'));
 			break;
 	}
-	
-	if ($saveattach)
+	// Отправляем письмо
+	$mailer = Swift_Mailer::newInstance($transport);
+	$mailer->send($message);
+
+	// Сохраняем вложения в ATTACH_DIR, если просили 
+	if ($attach && $saveattach)
 	{
 		$attach_dir = BASE_DIR . '/' . ATTACH_DIR . '/';
-		
 		foreach ($attach as $file_path)
 		{
 			if ($file_path && file_exists($file_path))
@@ -1189,7 +1151,7 @@ function send_mail($to,$body,$subject,$from_email,$from_name='',$type='text',$at
 				{
 					$file_name = rand(1000, 9999) . '_' . $file_name;
 				}
-				$file_path_new = BASE_DIR . '/' . ATTACH_DIR . '/' . $file_name;
+				$file_path_new = $attach_dir . $file_name;
 				if (!@move_uploaded_file($file_path,$file_path_new))
 				{
 					copy($file_path,$file_path_new);
@@ -1307,7 +1269,7 @@ function make_thumbnail($params)
 	{
 		$size = $params['size'];
 
-		if (!preg_match('/^[r|c]\d+x\d+r*$/', $size)) return;
+		if (!preg_match('/^[r|c|f]\d+x\d+r*$/', $size)) return;
 	}
 	else
 	{
