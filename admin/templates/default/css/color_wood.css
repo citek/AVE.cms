@@ -120,6 +120,9 @@ border-radius: 3px;
 /* ===== Growl notifications ===== */
 div.jGrowl div.jGrowl-notification, div.jGrowl div.jGrowl-closer {background-color: #FD6900;}
 
+div.jGrowl div.error { background-color: #FF0000;}
+div.jGrowl div.accept { background-color: #00CC00;}
+
 .tableStatic tbody tr { border-top: 1px solid #ddd;  background: url(theme_color_wood/bg_eeeeee.png);}
 .tableStatic tbody tr:nth-child(even) { background: url(theme_color_wood/bg_fafafa.png); }
 .tableStatic tbody tr:hover { background: url(theme_color_wood/bg_ffebcc.png); }

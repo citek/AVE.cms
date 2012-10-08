@@ -127,6 +127,9 @@ div.jGrowl div.jGrowl-notification, div.jGrowl div.jGrowl-closer {
 	background-color: #4f5a68;
 }
 
+div.jGrowl div.error { background-color: #FF0000;}
+div.jGrowl div.accept { background-color: #00CC00;}
+
 .tableStatic tbody tr:hover { background-color: #d5d5d5; }
 .rowElem:hover { background: none repeat scroll 0 0 #d5d5d5;}
 

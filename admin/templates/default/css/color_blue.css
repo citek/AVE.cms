@@ -5,3 +5,6 @@ body { background: #eceeef url(../images/backgrounds/pat4.png) repeat left top; 
 
 /* ===== Top navigation ===== */
 .fixed { position: fixed; background: url(theme_color_blue/topNav.jpg) repeat; width: 100%; color: #eeeeee; border-bottom: 1px solid #4a4f51; z-index: 999; }
+
+div.jGrowl div.error { background-color: #FF0000;}
+div.jGrowl div.accept { background-color: #00CC00;}
