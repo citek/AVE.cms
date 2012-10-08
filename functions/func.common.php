@@ -1,13 +1,13 @@
 <?php
-
-if (file_exists(BASE_DIR."/functions/func.custom.php")) include (BASE_DIR."/functions/func.custom.php"); // вставляем файл с пользовательскими функциями
-
 /**
  * AVE.cms
  *
  * @package AVE.cms
  * @filesource
  */
+
+// вставляем файл с пользовательскими функциями
+if (file_exists(BASE_DIR."/functions/func.custom.php")) include (BASE_DIR."/functions/func.custom.php");
 
 /**
  * Функция загрузки файлов с удаленного сервера через CURL
@@ -204,7 +204,13 @@ function get_settings($field = '')
 	return isset($settings[$field]) ? $settings[$field] : null;
 }
 
-function get_navigations($navi_id = '')
+/**
+ * Возвращает меню навигации
+ *
+ * @param int $id идентификатор меню навигации
+ * @return объект с навигацией по id, либо массив всех навигаций
+ */
+function get_navigations($id = null)
 {
 	global $AVE_DB;
 
@@ -223,9 +229,8 @@ function get_navigations($navi_id = '')
 		}
 	}
 
-	if ($navi_id == '') return $navigations;
-
-	return (isset($navigations[$navi_id]) ? $navigations[$navi_id] : false);
+	if ($id) return $navigations[$id];
+	else return $navigations;
 }
 
 /**
@@ -1319,7 +1324,17 @@ function _var($var)
 	var_dump ($var);
 	$var_dump = htmlspecialchars(ob_get_contents());
 	ob_end_clean();
-	$var_dump = '<pre style="background:#eee;color:#000;margin:10px;padding:10px;min-width:600px">' . $var_dump . '</pre>';
-	file_put_contents(BASE_DIR.'/cache/debug.html',$var_dump);
+	$var_dump = 
+'<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Отладка</title>
+</head>
+<body>
+  <pre style="background:#eee;color:#000;margin:10px;padding:10px;min-width:600px">' . $var_dump . '</pre>
+</body>
+</html>';
+	file_put_contents(BASE_DIR.'/debug.html',$var_dump);
 }
 ?>
