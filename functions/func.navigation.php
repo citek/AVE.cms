@@ -1,30 +1,25 @@
 <?php
 
 /**
- * AVE.cms - Навигация
+ * AVE.cms - Модуль Навигация
  *
  * @package AVE.cms
  * @filesource
  */
 
-
 /**
- * Функция обработки
+ * Функция обработки тега модуля
  *
  * @param int $navigation_id - идентификатор меню навигации
  */
-
 function parse_navigation($navigation_id)
 {
 	global $AVE_DB, $AVE_Core;
 
 	if (is_array($navigation_id)) $navigation_id = $navigation_id[1];
 
-	static $navigations = array();
-
-	// убираем не цифры
-	$navigation_id  = preg_replace('/\D/', '', $navigation_id);
-
+    static $navigations = array();
+	
 	if (isset($navigations[$navigation_id]))
 	{
 		echo $navigations[$navigation_id];
@@ -42,62 +37,36 @@ function parse_navigation($navigation_id)
 	if (!defined('UGROUP')) define('UGROUP', 2);
 	if (!in_array(UGROUP, $nav->navi_user_group)) return;
 
-	if (empty($_REQUEST['module']))
+	@$extended_by_module = "(nav.navi_item_link LIKE '%%" . $refurl2 . "%%')";
+	@$extended_by_module2 = "(nav.document_alias LIKE '%%" . $refurl2 . "%%')";
+
+	
+	$row_navi = $AVE_DB->Query("
+		SELECT CONCAT_WS(',',nav.Id, nav.parent_id, nav2.parent_id)
+		FROM
+			" . PREFIX . "_navigation_items AS nav
+		".$conect."
+		LEFT JOIN
+			" . PREFIX . "_navigation_items AS nav2 ON nav2.Id = nav.parent_id
+		WHERE nav.navi_item_status = '1'
+		AND nav.navi_id = '" . $navigation_id . "'
+		$reqest
+	")->GetCell();
+
+	if(empty($row_navi))
 	{
-
-		$curent_doc_id = (isset($_GET['id']) && is_numeric($_GET['id'])) ? $_GET['id'] : 1;
-
 		$row_navi = $AVE_DB->Query("
-			SELECT CONCAT_WS(',', nav.Id, nav.parent_id, nav2.parent_id)
+			SELECT CONCAT_WS(',',nav.parent_id, nav2.parent_id)
 			FROM
 				" . PREFIX . "_navigation_items AS nav
-			JOIN
-				" . PREFIX . "_documents AS doc
-			LEFT JOIN
-				" . PREFIX . "_navigation_items AS nav2 ON nav2.Id = nav.parent_id
-			WHERE nav.navi_item_status = 1
-			AND nav.navi_id = '" . $navigation_id . "'
-			AND doc.Id = '" . $curent_doc_id . "'
-			AND (nav.navi_item_link = 'index.php?id=" . $curent_doc_id . "'"
-				. ((!empty($AVE_Core->curentdoc->document_alias) && $AVE_Core->curentdoc->Id == $curent_doc_id) ? " OR nav.document_alias = '" . $AVE_Core->curentdoc->document_alias . "'" : '')
-				. " OR nav.Id = doc.document_linked_navi_id)
-		")->GetCell();
-	}
-	else
-	{
-
-		@$extended_by_module = "(nav.navi_item_link LIKE '%%" . $refurl2 . "%%')";
-		@$extended_by_module2 = "(nav.document_alias LIKE '%%" . $refurl2 . "%%')";
-
-		
-		$row_navi = $AVE_DB->Query("
-			SELECT CONCAT_WS(',',nav.Id, nav.parent_id, nav2.parent_id)
-			FROM
-				" . PREFIX . "_navigation_items AS nav
-			".$conect."
 			LEFT JOIN
 				" . PREFIX . "_navigation_items AS nav2 ON nav2.Id = nav.parent_id
 			WHERE nav.navi_item_status = '1'
 			AND nav.navi_id = '" . $navigation_id . "'
-			$reqest
+			AND $extended_by_module2
 		")->GetCell();
-
-		if(empty($row_navi))
-		{
-			$row_navi = $AVE_DB->Query("
-				SELECT CONCAT_WS(',',nav.parent_id, nav2.parent_id)
-				FROM
-					" . PREFIX . "_navigation_items AS nav
-				LEFT JOIN
-					" . PREFIX . "_navigation_items AS nav2 ON nav2.Id = nav.parent_id
-				WHERE nav.navi_item_status = '1'
-				AND nav.navi_id = '" . $navigation_id . "'
-				AND $extended_by_module2
-			")->GetCell();
-		}	
-
-		
 	}
+
 	$where_elter = '';
 #########################################
 #########################################
@@ -128,6 +97,7 @@ function parse_navigation($navigation_id)
 		$nav_items[$row_nav_item['parent_id']][] = $row_nav_item;
 	}
 
+
 	$ebenen = array(
 		1 =>  array(
 			'aktiv' => str_replace('[tag:mediapath]', ABS_PATH . 'templates/' . THEME_FOLDER . '/', $nav->navi_level1active),
@@ -143,15 +113,47 @@ function parse_navigation($navigation_id)
 		)
 	);
 
-	$END = printNavi($ebenen, $way, $navigation_id, $nav_items, $nav);
+	$END = str_replace('[tag:mediapath]', ABS_PATH . 'templates/' . THEME_FOLDER . '/', $nav->navi_begin);
 
+	printNavi($END, $ebenen, $way, $navigation_id, $nav_items, $nav);
+
+	$END .= str_replace('[tag:mediapath]', ABS_PATH . 'templates/' . THEME_FOLDER . '/', $nav->navi_end);
 	$END = rewrite_link($END);
 	$END = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $END);
 	$END = str_replace(array("\n","\r"),'',$END);
 
+	$search = array (
+		$nav->navi_level1begin . $nav->navi_level1end,
+		$nav->navi_level2begin . $nav->navi_level2end,
+		$nav->navi_level3begin . $nav->navi_level3end,
+		'</li>' . $nav->navi_level2begin . '<li',
+		'</li>' . $nav->navi_level3begin . '<li',
+		'</li>' . $nav->navi_level1end . '<li',
+		'</li>' . $nav->navi_level2end . '<li',
+		'</li>' . $nav->navi_level1end . $nav->navi_level2end . '<li',
+		'</li>' . $nav->navi_level1end . $nav->navi_level2end . $nav->navi_level3end,
+		'</li>' . $nav->navi_level1end . $nav->navi_level2end,
+		'</li>' . $nav->navi_level2end . $nav->navi_level3end
+	);
+
+	$replace = array (
+		'',
+		'',
+		'',
+		$nav->navi_level2begin . '<li',
+		$nav->navi_level3begin . '<li',
+		'</li>' . $nav->navi_level1end . '</li><li',
+		'</li>' . $nav->navi_level2end . '</li><li',
+		'</li>' . $nav->navi_level1end . '</li>' . $nav->navi_level2end . '</li><li',
+		'</li>' . $nav->navi_level1end . '</li>' . $nav->navi_level2end . '</li>' . $nav->navi_level3end,
+		'</li>' . $nav->navi_level1end . '</li>' . $nav->navi_level2end,
+		'</li>' . $nav->navi_level2end . '</li>' . $nav->navi_level3end
+	);
+	$END = str_replace($search, $replace, $END);
+
 	$navigations[$navigation_id] = $END;
 
-	echo $END;
+	return $END;
 }
 
 /**
@@ -165,14 +167,22 @@ function parse_navigation($navigation_id)
  * @param string $row_ul
  * @param int $parent
  */
-function printNavi($ebenen, $way, $rub, $nav_items, $row_ul, $parent = 0)
+function printNavi(&$navi, &$ebenen, &$way, &$rub, &$nav_items, &$row_ul, $parent = 0)
 {
-	// определяем уровень
+	
 	$ebene = $nav_items[$parent][0]['navi_item_level'];
 
-	// собираем каждый пункт в переменной $act
-	foreach ((array)$nav_items[$parent] as $row)
+	switch ($ebene)
 	{
+		case 1 : $navi .= $row_ul->navi_level1begin;  break;
+		case 2 : $navi .= $row_ul->navi_level2begin;  break;
+		case 3 : $navi .= $row_ul->navi_level3begin;  break;
+	}
+
+	$inter = '';
+	foreach ((array) $nav_items[$parent] as $row)
+	{
+
 		@$aktiv = (in_array($row['Id'], $way)) ? 'aktiv' : 'inaktiv';
 		@$akt = str_replace('[tag:linkname]', $row['title'], $ebenen[$ebene][$aktiv]);
 		@$akt = str_replace('[tag:linkid]', $row['Id'], $akt);
@@ -185,6 +195,7 @@ function printNavi($ebenen, $way, $rub, $nav_items, $row_ul, $parent = 0)
 		@$akt = str_replace('[tag:img_act]', stripslashes($row['Img_act']), $akt);
 		@$akt = str_replace('[tag:img_id]', stripslashes($row['navi_item_Img_id']), $akt);
 
+
 		if (strpos($row['navi_item_link'], 'module=') === false && start_with('index.php?', $row['navi_item_link']))
 		{
 				$akt = str_replace('[tag:link]', $row['navi_item_link'] . "&amp;doc=" . 
@@ -196,48 +207,23 @@ function printNavi($ebenen, $way, $rub, $nav_items, $row_ul, $parent = 0)
 				if (start_with('www.', $row['navi_item_link'])) $akt = str_replace('www.', 'http://www.', $akt);
 		}
 
-		$akt = str_replace('[tag:target]', (empty($row['navi_item_target']) ? '_self' : $row['navi_item_target']), $akt);
+		//$navi .= str_replace('[tag:target]', $row['navi_item_target'], $akt);
+		$navi .= str_replace('[tag:target]', (empty($row['navi_item_target']) ? '_self' : $row['navi_item_target']), $akt);
 
-		// Определяем тег для вставки следующего уровня
-		switch ($ebene)
-		{
-			case 1 :
-				$tag = "[tag:level:2]";
-				break;
-			case 2 :
-				$tag = "[tag:level:3]";
-				break;
-		}
-		
-		// Если есть подуровень, то заново запускаем для него функцию и вставляем вместо тега
+
 		if (isset($nav_items[$row['Id']]))
 		{
-			$sub_level = printNavi($ebenen, $way, $rub, $nav_items, $row_ul, $row['Id']);
-			$akt = str_replace($tag,$sub_level,$akt);
+			printNavi($navi, $ebenen, $way, $rub, $nav_items, $row_ul, $row['Id']);
 		}
-		// Если нет подуровня, то удаляем тег
-		else $akt = str_replace($tag,"",$akt);
-
-		// Подставляем в переменную навигации готовый пункт
-		$navi .= $akt;
 	}
-
-	// Вставляем все пункты уровня в шаблон уровня
+	
 	switch ($ebene)
 	{
-		case 1 :
-			$navi = str_replace("[tag:content]",$navi,$row_ul->navi_level1begin);
-			break;
-		case 2 :
-			$navi = str_replace("[tag:content]",$navi,$row_ul->navi_level2begin);
-			break;
-		case 3 :
-			$navi = str_replace("[tag:content]",$navi,$row_ul->navi_level3begin);
-			break;
+		case 1 : $navi .= $row_ul->navi_level1end;  break;
+		case 2 : $navi .= $row_ul->navi_level2end;  break;
+		case 3 : $navi .= $row_ul->navi_level3end;  break;
 	}
 
-	// Возвращаем сформированный уровень
-	return $navi;
 }
 
 ?>

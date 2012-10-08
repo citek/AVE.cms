@@ -251,7 +251,7 @@ CREATE TABLE `%%PRFX%%_sysblocks` (
   `sysblock_author_id` int(10) unsigned NOT NULL default '1',
   `sysblock_created` int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;#inst#
 
 CREATE TABLE `%%PRFX%%_templates` (
   `Id` smallint(3) unsigned NOT NULL auto_increment,
