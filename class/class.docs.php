@@ -691,6 +691,48 @@ class AVE_Document
 	}
 
 	/**
+	 * Метод, предназначенный для сохранения ревизии документа в БД
+	 *
+	 */
+
+	static	function SaveRevission($document_id){
+			global $AVE_DB;
+				$sql = $AVE_DB->Query("
+				SELECT
+					rubric_field_id,
+					field_value
+				FROM
+					" . PREFIX . "_document_fields AS doc_field
+				WHERE doc_field.document_id = '" . $document_id . "'
+				");
+			$rows=Array();
+			while ($row = $sql->FetchAssocArray())
+			{
+				$rows[$row['rubric_field_id']] = pretty_chars(clean_no_print_char($row['field_value']));
+			}
+			$dtime = $AVE_DB->Query('SELECT document_changed FROM ' . PREFIX . '_documents WHERE Id=' . $document_id)->GetCell();
+			$AVE_DB->Query("INSERT INTO " . PREFIX . "_document_rev
+			SET
+				doc_id   ='" . $document_id . "',
+				doc_revision ='". $dtime . "',
+				doc_data   ='" . serialize($rows) . "',
+				user_id ='".$_SESSION['user_id']."'
+			");
+			return $rows;
+		}
+
+	static	function RestoreRevission($document_id,$revision){
+			global $AVE_DB;
+			$res=$AVE_DB->Query("SELECT doc_data FROM ".PREFIX."_document_rev WHERE doc_id='".$document_id."' AND doc_revision='".$revision."' LIMIT 1")->GetCell();
+			if(!$res) return false;
+			$data=@unserialize($res);
+			foreach($data as $k=>$v){
+				$sql=$AVE_DB->Query("UPDATE ".PREFIX."_document_fields SET field_value='".$v."', field_number_value='".intval($v)."' WHERE document_id='".$document_id." AND rubric_field_id='".$k."'");
+			}
+			return true;
+		}
+
+	/**
 	 * Метод, предназначенный для сохранения документа в БД
 	 *
 	 * @param int $rubric_id	идентификатор Рубрики
@@ -868,6 +910,9 @@ class AVE_Document
 								document_linked_navi_id   = '" . (int)$data['document_linked_navi_id'] . "'
 							$where";
 						$AVE_DB->Query($sql);
+
+					if($oper=='UPDATE')$this->SaveRevission($document_id);
+
 					// Получаем id добавленной записи
 					$iid=$AVE_DB->InsertId();
 					$document_id = ($oper=="INSERT" ? $iid : $document_id);

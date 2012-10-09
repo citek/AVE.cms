@@ -275,7 +275,10 @@ function request_parse($id,$params=Array())
 
 					$request_order1.=$x.' '.$v.', ';
 				}
-		//Этот кусок для того чтобы можно было параметрами попросить произвольный статус досумента 
+		/* ----------- */
+		$request_order = addslashes($request_order1 . $request_order);
+		/* ----------- */
+		//Этот кусок для того чтобы можно было параметрами попросить произвольный статус досумента
 		//- например в личном кабинете попросить архивные документы
 		$docstatus="AND a.document_status != '0'";
 		$docstatus="AND a.document_status = '1'";
@@ -302,18 +305,17 @@ function request_parse($id,$params=Array())
 		if(isset($params['VIEWS'])){
 				$other_fields.="(SELECT sum(v1.`count`) FROM ".PREFIX."_view_count AS v1 WHERE v1.document_id=a.Id AND v1.day_id>".(strtotime($params['VIEWS'] ? $params['VIEWS'] : '-30 years')).") AS dayviews,
 				";
-				
+
 				if($params['VIEWS_ORDER']>'')$request_order1=(count(explode(',',$other_fields))-1).' '.$params['VIEWS_ORDER'].',';
-		
+
 		}
 
 		if(isset($params['VOTE'])){
 				$other_fields.="(SELECT ".$params['VOTE']."(v2.`vote`) FROM ".PREFIX."_modul_vote AS v2 WHERE type_of_doc='document' and v2.document_id=a.Id) AS votes,
 				";
-				
+
 				if($params['VOTE_ORDER']>'')$request_order2=(count(explode(',',$other_fields))-1).' '.$params['VOTE_ORDER'];
 		}
-
 
 		if (!empty($AVE_Core->install_modules['comment']->Status)){
 		

@@ -26,6 +26,13 @@ if (! isset($_REQUEST['sub'])) $_REQUEST['sub'] = '';
 require(BASE_DIR . '/class/class.core.php');
 $AVE_Core = new AVE_Core;
 if (empty($_REQUEST['module'])) $AVE_Core->coreUrlParse($_SERVER['REQUEST_URI']);
+
+if (!empty($_REQUEST['revission'])){
+	$res=$AVE_DB->Query("SELECT doc_data FROM ".PREFIX."_document_rev WHERE doc_id='".(int)$_REQUEST['id']."' AND doc_revision='".(int)$_REQUEST['revission']."' LIMIT 1")->GetCell();
+	$res=@unserialize($res);
+	$flds=get_document_fields((int)$_REQUEST['id'],$res);
+}
+
 $AVE_Core->coreSiteFetch(get_current_document_id());
 
 $content = ob_get_clean();

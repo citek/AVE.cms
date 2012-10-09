@@ -9,7 +9,7 @@ a { color: #fd6900; }
 .logo .box{ width: 200px; height: 64px; display: block; background: url(theme_color_wood/loginLogo.png) no-repeat; }
 
 /* ===== Top navigation ===== */
-.fixed { position: fixed; background: url(theme_color_wood/titleBg.png) ; width: 100%; color: #eeeeee; border-bottom: 1px solid #4a4f51; z-index: 999; }
+.fixed { position: fixed; background: url(theme_color_wood/top.jpg) ; width: 100%; color: #eeeeee; border-bottom: 1px solid #4a4f51; z-index: 10000; -moz-box-shadow: 0 0 1px #000; -webkit-box-shadow: 0 0 1px #000; box-shadow: 0 0 1px #000;}
 
 .userNav .lastNav { width: 2px; height: 36px; background: url(theme_color_wood/navSep.png) repeat-y; position: absolute; top: 0; right: 0; }
 .userNav ul li ul li:hover { background: url(theme_color_wood/titleBg.png) repeat-x; background-position: 0 -39px; }

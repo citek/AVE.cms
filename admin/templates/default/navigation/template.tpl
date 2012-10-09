@@ -612,7 +612,7 @@
       }
 
       function textSelection_2_2(startTag,endTag) {
-        var range = getSelectedRange_1_2();
+        var range = getSelectedRange_2_2();
         editor_2_2.replaceRange(startTag + editor_2_2.getRange(range.from, range.to) + endTag, range.from, range.to)
         editor_2_2.setCursor(range.from.line, range.from.ch + startTag.length);
       }
@@ -640,7 +640,7 @@
       }
 
       function textSelection_2_3(startTag,endTag) {
-        var range = getSelectedRange_1_3();
+        var range = getSelectedRange_2_3();
         editor_2_3.replaceRange(startTag + editor_2_3.getRange(range.from, range.to) + endTag, range.from, range.to)
         editor_2_3.setCursor(range.from.line, range.from.ch + startTag.length);
       }

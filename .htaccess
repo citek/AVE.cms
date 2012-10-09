@@ -19,7 +19,7 @@ php_value error_reporting E_NONE
 #	php_value post_max_size 20M
 
 
-<FilesMatch "\.(class|functions|inc|modules|templates|templates_c|cache|lib|session)$">
+<FilesMatch "\.(class|functions|inc|modules|templates|cache|lib|session)$">
     Order allow,deny
 </FilesMatch>
 
@@ -44,23 +44,9 @@ php_value error_reporting E_NONE
 
 	RewriteCond %{REQUEST_URI} !^/(class|functions|inc|modules|templates|templates_c|cache)/
 
-	RewriteRule ^(shop|forums|download|guestbook|roadmap)-([0-9]+).html$ index.php?module=$1&page=$2 [QSA,L]
-	RewriteRule ^(shop|forums|download|guestbook|roadmap)-print.html$ index.php?module=$1&print=1 [QSA,L]
-	RewriteRule ^(shop|forums|download|guestbook|roadmap).html$ index.php?module=$1 [QSA,L]
-
-	## Downloads
-	RewriteRule ^download-([0-9]+)-([0-9]+).html$ index.php?module=download&action=showfile&file_id=$1&categ=$2
-	RewriteRule ^download-([0-9]+)-([0-9]+)-print.html$ index.php?module=download&action=showfile&file_id=$1&categ=$2&print=1
-	RewriteRule ^download_file-([0-9]+)-([_a-zA-Z0-9]+).html$ index.php?module=download&action=get_file&file_id=$1&pop=1&cp_theme=$2
-	RewriteRule ^nopay_file-([0-9]+)-([_a-zA-Z0-9]+).html$ index.php?module=download&action=get_nopay_file&file_id=$1&pop=1&cp_theme=$2
-	RewriteRule ^notmine_file-([0-9]+)-([_a-zA-Z0-9]+).html$ index.php?module=download&action=get_notmine_file&file_id=$1&pop=1&cp_theme=$2
-	RewriteRule ^nouserpay_file-([0-9,]+)-([0-9]+)-([0-9]+)-([_a-zA-Z0-9]+).html$ index.php?module=download&action=get_nouserpay_file&diff=$1&val=$2&file_id=$3&pop=1&cp_theme=$4
-	RewriteRule ^download_kategorie-([0-9]+)-([0-9]+)-([0-9]+)-([a-zA-Z0-9-]+)-page([0-9]+)-order([_a-zA-Z0-9]+).html$ index.php?module=download&categ=$1&parent=$2&navop=$3&c=$4&page=$5&orderby=$6
-	RewriteRule ^download_kategorie-([0-9]+)-([0-9]+)-([0-9]+)-([a-zA-Z0-9-]+)-page([0-9]+).html$ index.php?module=download&categ=$1&parent=$2&navop=$3&c=$4&page=$5
-	RewriteRule ^download_kategorie-([0-9]+)-([0-9]+)-([0-9]+)-([a-zA-Z0-9-]+).html$ index.php?module=download&categ=$1&parent=$2&navop=$3&c=$4
-	RewriteRule ^pay-([0-9,]+)-([_a-zA-Z0-9]+).html$ index.php?module=download&action=pay&file_id=$1&pop=0&cp_theme=$2
-	RewriteRule ^toreg-([0-9,]+)-([_a-zA-Z0-9]+).html$ index.php?module=download&action=toreg&file_id=$1&pop=1&cp_theme=$2
-	RewriteRule ^denied-([0-9,]+)-([_a-zA-Z0-9]+).html$ index.php?module=download&action=get_denied&file_id=$1&pop=1&cp_theme=$2
+	RewriteRule ^(shop|forums|guestbook|roadmap)-([0-9]+).html$ index.php?module=$1&page=$2 [QSA,L]
+	RewriteRule ^(shop|forums|guestbook|roadmap)-print.html$ index.php?module=$1&print=1 [QSA,L]
+	RewriteRule ^(shop|forums|guestbook|roadmap).html$ index.php?module=$1 [QSA,L]
 
 	## Shop
 	RewriteRule ^product-([0-9]+)-([0-9]+)-([0-9]+).html$ index.php?module=shop&action=product_detail&product_id=$1&categ=$2&navop=$3 [QSA,L]

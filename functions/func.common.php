@@ -406,8 +406,12 @@ function get_breadcrumb()
  */
 function get_print_link()
 {
+	/*
 	$link = get_redirect_link('print');
 	$link .= (strpos($link, '?')===false ? '?print=1' : '&amp;print=1');
+	*/
+	/* Временное решение */
+	$link = ABS_PATH."index.php?id=".get_current_document_id()."&print=1";
 
 	return $link;
 }
@@ -720,7 +724,7 @@ function reportLog($meldung, $typ = 0, $rub = 0)
 	file_put_contents($logfile,'<? $logdata='.var_export($logdata,true).' ?>');
 }
 
-function get_document_fields($document_id)
+function get_document_fields($document_id,$values=null)
 {
 	global $AVE_DB, $request_documents;
 
@@ -758,6 +762,10 @@ function get_document_fields($document_id)
 		{
 			$row['tpl_req_empty'] = (trim($row['rubric_field_template_request']) == '');
 			$row['tpl_field_empty'] = (trim($row['rubric_field_template']) == '');
+
+			if($values){
+				$row['field_value']=(isset($values[$row['rubric_field_id']]) ? $values[$row['rubric_field_id']] : $row['field_value']);
+			}
 
 			if ($row['field_value'] === '')
 			{

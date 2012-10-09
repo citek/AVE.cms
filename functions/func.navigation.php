@@ -155,7 +155,7 @@ function parse_navigation($navi_id)
 	$navi = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $navi);
 	$navi = str_replace(array("\n","\r"),'',$navi);
 
-	echo $navi;
+	return $navi;
 }
 
 /**
