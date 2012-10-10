@@ -404,22 +404,34 @@ $(document).ready(function(){ldelim}
 		<col>
 		<col width="20">
 		<col width="20">
+		<col width="20">
 		<thead>
 		<tr>
 			<td>{#DOC_REVISSION_DATA#}</td>
 			<td>{#DOC_REVISSION_USER#}</td>
-			<td colspan="2">{#DOC_ACTIONS#}</td>
+			<td colspan="3">{#DOC_ACTIONS#}</td>
 		</tr>
 		</thead>
 		<tbody>
+		{if $document_rev}
 		{foreach from=$document_rev item=document_rev}
 			<tr class="noborder">
 				<td align="center"><span class="date_text dgrey">{$document_rev->doc_revision|date_format:$TIME_FORMAT|pretty_date}</span></td>
 				<td align="center">{$document_rev->user_id}</td>
 				<td><a class="topleftDir icon_sprite ico_look" title="{#DOC_REVISSION_VIEW#}" href="../?id={$document_rev->doc_id}&revission={$document_rev->doc_revision}" target="_blank"></a></td>
 				<td><a class="topleftDir ConfirmRecover icon_sprite ico_copy" title="{#DOC_REVISSION_RECOVER#}" dir="{#DOC_REVISSION_RECOVER#}" name="{#DOC_REVISSION_RECOVER_T#}" href="index.php?do=docs&action=recover&doc_id={$document_rev->doc_id}&revission={$document_rev->doc_revision}&rubric_id={$smarty.request.rubric_id}&cp={$sess}"></a></td>
+				<td><a class="topleftDir ConfirmDelete icon_sprite ico_delete" title="{#DOC_REVISSION_DELETE#}" dir="{#DOC_REVISSION_DELETE#}" name="{#DOC_REVISSION_DELETE_T#}" href="index.php?do=docs&action=recover_del&doc_id={$document_rev->doc_id}&revission={$document_rev->doc_revision}&rubric_id={$smarty.request.rubric_id}&cp={$sess}"></a></td>
 			</tr>
 		{/foreach}
+		{else}
+			<tr>
+				<td colspan="4">
+					<ul class="messages">
+						<li class="highlight yellow">{#DOC_REVISSION_NO_ITEMS#}</li>
+					</ul>
+				</td>
+			</tr>
+		{/if}
 		</tbody>
 	</table>
 	<div class="fix"></div>

@@ -721,6 +721,10 @@ class AVE_Document
 			return $rows;
 		}
 
+	/**
+	 * Метод, предназначенный для востановления ревизии документа
+	 *
+	 */
 	static	function RestoreRevission($document_id,$revision,$rubric_id){
 
 	global $AVE_DB;
@@ -739,9 +743,30 @@ class AVE_Document
 					WHERE document_id='".$document_id."' AND rubric_field_id='".$k."'
 				");
 			}
+			// Сохраняем системное сообщение в журнал
+			reportLog($_SESSION['user_name'] . " - Востановил версию документа (Doc: $document_id Rev: $revision)", 2, 2);
 			return true;
+		}
+
+	/**
+	 * Метод, предназначенный для удаления ревизии документа
+	 *
+	 */
+	static	function DeleteRevission($document_id,$revision,$rubric_id){
+
+	global $AVE_DB;
+
+			$AVE_DB->Query("
+				DELETE
+				FROM " . PREFIX . "_document_rev
+				WHERE doc_id = '" . $document_id . "' AND doc_revision='".$revision."'
+			");
+
+			// Сохраняем системное сообщение в журнал
+			reportLog($_SESSION['user_name'] . " - Удалил версию документа (Doc: $document_id Rev: $revision)", 2, 2);
 			header('Location:index.php?do=docs&action=edit&document_id=' . $document_id . '&rubric_id=' . $rubric_id . '&cp=' . SESSION);
 		}
+
 
 	/**
 	 * Метод, предназначенный для сохранения документа в БД

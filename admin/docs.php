@@ -159,6 +159,15 @@ switch($_REQUEST['action'])
 		}
 		break;
 
+	case 'recover_del':
+		if (check_permission_acp('documents'))
+		{
+			$AVE_Document->DeleteRevission((int)$_REQUEST['doc_id'], (int)$_REQUEST['revission']);
+			header('Location:index.php?do=docs&action=edit&Id=' . (int)$_REQUEST['doc_id'] . '&rubric_id=' . (int)$_REQUEST['rubric_id'] . '&cp=' . SESSION);
+			exit;
+		}
+		break;
+
 	case 'remark':
 		if (check_permission_acp('remarks'))
 		{

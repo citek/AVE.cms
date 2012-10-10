@@ -138,6 +138,10 @@ DOC_REVISSION_USER		 = "Автор"
 DOC_REVISSION_VIEW		 = "Посмотреть версию"
 DOC_REVISSION_RECOVER	 = "Востановить версию"
 DOC_REVISSION_RECOVER_T	 = "Вы уверены, что хотите данную востановить версию?"
+DOC_REVISSION_DELETE	 = "Удалить версию"
+DOC_REVISSION_DELETE_T	 = "Вы уверены, что хотите удалить данную версию?"
+DOC_REVISSION_NO_ITEMS   = "В настоящий момент нет данных"
+
 
 DOC_URL_ERROR_SYMBOL     = "недопустимые символы"
 DOC_URL_ERROR_START      = "начинается c /"
