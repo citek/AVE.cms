@@ -56,6 +56,23 @@ function openFileWin(target,id) {ldelim}
 
 $(document).ready(function(){ldelim}
 
+	$(".ConfirmRecover").click( function(e) {ldelim}
+		e.preventDefault();
+		var href = $(this).attr('href');
+		var title = $(this).attr('dir');
+		var confirm = $(this).attr('name');
+		jConfirm(
+				confirm,
+				title,
+				function(b){ldelim}
+					if (b){ldelim}
+						$.alerts._overlay('show');
+						window.location = href;
+					{rdelim}
+				{rdelim}
+			);
+	{rdelim});
+
 	function check(){ldelim}
 		$.ajax({ldelim}
 			beforeSend: function(){ldelim}
@@ -351,7 +368,7 @@ $(document).ready(function(){ldelim}
 <div class="head"><h5>{#DOC_MAIN_CONTENT#}</h5></div>
 		<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 		<col width="200">
-		<col class="second">
+		<col>
 		<tbody>
 		{foreach from=$document->fields item=document_field}
 			<tr class="noborder">
@@ -380,6 +397,32 @@ $(document).ready(function(){ldelim}
 	<div class="fix"></div>
 </div>
 
-
+<div class="widget first">
+<div class="head"><h5>{#DOC_REVISSION#}</h5></div>
+		<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+		<col>
+		<col>
+		<col width="20">
+		<col width="20">
+		<thead>
+		<tr>
+			<td>{#DOC_REVISSION_DATA#}</td>
+			<td>{#DOC_REVISSION_USER#}</td>
+			<td colspan="2">{#DOC_ACTIONS#}</td>
+		</tr>
+		</thead>
+		<tbody>
+		{foreach from=$document_rev item=document_rev}
+			<tr class="noborder">
+				<td align="center"><span class="date_text dgrey">{$document_rev->doc_revision|date_format:$TIME_FORMAT|pretty_date}</span></td>
+				<td align="center">{$document_rev->user_id}</td>
+				<td><a class="topleftDir icon_sprite ico_look" title="{#DOC_REVISSION_VIEW#}" href="../?id={$document_rev->doc_id}&revission={$document_rev->doc_revision}" target="_blank"></a></td>
+				<td><a class="topleftDir ConfirmRecover icon_sprite ico_copy" title="{#DOC_REVISSION_RECOVER#}" dir="{#DOC_REVISSION_RECOVER#}" name="{#DOC_REVISSION_RECOVER_T#}" href="index.php?do=docs&action=recover&doc_id={$document_rev->doc_id}&revission={$document_rev->doc_revision}&rubric_id={$smarty.request.rubric_id}&cp={$sess}"></a></td>
+			</tr>
+		{/foreach}
+		</tbody>
+	</table>
+	<div class="fix"></div>
+</div>
 
 </form>

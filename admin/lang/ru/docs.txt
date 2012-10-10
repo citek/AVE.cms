@@ -132,6 +132,13 @@ DOC_CHANGE_BUTTON        = "Изменить"
 
 DOC_IN_MENU              = "в меню"
 
+DOC_REVISSION			 = "История изменений"
+DOC_REVISSION_DATA		 = "Дата и время изменения"
+DOC_REVISSION_USER		 = "Автор"
+DOC_REVISSION_VIEW		 = "Посмотреть версию"
+DOC_REVISSION_RECOVER	 = "Востановить версию"
+DOC_REVISSION_RECOVER_T	 = "Вы уверены, что хотите данную востановить версию?"
+
 DOC_URL_ERROR_SYMBOL     = "недопустимые символы"
 DOC_URL_ERROR_START      = "начинается c /"
 DOC_URL_ERROR_END        = "заканчивается на / (при этом суффикс URL начинается на /)"

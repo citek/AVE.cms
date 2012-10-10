@@ -721,15 +721,26 @@ class AVE_Document
 			return $rows;
 		}
 
-	static	function RestoreRevission($document_id,$revision){
-			global $AVE_DB;
-			$res=$AVE_DB->Query("SELECT doc_data FROM ".PREFIX."_document_rev WHERE doc_id='".$document_id."' AND doc_revision='".$revision."' LIMIT 1")->GetCell();
+	static	function RestoreRevission($document_id,$revision,$rubric_id){
+
+	global $AVE_DB;
+
+			$res = $AVE_DB->Query("SELECT doc_data FROM ".PREFIX."_document_rev WHERE doc_id='".$document_id."' AND doc_revision='".$revision."' LIMIT 1")->GetCell();
+
 			if(!$res) return false;
+
 			$data=@unserialize($res);
+
 			foreach($data as $k=>$v){
-				$sql=$AVE_DB->Query("UPDATE ".PREFIX."_document_fields SET field_value='".$v."', field_number_value='".intval($v)."' WHERE document_id='".$document_id." AND rubric_field_id='".$k."'");
+				$sql=$AVE_DB->Query("UPDATE ".PREFIX."_document_fields
+				SET
+					field_value='".$v."',
+					field_number_value='".intval($v)."'
+					WHERE document_id='".$document_id."' AND rubric_field_id='".$k."'
+				");
 			}
 			return true;
+			header('Location:index.php?do=docs&action=edit&document_id=' . $document_id . '&rubric_id=' . $rubric_id . '&cp=' . SESSION);
 		}
 
 	/**
@@ -1258,6 +1269,21 @@ class AVE_Document
 					$document->formaction = 'index.php?do=docs&action=edit&sub=save&Id=' . $document_id . '&cp=' . SESSION;
 
 					if ($document->document_parent != 0) $document->parent = $AVE_DB->Query("SELECT document_title, Id FROM " . PREFIX . "_documents WHERE Id = '".$document->document_parent."' ")->FetchRow();
+
+					$document_rev = array();
+					$sql_rev = $AVE_DB->Query("
+						SELECT *
+						FROM " . PREFIX . "_document_rev
+						WHERE doc_id = '" . $document_id . "'
+					");
+			        // Формируем массив из полученных данных
+			        while ($result = $sql_rev->FetchRow())
+					{
+						$result->user_id = get_username_by_id($result->user_id);
+						array_push($document_rev, $result);
+					}
+
+					$AVE_Template->assign('document_rev', $document_rev);
 
 					$AVE_Template->assign('document', $document);
 
