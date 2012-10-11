@@ -217,14 +217,14 @@ function get_field_bild($field_value,$type,$field_id='',$rubric_field_template='
 				switch ($_SESSION['use_editor']) {
 					case '0': // стандартный редактор
 
-					case '1': // Elrte и Elfinder
-						$field .= "<input class=\"docm finder\" type=\"text\" style=\"width:" . $AVE_Document->_field_width . "\" name=\"feld[" . $field_id . "]\" value=\"" . htmlspecialchars($field_value, ENT_QUOTES) . "\" id=\"img_feld__" . $field_id . "\"/>&nbsp;";
-						$field .= "<span class=\"button basicBtn dialog_images\" rel=\"". $field_id ."\">" . $AVE_Template->get_config_vars('MAIN_OPEN_MEDIAPATH') . "</span>";
-						break;
-
 					case '2':
 						$field .= "<input type=\"text\" style=\"width:" . $AVE_Document->_field_width . "\" name=\"feld[" . $field_id . "]\" value=\"" . htmlspecialchars($field_value, ENT_QUOTES) . "\" id=\"image__" . $field_id . "\" />&nbsp;";
 						$field .= "<input type=\"button\" class=\"basicBtn\" value=\"...\" title=\"" . $AVE_Template->get_config_vars('MAIN_OPEN_MEDIAPATH') . "\" onclick=\"browse_uploads('image__" . $field_id . "');\" />";
+						break;
+
+					case '1': // Elrte и Elfinder
+						$field .= "<input class=\"docm finder\" type=\"text\" style=\"width:" . $AVE_Document->_field_width . "\" name=\"feld[" . $field_id . "]\" value=\"" . htmlspecialchars($field_value, ENT_QUOTES) . "\" id=\"img_feld__" . $field_id . "\"/>&nbsp;";
+						$field .= "<span class=\"button basicBtn dialog_images\" rel=\"". $field_id ."\">" . $AVE_Template->get_config_vars('MAIN_OPEN_MEDIAPATH') . "</span>";
 						break;
 
 					case '3': // CK
