@@ -189,8 +189,8 @@ class Search
 				$modul_search_results = array();
 
 				array_walk($this->_stem_words, create_function('&$val','$val=preg_quote(stripslashes(stripslashes(str_replace("\"","&quot;",$val))),"/");'));
-				$regex_snapshot  = '/.{0,100}[^\s]*' . implode('[^\s]*.{0,100}|.{0,100}[^\s]*', $this->_stem_words) . '[^\s]*.{0,100}/is';
-				$regex_highlight = '/[^\s]*' . implode('[^\s]*|[^\s]*', $this->_stem_words) . '[^\s]*/is';
+				$regex_snapshot  = '/.{0,100}[^\s]*' . implode('[^\s]*.{0,100}|.{0,100}[^\s]*', $this->_stem_words) . '[^\s]*.{0,100}/iu';
+				$regex_highlight = '/[^\s]*' . implode('[^\s]*|[^\s]*', $this->_stem_words) . '[^\s]*/iu';
 
 				$doctime = get_settings('use_doctime')
 					? ("AND document_published <= " . time() . " AND (document_expire = 0 OR document_expire >= " . time() . ")") : '';
@@ -212,6 +212,7 @@ class Search
 					{
 						$row->Text = $row_feld->field_value;
 						$row->Text = strip_tags($row->Text, $this->_allowed_tags);
+						//
 
 						$fo = array();
 						preg_match($regex_snapshot, $row->Text, $fo);

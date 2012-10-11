@@ -6,7 +6,7 @@
  * @package AVE.cms
  * @filesource
  */
- 
+
 /**
  * Обработка условий запроса.
  * Возвращает строку условий в SQL-формате
@@ -55,7 +55,7 @@
 			++$i;
 		}
 	}
-	
+
 	$i=1;
 	$vvv='';
 	while ($row_ak = $sql_ak->FetchRow())
@@ -66,7 +66,7 @@
 
 
 		$val = $row_ak->condition_value;
-		
+
 		if($val>''){
 			$val = addcslashes (str_ireplace("[field]","t$i.field_value",str_ireplace("[numeric_field]","t$i.field_number_value",$val)), "'");
 			if ($i) $from[] = "<?php \$vv=eval2var(' ?>$val<? '); echo \$vv>'' ? \"%%PREFIX%%_document_fields AS t$i,  \" : ''; ?>";
@@ -174,7 +174,7 @@ function request_get_document_field($rubric_id, $document_id, $maxlength = '')
 	if ($maxlength != '')
 	{
 		if ($maxlength == 'more' || $maxlength == 'esc'|| $maxlength == 'img')
-		{	
+		{
 			if($maxlength == 'more')
 			{
 				//$teaser = explode('<a name="more"></a>', $field_value);
@@ -283,7 +283,7 @@ function request_parse($id,$params=Array())
 		$docstatus="AND a.document_status != '0'";
 		$docstatus="AND a.document_status = '1'";
 		if(isset($params['STATUS']))$docstatus="AND a.document_status = '".intval($params['STATUS'])."'";
- 		$doctime = get_settings('use_doctime') 
+ 		$doctime = get_settings('use_doctime')
  		        	? ("AND a.document_published <= UNIX_TIMESTAMP() AND
  		         	(a.document_expire = 0 OR a.document_expire >=UNIX_TIMESTAMP())") : '';
 
@@ -298,7 +298,7 @@ function request_parse($id,$params=Array())
 
 		$other_fields='';
 		$other_tables='';
-		
+
 		$other_fields.=$request_order_fields;
 		$other_tables.=$request_order_tables;
 
@@ -318,7 +318,7 @@ function request_parse($id,$params=Array())
 		}
 
 		if (!empty($AVE_Core->install_modules['comment']->Status)){
-		
+
 				$other_tables.="
 					LEFT JOIN
 						" . PREFIX . "_modul_comment_info AS b
@@ -327,15 +327,15 @@ function request_parse($id,$params=Array())
 				$other_fields.="COUNT(b.document_id) AS nums,
 				";
 				if($params['COMMENT_ORDER']>'')$request_order1=(count(explode(',',$other_fields))-1).' '.$params['COMMENT_ORDER'].',';
-			}		
+			}
 
 			$request_order = addslashes($request_order1 .($request_order2>'' ? ($request_order1 ? $request_order2.',' : $request_order2) : ''). $request_order);
-		
+
 		if ($row_ab->request_show_pagination == 1)
 		{
-			$num = $AVE_DB->Query( eval2var( " ?> 
+			$num = $AVE_DB->Query( eval2var( " ?>
 				SELECT COUNT(*)
-				FROM 
+				FROM
 				".($where_cond['from'] ? $where_cond['from'] : '')."
 				" . PREFIX . "_documents AS a
 				WHERE
@@ -349,8 +349,8 @@ function request_parse($id,$params=Array())
 				" . $doctime . "
 			<?php " ),$ttl,'rub_'.$row_ab->rubric_id)->GetCell();
 
-			$seiten = ceil($num / $limit);
-			if (isset($_REQUEST['apage']) && is_numeric($_REQUEST['apage']) && $_REQUEST['apage'] > $seiten)
+			$num_pages = ceil($num / $limit);
+			if (isset($_REQUEST['apage']) && is_numeric($_REQUEST['apage']) && $_REQUEST['apage'] > $num_pages)
 			{
 				$redirect_link = rewrite_link('index.php?id=' . $AVE_Core->curentdoc->Id
 					. '&amp;doc=' . (empty($AVE_Core->curentdoc->document_alias) ? prepare_url($AVE_Core->curentdoc->document_title) : $AVE_Core->curentdoc->document_alias)
@@ -369,7 +369,7 @@ function request_parse($id,$params=Array())
 
 		$q =  " ?>
 			SELECT
-				". $other_fields ." 
+				". $other_fields ."
 				a.Id,
 				a.document_parent,
 				a.document_title,
@@ -381,7 +381,7 @@ function request_parse($id,$params=Array())
 			FROM
 				".($where_cond['from'] ? $where_cond['from'] : '')."
 				" . PREFIX . "_documents AS a
-			". ($other_tables>'' ? $other_tables : '') . "	
+			". ($other_tables>'' ? $other_tables : '') . "
 			WHERE
 				a.Id != '1'
 			AND a.Id != '" . PAGE_NOT_FOUND_ID . "'
@@ -410,7 +410,7 @@ function request_parse($id,$params=Array())
 		}
 
 		$page_nav   = '';
-		if ($row_ab->request_show_pagination == 1 && $seiten > 1)
+		if ($row_ab->request_show_pagination == 1 && $num_pages > 1)
 		{
 			$page_nav = ' <a class="pnav" href="index.php?id=' . $AVE_Core->curentdoc->Id
 				. '&amp;doc=' . (empty($AVE_Core->curentdoc->document_alias) ? prepare_url($AVE_Core->curentdoc->document_title) : $AVE_Core->curentdoc->document_alias)
@@ -418,8 +418,10 @@ function request_parse($id,$params=Array())
 				. '&amp;apage={s}'
 				. ((isset($_REQUEST['page']) && is_numeric($_REQUEST['page'])) ? '&amp;page=' . $_REQUEST['page'] : '')
 				. '">{t}</a> ';
-			$page_nav = get_pagination($seiten, 'apage', $page_nav, get_settings('navi_box'));
-			$page_nav = rewrite_link($page_nav);
+			$page_nav = get_pagination($num_pages, 'apage', $page_nav, get_settings('navi_box'));
+			//$page_nav = rewrite_link($page_nav);
+			// Костыль
+			$page_nav = str_ireplace('"//"','"/"',str_ireplace('///','/',rewrite_link($page_nav)));
 		}
 
 		$rows = array();
