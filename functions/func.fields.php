@@ -106,8 +106,16 @@ function get_field_smalltext($field_value,$type,$field_id='',$rubric_field_templ
 						$field  = '<a name="' . $field_id . '"></a>';
 						$field .= "<textarea style=\"width:" . $AVE_Document->_textarea_width_small . "; height:" . $AVE_Document->_textarea_height_small . "\"  name=\"feld[" . $field_id . "]\" Id=\"small-editor[" . $field_id . "]\">" . $field_value . "</textarea>";
 						$field  .= $innova[2];
-						break;	
-					}		
+						break;
+
+					case '3': // CKEditor
+						$oCKeditor = new CKeditor();
+						$oCKeditor->returnOutput = true;
+						$oCKeditor->config['toolbar'] = 'Small';
+						$config = array();
+						$field = $oCKeditor->editor('feld[' . $field_id . ']', $field_value, $config);
+						break;
+					}
 				}
 				$res=$field;
 				break;
@@ -147,7 +155,7 @@ function get_field_langtext($field_value,$type,$field_id='',$rubric_field_templa
 					$field .= '<textarea style="width:' . $AVE_Document->_textarea_width . ';height:' . $AVE_Document->_textarea_height . '" name="feld[' . $field_id . ']">' . $field_value . '</textarea>';
 				}
 				else
-				{							
+				{			
 					switch ($_SESSION['use_editor']) {
 					case '0': // стандартный редактор
 						$oFCKeditor = new FCKeditor('feld[' . $field_id . ']') ;
@@ -155,19 +163,28 @@ function get_field_langtext($field_value,$type,$field_id='',$rubric_field_templa
 						$oFCKeditor->Value  = $field_value;
 						$field  = $oFCKeditor->Create($field_id);
 						break;
-						
+
 					case '1': // Elrte и Elfinder 
 						$field  = '<a name="' . $field_id . '"></a>';
 						$field  .='<textarea style="width:' . $AVE_Document->_textarea_width . ';height:' . $AVE_Document->_textarea_height . '" name="feld[' . $field_id . ']" class="editor">' . $field_value . '</textarea></div>';
 						break;
-						
+
 					case '2': // Innova
 						require(BASE_DIR . "/admin/redactor/innova/innova_settings.php");
 						$field  = '<a name="' . $field_id . '"></a>';
 						$field  .='<textarea style="width:' . $AVE_Document->_textarea_width . ';height:' . $AVE_Document->_textarea_height . '" name="feld[' . $field_id . ']" Id="editor[' . $field_id . ']">' . $field_value . '</textarea></div>';
 						$field  .= $innova[1];
-						break;	
-					}					
+						break;
+
+					case '3': // CKEditor
+						$oCKeditor = new CKeditor(); 
+						$oCKeditor->returnOutput = true;
+						$oCKeditor->config['toolbar'] = 'Small';
+						$oCKeditor->config['height'] = 400;
+						$config = array();
+						$field = $oCKeditor->editor('feld[' . $field_id . ']', $field_value, $config);
+						break;
+					}
 				}
 				$res=$field;
 			break;
@@ -199,15 +216,22 @@ function get_field_bild($field_value,$type,$field_id='',$rubric_field_template='
 
 				switch ($_SESSION['use_editor']) {
 					case '0': // стандартный редактор
-					case '2':
-						$field .= "<input type=\"text\" style=\"width:" . $AVE_Document->_field_width . "\" name=\"feld[" . $field_id . "]\" value=\"" . htmlspecialchars($field_value, ENT_QUOTES) . "\" id=\"image__" . $field_id . "\" />&nbsp;";
-						$field .= "<input type=\"button\" class=\"basicBtn\" value=\"...\" title=\"" . $AVE_Template->get_config_vars('MAIN_OPEN_MEDIAPATH') . "\" onclick=\"browse_uploads('image__" . $field_id . "');\" />";
-						break;
 
 					case '1': // Elrte и Elfinder
 						$field .= "<input class=\"docm finder\" type=\"text\" style=\"width:" . $AVE_Document->_field_width . "\" name=\"feld[" . $field_id . "]\" value=\"" . htmlspecialchars($field_value, ENT_QUOTES) . "\" id=\"img_feld__" . $field_id . "\"/>&nbsp;";
 						$field .= "<span class=\"button basicBtn dialog_images\" rel=\"". $field_id ."\">" . $AVE_Template->get_config_vars('MAIN_OPEN_MEDIAPATH') . "</span>";
 						break;
+
+					case '2':
+						$field .= "<input type=\"text\" style=\"width:" . $AVE_Document->_field_width . "\" name=\"feld[" . $field_id . "]\" value=\"" . htmlspecialchars($field_value, ENT_QUOTES) . "\" id=\"image__" . $field_id . "\" />&nbsp;";
+						$field .= "<input type=\"button\" class=\"basicBtn\" value=\"...\" title=\"" . $AVE_Template->get_config_vars('MAIN_OPEN_MEDIAPATH') . "\" onclick=\"browse_uploads('image__" . $field_id . "');\" />";
+						break;
+
+					case '3': // CK
+						$field .= "<input type=\"text\" style=\"width:" . $AVE_Document->_field_width . "\" name=\"feld[" . $field_id . "]\" value=\"" . htmlspecialchars($field_value, ENT_QUOTES) . "\" id=\"image__" . $field_id . "\" />&nbsp;";
+						$field .= "<input type=\"button\" class=\"basicBtn\" value=\"...\" title=\"" . $AVE_Template->get_config_vars('MAIN_OPEN_MEDIAPATH') . "\" onclick=\"browse_uploads('image__" . $field_id . "');\" />";
+						break;
+
 				}
 				$res=$field;
 				break;

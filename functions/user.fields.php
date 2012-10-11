@@ -274,6 +274,14 @@ function get_field_bild_multi($field_value,$type,$field_id='',$rubric_field_temp
 			'<input class=\"docm finder\" type=\"text\" style=\"width:70%;\" name=\"feld[' + field_id + '][]\" value=\"' + field_value + '\" id=\"img_feld__' + field_id +'_' + _id+'\" />&nbsp;'+
 			'<span class=\"basicBtn\" onClick=\"dialog_images($(this))\" rel=\"'+ field_id + '_'+_id+'\">".$AVE_Template->get_config_vars('MAIN_OPEN_MEDIAPATH')."</span>'";
 		break;
+
+		case '3': // стандартный редактор
+		$img_js =
+			"'<img height=\"120px\" id=\"_img_feld__'+field_id+'_'+_id+'\" src=\"'+img_path+'\" alt=\"'+alt+'\" border=\"0\" />' +
+			'<div style=\"display:none\" id=\"span_feld__'+field_id+ '_'+_id+'\">&nbsp;</div>' + (field_value ? '<br />' : '') +
+			'<input type=\"text\" style=\"width:50%;\" name=\"feld[' + field_id + '][]\" value=\"' + field_value + '\" id=\"img_feld__' + field_id +'_' + _id+'\" />&nbsp;'+
+			'<input value=\"".$AVE_Template->get_config_vars('MAIN_OPEN_MEDIAPATH')."\" class=\"basicBtn\" type=\"button\" onclick=\"'+\"cp_imagepop('img_feld__\" + field_id + '_'+_id+\"', '', '', '0');\"+'\" />&nbsp;'";
+		break;
     }
 	$theme_folder =  '/admin/templates/'.DEFAULT_ADMIN_THEME_FOLDER;
 	$jsCode = <<<BLOCK

@@ -19,6 +19,10 @@
 	<script language=JavaScript src='{$ABS_PATH}admin/redactor/innova/scripts/innovaeditor.js'></script>
 {/if}
 
+{if $smarty.session.use_editor == 3}
+	<script type="text/javascript" src="/admin/ckeditor3/ckeditor.js"></script>
+{/if}
+
 <script type="text/javascript">
 {*
 function insertHTML(ed, code) {ldelim}

@@ -17,6 +17,7 @@ if(!defined('ACP'))
 require(BASE_DIR . '/inc/init.php');
 require(BASE_DIR . '/admin/functions/func.admin.common.php');
 require(BASE_DIR . '/admin/editor/fckeditor.php');
+require(BASE_DIR . '/admin/ckeditor3/ckeditor.php');
 
 if (! isset($_SESSION['admin_theme'])) $_SESSION['admin_theme'] = DEFAULT_ADMIN_THEME_FOLDER;
 if (! isset($_SESSION['admin_language']))
