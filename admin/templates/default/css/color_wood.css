@@ -44,7 +44,7 @@ ul.sub_stat li ul li { padding-left: 10px; }
 .widgetS { /*width: 342px;*/ /*width: 100%;*/ margin-top: 40px; border: 1px solid #595959; display: block; background: #fafafa; border-top: none; min-width: 25%; float: left; margin-right: 40px; }
 
 
-.widget .num a.basicNum { background: url(theme_color_wood/numDataBg.png) repeat-x 0 0; border: 1px solid #CE5300; color: #fff; -moz-box-shadow: 0 0 2px #9B3E00; -webkit-box-shadow: 0 0 2px #9B3E00; box-shadow: 0 0 2px #9B3E00;}
+.widget .num a.basicNum { background: transparent url(theme_color_wood/numDataBg.png) repeat-x 0 0; border: 1px solid #CE5300; color: #fff; -moz-box-shadow: 0 0 2px #9B3E00; -webkit-box-shadow: 0 0 2px #9B3E00; box-shadow: 0 0 2px #9B3E00;}
 
 .head { background: url(theme_color_wood/head.png) repeat-x; height: 38px; border-top: 1px solid #353E47; border-bottom: 1px solid #353E47; position: relative; color: #fff; border-top: none;}
 
@@ -123,9 +123,9 @@ div.jGrowl div.jGrowl-notification, div.jGrowl div.jGrowl-closer {background-col
 div.jGrowl div.error { background-color: #FF0000;}
 div.jGrowl div.accept { background-color: #00CC00;}
 
-.tableStatic tbody tr { border-top: 1px solid #ddd;  background: url(theme_color_wood/bg_eeeeee.png);}
-.tableStatic tbody tr:nth-child(even) { background: url(theme_color_wood/bg_fafafa.png); }
-.tableStatic tbody tr:hover { background: url(theme_color_wood/bg_ffebcc.png); }
+.tableStatic tbody tr { border-top: 1px solid #ddd; background: transparent url(theme_color_wood/bg_eeeeee.png);}
+.tableStatic tbody tr:nth-child(even) { background: transparent url(theme_color_wood/bg_fafafa.png); }
+.tableStatic tbody tr:hover { background: transparent url(theme_color_wood/bg_ffebcc.png); }
 
 .rowElem:hover { background: none repeat scroll 0 0 #ffebcc;}
 

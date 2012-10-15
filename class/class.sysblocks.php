@@ -38,11 +38,11 @@ class AVE_SysBlock
 	 */
 	function sys_blockSave($sysblock_id = null)
 	{
-		global $AVE_DB;
+		global $AVE_DB, $AVE_Template;
 
 		if (is_numeric($sysblock_id))
 		{
-			$AVE_DB->Query("
+			$save = $AVE_DB->Query("
 				UPDATE " . PREFIX . "_sysblocks
 				SET
 					sysblock_name = '" . $_POST['sysblock_name'] . "',
@@ -50,8 +50,9 @@ class AVE_SysBlock
 				WHERE
 					id = '" . $sysblock_id . "'
 			");
+
 			// Сохраняем системное сообщение в журнал
-			reportLog($_SESSION['user_name'] . " - Изменил системный блок (" . stripslashes($_POST['sysblock_name']) . ") (id: $sysblock_id)", 2, 2);
+			reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('SYSBLOCK_SQLUPDATE') . " (" . stripslashes($_POST['sysblock_name']) . ") (id: $sysblock_id)", 2, 2);
 		}
 		else
 		{
@@ -66,10 +67,10 @@ class AVE_SysBlock
 					sysblock_created = '" . time() . "'
 			");
 			$sysblock_id = $AVE_DB->Query("SELECT LAST_INSERT_ID(id) FROM " . PREFIX . "_sysblocks ORDER BY id DESC LIMIT 1")->GetCell();
-			// Сохраняем системное сообщение в журнал
-			reportLog($_SESSION['user_name'] . " - Создал системный блок (" . stripslashes($_POST['sysblock_name']) . ") (id: $sysblock_id)", 2, 2);
-		}
 
+			// Сохраняем системное сообщение в журнал
+			reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('SYSBLOCK_SQLNEW') . " (" . stripslashes($_POST['sysblock_name']) . ") (id: $sysblock_id)", 2, 2);
+		}
 		if (!isset($_REQUEST['next_edit'])) {
 			header('Location:index.php?do=sysblocks&cp=' . SESSION);
 		} else {
@@ -122,7 +123,7 @@ class AVE_SysBlock
 	 */
 	function sys_blockDelete($sysblock_id)
 	{
-		global $AVE_DB;
+		global $AVE_DB, $AVE_Template;
 
 		if (is_numeric($sysblock_id))
 		{
@@ -137,8 +138,9 @@ class AVE_SysBlock
 				FROM " . PREFIX . "_sysblocks
 				WHERE id = '" . $sysblock_id . "'
 			");
+
 			// Сохраняем системное сообщение в журнал
-			reportLog($_SESSION['user_name'] . " - Удалил системный блок (" . stripslashes($sql->sysblock_name) . ") (id: $sysblock_id)", 2, 2);
+			reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('SYSBLOCK_SQLDEL') . " (" . stripslashes($sql->sysblock_name) . ") (id: $sysblock_id)", 2, 2);
 		}
 		header('Location:index.php?do=sysblocks&cp=' . SESSION);
 	}

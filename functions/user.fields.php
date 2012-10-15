@@ -8,7 +8,56 @@ function get_field_code($field_value,$type,$field_id='',$rubric_field_template='
 	{
 		case 'edit' :
 				$field  = "<a name=\"" . $field_id . "\"></a>";
+
+				$field  .= "
+	<link rel=\"stylesheet\" href=\"". ABS_PATH ."admin/codemirror/lib/codemirror.css\">
+
+	<script src=\"". ABS_PATH ."admin/codemirror/lib/codemirror.js\" type=\"text/javascript\"></script>
+    <script src=\"". ABS_PATH ."admin/codemirror/mode/xml/xml.js\"></script>
+    <script src=\"". ABS_PATH ."admin/codemirror/mode/javascript/javascript.js\"></script>
+    <script src=\"". ABS_PATH ."admin/codemirror/mode/css/css.js\"></script>
+    <script src=\"". ABS_PATH ."admin/codemirror/mode/clike/clike.js\"></script>
+    <script src=\"". ABS_PATH ."admin/codemirror/mode/php/php.js\"></script>
+
+    <style type=\"text/css\">
+      .activeline {background: #e8f2ff !important;}
+    </style>
+";
+
 				$field .= "<textarea id=\"feld_" . $field_id . "\" style=\"width:" . $AVE_Document->_textarea_width . "; height:" . $AVE_Document->_textarea_height . "\"  name=\"feld[" . $field_id . "]\">" . $field_value . "</textarea>";
+
+$field .= '
+<script type="text/javascript">
+      var editor = CodeMirror.fromTextArea(document.getElementById("feld_' . $field_id . '"), {
+        lineNumbers: true,
+		lineWrapping: true,
+        matchBrackets: true,
+        mode: "application/x-httpd-php",
+        indentUnit: 4,
+        indentWithTabs: true,
+        enterMode: "keep",
+        tabMode: "shift",
+        onChange: function(){editor.save();},
+		onCursorActivity: function() {
+		  editor.setLineClass(hlLine, null, null);
+		  hlLine = editor.setLineClass(editor.getCursor().line, null, "activeline");
+		}
+      });
+
+      function getSelectedRange() {
+        return { from: editor.getCursor(true), to: editor.getCursor(false) };
+      }
+
+      function textSelection(startTag,endTag) {
+        var range = getSelectedRange();
+        editor.replaceRange(startTag + editor.getRange(range.from, range.to) + endTag, range.from, range.to)
+        editor.setCursor(range.from.line, range.from.ch + startTag.length);
+      }
+
+	  var hlLine = editor.setLineClass(0, "activeline");
+</script>
+';
+
 				$res=$field;
 			break;
 

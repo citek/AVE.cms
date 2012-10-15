@@ -132,7 +132,7 @@
 				{if $smarty.request.action=='edit'}
 					<input type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#SYSBLOCK_SAVEDIT_NEXT#}" />
 				{else}
-					<input type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#SYSBLOCK_SAVE_NEXT#}" />
+					<input type="submit" class="blackBtn" name="next_edit" value="{#SYSBLOCK_SAVE_NEXT#}" />
 				{/if}
 
 	<div class="fix"></div>
@@ -144,7 +144,7 @@
 <script language="javascript">
 
     var sett_options = {ldelim}
-		url: 'index.php?do=sysbloks&action=save&cp={$sess}',
+		url: 'index.php?do=sysblocks&action=save&cp={$sess}',
 		beforeSubmit: Request,
         success: Response,
 		error: Error

@@ -133,7 +133,7 @@ class AVE_Navigation
 				");
 
 				// Сохраняем системное сообщение в журнал
-                reportLog($_SESSION['user_name'] . " - создал меню навигации (" . stripslashes($navi_titel) . ")", 2, 2);
+                reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('NAVI_REPORT_NEW') . " (" . stripslashes($navi_titel) . ")", 2, 2);
 
 				// Выполянем переход к списку меню навигаций
                 header('Location:index.php?do=navigation&cp=' . SESSION);
@@ -207,7 +207,7 @@ class AVE_Navigation
 				");
 
 				// Сохраняем системное сообщение в журнал
-                reportLog($_SESSION['user_name'] . ' - изменил шаблон меню навигации (' . stripslashes($_POST['navi_titel']) . ')', 2, 2);
+                reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('NAVI_REPORT_EDIT') . " (" . stripslashes($_POST['navi_titel']) . ')', 2, 2);
 
 					// В противном случае выполняем переход к списку навигаций
 			      if (!$_REQUEST['next_edit']) {
@@ -254,7 +254,7 @@ class AVE_Navigation
 					INTO " . PREFIX . "_navigation
 					SET
 						id       = '',
-						navi_titel    = '" . addslashes($row->navi_titel . ' ' . $AVE_Template->get_config_vars('CopyT')) . "',
+						navi_titel    = '" . addslashes((empty($_REQUEST['navi_titel']) ? $row->navi_titel : $_REQUEST['navi_titel'])) . "',
 						navi_level1   = '" . addslashes($row->navi_level1) . "',
 						navi_level1active  = '" . addslashes($row->navi_level1active) . "',
 						navi_level2   = '" . addslashes($row->navi_level2) . "',
@@ -275,7 +275,7 @@ class AVE_Navigation
 
 
                 // Сохраняем системное сообщение в журнал
-                reportLog($_SESSION['user_name'] . " - создал копию меню навигации (" . $row->navi_titel . ")", 2, 2);
+                reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('NAVI_REPORT_COPY') . " (" . (empty($_REQUEST['navi_titel']) ? $row->navi_titel : $_REQUEST['navi_titel']) . ")", 2, 2);
 			}
 		}
 
@@ -298,13 +298,20 @@ class AVE_Navigation
 		// Если id меню числовой и это не первое меню (id не 1)
         if (is_numeric($navigation_id) && $navigation_id != 1)
 		{
+
+			 $sql= $AVE_DB->Query("
+				SELECT *
+				FROM " . PREFIX . "_navigation
+				WHERE id = '" . $navigation_id . "'
+			")->FetchRow();
+
 			// Выполняем запрос к БД на удаление общей информации и шаблона оформления меню
             $AVE_DB->Query("DELETE FROM " . PREFIX . "_navigation WHERE id = '" . $navigation_id . "'");
 			// Выполняем запрос к БД на удаление всех пунктов для данного меню
             $AVE_DB->Query("DELETE FROM " . PREFIX . "_navigation_items WHERE navi_id = '" . $navigation_id . "'");
 
             // Сохраняем системное сообщение в журнал
-            reportLog($_SESSION['user_name'] . " - удалил меню навигации (" . $navigation_id . ")", 2, 2);
+            reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('NAVI_REPORT_DEL') . " (" . stripslashes($sql->navi_titel) . ") (id: $navigation_id)", 2, 2);
 		}
 
 		// Выполянем переход к списку меню навигаций
@@ -496,7 +503,7 @@ class AVE_Navigation
 	 */
 	function navigationItemEdit($nav_id)
 	{
-		global $AVE_DB;
+		global $AVE_DB, $AVE_Template;
 
 		$nav_id = (int)$nav_id;
 
@@ -519,19 +526,6 @@ class AVE_Navigation
 				$link_url = '';
 				$matches = array();
 
-/****************************************************************/
-/****************************************************************/
-				//рубрики  и галлереи
-				//$link_url = $Gal_Supp->save_link($_POST['navi_item_link'][$id]);
-				/*
-				//рубрики статьи
-				preg_match('/^index\.php\?artrubid=(\d+)$/', trim($_POST['navi_item_link'][$id]), $matches);
-				//доделать
-
-				*/
-/****************************************************************/
-/****************************************************************/
-				
 				// документы	
                 preg_match('/^index\.php\?id=(\d+)$/', trim($_POST['navi_item_link'][$id]), $matches);
                 if (isset($matches[1]))
@@ -587,7 +581,7 @@ class AVE_Navigation
 			");
 
             // Сохраняем системное сообщение в журнал
-			reportLog($_SESSION['user_name'] . " - добавил пункт меню навигации (" . stripslashes($_POST['Titel_N'][0]) . ") - на первый уровень", 2, 2);
+			reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('NAVI_REPORT_ADDIT') . " (" . stripslashes($_POST['Titel_N'][0]) . ") - ". $AVE_Template->get_config_vars('NAVI_REPORT_FLEV'), 2, 2);
 		}
 
 		// Обрабатываем данные с целью добавления пунктов меню второго уровня
@@ -619,7 +613,7 @@ class AVE_Navigation
 				");
 
                 // Сохраняем системное сообщение в журнал
-				reportLog($_SESSION['user_name'] . " - добавил пункт меню навигации (" . stripslashes($title) . ") - второй уровень", 2, 2);
+				reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('NAVI_REPORT_ADDIT') . " (" . stripslashes($_POST['Titel_N'][0]) . ") - ". $AVE_Template->get_config_vars('NAVI_REPORT_SLEV'), 2, 2);
 			}
 		}
 
@@ -651,7 +645,7 @@ class AVE_Navigation
 				");
 
 				// Сохраняем системное сообщение в журнал
-                reportLog($_SESSION['user_name'] . " - добавил пункт меню навигации (" . stripslashes($title) . ") - третий уровень", 2, 2);
+                reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('NAVI_REPORT_ADDIT') . " (" . stripslashes($_POST['Titel_N'][0]) . ") - ". $AVE_Template->get_config_vars('NAVI_REPORT_TLEV'), 2, 2);
 			}
 		}
 
@@ -676,28 +670,37 @@ class AVE_Navigation
 					// Если данный пункт имеет подпункты, тогда
                     if ($num==1)
 					{
+		                $sql = $AVE_DB->Query("
+							SELECT *
+							FROM " . PREFIX . "_navigation_items
+							WHERE Id = '" . $del_id . "'
+							LIMIT 1
+						")->FetchRow();
 						// Выполняем запрос к БД и деактивируем пункт меню
                         $AVE_DB->Query("
 							UPDATE " . PREFIX . "_navigation_items
 							SET navi_item_status = '0'
 							WHERE Id = '" . $del_id . "'
 						");
-
 						// Сохраняем системное сообщение в журнал
-                        reportLog($_SESSION['user_name'] . " - деактивировал пункт меню навигации (" . $del_id . ")", 2, 2);
+                        reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('NAVI_REPORT_DEACT') . " (" . stripslashes($sql->title) . ") (id: $del_id)", 2, 2);
 					}
 					else
 					{ // В противном случае, если данный пункт не имеет подпунктов, тогда
-
+		                $sql = $AVE_DB->Query("
+							SELECT *
+							FROM " . PREFIX . "_navigation_items
+							WHERE Id = '" . $del_id . "'
+							LIMIT 1
+						")->FetchRow();
                         // Выполняем запрос к БД и удаляем помеченный пункт
                         $AVE_DB->Query("
 							DELETE
 							FROM " . PREFIX . "_navigation_items
 							WHERE Id = '" . $del_id . "'
 						");
-
                         // Сохраняем системное сообщение в журнал
-						reportLog($_SESSION['user_name'] . " - удалил пункт меню навигации (" . $del_id . ")", 2, 2);
+						reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('NAVI_REPORT_DELIT') . " (" . stripslashes($sql->title) . ") (id: $del_id)", 2, 2);
 					}
 				}
 			}
@@ -719,7 +722,7 @@ class AVE_Navigation
 	 */
 	function navigationItemDelete($document_id)
 	{
-		global $AVE_DB;
+		global $AVE_DB, $AVE_Template;
 
 		$document_id = (int)$document_id;
 
@@ -751,7 +754,7 @@ class AVE_Navigation
 				");
 
 				// Сохраняем системное сообщение в журнал
-                reportLog($_SESSION['user_name'] . " - деактивировал пункт меню навигации (" . $row->Id . ")", 2, 2);
+                reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('NAVI_REPORT_DEACT') . " (id: $row->Id)", 2, 2);
 			}
 			else
 			{ // В противном случае, если данный пункт не имеет подпунктов, тогда
@@ -764,7 +767,7 @@ class AVE_Navigation
 				");
 
                 // Сохраняем системное сообщение в журнал
-				reportLog($_SESSION['user_name'] . " - удалил пункт меню навигации (" . $row->Id . ")", 2, 2);
+				reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('NAVI_REPORT_DELIT') . " (id: $row->Id)", 2, 2);
 			}
 		}
 	}
@@ -779,7 +782,7 @@ class AVE_Navigation
 	 */
 	function navigationItemStatusOn($document_id)
 	{
-		global $AVE_DB;
+		global $AVE_DB, $AVE_Template;
 
 		if (!is_numeric($document_id)) return;
 
@@ -801,7 +804,7 @@ class AVE_Navigation
 			");
 
 			// Сохраняем системное сообщение в журнал
-            reportLog($_SESSION['user_name'] . " - активировал пункт меню навигации (" . $row->Id . ")", 2, 2);
+            reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('NAVI_REPORT_ACT') . " (id: $row->Id)", 2, 2);
 		}
 	}
 
@@ -813,7 +816,7 @@ class AVE_Navigation
 	 */
 	function navigationItemStatusOff($document_id)
 	{
-		global $AVE_DB;
+		global $AVE_DB, $AVE_Template;
 
 		if (!is_numeric($document_id)) return;
 
@@ -835,7 +838,8 @@ class AVE_Navigation
 			");
 
 			// Сохраняем системное сообщение в журнал
-            reportLog($_SESSION['user_name'] . " - деактивировал пункт меню навигации (" . $row->Id . ")", 2, 2);
+            reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('NAVI_REPORT_DEACT') . " (id: $row->Id)", 2, 2);
+
 		}
 	}
 }
