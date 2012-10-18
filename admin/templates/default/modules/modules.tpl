@@ -141,14 +141,16 @@ $(document).ready(function(){ldelim}
 	{/foreach}
 
 	{if $permission_modules_admin}
-	<div class="rowElem">
-		<input type="submit" class="basicBtn" value="{#MODULES_BUTTON_SAVE#}" />
-	</div>
-	</form>
+		<tr>
+			<td colspan="8"><input type="submit" class="basicBtn" value="{#MODULES_BUTTON_SAVE#}" /></td>
+		</tr>
 	{/if}
 
 	</tbody>
 </table>
+	{if $permission_modules_admin}
+		</form>
+	{/if}
 {else}
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 	<thead>
