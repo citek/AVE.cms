@@ -120,14 +120,14 @@ class AVE_User
 		else
 		{
 			$email_exist = $AVE_DB->Query("
-				SELECT 1
+				SELECT *
 				FROM " . PREFIX . "_users
 				WHERE email != '" . $_POST['Email_Old'] . "'
 				AND email = '" . $_POST['email'] . "'
 				" . ($new ? "AND email != '" . $_SESSION['user_email'] . "'" : '') . "
 				LIMIT 1
 			")->NumRows();
-			if ($email_exist)
+			if ($email_exist==1)
 			{
 				$errors[] = @$AVE_Template->get_config_vars('USER_EMAIL_EXIST');
 			}
@@ -433,7 +433,7 @@ class AVE_User
 
 		if ($num > $this->_limit)
 		{
-			$page_nav = '<li><a href="index.php?do=user' . $status_navi . '&page={s}&amp;cp=' . SESSION . $user_group_navi . $query_navi . '">{t}</a></li>';
+			$page_nav = '<li><a href="index.php?do=user' . $status_navi . '&page={s}&cp=' . SESSION . $user_group_navi . $query_navi . '">{t}</a></li>';
 			$page_nav = get_pagination(ceil($num/$this->_limit), 'page', $page_nav);
 			$AVE_Template->assign('page_nav', $page_nav);
 		}
@@ -455,7 +455,7 @@ class AVE_User
 			case '':
 				$AVE_Template->assign('available_countries', get_country_list(1));
 				$AVE_Template->assign('ugroups', $this->userGroupListGet(2));
-				$AVE_Template->assign('formaction', 'index.php?do=user&amp;action=new&amp;sub=save&amp;cp=' . SESSION);
+				$AVE_Template->assign('formaction', 'index.php?do=user&action=new&sub=save&cp=' . SESSION);
 				$AVE_Template->assign('content', $AVE_Template->fetch('user/form.tpl'));
 				break;
 
@@ -466,7 +466,7 @@ class AVE_User
 					$AVE_Template->assign('errors', $errors);
 					$AVE_Template->assign('available_countries', get_country_list(1));
 					$AVE_Template->assign('ugroups', $this->userGroupListGet(2));
-					$AVE_Template->assign('formaction', 'index.php?do=user&amp;action=new&amp;sub=save&amp;cp=' . SESSION);
+					$AVE_Template->assign('formaction', 'index.php?do=user&action=new&sub=save&cp=' . SESSION);
 					$AVE_Template->assign('content', $AVE_Template->fetch('user/form.tpl'));
 				}
 				else
@@ -507,13 +507,13 @@ class AVE_User
 					$message = str_replace('%PASSWORD%', $_POST['password'], $message);
 					$message = str_replace('%EMAIL%', $_POST['email'], $message);
 					$message = str_replace('%EMAILSIGNATURE%', get_settings('mail_signature'), $message);
-
+/*
 					send_mail(
 						$_POST['email'],
 						$message,
 						$AVE_Template->get_config_vars('USER_MAIL_SUBJECT')
 					);
-
+*/
 					reportLog($_SESSION['user_name'] . ' - Добавил пользователя (' . stripslashes($_POST['user_name']) . ')', 2, 2);
 
 					header('Location:index.php?do=user&cp=' . SESSION);

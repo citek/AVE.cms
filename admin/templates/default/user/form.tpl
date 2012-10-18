@@ -69,7 +69,10 @@ function mail_status(){
 
 
 <form method="post" action="{$formaction}" enctype="multipart/form-data" class="mainForm">
-<input name="Email_Old" type="hidden" value="{$smarty.request.email|stripslashes|default:$row->email|escape}" />
+
+{if $smarty.request.action=='edit'}
+	<input name="Email_Old" type="hidden" value="{$smarty.request.email|stripslashes|default:$row->email|escape}" />
+{/if}
 
 <fieldset>
 

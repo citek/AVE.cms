@@ -24,3 +24,5 @@ MODULES_ERROR          = "Возникла ошибка при загрузке 
 MODULES_INSTALLED      = "Установленные модули:"
 MODULES_NOT_INSTALLED  = "Неустановленные модули:"
 MODULES_SETUP		   = "Перейти к управлению модулем"
+MODULES_NO_INSTALL     = "<strong>Сообщение:</strong><br />Нет установленных модулей."
+MODULES_NOT_INSTALL    = "<strong>Сообщение:</strong><br />Нет неустановленных модулей."

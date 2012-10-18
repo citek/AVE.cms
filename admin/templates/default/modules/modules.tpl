@@ -63,6 +63,7 @@ $(document).ready(function(){ldelim}
 	<form method="post" action="index.php?do=modules&action=quicksave&cp={$sess}" class="mainForm">
 {/if}
 
+{if $installed_modules}
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 	<thead>
 		<tr>
@@ -138,15 +139,40 @@ $(document).ready(function(){ldelim}
 			</tr>
 		{/if}
 	{/foreach}
+
+	{if $permission_modules_admin}
+	<div class="rowElem">
+		<input type="submit" class="basicBtn" value="{#MODULES_BUTTON_SAVE#}" />
+	</div>
+	</form>
+	{/if}
+
 	</tbody>
 </table>
+{else}
+<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+	<thead>
+		<tr>
+			<td width="30">?</td>
+			<td>{#MODULES_NAME#}</td>
+			<td width="200">{#MODULES_TEMPLATE#}</td>
+			<td width="150">{#MODULES_SYSTEM_TAG#}</td>
+			<td width="50">{#MODULES_VERSION#}</td>
+            <td width="150">{#MODULES_ACTIONS#}</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+		<td colspan="6">
+        <ul class="messages">
+            <li class="highlight yellow">{#MODULES_NO_INSTALL#}</li>
+        </ul>
+        </td>
+		</tr>
+	</tbody>
+</table>
+{/if}
 
-		{if $permission_modules_admin}
-		<div class="rowElem">
-			<input type="submit" class="basicBtn" value="{#MODULES_BUTTON_SAVE#}" />
-		</div>
-		</form>
-		{/if}
 
 </div>
 
@@ -218,7 +244,7 @@ $(document).ready(function(){ldelim}
 		<tr>
 		<td colspan="6">
         <ul class="messages">
-            <li class="highlight yellow"><strong>Сообщение:</strong><br />В системе нет неустановленных модулей.</li>
+            <li class="highlight yellow">{#MODULES_NOT_INSTALL#}</li>
         </ul>
         </td>
 		</tr>

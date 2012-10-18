@@ -39,7 +39,7 @@ $(document).ready(function(){ldelim}
 <div class="widget first">
 	<div class="head closed active"><h5>{#MAIN_SEARCH_USERS#}</h5></div>
 	<div style="display: block;">
-<form action="index.php?do=user&amp;cp={$sess}" method="post" class="mainForm">
+<form action="index.php?do=user&cp={$sess}" method="post" class="mainForm">
 
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 	<thead>
