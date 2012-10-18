@@ -82,7 +82,7 @@ ul.tabs li a:hover { color: #fff; }
 
 .tableStatic tbody tr { border-top: 1px solid #DCE7EF; background: #F7F9FC url(theme_color_blue/bg_f7f9fc.png);}
 .tableStatic tbody tr:nth-child(even) { background: transparent url(theme_color_blue/bg_ffffff.png); }
-.tableStatic tbody tr:hover { background-color: #FFFFD4; }
+.tableStatic tbody tr:hover { background: #FFFFD4 url(theme_color_blue/bg_ffffd4.png); }
 
 .tableStatic tbody td { border-left: 1px solid #DCE7EF; padding: 6px 10px; vertical-align: middle; }
 
