@@ -715,7 +715,7 @@ class AVE_Document
 			SET
 				doc_id   ='" . $document_id . "',
 				doc_revision ='". $dtime . "',
-				doc_data   ='" . serialize(addslashes($rows)) . "',
+				doc_data   ='" . addslashes(serialize($rows)) . "',
 				user_id ='".$_SESSION['user_id']."'
 			");
 			return $rows;

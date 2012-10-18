@@ -7,7 +7,7 @@
  */
 define('APP_NAME', 'AVE.cms');
 define('APP_VERSION', '3.0RC1');
-define('APP_INFO', '&copy; 2007-2012 <a target="_blank" href="http://www.ave-cms.ru/">Ave-Cms.ru.Ru</a>');
+define('APP_INFO', '&copy; 2007-2012 <a target="_blank" href="http://www.ave-cms.ru/">Ave-Cms.Ru</a>');
 
 $GLOBALS['CMS_CONFIG']['IDS_LIB'] = array('DESCR' =>'Использовать систему обнаружения вторжений IDS для параноиков<br/>(существенно снижает производительность)','default'=>false,'TYPE'=>'bool','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['REWRITE_MODE'] = array('DESCR' =>'Использовать ЧПУ Адреса вида index.php будут преобразованы в /home/','default'=>true,'TYPE'=>'bool','VARIANT'=>'');

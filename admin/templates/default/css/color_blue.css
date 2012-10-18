@@ -1,16 +1,21 @@
-body { background: #eceeef url(../images/backgrounds/pat1.png) repeat left top; }
+body { background: #E0E3ED; }
 
 /* ==========  General styles ========== */
 .wrapper { margin: 0 3%; clear: both; }
 .img { border: 1px solid #d5d5d5; }
-
+a { color: #0C6EB3;}
 /* ===== Header ===== */
+.fixed { position: fixed; background: #000; width: 100%; color: #eeeeee; border-bottom: 1px solid #000; z-index: 999; }
 .logo .box{ width: 200px; height: 64px; display: block; background: url(theme_color_blue/loginLogo.png) no-repeat; }
 
 /* ===== Top navigation ===== */
 .userNav .lastNav { width: 2px; height: 36px; background: url(theme_color_blue/navSep.png) repeat-y; position: absolute; top: 0; right: 0; }
 .userNav ul li ul li:hover { background: url(theme_color_blue/titleBg.png) repeat-x; background-position: 0 -39px; }
 .userNav ul li ul li a.active {background: url(theme_color_blue/titleBg.png) repeat-x; background-position: 0 -39px; color: #fff;}
+
+.leftNav ul li a { color: #fafafa; text-shadow: 0 1px 0 #484848; font-size: 14px; display: block; background: url(../images/titleBg.png) repeat-x 0 0; border: 1px solid #484848; margin-top: 1px; text-decoration: none; }
+.leftNav ul li a:hover { background-position: 0 -78px; border: 1px solid #484848; }
+#leftNav_show #toggle-LeftMenu span{ background-image: url(theme_color_blue/left_menu_show.png); }
 
 /* Left navigation subnav */
 ul.sub { border: 1px solid #d5d5d5; border-top: none; background: url(../images/leftNavSub.png) repeat; }
@@ -30,7 +35,7 @@ ul.sub_stat li ul { border: none; border-top: 1px solid #c9c9c9; }
 ul.sub_stat li ul li { padding-left: 10px; }
 
 /* ===== Right side content ===== */
-.widget { /*width: 342px;*/ /*width: 100%;*/ margin-top: 40px; border: 1px solid #898989; display: block; background: #fff; clear: both; }
+.widget { /*width: 342px;*/ /*width: 100%;*/ margin-top: 40px; border: 1px solid #484848; display: block; background: #fff; clear: both; }
 .widgetS { /*width: 342px;*/ /*width: 100%;*/ margin-top: 40px; border: 1px solid #595959; display: block; background: #fafafa; border-top: none; min-width: 25%; float: left; margin-right: 40px; }
 
 
@@ -60,7 +65,7 @@ ul.sub_stat li ul li { padding-left: 10px; }
 #popup_message input[type=text] { background: #FCFCFC; border: 1px solid #D1D1D1; padding: 5px; width: 258px; }
 #popup_prompt { margin: .5em 0em; }
 
-.breadCrumbHolder.module { border: solid 1px #ddd; background: #fff; margin-top: 20px;}
+.breadCrumbHolder.module { border: solid 1px #DCE7EF; background: #fff; margin-top: 20px;}
 
 /* ===== Growl notifications ===== */
 div.jGrowl div.error { background-color: #FF0000;}
@@ -75,9 +80,13 @@ ul.tabs li a:hover { color: #fff; }
 .tabsRight { position: relative; }
 .tabsRight ul.tabs { float: right; background: url(theme_color_blue/head.png) repeat-x; height: 38px; border-bottom: 1px solid #595959; position: absolute; top: 0; right: 0; }
 
-.tableStatic tbody tr { border-top: 1px solid #ddd; background: transparent url(theme_color_wood/bg_eeeeee.png);}
-.tableStatic tbody tr:nth-child(even) { background: transparent url(theme_color_wood/bg_fafafa.png); }
-.tableStatic tbody tr:hover { background-color: #99CFEA; }
+.tableStatic tbody tr { border-top: 1px solid #DCE7EF; background: #F7F9FC url(theme_color_blue/bg_f7f9fc.png);}
+.tableStatic tbody tr:nth-child(even) { background: transparent url(theme_color_blue/bg_ffffff.png); }
+.tableStatic tbody tr:hover { background-color: #FFFFD4; }
+
+.tableStatic tbody td { border-left: 1px solid #DCE7EF; padding: 6px 10px; vertical-align: middle; }
+
+.rowElem:hover {background: none repeat scroll 0 0 #FFFFD4;}
 
 /* ===== Footer ===== */
 #footer { clear: both; /*height: 36px;*/ background: #000; width: 100%; color: #eeeeee; margin-top: 42px; position: absolute; bottom: 0; }

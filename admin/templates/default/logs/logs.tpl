@@ -42,6 +42,10 @@ $(document).ready(function(){ldelim}
 <div class="widget first">
         	<div class="head"><h5 class="iFrames">{#LOGS_TITLE#}</h5></div>
             <table cellpadding="0" cellspacing="0" width="100%" class="display" id="dinamTable">
+                <col width="5%">
+                <col width="10%">
+                <col width="15%">
+                <col width="70%">
             	<thead>
                 	<tr>
                         <th width="5%">{#LOGS_ID#}</th>
