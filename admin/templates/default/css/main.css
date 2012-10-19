@@ -747,3 +747,4 @@ li.plupload_droptext { background: transparent; text-align: center; vertical-ali
 
 
 .code { background-color: #e8f2ff; color: rgba(0, 0, 0, 0.75); padding: 1px 3px; }
+.code_red { background-color: #ff0000; color: rgba(255, 255, 255, 0.75); padding: 1px 5px; border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px;}

@@ -375,7 +375,7 @@ $(document).ready(function(){ldelim}
 		<col>
 		<tbody>
 		{foreach from=$document->fields item=document_field}
-			<tr class="noborder">
+			<tr>
 				<td><strong>{$document_field->rubric_field_title|escape}</strong></td>
 				<td colspan="2">{$document_field->Feld}</td>
 			</tr>
@@ -419,7 +419,7 @@ $(document).ready(function(){ldelim}
 		<tbody>
 		{if $document_rev}
 		{foreach from=$document_rev item=document_rev}
-			<tr class="noborder">
+			<tr>
 				<td align="center"><span class="date_text dgrey">{$document_rev->doc_revision|date_format:$TIME_FORMAT|pretty_date}</span></td>
 				<td align="center">{$document_rev->user_id}</td>
 				<td><a class="topleftDir icon_sprite ico_look" title="{#DOC_REVISSION_VIEW#}" href="../?id={$document_rev->doc_id}&revission={$document_rev->doc_revision}" target="_blank"></a></td>

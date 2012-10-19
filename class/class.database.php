@@ -325,9 +325,9 @@ class AVE_DB
 			{
 				$function = $call['class'] . "->$function";
 			}
-			$caller[] = (isset($call['file']) ? 'FILE: ' . $call['file'] . ' ' : '')
-						. 'FUNCTION: ' . $function
-						. (isset($call['line']) ? ' LINE: ' . $call['line'] : '');
+			$caller[] = (isset($call['file']) ? '<strong>FILE:</strong> ' . $call['file'] . ' ' : '')
+						. '<br /><strong>FUNCTION:</strong> ' . $function
+						. (isset($call['line']) ? ' <br /><strong>LINE:</strong> ' . $call['line'] : '');
 		}
 
 		return implode(', ', $caller);
@@ -350,10 +350,10 @@ class AVE_DB
 		{
 			$my_error = mysqli_error($this->_handle);
 
-			reportLog('SQL ERROR: ' . $my_error . PHP_EOL
-					. "\t\tQUERY: " . stripslashes($query) . PHP_EOL
-					. "\t\t"        . $this->get_caller() . PHP_EOL
-					. "\t\tURL: "   . HOST . $_SERVER['SCRIPT_NAME']
+			reportLog('<strong class="code_red">SQL ERROR:</strong> ' . $my_error . PHP_EOL
+					. "<br /><strong class=\"code\">QUERY:</strong> " . stripslashes($query) . PHP_EOL
+					. "<br />"        . $this->get_caller() . PHP_EOL
+					. "<br /><strong class=\"code\">URL:</strong> "   . HOST . $_SERVER['SCRIPT_NAME']
 						            . '?' . $_SERVER['QUERY_STRING'] . PHP_EOL
 			);
 

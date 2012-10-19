@@ -127,7 +127,7 @@ div.jGrowl div.accept { background-color: #00CC00;}
 .tableStatic tbody tr:nth-child(even) { background: transparent url(theme_color_wood/bg_fafafa.png); }
 .tableStatic tbody tr:hover { background: transparent url(theme_color_wood/bg_ffebcc.png); }
 
-.rowElem:hover { background: none repeat scroll 0 0 #ffebcc;}
+.rowElem:hover { background: transparent url(theme_color_wood/bg_ffebcc.png);}
 
 
 /* ===== Tabs ===== */

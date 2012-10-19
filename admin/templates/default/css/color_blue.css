@@ -93,11 +93,7 @@ ul.tabs li a:hover { color: #fff; }
 /* ===== Footer ===== */
 #footer { clear: both; /*height: 36px;*/ background: #000; width: 100%; color: #eeeeee; margin-top: 42px; position: absolute; bottom: 0; }
 
-.code {
-	background-color: #FEE9CC;
-	color: rgba(0, 0, 0, 0.75);
-	padding: 1px 3px;
-}
+.code { background-color: #E1E7ED; padding: 1px 5px; border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px;}
 
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { background: url(theme_color_blue/titleBg.png) repeat-x 0 -39px; font-weight: normal; color: #fff; }
 .ui-datepicker .ui-datepicker-header { position:relative; padding:.2em 0; background: url(theme_color_blue/titleBg.png) repeat-x 0 -39px; }

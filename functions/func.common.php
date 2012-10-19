@@ -719,7 +719,7 @@ function reportLog($meldung, $typ = 0, $rub = 0)
 	if(file_exists($logfile))
 		include($logfile);
 	$logdata[]=array('log_time' =>time(),'log_ip'=>$_SERVER['REMOTE_ADDR'],'log_url'=>$_SERVER['QUERY_STRING'],'log_text'=>$meldung,'log_type'=>(int)$typ,'log_rubric'=>(int)$rub);
-	$messlimit=500;
+	$messlimit=1000;
 	$logdata=array_slice($logdata,-1*$messlimit);
 	file_put_contents($logfile,'<? $logdata='.var_export($logdata,true).' ?>');
 }
