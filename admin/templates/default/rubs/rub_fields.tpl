@@ -289,13 +289,13 @@ $(document).ready(function(){ldelim}
 	<div style="display: block;">
 	<form id="rubperm" action="index.php?do=rubs&amp;action=edit&amp;Id={$smarty.request.Id|escape}&amp;cp={$sess}" method="post" class="mainForm">
 	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
-		<col width="10%">
-		<col width="15%">
-		<col width="15%">
-		<col width="15%">
-		<col width="15%">
-		<col width="15%">
-		<col width="15%">
+		<col width="28%">
+		<col width="12%">
+		<col width="12%">
+		<col width="12%">
+		<col width="12%">
+		<col width="12%">
+		<col width="12%">
 		<thead>
 		<tr>
 			<td>{#RUBRIK_USER_GROUP#}</td>

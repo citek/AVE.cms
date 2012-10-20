@@ -429,7 +429,7 @@ $(document).ready(function(){ldelim}
 		{/foreach}
 		{else}
 			<tr>
-				<td colspan="4">
+				<td colspan="5">
 					<ul class="messages">
 						<li class="highlight yellow">{#DOC_REVISSION_NO_ITEMS#}</li>
 					</ul>
