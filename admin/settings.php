@@ -75,6 +75,11 @@ switch($_REQUEST['action'])
 					if (isset($_REQUEST['sessionClear'])) $AVE_Template->sessionClear();
 					exit;
 
+				case 'clearthumb':
+					$thumb_dirs = bfglob(BASE_DIR . '/' . UPLOAD_DIR . '/', THUMBNAIL_DIR, GLOB_NOSORT+GLOB_ONLYDIR, -1);
+					foreach ($thumb_dirs as $thumb_dir) rrmdir($thumb_dir);
+					exit;
+
 				case 'showcache':
 					cacheShow();
 					exit;

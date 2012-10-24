@@ -192,6 +192,26 @@ $(document).ready(function(){
 			);
 	});
 
+    //===== Окно очистки миниатюр изображений =====//
+	$(".clearThumb").click( function(e) {
+		e.preventDefault();
+		var title = "Удаление миниатюр";
+		var confirm = "Вы уверены, что хотите удалить все миниатюры изображений<br/>из директории для хранения файлов (UPLOAD_DIR)?";
+		jConfirm(
+				confirm,
+				title,
+				function(b){
+					if (b){
+                        $.alerts._overlay('hide');
+                        $.alerts._overlay('show');
+            		    $.post(ave_path+'admin/index.php?do=settings&sub=clearthumb', function(){
+                            $.alerts._overlay('hide');
+                            $.jGrowl('Миниатюры удалены');
+                        });
+            		}
+				}
+			);
+	});
 
     //===== Окно очистки кэша =====//
 	$("#cacheShow").click( function(e) {

@@ -58,6 +58,12 @@ TEMPLATES_DESCRIPTION  = "Описание страницы (Meta - Description)
 TEMPLATES_INDEXFOLLOW  = "Тип индексирования"
 TEMPLATES_PATH         = "Корневой путь установки"
 TEMPLATES_MEDIAPATH    = "Путь до папки с шаблоном (Пример: [tag:mediapath]images/logo.gif)"
+
+TEMPLATES_CSS          = "Сжимает несколько css-файлов в один. Возвращает путь.<br><b>FFF</b> - имена файлов через запятую<br><b>P</b> - путь к папке с файлами, не обязательно. По умолчанию - [tag:mediapath]css/<br><br><i>Пример:</i> href=&quot;[tag:css:reset.css,style.css]&quot;"
+
+TEMPLATES_JS           = "Сжимает несколько js-файлов в один. Возвращает путь.<br><b>FFF</b> - имена файлов через запятую<br><b>P</b> - путь к папке с файлами, не обязательно. По умолчанию - [tag:mediapath]js/<br><br><i>Пример:</i> href=&quot;[tag:js:common.js,main.js]&quot;"
+
+TEMPLATES_MEDIAPATH    = "Путь до папки с шаблоном (Пример: [tag:mediapath]images/logo.gif)"
 TEMPLATES_MAINCONTENT  = "Тег для главного содержания"
 TEMPLATES_QUICKFINDER  = "Выпадающее меню быстрой навигации"
 TEMPLATES_DOCUMENT     = "Ссылка на текущий документ"

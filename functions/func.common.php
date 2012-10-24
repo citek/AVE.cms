@@ -24,8 +24,34 @@ function CURL_file_get_contents($sourceFileName){
 	return ($st);
 }
 
- 
- 
+/**
+ * Ищет по шаблону в указанном месте пути всех директорий, поддиректорий и файлов, находящихся в них
+ *
+ * @param (string)	$path - путь к директории
+ * @param (string)	$pattern - шаблон поиска
+ * @param (flags)	$flags - флаги для функции glob()
+ * @param (int)		$depth - глубина вложенности, просматриваемая функцией. -1 - без ограничений.
+ *
+ * @return (array) - найденные пути
+ */
+function bfglob($path, $pattern = '*', $flags = GLOB_NOSORT, $depth = 0)
+{
+	$matches = array();
+	$folders = array(rtrim($path, '/'));
+
+	while($folder = array_shift($folders)) 
+	{
+		$matches = array_merge($matches, glob($folder.'/'.$pattern, $flags));
+		if($depth != 0)
+		{
+			$moreFolders = glob($folder.'/'.'*', GLOB_ONLYDIR);
+			$depth   = ($depth < -1) ? -1: $depth + count($moreFolders) - 2;
+			$folders = array_merge($folders, $moreFolders);
+		}
+	}
+	return $matches;
+}
+
 /**
  * Рекурсивно чистит директорию
  *

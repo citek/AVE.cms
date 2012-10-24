@@ -474,6 +474,53 @@ class AVE_Core
 		return (! empty($this->curentdoc));
 	}
 
+	/**
+	 * Метод парсинга тега [tag:(css|js):files]
+	 * для вывода css/js-файлов в шаблоне через combine.php
+	 *
+	 * @param array $tag параметры тега
+	 * @return string что выводить в шаблоне
+	 */
+	function _parse_combine($tag)
+	{
+		// тип тега (css|js)
+		$type = $tag[1];
+		// имена файлов
+		$files = explode(',',$tag[2]);
+
+		// определяем путь. если указан - то считаем от корня, если нет, то в /[tag:mediapath]/css|js/
+		if ($tag[3])
+		{
+			$path = '/' . trim($tag[3],'/') . '/';
+		}
+		else
+		{
+			$path = '/templates/' . THEME_FOLDER . '/' . $type . '/';
+		}
+		// уровень вложенности
+		$level = substr_count($path,'/') - 1;
+
+		// копируем combine.php, если он поменялся или отсутствует
+		$dest_stat = stat(BASE_DIR . $path . 'combine.php');
+		$source_stat = stat(BASE_DIR . '/lib/combine/combine.php');
+		if (!file_exists(BASE_DIR . $path . 'combine.php') || $source_stat[9] > $dest_stat[9])
+		{
+			@copy(BASE_DIR . '/lib/combine/combine.php', BASE_DIR . $path . 'combine.php');
+		}
+
+		// удаляем из списка отсутствующие файлы
+		foreach($files as $key=>$file)
+		{
+			if (!file_exists(BASE_DIR . $path . $file)) unset($files[$key]);
+		}
+		if ($files)
+		{
+			$combine = $path . 'combine.php?level=' . $level . '&amp;' . $type . '=' . implode(',',$files);
+			$combine = @str_replace('//','/',$combine);
+		}
+		return $combine;
+	}
+
 /**
  *	Внешние методы класса
  */
@@ -854,6 +901,10 @@ class AVE_Core
 
 		$out = str_replace($search, $replace, $out);
 		unset ($search, $replace);
+
+		// парсим теги для combine.php
+		$out = preg_replace_callback('/\[tag:(css|js):([^ :\/]+):?(\S+)*\]/', array($this, '_parse_combine'), $out);
+
 		// /парсим остальные теги основного шаблона
 
 		// ЧПУ
