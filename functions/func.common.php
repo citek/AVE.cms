@@ -1348,17 +1348,20 @@ function preg_replace_ru ($pattern="", $replacement="", $string="", $limit=-1)
 }
 
 /**
- * Функция для вывода на экран переменной (для отладки)
+ * Функция для вывода переменной (для отладки)
  *
  * @param mixed $var любая переменная
+ * @param bool $echo true - выведет на экран, false - запишет в корень в файл debug.html
  */
-function _var($var)
+function _var($var,$echo=false)
 {
 	ob_start();
 	var_dump ($var);
 	$var_dump = htmlspecialchars(ob_get_contents());
 	ob_end_clean();
-	$var_dump = 
+	if (!$echo)
+	{
+		$var_dump = 
 '<!doctype html>
 <html>
 <head>
@@ -1369,6 +1372,26 @@ function _var($var)
   <pre style="background:#eee;color:#000;margin:10px;padding:10px;min-width:600px">' . $var_dump . '</pre>
 </body>
 </html>';
-	file_put_contents(BASE_DIR.'/debug.html',$var_dump);
+		file_put_contents(BASE_DIR.'/debug.html',$var_dump);
+	}
+	else
+	{
+		echo '<pre style="background:#eee;color:#000;margin:10px;padding:10px;min-width:600px">' . $var_dump . '</pre>';
+	}
+}
+
+/**
+ * Функция записывает в указанную папку .htaccess с содержанием "Deny from all"
+ *
+ * @param string $dir путь
+ */
+function write_htaccess_deny($dir)
+{
+	$file = $dir . '/.htaccess';
+	if(!file_exists($file))
+	{
+		mkdir($dir);
+		file_put_contents($dir . '/.htaccess','Deny from all');
+	}
 }
 ?>

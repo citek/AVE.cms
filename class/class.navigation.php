@@ -129,7 +129,7 @@ class AVE_Navigation
 						navi_begin      = '" . $_POST['navi_begin'] . "',
 						navi_end     = '" . $_POST['navi_end'] . "',
 						navi_user_group  = '" . (empty($_REQUEST['navi_user_group']) ? '' : implode(',', $_REQUEST['navi_user_group'])) . "',
-						navi_expand   = '" . (empty($_POST['navi_expand']) ? '0' : $_POST['navi_expand']) . "'
+						navi_expand_ext = '" . $_POST['navi_expand_ext'] . "'
 				");
 
 				// Сохраняем системное сообщение в журнал
@@ -201,7 +201,7 @@ class AVE_Navigation
 						navi_begin      = '" . $_POST['navi_begin'] . "',
 						navi_end     = '" . $_POST['navi_end'] . "',
 						navi_user_group  = '" . (empty($_REQUEST['navi_user_group']) ? '' : implode(',', $_REQUEST['navi_user_group'])) . "',
-						navi_expand   = '" . (empty($_POST['navi_expand']) ? '0' : (int)$_POST['navi_expand']) . "'
+						navi_expand_ext = '" . $_POST['navi_expand_ext'] . "'
 					WHERE
 						id = '" . $navigation_id . "'
 				");
@@ -270,7 +270,7 @@ class AVE_Navigation
 						navi_level2end = '" . addslashes($row->navi_level2end) . "',
 						navi_level3end = '" . addslashes($row->navi_level3end) . "',
 						navi_user_group  = '" . addslashes($row->navi_user_group) . "',
-						navi_expand   = '" . addslashes($row->navi_expand) . "'
+						navi_expand_ext = '" . $row->navi_expand_ext . "'
 				");
 
 

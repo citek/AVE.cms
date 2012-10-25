@@ -132,6 +132,23 @@ if (!defined('ACP'))
 	require(BASE_DIR . '/functions/func.parserequest.php');
 }
 
+/**
+ * Создание папок и файлов
+ *
+ */
+foreach(array('cache','session') as $dir)
+{
+	write_htaccess_deny(BASE_DIR . '/' . $dir);
+}
+foreach(array('attachments','combine','IDS','module','redactor','smarty','sql','tpl') as $dir)
+{
+	write_htaccess_deny(BASE_DIR . '/cache/' . $dir);
+}
+if(!file_exists(BASE_DIR . '/cache/IDS/phpids_log.txt'))
+{
+	file_put_contents(BASE_DIR . '/cache/IDS/phpids_log.txt','');
+}
+
 function set_cookie_domain($cookie_domain = '')
 {
 	global $cookie_domain;

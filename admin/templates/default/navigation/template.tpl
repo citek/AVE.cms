@@ -50,12 +50,17 @@
 		</tr>
 
 		<tr>
-			<td width="200"><strong>{#NAVI_EXPAND#}</strong></td>
-			<td><input class="mousetrap" name="navi_expand" type="checkbox" id="navi_expand" value="1" {if $nav->navi_expand==1}checked{/if} class="float" /> <label>&nbsp;</label></td>
+			<td width="200"><strong>{#NAVI_PRINT_TYPE#}</strong></td>
+			<td>
+                <select name="navi_expand_ext">
+                    <option value="1"{if $nav->navi_expand_ext==1} selected{/if}/>{#NAVI_EXPAND_ALL#}</option>
+                    <option value="0"{if $nav->navi_expand_ext==0} selected{/if}/>{#NAVI_EXPAND_WAY#}</option>
+                    <option value="2"{if $nav->navi_expand_ext==2} selected{/if}/>{#NAVI_EXPAND_LEVEL#}</option>
+                </select></td>
 		</tr>
 
 		<tr>
-			<td width="200">{#NAVI_GROUPS#}</td>
+			<td width="200"><strong>{#NAVI_GROUPS#}</strong></td>
 			<td>
 				<select class="mousetrap" name="navi_user_group[]" multiple="multiple" size="5" style="width:200px">
 					{if $smarty.request.action=='new'}
