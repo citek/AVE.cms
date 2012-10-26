@@ -11,11 +11,13 @@
  *
  * @param int $navi_id - идентификатор меню навигации
  */
-function parse_navigation($navi_id)
+function parse_navigation($navi_tag)
 {
 	global $AVE_DB, $AVE_Core;
-	// извлекаем настоящий id из аргумента
-	$navi_id  = (int)preg_replace('/\D/', '', $navi_id[1]);
+	// извлекаем id из аргумента
+	$navi_id  = (int)$navi_tag[1];
+	// извлекаем level из аргумента
+	$navi_print_level = $navi_tag[2];
 
 	// получаем меню навигации по id,
 	// и если такой не существует, выводим сообщение
@@ -35,7 +37,7 @@ function parse_navigation($navi_id)
 	//		1) документы, которые сами связаны с пунктом меню
 	//		2) пункты навигации, у которых ссылка совпадает с алиасом дока
 	//		3) текущий level, текущий id
-	// возвращаем в $navi_active_way через запятую id пунктов:
+	// возвращаем в $navi_active через запятую id пунктов:
 	//		1) активный пункт
 	//		2) родители активного пункта
 	// после ; через запятую все level-ы текущего пути, чтобы потом взять max
@@ -74,8 +76,13 @@ function parse_navigation($navi_id)
 				)
 		")->GetCell();
 		$navi_active = explode(';',$navi_active);
-		$navi_active_way = (string)$navi_active[0];
+		// готовим 2 переменные с путём
+		if ($navi_active[0]) $navi_active_way = explode(',',$navi_active[0]);
+		$navi_active_way[] = '0';
+		$navi_active_way_str = implode(',',$navi_active_way);
+		// текущий уровень
 		$navi_active_level = (int)max(explode(',',$navi_active[1]))+1;
+		// текущий id
 		$navi_active_id = (int)$navi_active[2];
 
 //	}
@@ -110,34 +117,45 @@ function parse_navigation($navi_id)
 		}
 	}*/
 
-	// если мы нашли активный пункт
-	if ($navi_active_way)
+	// если просят вывести какие-то конкретные уровни:
+	if($navi_print_level)
 	{
-		// если не "раскрывать все уровни", то ищем 
-		// пункты меню для нави только среди активного и его родителей
-		if ($navi_menu->navi_expand_ext != 1) $sql_navi_active_way = ' AND parent_id IN(' . $navi_active_way . ') ';
-		// задаём путь до активного пункта в виде массива
-		$navi_active_way = explode(',', $navi_active_way);
+		$sql_navi_level = ' AND navi_item_level IN (' . $navi_print_level . ') ';
+		$sql_navi_active = ' AND parent_id IN(' . $navi_active_way_str . ') ';
+		$navi_parent = (in_array('1',explode(',',$navi_print_level))) ? 0 : $navi_active_id;
 	}
-	// если не нашли активный пункт
+	// обычное использование навигации
 	else
 	{
-		// если не "раскрывать все уровни", то выводим только первый уровень нави
-		if ($navi_menu->navi_expand_ext != 1) $sql_navi_active_way = ' AND parent_id = 0 ';
-		// задаём путь до активного пункта в виде массива 
-		$navi_active_way = array();
-	}
+		switch ($navi_menu->navi_expand_ext)
+		{
+			// все уровни
+			case 1:
+				$navi_parent = 0;
+				break;
 
-	// если "выводить только текущий уровень" - добавляем выборку по активному уровню
-	$sql_navi_active_way .= ($navi_menu->navi_expand_ext == 2) ? ' AND navi_item_level = ' . $navi_active_level : '';
+			// текущий и родительский уровни
+			case 0:
+				$sql_navi_active = ' AND parent_id IN(' . $navi_active_way_str . ') ';
+				$navi_parent = 0;
+				break;
+
+			// только текущий уровень
+			case 2:
+				$sql_navi_level = ' AND navi_item_level = ' . $navi_active_level . ' ';
+				$navi_parent = $navi_active_id;
+				break;
+		}
+	}
 
 	// запрос пунктов меню
 	$sql_navi_items = $AVE_DB->Query("
 		SELECT *
 		FROM " . PREFIX . "_navigation_items
 		WHERE navi_item_status = '1'
-		AND navi_id = 2
-		" . $sql_navi_active_way . "
+		AND navi_id = '" . $navi_id . "'" .
+		$sql_navi_level .
+		$sql_navi_active . "
 		ORDER BY navi_item_position ASC
 	");
 
@@ -145,10 +163,6 @@ function parse_navigation($navi_id)
 	{
 		$navi_items[$row_navi_items['parent_id']][] = $row_navi_items;
 	}
-	
-	// записываем родителя, с которого начинаем делать навигацию.
-	// если "выводить только текущий уровень" - то начинаем с его родителя, иначе с корня (0)
-	$navi_parent = (($navi_menu->navi_expand_ext == 2) ? $navi_active_id : 0);
 
 	// Парсим теги в шаблонах пунктов
 	$navi_item_tpl = array(

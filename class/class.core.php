@@ -841,7 +841,7 @@ class AVE_Core
 		$out = preg_replace_callback('/\[tag:request:(\d+)\]/', 'request_parse', $out);
 
 		// парсим теги навигации
-		$out = preg_replace_callback('/\[tag:navigation:(\d+)\]/', 'parse_navigation', $out);
+		$out = preg_replace_callback('/\[tag:navigation:(\d+):?([0-9,]*)\]/', 'parse_navigation', $out);
 		
 		// парсим теги скрытого текста
 		$out = parse_hide($out);
