@@ -738,7 +738,7 @@ class AVE_Document
 			foreach($data as $k=>$v){
 				$sql=$AVE_DB->Query("UPDATE ".PREFIX."_document_fields
 				SET
-					field_value='".$v."',
+					field_value='".addslashes($v)."',
 					field_number_value='".intval($v)."'
 					WHERE document_id='".$document_id."' AND rubric_field_id='".$k."'
 				");
