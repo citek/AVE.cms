@@ -154,3 +154,13 @@ DOC_URL_CHECK_ER		 = "URL содержит ошибки:<br />"
 
 DOC_REQUEST_NOT_INFO     = "Для данного запроса описания нет."
 DOC_BREADCRUMB_TITLE	 = "Название ссылки для хлебных крошек"
+
+DOC_DOCUMENT_OPEN		 = "Документ опубликован"
+DOC_DOCUMENT_CLOSE		 = "Документ снят с публикации"
+
+DOC_DOCUMENT_DOC		 = "документ"
+DOC_DOCUMENT_ACT		 = "Опубликовал"
+DOC_DOCUMENT_DISACT		 = "Снял с публикации"
+
+DOC_DOCUMENT_OPEN_ERR	 = "Этот документ нельзя сделать неактивным!"
+DOC_DOCUMENT_OPEN_PRIVE	 = "У вас недостаточно для этого прав!"

@@ -1,7 +1,7 @@
 body { background: url(theme_color_wood/wood.jpg) repeat; }
 
 /* ==========  General styles ========== */
-.wrapper { margin: 0 3%; clear: both; }
+.wrapper { margin: 0 40px; clear: both; }
 .img { border: 1px solid #d5d5d5; }
 a { color: #fd6900; }
 
@@ -16,6 +16,7 @@ a { color: #fd6900; }
 .userNav ul li ul li a.active {background: url(theme_color_wood/titleBg.png) repeat-x; background-position: 0 -39px; color: #fff;}
 
 /* ===== Left navigation ===== */
+.leftNav { width: 212px; max-width: 36%; margin-top: -1px; float: left; margin-bottom: 80px; margin-right: 25px; }
 .leftNav ul li a { color: #fafafa; text-shadow: 0 1px 0 #424242; font-size: 14px; display: block; background: url(theme_color_wood/titleBg.png) repeat-x 0 0; border: 1px solid #353E47; margin-top: 1px; }
 .leftNav ul li a:hover { background-position: 0 -78px; border: 1px solid #353E47; }
 .leftNav ul li a.active { background-position: 0 -39px; border: 1px solid #FF6600; text-shadow: 0 1px 0 #CC6600; }
@@ -40,9 +41,11 @@ ul.sub_stat li ul { border: none; border-top: 1px solid #c9c9c9; }
 ul.sub_stat li ul li { padding-left: 10px; }
 
 /* ===== Right side content ===== */
-.widget { /*width: 342px;*/ /*width: 100%;*/ margin-top: 40px; border: 1px solid #898989; display: block; background: transparent url(theme_color_wood/bg_ffffff.png); clear: both; }
-.widgetS { /*width: 342px;*/ /*width: 100%;*/ margin-top: 40px; border: 1px solid #595959; display: block; background: #fafafa; border-top: none; min-width: 25%; float: left; margin-right: 40px; }
+.widget { /*width: 342px;*/ /*width: 100%;*/ margin-top: 25px; border: 1px solid #898989; display: block; background: transparent url(theme_color_wood/bg_ffffff.png); clear: both; }
+.widgetS { /*width: 342px;*/ /*width: 100%;*/ margin-top: 25px; border: 1px solid #595959; display: block; background: #fafafa; border-top: none; min-width: 25%; float: left; margin-right: 40px; }
 
+.widgets .left { float: left; width: 49%; margin-right: 2%; }
+.widgets .right { float: right; width: 49%; }
 
 .widget .num a.basicNum { background: transparent url(theme_color_wood/numDataBg.png) repeat-x 0 0; border: 1px solid #CE5300; color: #fff; -moz-box-shadow: 0 0 2px #9B3E00; -webkit-box-shadow: 0 0 2px #9B3E00; box-shadow: 0 0 2px #9B3E00;}
 

@@ -57,6 +57,51 @@ $(document).ready(function(){ldelim}
 			);
 	{rdelim});
 
+
+
+{literal}
+
+	function action(href,actions){
+		$.ajax({
+				beforeSend: function(){
+					$.alerts._overlay('show');
+					},
+				url: href,
+				data: ({
+					action: actions,
+					ajax: '1',
+					pop: '1'
+					}),
+				timeout:3000,
+				dataType: "json",
+				success: function(data){
+					$.alerts._overlay('hide');
+				    $.jGrowl(data[0],{theme: data[1]});
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					$.alerts._overlay('hide');
+					$.jGrowl(xhr.status + thrownError, {theme: 'error'});
+				}
+			});
+		};
+
+
+	$('.lock').on('click', function(e){
+		e.preventDefault();
+        if($(this).hasClass('ico_unlock')){
+			action($(this).attr('ajax'),'close');
+			$(this).removeClass("ico_unlock").addClass("ico_lock");
+        } else if ($(this).hasClass('ico_lock')){
+			action($(this).attr('ajax'),'open');
+			$(this).removeClass("ico_lock").addClass("ico_unlock")
+        }
+	});
+
+{/literal}
+
+
+
+
 {rdelim});
 </script>
 
@@ -142,9 +187,8 @@ $(document).ready(function(){ldelim}
 	<col width="10">
 	<col>
 	<col width="150">
-	<col width="120">
-	<col width="120">
-	<col width="100">
+	<col width="180">
+	<col width="80">
 	{*<col width="100">*}
 	<col width="100">
 	<col width="20">
@@ -163,8 +207,7 @@ $(document).ready(function(){ldelim}
 			<a href="{$link}&sort=alias{if $smarty.request.sort=='alias'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_URL_RUB#}</a>
 		</td>
 		<td><a href="{$link}&sort=rubric{if $smarty.request.sort=='rubric'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_IN_RUBRIK#}</a></td>
-		<td><a href="{$link}&sort=published{if $smarty.request.sort=='published'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_CREATED#}</a></td>
-		<td><a href="{$link}&sort=changed{if $smarty.request.sort=='changed' || !$smarty.request.sort}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_EDIT#}</a></td>
+		<td><a href="{$link}&sort=published{if $smarty.request.sort=='published'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_CREATED#}</a> | <a href="{$link}&sort=changed{if $smarty.request.sort=='changed' || !$smarty.request.sort}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_EDIT#}</a></td>
 		<td><a href="{$link}&sort=view{if $smarty.request.sort=='view'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_CLICKS#}</a></td>
 		{*<td><a href="{$link}&sort=print{if $smarty.request.sort=='print'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_PRINTED#}</a></td>*}
 		<td><a href="{$link}&sort=author{if $smarty.request.sort=='author'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_AUTHOR#}</a></td>
@@ -202,9 +245,7 @@ $(document).ready(function(){ldelim}
 				{/if}
 			</td>
 
-			<td align="right"><span class="date_text dgrey">{$item->document_published|date_format:$TIME_FORMAT|pretty_date}</span></td>
-
-			<td align="right"><span class="date_text dgrey">{$item->document_changed|date_format:$TIME_FORMAT|pretty_date}</span></td>
+			<td align="center"><span class="date_text dgrey">{$item->document_published|date_format:$TIME_FORMAT|pretty_date}<br />{$item->document_changed|date_format:$TIME_FORMAT|pretty_date}</span></td>
 
 			<td align="center"><strong>{$item->document_count_view}</strong></td>
 
@@ -242,11 +283,11 @@ $(document).ready(function(){ldelim}
 
 			<td align="center" nowrap="nowrap">
 				{if $item->document_deleted==1}
-					<a title="" href="javascript:void(0);" class="topleftDir icon_sprite ico_blank"></a>
+					<span title="" class="topleftDir icon_sprite ico_blank"></span>
 				{else}
 					{if $item->document_status==1}
 						{if $item->canOpenClose==1 && $item->Id != 1 && $item->Id != $PAGE_NOT_FOUND_ID}
-							<a class="topleftDir icon_sprite ico_unlock" title="{#DOC_DISABLE_TITLE#}" href="index.php?do=docs&action=close&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
+							<a ajax="index.php?do=docs&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}" class="topleftDir lock icon_sprite ico_unlock" title="{#DOC_DISABLE_TITLE#}" href="index.php?do=docs&action=close&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
 						{else}
 							{if $item->cantEdit==1 && $item->Id != 1 && $item->Id != $PAGE_NOT_FOUND_ID}
 				   			<span title="" class="topleftDir icon_sprite ico_unlock_no"></span>
@@ -256,7 +297,7 @@ $(document).ready(function(){ldelim}
 						{/if}
 					{else}
 						{if $item->canOpenClose==1}
-							<a class="topleftDir icon_sprite ico_lock" title="{#DOC_ENABLE_TITLE#}" href="index.php?do=docs&action=open&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
+							<a ajax="index.php?do=docs&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}" class="topleftDir lock icon_sprite ico_lock" title="{#DOC_ENABLE_TITLE#}" href="index.php?do=docs&action=open&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
 						{else}
 							{if $item->cantEdit==1 && $item->Id != 1 && $item->Id != $PAGE_NOT_FOUND_ID}
 							<span title="" class="topleftDir icon_sprite ico_lock_no"></span>
@@ -299,8 +340,7 @@ $(document).ready(function(){ldelim}
 			<a href="{$link}&sort=alias{if $smarty.request.sort=='alias'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_URL_RUB#}</a>
 		</td>
 		<td><a href="{$link}&sort=rubric{if $smarty.request.sort=='rubric'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_IN_RUBRIK#}</a></td>
-		<td><a href="{$link}&sort=published{if $smarty.request.sort=='published'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_CREATED#}</a></td>
-		<td><a href="{$link}&sort=changed{if $smarty.request.sort=='changed' || !$smarty.request.sort}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_EDIT#}</a></td>
+		<td><a href="{$link}&sort=published{if $smarty.request.sort=='published'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_CREATED#}</a> | <a href="{$link}&sort=changed{if $smarty.request.sort=='changed' || !$smarty.request.sort}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_EDIT#}</a></td>
 		<td><a href="{$link}&sort=view{if $smarty.request.sort=='view'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_CLICKS#}</a></td>
 		{*<td><a href="{$link}&sort=print{if $smarty.request.sort=='print'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_PRINTED#}</a></td>*}
 		<td><a href="{$link}&sort=author{if $smarty.request.sort=='author'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_AUTHOR#}</a></td>

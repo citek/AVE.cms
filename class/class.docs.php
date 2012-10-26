@@ -1644,7 +1644,9 @@ class AVE_Document
 	 */
 	function documentStatusSet($document_id, $openclose = 0)
 	{
-		global $AVE_DB;
+		global $AVE_DB, $AVE_Template;
+
+		$errors = array();
 
 		// Выполняем запрос к БД на получение id автора документа, чтобы проверить уровень прав доступа
 		$row = $AVE_DB->Query("
@@ -1672,17 +1674,47 @@ class AVE_Document
 				");
 
 				$AVE_DB->clearcache('rub_'.$row->rubric_id);			
-				$AVE_DB->clearcache('doc_'.$document_id);			
+				$AVE_DB->clearcache('doc_'.$document_id);	
+
 				// Сохраняем системное сообщение в журнал
-				reportLog($_SESSION['user_name'] . ' - ' . (($openclose==1) ? 'активировал' : 'деактивировал') . ' документ (' . $document_id . ')', 2, 2);
+				reportLog($_SESSION['user_name'] . ' - ' . (($openclose==1) ? $AVE_Template->get_config_vars('DOC_DOCUMENT_ACT') : $AVE_Template->get_config_vars('DOC_DOCUMENT_DISACT')) . ' ' . $AVE_Template->get_config_vars('DOC_DOCUMENT_DOC') . ' (' . $document_id . ')', 2, 2);
+			
+			}else{
+
+				$errors[] = $AVE_Template->get_config_vars('DOC_DOCUMENT_OPEN_ERR');
 			}
+
+		}else{
+
+			$errors[] = $AVE_Template->get_config_vars('DOC_DOCUMENT_OPEN_PRIVE');
 		}
 
-		$AVE_DB->clearcache('rub_'.$row->rubric_id);			
-		$AVE_DB->clearcache('doc_'.$document_id);			
-		// Выполняем обновление страницы
-		header('Location:index.php?do=docs&cp=' . SESSION);
-		exit;
+		if (isset($_REQUEST['ajax'])) {
+
+			if (empty($errors))
+			{
+				// Если ошибок не найдено, формируем сообщение об успешной операции
+				echo json_encode(array((($openclose==1) ? $AVE_Template->get_config_vars('DOC_DOCUMENT_OPEN') : $AVE_Template->get_config_vars('DOC_DOCUMENT_CLOSE')) . implode(',<br />', $errors), accept));
+			}else{
+
+				// В противном случае формируем сообщение с ошибкой
+				echo json_encode(array($AVE_Template->get_config_vars('DOC_URL_CHECK_ER') . implode(',<br />', $errors), error));
+
+			}
+
+			$AVE_DB->clearcache('rub_'.$row->rubric_id);
+			$AVE_DB->clearcache('doc_'.$document_id);
+			exit;
+
+		}else{
+
+			$AVE_DB->clearcache('rub_'.$row->rubric_id);
+			$AVE_DB->clearcache('doc_'.$document_id);
+			// Выполняем обновление страницы
+			header('Location:index.php?do=docs&cp=' . SESSION);
+			exit;
+		}
+
 	}
 
 	/**
