@@ -38,7 +38,7 @@ $GLOBALS['CMS_CONFIG']['THUMBNAIL_DIR'] = array('DESCR' =>'Директория 
 
 $GLOBALS['CMS_CONFIG']['DEFAULT_LANGUAGE'] = array('DESCR' =>'Язык по умолчанию','default'=>'ru','TYPE'=>'dropdown','VARIANT'=>array('ru','en','ua'));
 $GLOBALS['CMS_CONFIG']['SESSION_SAVE_HANDLER'] = array('DESCR' =>'Хранить сессии в БД','default'=>false,'TYPE'=>'bool','VARIANT'=>''); 
-$GLOBALS['CMS_CONFIG']['SESSION_LIFETIME'] = array('DESCR' =>'Время жизни сессии (Значение по умолчанию 24 минуты)','default'=>60*24,'TYPE'=>'integer','VARIANT'=>''); 
+$GLOBALS['CMS_CONFIG']['SESSION_LIFETIME'] = array('DESCR' =>'Время жизни сессии (Значение по умолчанию 24 минуты)','default'=>60*60*24,'TYPE'=>'integer','VARIANT'=>''); 
 $GLOBALS['CMS_CONFIG']['COOKIE_LIFETIME'] = array('DESCR' =>'Время жизни cookie автологина (60*60*24*14 - 2 недели)','default'=>60*60*24*14,'TYPE'=>'integer','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['PROFILING'] = array('DESCR' =>'Вывод статистики и списка выполненых запросов','default'=>false,'TYPE'=>'bool','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['SEND_SQL_ERROR'] = array('DESCR' =>'Отправка писем с ошибками MySQL','default'=>false,'TYPE'=>'bool','VARIANT'=>''); 

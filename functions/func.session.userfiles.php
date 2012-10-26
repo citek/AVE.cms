@@ -14,11 +14,16 @@ function sess_close(){
   return(true);
 }
 
+function sess_folder(){
+global $sess_session_id,$sess_save_path;
+return $sess_save_path.'/'.mb_substr($sess_session_id,0,2);
+}
+
 function sess_read($id){
 	global $sess_save_path, $sess_session_name, $sess_session_id;
 
 	$sess_session_id=$id;
-	$sess_dir=$sess_save_path.'/'.mb_substr($sess_session_id,0,2).'/'.mb_substr($sess_session_id,2,2).'/'.mb_substr($sess_session_id,4,2);
+	$sess_dir=sess_folder();
 	$sess_file = "$sess_dir/$id.sess";
 	if(file_exists($sess_file) && (filemtime($sess_file)+SESSION_LIFETIME)<time()) sess_gc(SESSION_LIFETIME);
 	if ($fp = @fopen($sess_file, "r")) {
@@ -32,7 +37,7 @@ function sess_read($id){
 function sess_write ($id, $sess_data) {
 	global $sess_save_path, $sess_session_name, $sess_session_id;
 	$sess_session_id=$id;
-	$sess_dir=$sess_save_path.'/'.mb_substr($sess_session_id,0,2).'/'.mb_substr($sess_session_id,2,2).'/'.mb_substr($sess_session_id,4,2);
+	$sess_dir=sess_folder();
 	$sess_file = "$sess_dir/$id.sess";
 	if(!file_exists($sess_dir))
 		mkdir($sess_dir,0777,true);
@@ -47,7 +52,7 @@ function sess_destroy ($id) {
 	global $sess_save_path, $sess_session_name, $sess_session_id;
 
 	$sess_session_id=$id;
-	$sess_dir=$sess_save_path.'/'.mb_substr($sess_session_id,0,2).'/'.mb_substr($sess_session_id,2,2).'/'.mb_substr($sess_session_id,4,2);
+	$sess_dir=sess_folder();
 	$sess_file = "$sess_dir/$id.sess";
 	return(@unlink($sess_file));
 }
@@ -59,7 +64,7 @@ function sess_destroy ($id) {
 function sess_gc ($maxlifetime) {
 	global $sess_save_path, $sess_session_id;
 
-	$sess_dir=$sess_save_path.'/'.mb_substr($sess_session_id,0,2).'/'.mb_substr($sess_session_id,2,2).'/'.mb_substr($sess_session_id,4,2);
+	$sess_dir=sess_folder();
 	foreach (glob($sess_dir."/*.sess") as $filename) {
 		if((filemtime($filename)+$maxlifetime)<time())unlink($filename);
 	}
