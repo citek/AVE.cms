@@ -42,6 +42,27 @@ switch ($_REQUEST['action'])
 			$AVE_Logs->logExport();
 		}
 		break;
+
+	case 'log404':
+		if (check_permission_acp('logs'))
+		{
+			$AVE_Logs->List404();
+		}
+		break;
+
+	case 'delete404':
+		if (check_permission_acp('logs'))
+		{
+			$AVE_Logs->Delete404();
+		}
+		break;
+
+	case 'export404':
+		if (check_permission_acp('logs'))
+		{
+			$AVE_Logs->Export404();
+		}
+		break;
 }
 
 ?>

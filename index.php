@@ -38,7 +38,19 @@ $AVE_Core->coreSiteFetch(get_current_document_id());
 $content = ob_get_clean();
 ob_start();
 
-if ($_REQUEST['id'] == 2) header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found', true);
+if ($_REQUEST['id'] == PAGE_NOT_FOUND_ID){
+	report404(
+		"<strong class=\"code_red\">404 ERROR:</strong> "
+		. "<br />" .
+		"<strong class=\"code\">HTTP_USER_AGENT</strong> - ". $_SERVER['HTTP_USER_AGENT']
+		. "<br />" .
+		"<strong class=\"code\">HTTP_REFERER</strong> - ". $_SERVER['HTTP_REFERER']
+		. "<br />" .
+		"<strong class=\"code\">REQUEST_URI</strong> - " . $_SERVER['REQUEST_URI']
+		, 2, 2);
+	header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found', true);
+}
+ 
 
 eval ('?>' . $content . '<?');
 

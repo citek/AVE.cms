@@ -45,11 +45,6 @@
 				<col width="250" />
 				<col width="150" />
 				<col width="150" />
-				<col width="20" />
-				<col width="20" />
-				<col width="20" />
-				<col width="20" />
-				<col width="20" />
 				<thead>
 					<tr>
 						<td>id</td>
@@ -57,7 +52,6 @@
 						<td>Рубрика</td>
 						<td>Опубликован</td>
 						<td>Автор</td>
-						<td colspan="5">Действия</td>
 					</tr>
 				</thead>
 				{foreach from=$doc_start item=item}
@@ -82,73 +76,7 @@
 						</td>
 						<td align="center"><span class="date_text dgrey">{$item->document_published|date_format:$TIME_FORMAT|pretty_date}</span></td>
 						<td align="center">{$item->document_author|escape}</td>
-						<td align="center" nowrap="nowrap">
-							{if check_permission("remarks")}
-								{if $item->ist_remark=='0'}
-									<a class="topleftDir icon_sprite ico_comment" title="{#DOC_CREATE_NOTICE_TITLE#}" href="javascript:void(0);" onclick="cp_pop('index.php?do=docs&action=remark&Id={$item->Id}&pop=1&cp={$sess}','800','700','1','docs');"></a>
-								{else}
-									<a class="topleftDir icon_sprite ico_comment" title="{#DOC_REPLY_NOTICE_TITLE#}" href="javascript:void(0);" onclick="cp_pop('index.php?do=docs&action=remark_reply&Id={$item->Id}&pop=1&cp={$sess}','800','700','1','docs');"></a>
-								{/if}
-							{else}
-								<span title="" class="topleftDir icon_sprite ico_comment_no"></span>
-							{/if}
-						</td>
 
-						<td align="center" nowrap="nowrap">
-							{if $item->cantEdit==1}
-								<a class="topleftDir icon_sprite ico_edit" title="{#DOC_EDIT_TITLE#}" href="index.php?do=docs&action=edit&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
-							{else}
-								<span title="" class="topleftDir icon_sprite ico_edit_no"></span>
-							{/if}
-						</td>
-
-						<td align="center" nowrap="nowrap">
-							{if $item->document_deleted==1}
-								<a title="" href="javascript:void(0);" class="topleftDir icon_sprite ico_blank"></a>
-							{else}
-								{if $item->document_status==1}
-									{if $item->canOpenClose==1 && $item->Id != 1 && $item->Id != $PAGE_NOT_FOUND_ID}
-										<a class="topleftDir icon_sprite ico_unlock" title="{#DOC_DISABLE_TITLE#}" href="index.php?do=docs&action=close&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
-									{else}
-										{if $item->cantEdit==1 && $item->Id != 1 && $item->Id != $PAGE_NOT_FOUND_ID}
-							   			<span title="" class="topleftDir icon_sprite ico_unlock_no"></span>
-										{else}
-										<span title="" class="topleftDir icon_sprite ico_unlock_no"></span>
-										{/if}
-									{/if}
-								{else}
-									{if $item->canOpenClose==1}
-										<a class="topleftDir icon_sprite ico_lock" title="{#DOC_ENABLE_TITLE#}" href="index.php?do=docs&action=open&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
-									{else}
-										{if $item->cantEdit==1 && $item->Id != 1 && $item->Id != $PAGE_NOT_FOUND_ID}
-										<span title="" class="topleftDir icon_sprite ico_lock_no"></span>
-										{else}
-										<span title="" class="topleftDir icon_sprite ico_lock_no"></span>
-										{/if}
-									{/if}
-								{/if}
-							{/if}
-						</td>
-
-						<td align="center" nowrap="nowrap">
-							{if $item->document_deleted==1}
-								<a class="topleftDir icon_sprite ico_recylce_on" title="{#DOC_RESTORE_DELETE#}" href="index.php?do=docs&action=redelete&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
-							{else}
-								{if $item->canDelete==1}
-									<a class="ConfirmRecycle topleftDir icon_sprite ico_recylce" title="{#DOC_TEMPORARY_DELETE#}"  href="index.php?do=docs&action=delete&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
-								{else}
-									<span title="" class="topleftDir icon_sprite ico_recylce_no"></span>
-								{/if}
-							{/if}
-						</td>
-
-						<td align="center" nowrap="nowrap">
-							{if $item->canEndDel==1 && $item->Id != 1 && $item->Id != $PAGE_NOT_FOUND_ID}
-								<a class="ConfirmDelete topleftDir icon_sprite ico_delete" title="{#DOC_FINAL_DELETE#}" dir="{#DOC_FINAL_DELETE#}" name="{#DOC_FINAL_CONFIRM#}" href="index.php?do=docs&action=enddelete&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
-							{else}
-								<span title="" class="topleftDir icon_sprite ico_delete_no"></span>
-							{/if}
-						</td>
 					</tr>
 				{/foreach}
 			</table>
