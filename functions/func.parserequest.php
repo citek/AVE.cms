@@ -152,10 +152,12 @@
  */
 function request_get_document_field($rubric_id, $document_id, $maxlength = '')
 {
-	if (!is_numeric($rubric_id) || $rubric_id < 1 || !is_numeric($document_id) || $document_id < 1) return '';
-
+	if (!is_numeric($document_id) || $document_id < 1) return '';
+	
 	$document_fields = get_document_fields($document_id);
 
+	if (!is_array($document_fields[$rubric_id]))$rubric_id=intval($document_fields[$rubric_id]);
+	
 	if (empty($document_fields[$rubric_id])) return '';
 
 	$field_value = trim($document_fields[$rubric_id]['field_value']);
@@ -209,6 +211,69 @@ function request_get_document_field($rubric_id, $document_id, $maxlength = '')
 	}
 
 	return $field_value;
+}
+
+function showteaser($id){
+	return showrequestelement($id);
+}
+
+function showrequestelement($mixed,$template=''){
+global $AVE_DB;
+	if (is_array($mixed)) $mixed = $mixed[1];
+
+	$row=(is_object($mixed) ? $mixed : $AVE_DB->Query("SELECT
+				a.Id,
+				a.rubric_id,
+				a.document_parent,
+				a.document_title,
+				a.document_alias,
+				a.document_author_id,
+				a.document_count_view,
+				a.document_published,
+				a.document_meta_keywords
+			FROM
+				" . PREFIX . "_documents AS a
+			WHERE
+			a.Id = '" . intval($mixed) . "'
+			GROUP BY a.Id
+			LIMIT 1
+		")->FetchRow());
+		if(!$row) return '';
+		$template=($template>'' ? $template : $AVE_DB->Query(
+					"SELECT rubric_teaser_template FROM ".PREFIX."_rubrics WHERE Id='".intval($row->rubric_id)."'"
+				)->GetCell());
+		$cachefile_docid=BASE_DIR.'/cache/sql/doc_'.$row->Id.'/request-'.md5($template).'.cache';
+			if(!file_exists($cachefile_docid))
+				{
+					$item = preg_replace_callback('/\[tag:sysblock:(\d+)\]/', 'parse_sysblock', $template);
+					$item = preg_replace('/\[tag:rfld:([a-zA-Z0-9-_]+)]\[(more|esc|img|[0-9-]+)]/e', "request_get_document_field(\"$1\", $row->Id, \"$2\")", $item);
+					$item = preg_replace_callback('/\[tag:([r|c|f]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $item);
+					//if(!file_exists(dirname($cachefile_docid)))mkdir(dirname($cachefile_docid),0777,true);
+					//file_put_contents($cachefile_docid,$item);
+				}
+				else
+				{
+					$item=file_get_contents($cachefile_docid);
+				}
+				
+	
+			$link = rewrite_link('index.php?id=' . $row->Id . '&amp;doc=' . (empty($row->document_alias) ? prepare_url($row->document_title) : $row->document_alias));
+			$item = str_replace('[tag:link]', $link, $item);
+			$item = str_replace('[tag:docid]', $row->Id, $item);
+			$item = str_replace('[tag:doctitle]', $row->document_title, $item);
+			$item = str_replace('[tag:dockeywords]', $row->document_meta_keywords, $item);
+			$item = str_replace('[tag:docparent]', $row->document_parent, $item);
+			$item = str_replace('[tag:docdate]', pretty_date(strftime(DATE_FORMAT, $row->document_published)), $item);
+			$item = str_replace('[tag:doctime]', pretty_date(strftime(TIME_FORMAT, $row->document_published)), $item);
+			$item = preg_replace('/\[tag:date:([a-zA-Z0-9-]+)\]/e', "RusDate(date('$1', ".$row->document_published."))", $item);
+			$item = str_replace('[tag:docauthor]', get_username_by_id($row->document_author_id), $item);
+			$item = str_replace('[tag:docauthorid]', $row->document_author_id, $item);
+			$item = str_replace('[tag:docviews]', $row->document_count_view, $item);
+			$item = str_replace('[tag:doccomments]', isset($row->nums) ? $row->nums : '', $item);
+			$item = str_replace('[tag:docvotes]', isset($row->votes) ? $row->votes : '', $item);
+			$item = str_replace('[tag:docdayviews]', isset($row->dayviews) ? $row->dayviews : '', $item);
+
+		return $item;	
 }
 
 /**
@@ -432,38 +497,9 @@ function request_parse($id,$params=Array())
 			array_push($rows, $row);
 		}
 		$items = '';
-		$md5template=md5($item_template);
 		foreach ($rows as $row)
 		{
-			$cachefile_docid=BASE_DIR.'/cache/sql/doc_'.$row->Id.'/request-'.$id.'.cache';
-			if(!file_exists($cachefile_docid))
-				{
-					$item = preg_replace_callback('/\[tag:sysblock:(\d+)\]/', 'parse_sysblock', $item_template);
-					$item = preg_replace('/\[tag:rfld:(\d+)]\[(more|esc|img|[0-9-]+)]/e', "request_get_document_field(\"$1\", $row->Id, \"$2\")", $item);
-					$item = preg_replace_callback('/\[tag:([r|c|f]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $item);
-					//if(!file_exists(dirname($cachefile_docid)))mkdir(dirname($cachefile_docid),0777,true);
-					//file_put_contents($cachefile_docid,$item);
-				}
-				else
-				{
-					$item=file_get_contents($cachefile_docid);
-				}
-			$link = rewrite_link('index.php?id=' . $row->Id . '&amp;doc=' . (empty($row->document_alias) ? prepare_url($row->document_title) : $row->document_alias));
-			$item = str_replace('[tag:link]', $link, $item);
-			$item = str_replace('[tag:docid]', $row->Id, $item);
-			$item = str_replace('[tag:doctitle]', $row->document_title, $item);
-			$item = str_replace('[tag:dockeywords]', $row->document_meta_keywords, $item);
-			$item = str_replace('[tag:docparent]', $row->document_parent, $item);
-			$item = str_replace('[tag:docdate]', pretty_date(strftime(DATE_FORMAT, $row->document_published)), $item);
-			$item = str_replace('[tag:doctime]', pretty_date(strftime(TIME_FORMAT, $row->document_published)), $item);
-			$item = preg_replace('/\[tag:date:([a-zA-Z0-9-]+)\]/e', "RusDate(date('$1', ".$row->document_published."))", $item);
-			$item = str_replace('[tag:docauthor]', get_username_by_id($row->document_author_id), $item);
-			$item = str_replace('[tag:docauthorid]', $row->document_author_id, $item);
-			$item = str_replace('[tag:docviews]', $row->document_count_view, $item);
-			$item = str_replace('[tag:doccomments]', isset($row->nums) ? $row->nums : '', $item);
-			$item = str_replace('[tag:docvotes]', isset($row->votes) ? $row->votes : '', $item);
-			$item = str_replace('[tag:docdayviews]', isset($row->dayviews) ? $row->dayviews : '', $item);
-			$items .= $item;
+			$items.=showrequestelement($row,$item_template);
 		}
 		$main_template = preg_replace_callback('/\[tag:sysblock:(\d+)\]/', 'parse_sysblock', $main_template);
 		$main_template = str_replace('[tag:pages]', $page_nav, $main_template);

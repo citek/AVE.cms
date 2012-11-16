@@ -324,7 +324,9 @@ class AVE_Rubric
 					rubric_template    = '" . addslashes($row->rubric_template) . "',
 					rubric_template_id = '" . addslashes($row->rubric_template_id) . "',
 					rubric_author_id   = '" . (int)$_SESSION['user_id'] . "',
-					rubric_created     = '" . time() . "'
+					rubric_created     = '" . time() . "',
+					rubric_teaser_template    = '" . addslashes($row->rubric_teaser_template) . "',
+					rubric_header_template    = '" . addslashes($row->rubric_header_template) . "'
 			");
 			$iid = $AVE_DB->InsertId();
 
@@ -349,6 +351,7 @@ class AVE_Rubric
 			$sql = $AVE_DB->Query("
 				SELECT
 					rubric_field_title,
+					rubric_field_alias,
 					rubric_field_type,
 					rubric_field_position,
 					rubric_field_default,
@@ -365,6 +368,7 @@ class AVE_Rubric
 					SET
 						rubric_id                     = '" . $iid . "',
 						rubric_field_title            = '" . addslashes($row->rubric_field_title) . "',
+						rubric_field_alias            = '" . addslashes($row->rubric_field_alias) . "',
 						rubric_field_type             = '" . addslashes($row->rubric_field_type) . "',
 						rubric_field_position         = '" . (int)$row->rubric_field_position . "',
 						rubric_field_default          = '" . addslashes($row->rubric_field_default) . "',
@@ -665,7 +669,9 @@ class AVE_Rubric
 		$row = $AVE_DB->Query("
 			SELECT
 				rubric_title,
-				rubric_template
+				rubric_template,
+				rubric_header_template,
+				rubric_teaser_template
 			FROM " . PREFIX . "_rubrics
 			WHERE Id = '" . $fetchId . "'
 		")
@@ -711,7 +717,7 @@ class AVE_Rubric
 	 *
 	 * @param string $data
 	 */
-	function rubricTemplateSave($data)
+	function rubricTemplateSave($Rtemplate,$Htemplate='',$Ttemplate='')
 	{
 		global $AVE_DB;
 
@@ -719,7 +725,10 @@ class AVE_Rubric
 
 		$AVE_DB->Query("
 			UPDATE " . PREFIX . "_rubrics
-			SET rubric_template = '" . $data . "'
+			SET 
+				rubric_template = '" . $Rtemplate . "',
+				rubric_header_template = '" . $Htemplate . "',
+				rubric_teaser_template = '" . $Ttemplate . "'
 			WHERE Id = '" . $rubric_id . "'
 		");
 		// Очищаем кэш шаблона документов рубрики
@@ -843,6 +852,100 @@ class AVE_Rubric
 
 		$AVE_Template->assign('rubrics', $items);
 	}
+
+	/**
+	 * Получить
+	 */
+	function rubricAliasAdd()
+	{
+		global $AVE_DB, $AVE_Template;
+
+			$sql = $AVE_DB->Query("
+				SELECT
+					a.rubric_title,
+					b.rubric_field_title,
+					b.rubric_field_alias
+				FROM " . PREFIX . "_rubrics AS a
+				JOIN 
+					 " . PREFIX . "_rubric_fields AS b
+				WHERE a.Id = '" . $_REQUEST['rubric_id'] . "'
+				AND b.Id = '" . $_REQUEST['field_id'] . "'
+			")->FetchAssocArray();
+
+		$AVE_Template->assign($sql);
+		$AVE_Template->assign('content', $AVE_Template->fetch('rubs/alias.tpl'));
+	}
+
+	function rubricAliasCheck($rubric_id, $field_id, $value)
+	{
+
+	global $AVE_DB, $AVE_Template;
+
+	$errors = array();
+
+		if(!intval($rubric_id)>0){
+			$errors[] = $AVE_Template->get_config_vars('RUBRIK_ALIAS_RUBID');
+		}
+
+		if(!intval($field_id)>0) {
+			$errors[] = $AVE_Template->get_config_vars('RUBRIK_ALIAS_FIELDID');
+		};
+
+		if(!preg_match('/^[A-Za-z][[:word:]]{0,19}$/', $value)) {
+			$errors[] = $AVE_Template->get_config_vars('RUBRIK_ALIAS_MATCH');
+		};
+		
+		//Проверяем есть такой алиас уже
+		$res = $AVE_DB->Query("
+			SELECT COUNT(*)
+			FROM
+				" . PREFIX . "_rubric_fields
+			WHERE
+				Id <> " . intval($field_id) . "
+				AND rubric_id = " . intval($rubric_id) . "
+				AND rubric_field_alias = '" . addslashes($value) . "'
+			")->GetCell();
+
+		if($res>0){
+			$errors[] = $AVE_Template->get_config_vars('RUBRIK_ALIAS_MATCH');
+		};
+
+		if (empty($errors))
+		{
+			$res = $AVE_DB->Query("
+				UPDATE " . PREFIX . "_rubric_fields 
+				SET
+					rubric_field_alias = '" . addslashes($value) . "'
+				WHERE 
+					Id = '" . intval($field_id) . "'
+				AND rubric_id = '" . intval($rubric_id) . "'
+				");
+			echo "
+			<script language=\"javascript\" type=\"text/javascript\">
+				window.opener.document.getElementById('". $_REQUEST['target'] ."').value = '" . addslashes($value) . "'
+				window.close();
+			</script>
+			";
+		}else{
+			$sql = $AVE_DB->Query("
+				SELECT
+					a.rubric_title,
+					b.rubric_field_title,
+					b.rubric_field_alias
+				FROM " . PREFIX . "_rubrics AS a
+				JOIN 
+					 " . PREFIX . "_rubric_fields AS b
+				WHERE a.Id = '" . $_REQUEST['rubric_id'] . "'
+				AND b.Id = '" . $_REQUEST['field_id'] . "'
+			")->FetchAssocArray();
+
+			$AVE_Template->assign('errors', $errors);
+			$AVE_Template->assign($sql);
+			$AVE_Template->assign('content', $AVE_Template->fetch('rubs/alias.tpl'));
+		}
+
+ 	}
+
 }
 
 ?>

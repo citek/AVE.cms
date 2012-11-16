@@ -77,6 +77,9 @@ $allowed = array('index',   'start',    'templates',  'rubs', 'user', 'finder',
 );
 $do = (!empty($_REQUEST['do']) && in_array($_REQUEST['do'], $allowed)) ? $_REQUEST['do'] : 'start';
 
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Expires: " . date("r"));
+
 include(BASE_DIR . '/lib/subversion/work_svn.php');
 include(BASE_DIR . '/admin/' . $do . '.php');
 

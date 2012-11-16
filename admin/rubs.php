@@ -56,10 +56,12 @@ switch($_REQUEST['action'])
 
 				case 'save':
 					$Rtemplate = $_POST['rubric_template'];
+					$Htemplate = $_POST['rubric_header_template'];
+					$Ttemplate = $_POST['rubric_teaser_template'];
 					$check_code = strtolower($Rtemplate);
 					$ok = true;
 
-					if(is_php_code($check_code) && !check_permission('rubric_php') )
+					if((is_php_code($check_code)&&strtolower($Htemplate)&&strtolower($Ttemplate)) && !check_permission('rubric_php') )
 					{
 						$AVE_Template->assign('php_forbidden', 1);
 						$ok = false;
@@ -71,7 +73,7 @@ switch($_REQUEST['action'])
 					}
 					else
 					{
-						$AVE_Rubric->rubricTemplateSave($_POST['rubric_template']);
+						$AVE_Rubric->rubricTemplateSave($Rtemplate, $Htemplate, $Ttemplate);
 					}
 					break;
 			}
@@ -132,6 +134,14 @@ switch($_REQUEST['action'])
 					break;
 			}
 		}
+		break;
+
+	case 'alias_add':
+		$AVE_Rubric->rubricAliasAdd();
+		break;
+
+	case 'alias_check':
+		$AVE_Rubric->rubricAliasCheck((int)$_REQUEST['rubric_id'],(int)$_REQUEST['field_id'], $_REQUEST['rubric_field_alias']);
 		break;
 }
 

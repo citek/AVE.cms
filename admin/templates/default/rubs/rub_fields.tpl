@@ -15,6 +15,17 @@
 {/literal}
 
 <script language="Javascript" type="text/javascript">
+
+function openAliasWindow(fieldId, rubId, width, height, target) {ldelim}
+	if (typeof width=='undefined' || width=='') var width = screen.width * 0.8;
+	if (typeof height=='undefined' || height=='') var height = screen.height * 0.8;
+	if (typeof scrollbar=='undefined') var scrollbar=1;
+	var left = ( screen.width - width ) / 2;
+	var top = ( screen.height - height ) / 2;
+	window.open('index.php?field_id='+fieldId+'&rubric_id='+rubId+'&target='+target+'&do=rubs&action=alias_add&cp={$sess}&pop=1','pop','left='+left+',top='+top+',width='+width+',height='+height+',scrollbars='+scrollbar+',resizable=1').focus();
+{rdelim}
+
+
 $(document).ready(function(){ldelim}
 	$('tr.tpls').hide();
 
@@ -73,7 +84,8 @@ $(document).ready(function(){ldelim}
 	{assign var=js_form value='kform'}
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic" id="Fields">
 		<col width="20">
-		<col width="100">
+		<col width="40">
+		<col width="175">
 		<col width="220">
 		<col width="220">
 		<col>
@@ -83,6 +95,7 @@ $(document).ready(function(){ldelim}
 		<tr>
 			<td align="center"><div align="center"><input type="checkbox" id="selall" value="1" /></div></td>
 			<td>{#RUBRIK_ID#}</td>
+			<td>{#RUBRIK_FIELD_ALIAS#}</td>
 			<td>{#RUBRIK_FIELD_NAME#}</td>
 			<td>{#RUBRIK_FIELD_TYPE#}</td>
 			<td>{#RUBRIK_FIELD_DEFAULT#}</td>
@@ -96,7 +109,12 @@ $(document).ready(function(){ldelim}
 		{foreach from=$rub_fields item=rf}
 			<tr>
 				<td align="center"><input title="{#RUBRIK_MARK_DELETE#}" name="del[{$rf->Id}]" type="checkbox" id="del[{$rf->Id}]" value="1" class="checkbox" /></td>
-				<td>[tag:fld:{$rf->Id}]</td>
+				<td align="center">{$rf->Id}</td>
+				<td nowrap>
+					<input name="alias[{$rf->Id}]" type="text" id="alias_{$rf->Id}" value="{$rf->rubric_field_alias|escape}" style="width: 100px;" readonly />
+					&nbsp;
+					<input type="button" class="button blackBtn topDir" onclick="openAliasWindow('{$rf->Id}','{$smarty.request.Id|escape}','750','400','alias_{$rf->Id}')" value="...">
+				</td>
 				<td><div class="pr12"><input name="title[{$rf->Id}]" type="text" id="title[{$rf->Id}]" value="{$rf->rubric_field_title|escape}" style="width:100%;" /></div></td>
 				<td>
 					<select name="rubric_field_type[{$rf->Id}]" id="rubric_field_type[{$rf->Id}]" style="width: 250px;">
@@ -174,7 +192,7 @@ $(document).ready(function(){ldelim}
 			</tr>
 		{/foreach}
 		<tr>
-			<td colspan="7">
+			<td colspan="8">
 				<input type="hidden" name="submit" value="" id="nf_save_next" />
 				<input type="submit" class="basicBtn" value="{#RUBRIK_BUTTON_SAVE#}" onclick="document.getElementById('nf_save_next').value='save'" />&nbsp;
 				<input type="submit" class="redBtn" value="{#RUBRIK_BUTTON_TEMPL#}" onclick="document.getElementById('nf_save_next').value='next'" />

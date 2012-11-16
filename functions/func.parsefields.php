@@ -50,12 +50,16 @@ function document_pagination($text)
 function document_get_field($field_id)
 {
 	global $AVE_Core;
-
+	
 	if (is_array($field_id)) $field_id = $field_id[1];
-
 	$document_fields = get_document_fields($AVE_Core->curentdoc->Id);
 
+
+	if (!is_array($document_fields[$field_id]))$field_id=intval($document_fields[$field_id]);
+
+
 	if (empty($document_fields[$field_id])) return '';
+
 
 	$field_value = trim($document_fields[$field_id]['field_value']);
 

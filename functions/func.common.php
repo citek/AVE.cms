@@ -763,6 +763,18 @@ function report404($meldung, $typ = 0, $rub = 0)
 	file_put_contents($logfile,'<? $logdata='.var_export($logdata,true).' ?>');
 }
 
+//Возвращаем истинное значение поля для документа
+//Истинное - AsIs в табличке
+function get_document_field($document_id,$field)
+{
+	$document_fields=get_document_fields($document_id);
+	if (!is_array($document_fields[$field]))$field=intval($document_fields[$field]);
+	if (empty($document_fields[$field])) return false;
+
+	$field_value = $document_fields[$field]['field_value'];
+	return $field_value;
+}
+
 function get_document_fields($document_id,$values=null)
 {
 	global $AVE_DB, $request_documents;
@@ -781,6 +793,7 @@ function get_document_fields($document_id,$values=null)
 				doc_field.Id,
 				document_id,
 				rubric_field_id,
+				rubric_field_alias,
 				rubric_field_type,
 				field_value,
 				document_author_id,
@@ -822,11 +835,11 @@ function get_document_fields($document_id,$values=null)
 				$row['rubric_field_template'] = preg_replace('/\[tag:if_empty](.*?)\[\/tag:if_empty]/si', '', $row['rubric_field_template']);
 				$row['rubric_field_template'] = trim(str_replace(array('[tag:if_notempty]','[/tag:if_notempty]'), '', $row['rubric_field_template']));
 			}
-
+		
 			$document_fields[$row['document_id']][$row['rubric_field_id']] = $row;
+			$document_fields[$row['document_id']][$row['rubric_field_alias']] = $row['rubric_field_id'];
 		}
 	}
-
 	return $document_fields[$document_id];
 }
 

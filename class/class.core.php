@@ -774,7 +774,7 @@ class AVE_Core
 					else
 					{
 						// парсим теги полей в шаблоне документа
-						$main_content = preg_replace_callback('/\[tag:fld:(\d+)\]/', 'document_get_field', $rubTmpl);
+						$main_content = preg_replace_callback('/\[tag:fld:([a-zA-Z0-9-_]+)\]/', 'document_get_field', $rubTmpl);
 						$main_content = preg_replace_callback('/\[tag:([r|c|f]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $main_content);
 
 						// удаляем ошибочные теги полей
@@ -802,7 +802,17 @@ class AVE_Core
 			}
 			$out = str_replace('[tag:maincontent]', $main_content, $this->_coreDocumentTemplateGet(RUB_ID));
 		}	// /вывод документа
-
+		// Тут мы вводим в хеадер иньекцию скриптов.
+		$rubheader=$AVE_DB->Query("
+							SELECT rubric_header_template
+							FROM " . PREFIX . "_rubrics
+							WHERE Id = '" . RUB_ID . "'
+							LIMIT 1
+						",CACHE_LIFETIME)->GetCell();
+						
+		//$rubheader = preg_replace('/\[tag:rfld:([a-zA-Z0-9-_]+)]\[(more|esc|img|[0-9-]+)]/e', "request_get_document_field(\"$1\", $id, \"$2\")", $rubheader);
+		$out = str_replace('[tag:rubheader]', $rubheader, $out);
+		$out = preg_replace('/\[tag:rfld:([a-zA-Z0-9-_]+)]\[(more|esc|img|[0-9-]+)]/e', "request_get_document_field(\"$1\", $id, \"$2\")", $out);
 		// Если в запросе пришел параметр print, т.е. страница для печати, парсим контент, который обрамлен
         // тегами только для печати
 		if (isset ($_REQUEST['print']) && $_REQUEST['print'] == 1)
@@ -900,6 +910,7 @@ class AVE_Core
 		$replace[] = isset ($this->curentdoc->document_count_view) ? $this->curentdoc->document_count_view : '';
 
 		$out = str_replace($search, $replace, $out);
+		$out = preg_replace_callback('/\[tag:teaser:(\d+)\]/', "showteaser", $out);
 		unset ($search, $replace);
 
 		// парсим теги для combine.php

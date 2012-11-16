@@ -56,8 +56,8 @@ function parse_navigation($navi_tag)
 		$navi_active = $AVE_DB->Query("
 			SELECT CONCAT_WS(
 					';',
-					CONCAT_WS (',', nav.Id, nav.parent_id, nav2.parent_id),
-					CONCAT_WS (',', nav.navi_item_level),
+					CONCAT_WS(',', nav.Id, nav.parent_id, nav2.parent_id),
+					CONCAT_WS(',', nav.navi_item_level),
 					nav.Id
 				)
 			FROM
