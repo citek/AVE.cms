@@ -36,11 +36,6 @@ AddDefaultCharset utf-8
 	#index.php Редирект
 	RewriteRule ^index\.(.+)$ http://%{HTTP_HOST}/ [R,L]
 
-	#Заглушка для admin
-	RewriteRule ^admin/$ admin/index.php [QSA,L]
-
-	RewriteRule ^install/$ install/index.php [QSA,L]
-
 	#Убираем слеш в конце
 	RewriteCond %{HTTP_HOST} (.*)
 	RewriteCond %{REQUEST_URI} /$ [NC]
