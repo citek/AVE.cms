@@ -33,8 +33,9 @@ AddDefaultCharset utf-8
 	RewriteEngine on
 	RewriteBase /
 
-	#index.php Редирект
-	RewriteRule ^index\.(.+)$ http://%{HTTP_HOST}/ [R,L]
+	#Заглушка для index.php
+	RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php\ HTTP/
+	RewriteRule ^index\.php$ http://%{HTTP_HOST}/ [R=301,L]
 
 	#Убираем слеш в конце
 	RewriteCond %{HTTP_HOST} (.*)
