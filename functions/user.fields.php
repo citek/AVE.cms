@@ -1,5 +1,61 @@
 <?php
 
+//Дата
+function get_field_data($field_value,$type,$field_id='',$rubric_field_template='',$tpl_field_empty=0,&$maxlength = '',$document_fields=0,$rubric_id=0,$dropdown=''){
+	global $AVE_Template, $AVE_Core, $AVE_Document;
+	$res=0;
+	switch ($type)
+	{
+		case 'edit' :
+			$field = "
+			<script type=\"text/javascript\">
+			$(document).ready(function(){
+				$('#field" . $field_id . "').datetimepicker({
+					dateFormat: \"dd-mm-yy\",
+				});
+			});
+			</script>
+
+			<input id=\"feld_" . $field_id . "\" name=\"feld[" . $field_id . "]\" value=\"".$field_value."\" type=\"hidden\">
+
+			<input id=\"field" . $field_id . "\" type=\"text\" name=\"field[" . $field_id . "]\" value=\"" . strftime("%d-%m-%Y %H:%M", $field_value) . "\" style=\"width: 250px\" onchange=\"
+					$('#feld_" . $field_id ."').val('');
+					$('#feld_" . $field_id . "').val($('#field" . $field_id ."').datetimepicker('getDate')/1000);
+			\">";
+			$res=$field;
+			break;
+
+		case 'doc' :
+			if (!$tpl_field_empty)
+			{
+				$field_value = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_value', $rubric_field_template);
+			}else{
+				$field_value = strftime("%d-%m-%Y %H:%M", $field_value);
+			}
+
+			$res=$field_value;
+			break;
+
+		case 'req' :
+			
+			if (!$tpl_field_empty)
+			{
+				$field_value = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_value', $rubric_field_template);
+			}else{
+				$field_value = strftime("%d-%m-%Y %H:%M", $field_value);
+			}
+
+			$res=$field_value;
+			break;
+
+		case 'name' :
+			$res='FIELD_DATA';
+		break;
+
+	}
+	return ($res ? $res : $field_value);
+}
+
 //Код
 function get_field_code($field_value,$type,$field_id='',$rubric_field_template='',$tpl_field_empty=0,&$maxlength = '',$document_fields=0,$rubric_id=0,$dropdown=''){
 	global $AVE_Template, $AVE_Core, $AVE_Document;

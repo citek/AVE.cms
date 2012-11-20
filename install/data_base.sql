@@ -244,15 +244,15 @@ INSERT INTO `%%PRFX%%_document_fields` VALUES
   (4, 2, 2, 0, 'Извините, запрошенный Вами документ не найден.', '0');#inst#
 
 INSERT INTO `%%PRFX%%_documents` VALUES
-  (1, 1, 0, '/', 'Главная', 'Главная страница', 0, 0, 0, 1, '0', '', '', 'index,follow', '1', '0', 0, 0, 0),
-  (2, 1, 0, '404-not-found', '404 - Документ не найден', 'Ошибка 404', 0, 0, 0, 1, '0', '', '', 'noindex,nofollow', '1', '0', 0, 0, 0);#inst#
+  (1, 1, 0, '/', 'Главная', 'Главная страница', 0, 0, 0, 1, '0', '', '', 'index,follow', '1', '0', 0, 0, 0, ''),
+  (2, 1, 0, '404-not-found', '404 - Документ не найден', 'Ошибка 404', 0, 0, 0, 1, '0', '', '', 'noindex,nofollow', '1', '0', 0, 0, 0, '');#inst#
 
 INSERT INTO `%%PRFX%%_navigation` VALUES
   (1, 'Основное меню', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');#inst#
 
 INSERT INTO `%%PRFX%%_rubric_fields` VALUES
-  (1, 1, 'Заголовок', 'kurztext', 1, '', '', ''),
-  (2, 1, 'Текст', 'langtext', 2, '', '', '');#inst#
+  (1, 1, 'header', 'Заголовок', 'kurztext', 1, '', '', ''),
+  (2, 1, 'text', 'Текст', 'langtext', 2, '', '', '');#inst#
 
 INSERT INTO `%%PRFX%%_rubric_permissions` VALUES
   (1, 1, 1, 'alles'),
@@ -261,7 +261,7 @@ INSERT INTO `%%PRFX%%_rubric_permissions` VALUES
   (4, 1, 4, 'docread');#inst#
 
 INSERT INTO `%%PRFX%%_rubrics` VALUES
-  (1, 'Основные страницы', '', '<h1>[tag:fld:1]</h1>[tag:fld:2]', 1, 1, 0, 1, '', '');#inst#
+  (1, 'Основные страницы', '', '<h1>[tag:fld:header]</h1>[tag:fld:text]', 1, 1, 0, 1, '', '', '', '');#inst#
 
 INSERT INTO `%%PRFX%%_settings` VALUES
   (1, '%%SITENAME%%', 'mail', 'text/plain', 465, 'smtp.gmail.com', 'yourusername@gmail.com', 'yourpassword', 'ssl', '/usr/sbin/sendmail', 800, '%%EMAIL%%', '%%USERNAME%%', 'Здравствуйте %NAME%,\r\nВаша регистрация на сайте %HOST%. \r\n\r\nТеперь Вы можете войти на %HOST% со следующими данными:: \r\n\r\nПароль: %PASSWORD%\r\nE-Mail: %EMAIL%\r\n\r\n-----------------------\r\n%EMAILSIGNATURE%\r\n\r\n', '--------------------\r\nOverdoze Team\r\nwww.overdoze.ru\r\ninfo@overdoze.ru\r\n--------------------', 2, '<h2>Ошибка...</h2>\r\n<br />\r\nУ Вас нет прав на просмотр этого документа!.', '<div class="page_navigation_box">%s</div>', 'Первая «', '» Последняя', '…', '»', '«', 'Страница %d из %d', '%d %B %Y', '%d %B %Y, %H:%M', 'RU', '0', '0', '<div class="hidden_box">Содержимое скрыто. Пожалуйста, <a href="index.php?module=login&action=register">зарегистрируйтесь</a></div>');#inst#

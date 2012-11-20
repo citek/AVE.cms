@@ -222,6 +222,7 @@ function printNavi($navi_menu,$navi_items,$navi_active_way,$navi_item_tpl,$paren
 		if (strpos($row['navi_item_link'], 'module=') === false && start_with('index.php?', $row['navi_item_link']))
 		{
 			$item = str_replace('[tag:link]', $row['navi_item_link'] . "&amp;doc=" . ((!$row['document_alias']) ? prepare_url($row['title']) : $row['document_alias']), $item);
+			$item = str_ireplace('"//"','"/"',str_ireplace('///','/',rewrite_link($item)));
 		}
 		else
 		{
