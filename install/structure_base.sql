@@ -96,7 +96,7 @@ CREATE TABLE `%%PRFX%%_module` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 PACK_KEYS=0;#inst#
 
 CREATE TABLE `%%PRFX%%_navigation` (
-  `id` smallint(3) unsigned NOT NULL auto_increment,
+  `id` smallint(3) unsigned NOT NULL AUTO_INCREMENT,
   `navi_titel` varchar(255) NOT NULL,
   `navi_level1` text NOT NULL,
   `navi_level2` text NOT NULL,
@@ -113,8 +113,8 @@ CREATE TABLE `%%PRFX%%_navigation` (
   `navi_begin` text NOT NULL,
   `navi_end` text NOT NULL,
   `navi_user_group` text NOT NULL,
-  `navi_expand` enum('0','1') NOT NULL default '0',
-  PRIMARY KEY  (`id`)
+  `navi_expand_ext` enum('0','1','2') DEFAULT '1',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 PACK_KEYS=0;#inst#
 
 CREATE TABLE `%%PRFX%%_navigation_items` (
