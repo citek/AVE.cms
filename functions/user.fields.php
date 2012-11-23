@@ -37,12 +37,15 @@ function get_field_data($field_value,$type,$field_id='',$rubric_field_template='
 			break;
 
 		case 'req' :
-			
-			if (!$tpl_field_empty)
+
+			$field_value = clean_php($field_value);
+			if ($document_fields[$rubric_id]['tpl_req_empty'])
 			{
-				$field_value = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_value', $rubric_field_template);
-			}else{
 				$field_value = strftime("%d-%m-%Y %H:%M", $field_value);
+			}
+			else
+			{
+                $field_value = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_value', $document_fields[$rubric_id]['rubric_field_template_request']);
 			}
 
 			$res=$field_value;

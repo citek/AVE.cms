@@ -351,7 +351,7 @@ function changeRub(select) {ldelim}
 	</thead>
 	{foreach from=$tags item=tag}
 		<tr>
-			<td><a title="{#REQUEST_INSERT_INFO#}" href="javascript:void(0);" onclick="textSelection2('[tag:rfld:{$tag->Id}][', '150]');" class="toprightDir"><strong>[tag:rfld:{$tag->Id}][150]</strong></a></td>
+			<td><a title="{#REQUEST_INSERT_INFO#}" href="javascript:void(0);" onclick="textSelection2('[tag:rfld:{if $tag->rubric_field_alias}{$tag->rubric_field_alias}{else}{$tag->Id}{/if}][', '150]');" class="toprightDir"><strong>[tag:rfld:{if $tag->rubric_field_alias}{$tag->rubric_field_alias}{else}{$tag->Id}{/if}][150]</strong></a></td>
 			<td><strong>{$tag->rubric_field_title}</strong></td>
 			<td>
 				{section name=feld loop=$feld_array}
