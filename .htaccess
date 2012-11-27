@@ -46,8 +46,8 @@ AddDefaultCharset utf-8
 
 #	Редирект с www.domain.com на domain.com
 #	http://site
-	RewriteCond %{HTTP_HOST} ^www\.(.+) [NC]
-	RewriteRule (.*) http://%1/$1 [R=permanent,L]
+#	RewriteCond %{HTTP_HOST} ^www\.(.+) [NC]
+#	RewriteRule (.*) http://%1/$1 [R=permanent,L]
 
 #	Редирект с domain.com на www.domain.com
 #	http://www.site
