@@ -99,6 +99,12 @@
 
 					<tr>
 						<td>
+							<strong><a class="rightDir" title="{#TEMPLATES_RUBHEADER#}" href="javascript:void(0);" onclick="textSelection('[tag:rubheader]','');">[tag:rubheader]</a></strong>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
 							<strong><a class="rightDir" title="{#TEMPLATES_TITLE#}" href="javascript:void(0);" onclick="textSelection('[tag:title]','');">[tag:title]</a></strong>
 						</td>
 					</tr>

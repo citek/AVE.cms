@@ -69,7 +69,7 @@
 			<td>
 				<strong><a class="rightDir" title="{#RUBRIK_TEMPLATES_THEME_FOLDER#}" href="javascript:void(0);" onclick="textSelection2('[tag:theme:',']');">[tag:theme:folder]</a></strong>
 			</td>
-            <td rowspan="8" colspan="2"><textarea {$read_only} class="{if $php_forbidden==1}tpl_code_readonly{else}{/if}" style="width:100%; height:200px" name="rubric_header_template" id="rubric_header_template">{$row->rubric_header_template|default:$prefab|escape:html}</textarea></td>
+            <td rowspan="9" colspan="2"><textarea {$read_only} class="{if $php_forbidden==1}tpl_code_readonly{else}{/if}" style="width:100%; height:200px" name="rubric_header_template" id="rubric_header_template">{$row->rubric_header_template|default:$prefab|escape:html}</textarea></td>
 		</tr>
 
 		<tr>
@@ -99,6 +99,13 @@
 		<tr>
 			<td>
 				<strong><a class="rightDir" title="{#RUBRIK_TEMPLATES_INDEXFOLLOW#}" href="javascript:void(0);" onclick="textSelection2('[tag:robots]','');">[tag:robots]</a></strong>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				<strong><a class="rightDir" title="{#RUBRIK_TEMPLATES_CSS#}" href="javascript:void(0);" onclick="textSelection2('[tag:css:]','');">[tag:css:FFF:P]</a></strong>,&nbsp;&nbsp;
+                <strong><a class="rightDir" title="{#RUBRIK_TEMPLATES_JS#}" href="javascript:void(0);" onclick="textSelection2('[tag:js:]','');">[tag:js:FFF:P]</a></strong>
 			</td>
 		</tr>
 
@@ -527,7 +534,7 @@
 		  hlLine = editor2.setLineClass(editor2.getCursor().line, null, "activeline");
 		}
       });
-	  editor2.setSize("100%", 250);
+	  editor2.setSize("100%", 280);
       function getSelectedRange2() {
         return { from: editor2.getCursor(true), to: editor2.getCursor(false) };
       }

@@ -909,14 +909,14 @@ class AVE_Core
 		$search[] = '[tag:docviews]';
 		$replace[] = isset ($this->curentdoc->document_count_view) ? $this->curentdoc->document_count_view : '';
 
-		$out = str_replace($search, $replace, $out);
+		// парсим тизер документа
 		$out = preg_replace_callback('/\[tag:teaser:(\d+)\]/', "showteaser", $out);
+		// парсим остальные теги основного шаблона
+		$out = str_replace($search, $replace, $out);
 		unset ($search, $replace);
 
 		// парсим теги для combine.php
 		$out = preg_replace_callback('/\[tag:(css|js):([^ :\/]+):?(\S+)*\]/', array($this, '_parse_combine'), $out);
-
-		// /парсим остальные теги основного шаблона
 
 		// ЧПУ
 		$out = rewrite_link($out);

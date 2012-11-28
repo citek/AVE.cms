@@ -115,6 +115,8 @@ RUBRIK_TEMPLATES_DESCRIPTION  = "Описание страницы (Meta - Descr
 RUBRIK_TEMPLATES_INDEXFOLLOW  = "Тип индексирования"
 RUBRIK_TEMPLATES_PATH         = "Корневой путь установки"
 RUBRIK_TEMPLATES_MEDIAPATH    = "Путь до папки с шаблоном (Пример: [tag:mediapath]images/logo.gif)"
+RUBRIK_TEMPLATES_CSS          = "Сжимает несколько css-файлов в один. Возвращает путь.<br><b>FFF</b> - имена файлов через запятую<br><b>P</b> - путь к папке с файлами, не обязательно. По умолчанию - [tag:mediapath]css/<br><br><i>Пример:</i> href=&quot;[tag:css:reset.css,style.css]&quot;"
+RUBRIK_TEMPLATES_JS           = "Сжимает несколько js-файлов в один. Возвращает путь.<br><b>FFF</b> - имена файлов через запятую<br><b>P</b> - путь к папке с файлами, не обязательно. По умолчанию - [tag:mediapath]js/<br><br><i>Пример:</i> href=&quot;[tag:js:common.js,main.js]&quot;"
 
 REQUEST_RUB_INFO       = "Системный тег отвечающий за вывод содержимого поля рубрики. ID-номер поля. ХХХ-количество символов для отображения."
 REQUEST_SELECT_IN_LIST = "Пожалуйста, выберите поле рубрики из списка, приведенного ниже"
