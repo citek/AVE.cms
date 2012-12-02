@@ -7,6 +7,7 @@ function get_field_data($field_value,$type,$field_id='',$rubric_field_template='
 	switch ($type)
 	{
 		case 'edit' :
+			$field_value = ($field_value != 0) ? $field_value : '';
 			$field = "
 			<script type=\"text/javascript\">
 			$(document).ready(function(){
@@ -26,6 +27,8 @@ function get_field_data($field_value,$type,$field_id='',$rubric_field_template='
 			break;
 
 		case 'doc' :
+
+			$field_value = clean_php($field_value);
 			if (!$tpl_field_empty)
 			{
 				$field_value = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_value', $rubric_field_template);
