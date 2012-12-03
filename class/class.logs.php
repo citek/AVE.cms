@@ -42,7 +42,7 @@ class AVE_Logs
 		$logdata=array();
 		$logfile = BASE_DIR.$this->_logdir;
 		if(file_exists($logfile))
-			include($logfile);
+			@eval('?>'.file_get_contents($logfile).'<?');
 		arsort($logdata);
 		// Передаем данные в шаблон для вывода и отображаем страницу
         $AVE_Template->assign('logs', $logdata);
@@ -123,7 +123,7 @@ class AVE_Logs
 		$logdata=array();
 		$logfile = BASE_DIR.$this->_logdir;
 		if(file_exists($logfile))
-			include($logfile);
+			@eval('?>'.file_get_contents($logfile).'<?');
 		arsort($logdata);
 		$fieldcount = count($logdata[0]);
 		
