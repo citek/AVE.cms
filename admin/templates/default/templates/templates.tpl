@@ -133,41 +133,65 @@ $(document).ready(function(){ldelim}
 		<div id="tab3" class="tab_content" style="display:none;">
 		<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 		<tbody>
-				{foreach from=$css_files item=css_files}
-		<tr class="noborder">
-			<td>
-				<a title="{#TEMPLATES_EDIT_FILE#}" href="index.php?do=templates&amp;action=edit_css&amp;sub=edit&amp;name_file={$css_files}&amp;cp={$sess}" class="toprightDir">{$css_files}</a>
-			</td>
-			<td nowrap="nowrap" width="1%" align="center">
-				<a title="{#TEMPLATES_EDIT_FILE#}" href="index.php?do=templates&amp;action=edit_css&amp;sub=edit&amp;name_file={$css_files}&amp;cp={$sess}" class="topDir icon_sprite ico_edit"></a>
-			</td>
+			{if check_permission('template_edit')}
+			{if $css_files}
+			{foreach from=$css_files item=css_files}
+			<tr>
+				<td>
+					<a title="{#TEMPLATES_EDIT_FILE#}" href="index.php?do=templates&amp;action=edit_css&amp;sub=edit&amp;name_file={$css_files}&amp;cp={$sess}" class="toprightDir"><strong>{$css_files}</strong></a>
+				</td>
+				<td nowrap="nowrap" width="1%" align="center">
+					<a title="{#TEMPLATES_EDIT_FILE#}" href="index.php?do=templates&amp;action=edit_css&amp;sub=edit&amp;name_file={$css_files}&amp;cp={$sess}" class="topDir icon_sprite ico_edit"></a>
+				</td>
 
-			<td nowrap="nowrap" width="1%" align="center">
-				<a title="{#TEMPLATES_DEL_FILE#}" dir="{#TEMPLATES_DEL_FILE#}" name="{#TEMPLATES_DELETE_CONF#}" href="index.php?do=templates&amp;action=edit_css&amp;sub=delete&amp;name_file={$css_files}&amp;cp={$sess}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
-			</td>
-		</tr>
-				{/foreach}
+				<td nowrap="nowrap" width="1%" align="center">
+					<a title="{#TEMPLATES_DEL_FILE#}" dir="{#TEMPLATES_DEL_FILE#}" name="{#TEMPLATES_DELETE_CONF#}" href="index.php?do=templates&amp;action=edit_css&amp;sub=delete&amp;name_file={$css_files}&amp;cp={$sess}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
+				</td>
+			</tr>
+			{/foreach}
+			{else}
+			<tr>
+				<td colspan="3">
+					<ul class="messages">
+						<li class="highlight yellow">{#TEMPLATES_NO_ITEMS#}</li>
+					</ul>
+				</td>
+			</tr>
+			{/if}
+			{/if}
 		</tbody>
 		</table>
 		</div>
 
 		<div id="tab4" class="tab_content" style="display:none;">
 		<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
-				{foreach from=$js_files item=js_files}
-		<tr class="noborder">
-			<td>
-				<a title="{#TEMPLATES_EDIT_FILE#}" href="index.php?do=templates&amp;action=edit_js&amp;sub=edit&amp;name_file={$js_files}&amp;cp={$sess}" class="toprightDir">{$js_files}</a>
-			</td>
+			{if check_permission('template_edit')}
+			{if $js_files}
+			{foreach from=$js_files item=js_files}
+			<tr>
+				<td>
+					<a title="{#TEMPLATES_EDIT_FILE#}" href="index.php?do=templates&amp;action=edit_js&amp;sub=edit&amp;name_file={$js_files}&amp;cp={$sess}" class="toprightDir"><strong>{$js_files}</strong></a>
+				</td>
 
-			<td nowrap="nowrap" width="1%" align="center">
-				<a title="{#TEMPLATES_EDIT_FILE#}" href="index.php?do=templates&amp;action=edit_js&amp;sub=edit&amp;name_file={$js_files}&amp;cp={$sess}" class="topDir icon_sprite ico_edit"></a>
-			</td>
+				<td nowrap="nowrap" width="1%" align="center">
+					<a title="{#TEMPLATES_EDIT_FILE#}" href="index.php?do=templates&amp;action=edit_js&amp;sub=edit&amp;name_file={$js_files}&amp;cp={$sess}" class="topDir icon_sprite ico_edit"></a>
+				</td>
 
-			<td nowrap="nowrap" width="1%" align="center">
-				<a title="{#TEMPLATES_DEL_FILE#}" dir="{#TEMPLATES_DEL_FILE#}" name="{#TEMPLATES_DELETE_CONF#}" href="index.php?do=templates&amp;action=edit_js&amp;sub=delete&amp;name_file={$js_files}&amp;cp={$sess}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
-			</td>
-		</tr>
-				{/foreach}
+				<td nowrap="nowrap" width="1%" align="center">
+					<a title="{#TEMPLATES_DEL_FILE#}" dir="{#TEMPLATES_DEL_FILE#}" name="{#TEMPLATES_DELETE_CONF#}" href="index.php?do=templates&amp;action=edit_js&amp;sub=delete&amp;name_file={$js_files}&amp;cp={$sess}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
+				</td>
+			</tr>
+			{/foreach}
+			{else}
+			<tr>
+				<td colspan="3">
+					<ul class="messages">
+						<li class="highlight yellow">{#TEMPLATES_NO_ITEMS#}</li>
+					</ul>
+				</td>
+			</tr>
+			{/if}
+			{/if}
 		</table>
 		</div>
 

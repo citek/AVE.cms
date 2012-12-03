@@ -530,8 +530,8 @@
         tabMode: "shift",
         onChange: function(){editor2.save();},
 		onCursorActivity: function() {
-		  editor2.setLineClass(hlLine, null, null);
-		  hlLine = editor2.setLineClass(editor2.getCursor().line, null, "activeline");
+		  editor2.setLineClass(hlLine2, null, null);
+		  hlLine2 = editor2.setLineClass(editor2.getCursor().line, null, "activeline");
 		}
       });
 	  editor2.setSize("100%", 280);
@@ -545,7 +545,7 @@
         editor2.setCursor(range.from.line, range.from.ch + startTag.length);
       }
 
-      var hlLine = editor2.setLineClass(0, "activeline");
+      var hlLine2 = editor2.setLineClass(0, "activeline");
 
       var editor3 = CodeMirror.fromTextArea(document.getElementById("rubric_teaser_template"), {
       	extraKeys: {"Ctrl-S": function(cm){$("#f_tpl").ajaxSubmit(sett_options);}},
@@ -557,10 +557,10 @@
         indentWithTabs: true,
         enterMode: "keep",
         tabMode: "shift",
-        onChange: function(){editor2.save();},
+        onChange: function(){editor3.save();},
 		onCursorActivity: function() {
-		  editor3.setLineClass(hlLine, null, null);
-		  hlLine = editor3.setLineClass(editor2.getCursor().line, null, "activeline");
+		  editor3.setLineClass(hlLine3, null, null);
+		  hlLine3 = editor3.setLineClass(editor3.getCursor().line, null, "activeline");
 		}
       });
 	  editor3.setSize("100%", 420);
@@ -574,7 +574,7 @@
         editor3.setCursor(range.from.line, range.from.ch + startTag.length);
       }
 
-      var hlLine = editor2.setLineClass(0, "activeline");
+      var hlLine3 = editor3.setLineClass(0, "activeline");
 {/literal}
     </script>
 
