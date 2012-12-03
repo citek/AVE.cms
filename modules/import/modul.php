@@ -5,8 +5,8 @@ if (defined('ACP'))
 {
     $modul['ModulName'] = "Модуль импорта";
     $modul['ModulPfad'] = "import";
-    $modul['ModulVersion'] = "1.1";
-    $modul['description'] = "Данный модуль предназначен для импотра документов в определенную рубрику";
+    $modul['ModulVersion'] = "1.2";
+    $modul['description'] = "Данный модуль предназначен для импорта документов в определенную рубрику";
     $modul['Autor'] = "censored!";
     $modul['MCopyright'] = "&copy; 2011 Volga-Info Team";
     $modul['Status'] = 1;
@@ -22,34 +22,41 @@ if (defined('ACP'))
 /**
  * Администрирование
  */
- 
- function module_import_autoupdate(){
+function module_import_autoupdate()
+{
 	global $AVE_DB;
-	$sql="SELECT 
+	$sql="
+		SELECT 
 			Id,
 			import_default_file,
 			import_last_update 
-		FROM ". PREFIX ."_modul_import 
+		FROM " . PREFIX . "_modul_import 
 		WHERE import_monitor_file != 0
-		";
-	$res=$AVE_DB->Query($sql);
-	$rows=array();
-	while ($row = $res->FetchAssocArray()){
-		$rows[]=$row;
-		if(file_exists(BASE_DIR.$row["import_default_file"]))
-			if(filemtime(BASE_DIR.$row["import_default_file"])>$row['import_last_update'])
-				{
-					if (! (is_file(BASE_DIR . '/modules/import/class.import.php') &&
-						@require_once(BASE_DIR . '/modules/import/class.import.php'))) module_error();
-					Import::DoImport($row['Id']);
-				}
+	";
+	$res = $AVE_DB->Query($sql);
+	$rows = array();
+	while ($row = $res->FetchAssocArray())
+	{
+		$rows[] = $row;
+		if(file_exists(BASE_DIR . $row["import_default_file"]))
+		{
+			if(filemtime(BASE_DIR . $row["import_default_file"]) > $row['import_last_update'])
+			{
+				if (!(is_file(BASE_DIR . '/modules/import/class.import.php') &&
+					include_once(BASE_DIR . '/modules/import/class.import.php'))) module_error();
+				$import = new import;
+				$import -> DoImport($row['Id']);
+			}
+		}
 	}
- }
+}
  
-if (defined('ACP') && !empty($_REQUEST['moduleaction']))
+if (defined('ACP') && $_REQUEST['moduleaction'])
 {
-	if (! (is_file(BASE_DIR . '/modules/import/class.import.php') &&
-		@require_once(BASE_DIR . '/modules/import/class.import.php'))) module_error();
+	if (!(is_file(BASE_DIR . '/modules/import/class.import.php'))) module_error();
+
+	include_once(BASE_DIR . '/modules/import/class.import.php');
+	$import = new import;
 
 	$tpl_dir   = BASE_DIR . '/modules/import/templates/';
 	$lang_file = BASE_DIR . '/modules/import/lang/' . $_SESSION['user_language'] . '.txt';
@@ -59,26 +66,28 @@ if (defined('ACP') && !empty($_REQUEST['moduleaction']))
 	switch ($_REQUEST['moduleaction'])
 	{
 		case '1':
-			Import::importList($tpl_dir);
+			$import->importList($tpl_dir);
 			break;
 
 		case 'del':
-			Import::importDelete($_REQUEST['id']);
+			$import->importDelete($_REQUEST['id']);
 			break;
 
 		case 'edit':
-			Import::importEdit(isset($_REQUEST['id']) ? $_REQUEST['id'] : null, $tpl_dir);
+			$import->importEdit(isset($_REQUEST['id']) ? $_REQUEST['id'] : null, $tpl_dir);
 			break;
 
 		case 'saveedit':
-			Import::importSave(isset($_REQUEST['id']) ? $_REQUEST['id'] : null);
+			$import->importSave(isset($_REQUEST['id']) ? $_REQUEST['id'] : null);
 			break;
+
 		case 'do':
-			Import::DoImport(isset($_REQUEST['id']) ? $_REQUEST['id'] : null);
+			$import->DoImport(isset($_REQUEST['id']) ? $_REQUEST['id'] : null);
+			break;
+
+		case 'tags':
+			$import->DoImport(isset($_REQUEST['id']) ? $_REQUEST['id'] : null, true);
 			break;
 	}
 }
-
-	//module_import_autoupdate();
-
 ?>

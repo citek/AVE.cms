@@ -31,7 +31,7 @@ $sql="SELECT
 		left join ".PREFIX."_rubric_permissions rubperm
 			on rubperm.rubric_id=doc.rubric_id
 		where
-			rub.rubric_template>' '
+			rub.rubric_template NOT LIKE ''
 			AND doc.document_status=1
 			AND doc.document_expire>UNIX_TIMESTAMP()
 			AND doc.Id != 2

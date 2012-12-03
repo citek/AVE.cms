@@ -1416,8 +1416,8 @@ function write_htaccess_deny($dir)
 	$file = $dir . '/.htaccess';
 	if(!file_exists($file))
 	{
-		mkdir($dir);
-		file_put_contents($dir . '/.htaccess','Deny from all');
+		@mkdir($dir);
+		@file_put_contents($dir . '/.htaccess','Deny from all');
 	}
 }
 ?>
