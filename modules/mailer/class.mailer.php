@@ -418,7 +418,7 @@ class mailer
 				WHERE id=" . $mail_id
 			);
 		}
-		
+
 		// Отправляем письмо
 		if ($act == 'send') {
 
@@ -437,38 +437,45 @@ class mailer
 			$receivers = array();
 
 			// получатели из списков
-			$rec_lists = $AVE_DB->Query("
-				SELECT *
-				FROM " . PREFIX . "_modul_mailer_receivers
-				WHERE list_id = " . implode(' OR list_id = ',$_POST['to_lists'])
-			);
-			while ($rec = $rec_lists->FetchRow())
+			if($mailer['to_lists'])
 			{
-				if(!in_array($rec->email,$receivers) && (int)$rec->status == 1)
+				$rec_lists = $AVE_DB->Query("
+					SELECT *
+					FROM " . PREFIX . "_modul_mailer_receivers
+					WHERE list_id = " . implode(' OR list_id = ',$mailer['to_lists'])
+				);
+				while ($rec = $rec_lists->FetchRow())
 				{
-					$rec -> id = 'L' . $rec -> id;
-					array_push($mailer['receivers'], $rec);
-					array_push($receivers, $rec->email);
+					if(!in_array($rec->email,$receivers) && (int)$rec->status == 1)
+					{
+						$rec -> id = 'L' . $rec -> id;
+						array_push($mailer['receivers'], $rec);
+						array_push($receivers, $rec->email);
+					}
 				}
+				unset($rec);
 			}
-			unset($rec);
 
 			// получатели из групп
-			$rec_groups = $AVE_DB->Query("
-				SELECT id,email,lastname,firstname,user_group
-				FROM " . PREFIX . "_users
-				WHERE user_group = " . implode(' OR user_group = ',$_POST['to_groups'])
-			);
-			while ($rec = $rec_groups->FetchRow())
+			if($mailer['to_groups'])
 			{
-				if(!in_array($rec->email,$receivers))
+				$rec_groups = $AVE_DB->Query("
+					SELECT id,email,lastname,firstname,user_group
+					FROM " . PREFIX . "_users
+					WHERE user_group = " . implode(' OR user_group = ',$mailer['to_groups'])
+				);
+	
+				while ($rec = $rec_groups->FetchRow())
 				{
-					$rec -> id = 'G' . $rec -> id;
-					array_push($mailer['receivers'], $rec);
-					array_push($receivers, $rec->email);
+					if(!in_array($rec->email,$receivers))
+					{
+						$rec -> id = 'G' . $rec -> id;
+						array_push($mailer['receivers'], $rec);
+						array_push($receivers, $rec->email);
+					}
 				}
+				unset($rec);
 			}
-			unset($rec);
 
 			// дополнительные получатели
 			$rec_add = explode(';',$mailer['to_add']);

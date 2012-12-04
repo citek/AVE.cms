@@ -157,7 +157,7 @@
       <tr>
         <td>{#MAILER_MAILS_FINAL_REC#}</td>
         <td><div class="pr12">
-            <input type="button" class="greenBtn" onClick="countMail();" value="{#MAILER_MAILS_MAKE_FIN#}"/>
+            <input type="button" class="greenBtn" onclick="openLinkWinId('document_parent','document_parent');" value="{#MAILER_MAILS_MAKE_FIN#}"/>
           </div></td>
       </tr>
     </table>
@@ -226,6 +226,7 @@ function send() {ldelim}
 				$.alerts._overlay('hide');
 				$.jGrowl("{#MAILER_SENT_OK#}");
 				$("#sent_ok").show();
+				location.reload();
 			{rdelim}
 			else {ldelim}
 				$("#progressbar").progressbar({ldelim}value: Number(data){rdelim});
@@ -268,22 +269,28 @@ function save_func(ajax) {ldelim}
 	{rdelim}
 {rdelim}
 
+{if !$mail->sent}
+	{literal}
+	$(document).ready(function() {
+		Mousetrap.bind(['ctrl+s', 'meta+s'], function(e) {
+			if (e.preventDefault) e.preventDefault();
+			else e.returnValue = false;
+			save_func(true);
+			return false;
+		});
+	
+		$(".SaveEdit").click(function(e) {
+			if (e.preventDefault) e.preventDefault();
+			else e.returnValue = false;
+			save_func(true);
+			return false;
+		});
+	});
+	{/literal}
+{/if}
+
 {literal}
 $(document).ready(function() {
-	Mousetrap.bind(['ctrl+s', 'meta+s'], function(e) {
-		if (e.preventDefault) e.preventDefault();
-		else e.returnValue = false;
-		save_func(true);
-		return false;
-	});
-
-	$(".SaveEdit").click(function(e) {
-		if (e.preventDefault) e.preventDefault();
-		else e.returnValue = false;
-		save_func(true);
-		return false;
-	});
-	
 	var active_type = $("input[name=type]:checked").attr("value");
 	if (active_type == 'text') {
 		$("#html").hide(); $("#text").show(); $("#html textarea").attr("name","");
@@ -307,20 +314,16 @@ $(document).ready(function() {
 		}
 	});
 });
-{/literal}
 
-function countMail() {ldelim}
-	$("#mail_form").ajaxSubmit({ldelim}
-		url: 'index.php?do=modules&action=modedit&mod=mailer&moduleaction=countmail&id={$smarty.request.id}&cp={$sess}',
-		beforeSubmit: function() {ldelim}$.alerts._overlay('show');{rdelim},
-		success: function(data) {ldelim}
-			$.alerts._overlay('hide');
-			$.jGrowl('{#MAILER_MAILS_FIN_INFO#}');
-			$.jGrowl('{#MAILER_COUNT_ALL#}: '+data);
-			window.open('index.php?do=modules&action=modedit&mod=mailer&moduleaction=showcount&id={$smarty.request.id}&cp={$sess}&pop=1','mailer_showcount_{$smarty.request.id}','top=0,left=0,width=900,height=600,scrollbars=1,resizable=1');
-		{rdelim}
-	{rdelim});
-{rdelim}
+function openLinkWinId(target,doc) {
+	save_func(true);
+	var width = screen.width * 0.9;
+	var height = screen.height * 0.9;
+	var left = ( screen.width - width ) / 2;
+	var top = ( screen.height - height ) / 2;
+	window.open('index.php?do=modules&action=modedit&mod=mailer&moduleaction=showcount&id={$smarty.request.id}&pop=1&cp={$sess}','pop','left='+left+',top='+top+',width='+width+',height='+height+',scrollbars=1,resizable=1');
+}
+{/literal}
 
 function checkemail(in_email){ldelim}
 	emails = in_email.split(";");
@@ -381,9 +384,9 @@ function full_check(rec) {ldelim}
 	return true;
 {rdelim}
 
-{literal}
-var editor = CodeMirror.fromTextArea(document.getElementById("codemirror"), {
-	extraKeys: {"Ctrl-S": function(cm){save_func(true);}},
+var editor = CodeMirror.fromTextArea(document.getElementById("codemirror"),{ldelim}
+	readOnly: {if $mail->sent} true {else} false {/if},
+	extraKeys: {ldelim}"Ctrl-S": function(cm){ldelim}save_func(true);{rdelim}{rdelim},
 	lineNumbers: true,
 	lineWrapping: true,
 	matchBrackets: true,
@@ -392,12 +395,11 @@ var editor = CodeMirror.fromTextArea(document.getElementById("codemirror"), {
 	indentWithTabs: true,
 	enterMode: "keep",
 	tabMode: "shift",
-	onChange: function(){editor.save();},
-	onCursorActivity: function() {
+	onChange: function(){ldelim}editor.save();{rdelim},
+	onCursorActivity: function() {ldelim}
 		editor.setLineClass(hlLine, null, null);
 		hlLine = editor.setLineClass(editor.getCursor().line, null, "activeline");
-	}
-});
+	{rdelim}
+{rdelim});
 var hlLine = editor.setLineClass(0, "activeline");
-{/literal}
 </script>

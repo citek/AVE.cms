@@ -47,25 +47,25 @@
 
 				<td width="200">
 					<select style="width:200px" name="condition_compare[{$condition->Id}]" id="Operator_{$condition->Id}">
-						<option value="==" {if $condition->condition_compare=='=='}selected="selected"{/if}>{#REQUEST_COND_SELF#}</option>
-						<option value="!=" {if $condition->condition_compare=='!='}selected="selected"{/if}>{#REQUEST_COND_NOSELF#}</option>
-						<option value="%%" {if $condition->condition_compare=='%%'}selected="selected"{/if}>{#REQUEST_COND_USE#}</option>
-						<option value="--" {if $condition->condition_compare=='--'}selected="selected"{/if}>{#REQUEST_COND_NOTUSE#}</option>
-						<option value="%" {if $condition->condition_compare=='%'}selected="selected"{/if}>{#REQUEST_COND_START#}</option>
-						<option value="<=" {if $condition->condition_compare=='<='}selected="selected"{/if}>{#REQUEST_SMALL1#}</option>
-						<option value=">=" {if $condition->condition_compare=='>='}selected="selected"{/if}>{#REQUEST_BIG1#}</option>
-						<option value="<" {if $condition->condition_compare=='<'}selected="selected"{/if}>{#REQUEST_SMALL2#}</option>
-						<option value=">" {if $condition->condition_compare=='>'}selected="selected"{/if}>{#REQUEST_BIG2#}</option>
+						<option value="==" {if $condition->condition_compare=='=='}selected{/if}>{#REQUEST_COND_SELF#}</option>
+						<option value="!=" {if $condition->condition_compare=='!='}selected{/if}>{#REQUEST_COND_NOSELF#}</option>
+						<option value="%%" {if $condition->condition_compare=='%%'}selected{/if}>{#REQUEST_COND_USE#}</option>
+						<option value="--" {if $condition->condition_compare=='--'}selected{/if}>{#REQUEST_COND_NOTUSE#}</option>
+						<option value="%" {if $condition->condition_compare=='%'}selected{/if}>{#REQUEST_COND_START#}</option>
+						<option value="<=" {if $condition->condition_compare=='<='}selected{/if}>{#REQUEST_SMALL1#}</option>
+						<option value=">=" {if $condition->condition_compare=='>='}selected{/if}>{#REQUEST_BIG1#}</option>
+						<option value="<" {if $condition->condition_compare=='<'}selected{/if}>{#REQUEST_SMALL2#}</option>
+						<option value=">" {if $condition->condition_compare=='>'}selected{/if}>{#REQUEST_BIG2#}</option>
 
-						<option value="N==" {if $condition->condition_compare=='<='}selected="selected"{/if}>{#REQUEST_N_COND_SELF#}</option>
-						<option value="N<=" {if $condition->condition_compare=='<='}selected="selected"{/if}>{#REQUEST_N_SMALL1#}</option>
-						<option value="N>=" {if $condition->condition_compare=='>='}selected="selected"{/if}>{#REQUEST_N_BIG1#}</option>
-						<option value="N<" {if $condition->condition_compare=='<'}selected="selected"{/if}>{#REQUEST_N_SMALL2#}</option>
-						<option value="N>" {if $condition->condition_compare=='>'}selected="selected"{/if}>{#REQUEST_N_BIG2#}</option>
+						<option value="N==" {if $condition->condition_compare=='N=='}selected{/if}>{#REQUEST_N_COND_SELF#}</option>
+						<option value="N<=" {if $condition->condition_compare=='N<='}selected{/if}>{#REQUEST_N_SMALL1#}</option>
+						<option value="N>=" {if $condition->condition_compare=='N>='}selected{/if}>{#REQUEST_N_BIG1#}</option>
+						<option value="N<" {if $condition->condition_compare=='N<'}selected{/if}>{#REQUEST_N_SMALL2#}</option>
+						<option value="N>" {if $condition->condition_compare=='N>'}selected{/if}>{#REQUEST_N_BIG2#}</option>
 
-						<option value="IN=" {if $condition->condition_compare=='IN='}selected="selected"{/if}>{#REQUEST_IN_NUM#}</option>
-						<option value="ANY" {if $condition->condition_compare=='ANY'}selected="selected"{/if}>{#REQUEST_ANY_NUM#}</option>
-						<option value="FRE" {if $condition->condition_compare=='FRE'}selected="selected"{/if}>{#REQUEST_FREE#}</option>
+						<option value="IN=" {if $condition->condition_compare=='IN='}selected{/if}>{#REQUEST_IN_NUM#}</option>
+						<option value="ANY" {if $condition->condition_compare=='ANY'}selected{/if}>{#REQUEST_ANY_NUM#}</option>
+						<option value="FRE" {if $condition->condition_compare=='FRE'}selected{/if}>{#REQUEST_FREE#}</option>
 
 					</select>
 				</td>
@@ -100,24 +100,23 @@
 
 			<td width="200">
 				<select style="width:200px" name="Operator_Neu" id="Operator_Neu">
-					<option value="==" {if $condition->condition_compare=='=='}selected="selected"{/if}>{#REQUEST_COND_SELF#}</option>
-					<option value="!=" {if $condition->condition_compare=='!='}selected="selected"{/if}>{#REQUEST_COND_NOSELF#}</option>
-					<option value="%%" {if $condition->condition_compare=='%%'}selected="selected"{/if}>{#REQUEST_COND_USE#}</option>
-					<option value="--" {if $condition->condition_compare=='--'}selected="selected"{/if}>{#REQUEST_COND_NOTUSE#}</option>
-					<option value="%" {if $condition->condition_compare=='%'}selected="selected"{/if}>{#REQUEST_COND_START#}</option>
-					<option value="<=" {if $condition->condition_compare=='<='}selected="selected"{/if}>{#REQUEST_SMALL1#}</option>
-					<option value=">=" {if $condition->condition_compare=='>='}selected="selected"{/if}>{#REQUEST_BIG1#}</option>
-					<option value="<" {if $condition->condition_compare=='<'}selected="selected"{/if}>{#REQUEST_SMALL2#}</option>
-					<option value=">" {if $condition->condition_compare=='>'}selected="selected"{/if}>{#REQUEST_BIG2#}</option>
-
-					<option value="N==" {if $condition->condition_compare=='N=='}selected="selected"{/if}>{#REQUEST_N_COND_SELF#}</option>
-					<option value="N<=" {if $condition->condition_compare=='N<='}selected="selected"{/if}>{#REQUEST_N_SMALL1#}</option>
-					<option value="N>=" {if $condition->condition_compare=='N>='}selected="selected"{/if}>{#REQUEST_N_BIG1#}</option>
-					<option value="N<" {if $condition->condition_compare=='N<'}selected="selected"{/if}>{#REQUEST_N_SMALL2#}</option>
-					<option value="N>" {if $condition->condition_compare=='N>'}selected="selected"{/if}>{#REQUEST_N_BIG2#}</option>
-					<option value="IN=" {if $condition->condition_compare=='IN='}selected="selected"{/if}>{#REQUEST_IN_NUM#}</option>
-					<option value="ANY" {if $condition->condition_compare=='ANY'}selected="selected"{/if}>{#REQUEST_ANY_NUM#}</option>
-					<option value="FRE" {if $condition->condition_compare=='FRE'}selected="selected"{/if}>{#REQUEST_FREE#}</option>
+					<option value="==" selected>{#REQUEST_COND_SELF#}</option>
+					<option value="!=">{#REQUEST_COND_NOSELF#}</option>
+					<option value="%%">{#REQUEST_COND_USE#}</option>
+					<option value="--">{#REQUEST_COND_NOTUSE#}</option>
+					<option value="%">{#REQUEST_COND_START#}</option>
+					<option value="<=">{#REQUEST_SMALL1#}</option>
+					<option value=">=">{#REQUEST_BIG1#}</option>
+					<option value="<">{#REQUEST_SMALL2#}</option>
+					<option value=">">{#REQUEST_BIG2#}</option>
+					<option value="N==">{#REQUEST_N_COND_SELF#}</option>
+					<option value="N<=">{#REQUEST_N_SMALL1#}</option>
+					<option value="N>=">{#REQUEST_N_BIG1#}</option>
+					<option value="N<">{#REQUEST_N_SMALL2#}</option>
+					<option value="N>">{#REQUEST_N_BIG2#}</option>
+					<option value="IN=">{#REQUEST_IN_NUM#}</option>
+					<option value="ANY">{#REQUEST_ANY_NUM#}</option>
+					<option value="FRE">{#REQUEST_FREE#}</option>
 				</select>
 			</td>
 

@@ -7,7 +7,7 @@ if (defined('ACP'))
     $modul['ModulPfad'] = "import";
     $modul['ModulVersion'] = "1.2";
     $modul['description'] = "Данный модуль предназначен для импорта документов в определенную рубрику";
-    $modul['Autor'] = "censored!";
+    $modul['Autor'] = "Realter, val005";
     $modul['MCopyright'] = "&copy; 2011 Volga-Info Team";
     $modul['Status'] = 1;
     $modul['IstFunktion'] = 0;
@@ -82,7 +82,8 @@ if (defined('ACP') && $_REQUEST['moduleaction'])
 			break;
 
 		case 'do':
-			$import->DoImport(isset($_REQUEST['id']) ? $_REQUEST['id'] : null);
+			$import->DoImport($_REQUEST['id'],true,false);
+			$import->DoImport($_REQUEST['id'],false);
 			break;
 
 		case 'tags':

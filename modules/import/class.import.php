@@ -239,6 +239,31 @@ class import
 		return $data['RESULT'];
 	}
 
+	// рекурсивно создаёт массив с заменами
+	function _replace_array($mixed,$key='',$new=true)
+	{
+		static $arr = array();
+		if($new) $arr = array();
+
+		if (!is_array($mixed)) return $arr['[row'.$key.']'] = $mixed;
+		$res = $key;
+		foreach ($mixed as $k=>$v)
+		{
+			if(is_array($v))
+			{
+				$arr['[row:'.$k.']'] = serialize($v);
+			}
+			$this->_replace_array($v,$res.':'.$k,false);
+		}
+		return $arr;
+	}
+	// Заменяет в массиве доков, используя массив замен, выполняя код php
+	function _replace(&$item, &$key, $repl_array)
+	{
+		$code = stripslashes(strtr($item,$repl_array));
+		$item = eval2var('?>' . $code . '<?');
+	}
+
 /**
  *	Внешние методы класса
  */
@@ -406,29 +431,9 @@ class import
 	 *
 	 * @param int $import_id идентификатор системного блока
 	 */
-	function DoImport($import_id, $tags_only=false)
+	function DoImport($import_id, $tags_only=false, $location=true)
 	{
 		global $AVE_DB;
-
-		// рекурсивно создаёт массив с заменами
-		function make_replace_array($mixed,$key="")
-		{
-			static $arr = array();
-			if (!is_array($mixed)) return $arr['[row'.$key.']'] = $mixed;
-			$res = $key;
-			foreach ($mixed as $k=>$v)
-			{
-				if(is_array($v))$arr['[row:'.$k.']'] = serialize($v);
-				make_replace_array($v,$res.':'.$k);
-			}
-			return $arr;
-		}
-		// Заменяет в массиве доков, используя массив замен, выполняя код php
-		function replace(&$item, &$key, $repl_array)
-		{
-			$code = stripslashes(strtr($item,$repl_array));
-			$item = eval2var('?>' . $code . '<?');
-		}
 
 		$import = $AVE_DB->Query("
 			SELECT *
@@ -436,6 +441,7 @@ class import
 			WHERE id = '" . $import_id . "'
 		")->FetchAssocArray();
 		$import['import_text'] = @unserialize($import['import_text']);
+		if($tags_only) $import['import_text']['tags'] = array();
 
 		//Создаем массив ключевых полей
 		foreach($import['import_text']['key']['header'] as $k=>$v)
@@ -449,10 +455,10 @@ class import
 
 		// Получаем массив из файла импорта
 		$func = $import['import_parser'];
-		$rows = $this -> $func(BASE_DIR . $import['import_default_file']);
+		$rows = $this->$func(BASE_DIR . $import['import_default_file']);
 		
 		// Помечаем документы как удалённые, если нужно
-		if($import['import_delete_docs'])
+		if($import['import_delete_docs'] && !$tags_only)
 		{
 			$AVE_DB->Query("
 				UPDATE " . PREFIX . "_documents
@@ -465,24 +471,33 @@ class import
 		// Обрабатываем по очереди каждый объект
 		foreach($rows as $row)
 		{
-			$key_fields = $import_key_fields;
-			$doc_fields = array();
-			$doc_fields['header'] = $import['import_text']['fields']['header'];
-			$doc_fields['body'] = $import['import_text']['fields']['body'];
-
 			// создаем массив замен
 			$replace_array = array();
-			$replace_array = make_replace_array($row);
+			$replace_array = $this->_replace_array($row);
 			$replace_array['[Y-m-d]'] = date('Y-m-d');
-			$import['import_text']['tags'] = array_keys($replace_array);
 
-			// гуляем по шаблонам - заменяем теги на значения
-			array_walk_recursive($key_fields,'replace', $replace_array);
-			array_walk_recursive($doc_fields, 'replace', $replace_array);
-
-			// если нужно проработать документы
-			if(!$tags_only)
+			// если нужно только обновить теги
+			if($tags_only)
 			{
+				$import['import_text']['tags'] = array_unique(array_merge($import['import_text']['tags'],array_keys($replace_array)));
+			}
+			else
+			{
+				// дополняем массив замен отсутствующими тегами
+				foreach($import['import_text']['tags'] as $v)
+				{
+					if(!$replace_array[$v]) $replace_array[$v] = '';
+				}
+
+				$key_fields = $import_key_fields;
+				$doc_fields = array();
+				$doc_fields['header'] = $import['import_text']['fields']['header'];
+				$doc_fields['body'] = $import['import_text']['fields']['body'];
+
+				// гуляем по шаблонам - заменяем теги на значения
+				array_walk_recursive($key_fields,array($this, '_replace'), $replace_array);
+				array_walk_recursive($doc_fields,array($this, '_replace'), $replace_array);
+
 				// проверяем наличие документа по ключевому полю
 				$id = $this->Doc_Exists($key_fields,$import['import_rub']);
 				if ($id)
@@ -530,7 +545,10 @@ class import
 					import_text = '" . addslashes(serialize($import['import_text'])) . "'
 				WHERE id = " . $import_id
 			);
-			header('Location:index.php?do=modules&action=modedit&mod=import&moduleaction=edit&id=' . $import_id . '&cp=' . SESSION);
+			if ($location)
+			{
+				header('Location:index.php?do=modules&action=modedit&mod=import&moduleaction=edit&id=' . $import_id . '&cp=' . SESSION);
+			}
 		}
 	}
 }

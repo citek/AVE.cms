@@ -122,7 +122,6 @@ function parse_navigation($navi_tag)
 	{
 		$sql_navi_level = ' AND navi_item_level IN (' . $navi_print_level . ') ';
 		$sql_navi_active = ' AND parent_id IN(' . $navi_active_way_str . ') ';
-		$navi_parent = (in_array('1',explode(',',$navi_print_level))) ? 0 : $navi_active_id;
 	}
 	// обычное использование навигации
 	else
@@ -159,9 +158,16 @@ function parse_navigation($navi_tag)
 		ORDER BY navi_item_position ASC
 	");
 
+	$navi_items = array();
+
 	while ($row_navi_items = $sql_navi_items->FetchAssocArray())
 	{
 		$navi_items[$row_navi_items['parent_id']][] = $row_navi_items;
+	}
+	if($navi_print_level)
+	{
+		$keys = array_keys($navi_items);
+		$navi_parent = $keys[0];
 	}
 
 	// Парсим теги в шаблонах пунктов
@@ -181,7 +187,7 @@ function parse_navigation($navi_tag)
 	);
 
 	// запускаем рекурсивную сборку навигации
-	$navi = printNavi($navi_menu,$navi_items,$navi_active_way,$navi_item_tpl,$navi_parent);
+	if ($navi_items) $navi = printNavi($navi_menu,$navi_items,$navi_active_way,$navi_item_tpl,$navi_parent);
 
 	// преобразуем все ссылке в коде
 	$navi = rewrite_link($navi);
@@ -208,6 +214,7 @@ function printNavi($navi_menu,$navi_items,$navi_active_way,$navi_item_tpl,$paren
 	$navi_item_level = $navi_items[$parent][0]['navi_item_level'];
 
 	// собираем каждый пункт в данном родителе -> в переменной $item
+	
 	foreach ($navi_items[$parent] as $row)
 	{
 		// Проверяем пункт меню на принадлежность к "активному пути" и выбираем шаблон

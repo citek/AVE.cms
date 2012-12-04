@@ -671,7 +671,7 @@ class AVE_Document
 		global $AVE_DB;
 		if(!$keywords)$keywords=$AVE_DB->Query("SELECT document_meta_keywords FROM ".PREFIX."_documents WHERE Id=".intval($document_id)." LIMIT 1")->GetCell();
 		$keywords=explode(',',$keywords);
-		$res=$AVE_DB->Query("DELETE FROM ".PREFIX."_document_keywords where document_id=".intval($document_id)." LIMIT 1");
+		$res=$AVE_DB->Query("DELETE FROM ".PREFIX."_document_keywords where document_id=".intval($document_id));
 		foreach($keywords as $k=>$v){
 			if(trim($v)>''){
 				$key=trim(mb_substr($v,0,254));
