@@ -54,6 +54,14 @@ if ($_REQUEST['id'] == PAGE_NOT_FOUND_ID){
 
 eval ('?>' . $content . '<?');
 
+if (((isset($_REQUEST['apage']) && is_numeric($_REQUEST['apage']) && $_REQUEST['apage'] > $GLOBALS['page_id'][$_REQUEST['id']]['apage']))
+		OR ((isset($_REQUEST['page']) && is_numeric($_REQUEST['page']) && $_REQUEST['page'] > $GLOBALS['page_id'][$_REQUEST['id']]['page']))
+		OR ((isset($_REQUEST['artpage']) && is_numeric($_REQUEST['artpage']) && $_REQUEST['artpage'] > $GLOBALS['page_id'][$_REQUEST['id']]['artpage'])))
+{
+	if($_REQUEST['id']==1){header('Location:' . ABS_PATH);}else{header('Location:' . ABS_PATH.$AVE_Core->curentdoc->document_alias.URL_SUFF);}
+	exit;
+}
+
 //if (isset($cache) && is_object($cache)) $cache->end();
 
 if (!defined('ONLYCONTENT') && UGROUP == 1 && defined('PROFILING') && PROFILING) echo get_statistic(1, 1, 1, 1);

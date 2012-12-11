@@ -102,7 +102,7 @@ function get_field_smalltext($field_value,$type,$field_id='',$rubric_field_templ
 						break;
 						
 					case '2': // Innova
-						require(BASE_DIR . "/admin/redactor/innova/innova_settings.php");
+						require(BASE_DIR . "/modules/liveeditor/f_config/li_set_smf.php");
 						$field  = '<a name="' . $field_id . '"></a>';
 						$field .= "<textarea style=\"width:" . $AVE_Document->_textarea_width_small . "; height:" . $AVE_Document->_textarea_height_small . "\"  name=\"feld[" . $field_id . "]\" Id=\"small-editor[" . $field_id . "]\">" . $field_value . "</textarea>";
 						$field  .= $innova[2];
@@ -170,9 +170,9 @@ function get_field_langtext($field_value,$type,$field_id='',$rubric_field_templa
 						break;
 
 					case '2': // Innova
-						require(BASE_DIR . "/admin/redactor/innova/innova_settings.php");
+						require(BASE_DIR . "/modules/liveeditor/f_config/li_set_mf.php");
 						$field  = '<a name="' . $field_id . '"></a>';
-						$field  .='<textarea style="width:' . $AVE_Document->_textarea_width . ';height:' . $AVE_Document->_textarea_height . '" name="feld[' . $field_id . ']" Id="editor[' . $field_id . ']">' . $field_value . '</textarea></div>';
+						$field  .='<textarea style="width:' . $AVE_Document->_textarea_width . ';height:' . $AVE_Document->_textarea_height . '" name="feld[' . $field_id . ']" Id="editor[' . $field_id . ']">' . $field_value . '</textarea>';
 						$field  .= $innova[1];
 						break;
 

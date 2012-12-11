@@ -14,9 +14,22 @@
 	<script type="text/javascript" src="{$tpl_dir}/js/rle.js"></script>	
 {/if}
 
+    <!-- liveeditor -->
 {if $smarty.session.use_editor == 2}
-	<script language="Javascript" src="{$ABS_PATH}admin/redactor/innova/scripts/language/ru-RU/editor_lang.js"></script>
-	<script language=JavaScript src='{$ABS_PATH}admin/redactor/innova/scripts/innovaeditor.js'></script>
+{literal}
+<style>
+.istoolbar_container { padding:0; margin:0}
+.istoolbar_container tbody tr { border-top: 0px !important; background:transparent !important}
+.istoolbar_container tbody tr:hover { background:transparent !important}		
+.istoolbar_container tbody td { border-left:0px !important}
+.istoolbar_container tbody td:hover { background:transparent !important}
+</style>
+{/literal}
+    
+    <script src="{$ABS_PATH}admin/liveeditor/scripts/language/ru-RU/editor_lang.js"></script>
+    <script src="{$ABS_PATH}admin/liveeditor/scripts/innovaeditor.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/webfont/1.0.30/webfont.js" type="text/javascript"></script>
+    <script src="{$ABS_PATH}admin/liveeditor/scripts/common/webfont.js" type="text/javascript"></script>
 {/if}
 
 {if $smarty.session.use_editor == 3}

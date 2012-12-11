@@ -415,6 +415,9 @@ function request_parse($id,$params=Array())
 			<?php " ),$ttl,'rub_'.$row_ab->rubric_id)->GetCell();
 
 			$num_pages = ceil($num / $limit);
+
+			$GLOBALS['page_id'][$_REQUEST['id']]['apage']=($GLOBALS['page_id'][$_REQUEST['id']]['apage']>$num_pages ? $GLOBALS['page_id'][$_REQUEST['id']]['apage'] : $num_pages);
+
 			if (isset($_REQUEST['apage']) && is_numeric($_REQUEST['apage']) && $_REQUEST['apage'] > $num_pages)
 			{
 				$redirect_link = rewrite_link('index.php?id=' . $AVE_Core->curentdoc->Id

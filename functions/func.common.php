@@ -380,7 +380,7 @@ function get_breadcrumb()
 
 	$crumb = array();
 	$curent_document = get_current_document_id();
-	
+	$noprint=null;
 	$bread_crumb = "<a href=\"".get_home_link()."\">Главная</a>&nbsp;&rarr;&nbsp;";
 	if ($curent_document == 1|| $curent_document == 2) $noprint = 1;
 
@@ -733,7 +733,6 @@ function rewrite_link($s)
 	$s = preg_replace($mod_regex.'&(?:amp;)*page=([{s}]|\d+)/', ABS_PATH.'$1-$2.html', $s);
 	$s = preg_replace($mod_regex.'&(?:amp;)*print=1/',          ABS_PATH.'$1-print.html', $s);
 	$s = preg_replace($mod_regex.'(?!&)/',                      ABS_PATH.'$1.html', $s);
-
 	return $s;
 }
 
@@ -743,7 +742,7 @@ function reportLog($meldung, $typ = 0, $rub = 0)
 	
 	$logfile=BASE_DIR.'/cache/log.php';
 	if(file_exists($logfile))
-		@include($logfile);
+		@eval('?>'.file_get_contents($logfile).'<?');
 	$logdata[]=array('log_time' =>time(),'log_ip'=>$_SERVER['REMOTE_ADDR'],'log_url'=>$_SERVER['QUERY_STRING'],'log_text'=>$meldung,'log_type'=>(int)$typ,'log_rubric'=>(int)$rub);
 	$messlimit=1000;
 	$logdata=array_slice($logdata,-1*$messlimit);

@@ -125,6 +125,7 @@ class Gallery
 				. '&amp;page={s}">{t}</a> ';
 			$page_nav = get_pagination(ceil($num / $limit), 'page', $page_nav, get_settings('navi_box'));
 			$page_nav = rewrite_link($page_nav);
+			$GLOBALS['page_id'][$_REQUEST['id']]['page']=($GLOBALS['page_id'][$_REQUEST['id']]['page']>ceil($num / $limit) ? $GLOBALS['page_id'][$_REQUEST['id']]['page'] : ceil($num / $limit));
 		}
 		else
 		{
@@ -175,7 +176,6 @@ class Gallery
 				$images .= $image;
 				$i++;
 		}
-
 		$main_template = str_replace('[tag:gal:pages]', $page_nav, $main_template);
 
 		$return = str_replace('[tag:gal:content]', $images, $main_template);
