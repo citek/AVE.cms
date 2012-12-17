@@ -1,0 +1,73 @@
+/*
+	css файл модуля Контакты
+	© 2012 AVE CMS 
+	manufactured by Chikk
+	
+	файл стилей предназначен для оформления базового шаблона
+	при изменении шаблона не забывайте удалить/изменить файл
+*/
+.clear {
+	clear: both;
+}
+.message_info {
+	color: #FFF;
+	margin: 5px 0;
+	padding: 10px 0;
+	text-align: center;
+	text-transform: uppercase;
+	text-shadow: 0 0 1px #CCC;
+	background: #960018;
+	border-left: 5px solid #9BA0A7;
+}
+#module_contact {}
+#module_contact .star {
+	font-family: "Times New Roman", Georgia, Times, serif;
+	font-size: 22px;
+	color: #960018;
+	vertical-align: bottom;
+}
+#module_contact .info {
+	font-size: 11px;
+}
+#module_contact label {
+	width: 220px;
+	display: block;
+	float: left;
+	clear: left;
+	line-height: 25px;
+	padding: 1px 0;
+}
+#module_contact .default {
+	width: 180px;
+	margin: 2px 0;
+	display: block;
+	float: left;
+}
+#module_contact .maxupload {
+	font-size: 11px;
+	display: block;
+	clear: left;
+	margin-left: 220px;
+}
+#module_contact textarea {
+	width: 340px;
+	height: 150px;
+	margin-top: 4px;
+	display: block;
+	float: left;
+}
+#module_contact .checker {
+	display: block;
+}
+#module_contact .selector,
+#module_contact .checkbox_info {
+	line-height: 24px;
+	float: left;
+	clear: right;
+}
+#module_contact #secureimg {
+	display: block;
+}
+#module_contact .buttons {
+	margin: 15px 0 0 222px;
+}

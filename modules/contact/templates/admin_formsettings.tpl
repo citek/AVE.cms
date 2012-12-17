@@ -1,3 +1,21 @@
+<link rel="stylesheet" href="{$ABS_PATH}admin/codemirror/lib/codemirror.css">
+
+<script src="{$ABS_PATH}admin/codemirror/lib/codemirror.js" type="text/javascript"></script>
+    <script src="{$ABS_PATH}admin/codemirror/mode/xml/xml.js"></script>
+    <script src="{$ABS_PATH}admin/codemirror/mode/javascript/javascript.js"></script>
+    <script src="{$ABS_PATH}admin/codemirror/mode/css/css.js"></script>
+    <script src="{$ABS_PATH}admin/codemirror/mode/clike/clike.js"></script>
+    <script src="{$ABS_PATH}admin/codemirror/mode/php/php.js"></script>
+
+{literal}
+    <style type="text/css">
+      .activeline {background: #e8f2ff !important;}
+    </style>
+{/literal}
+
+<div class="widget first">
+	<div class="head"><h5 class="iFrames">{#CONTACT_FORM_FIELDS#}</h5></div>
+
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 	<tr class="noborder">
 		<td width="1%"><a class="toprightDir icon_sprite ico_info" title="{#CONTACT_FORM_TITEL#}" href="#"></a></td>
@@ -71,3 +89,93 @@
 		<td><textarea style="width:500px; height:100px" name="contact_form_message_noaccess" id="contact_form_message_noaccess">{$row->contact_form_message_noaccess|escape|stripslashes}</textarea></td>
 	</tr>
 </table>
+</div>
+
+<div class="widget first">
+	<div class="head"><h5 class="iFrames">{#CONTACT_TEXT_SCRIPTS#}</h5></div>
+	<div class="body">
+		{#CONTACT_TEXT_SCRIPT_INFO#}
+    </div>
+	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+
+			<tr>
+				<td><strong><a class="rightDir" title="{#CONTACT_TEMPLATES_MEDIAPATH#}" href="javascript:void(0);" onclick="textSelection('[tag:mediapath]','');">[tag:mediapath]</a></strong></td>
+				<td rowspan="4">
+					<textarea style="width:400px; height:100px" name="contact_form_message_scripts" id="contact_form_message_scripts">{$row->contact_form_message_scripts}</textarea>
+				</td>
+			</tr>
+		<tr>
+			<td>
+				<strong><a class="rightDir" title="{#CONTACT_TEMPLATES_CSS#}" href="javascript:void(0);" onclick="textSelection('[tag:css:]','');">[tag:css:FFF:P]</a></strong>,&nbsp;&nbsp;
+                <strong><a class="rightDir" title="{#CONTACT_TEMPLATES_JS#}" href="javascript:void(0);" onclick="textSelection('[tag:js:]','');">[tag:js:FFF:P]</a></strong>
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				<strong><a class="rightDir" title="{#CONTACT_TEMPLATES_PATH#}" href="javascript:void(0);" onclick="textSelection('[tag:path]','');">[tag:path]</a></strong>
+			</td>
+		</tr>
+
+		<tr>
+			<td></td>
+		</tr>
+            <tr>
+                <td>HTML tags</td>
+                <td>
+				    |&nbsp;
+				    <a href="javascript:void(0);" onclick="textSelection('<ol>', '</ol>');"><strong>OL</strong></a>&nbsp;|&nbsp;
+				    <a href="javascript:void(0);" onclick="textSelection('<ul>', '</ul>');"><strong>UL</strong></a>&nbsp;|&nbsp;
+				    <a href="javascript:void(0);" onclick="textSelection('<li>', '</li>');"><strong>LI</strong></a>&nbsp;|&nbsp;
+					<a href="javascript:void(0);" onclick="textSelection('<p class=&quot;&quot;>', '</p>');"><strong>P</strong></a>&nbsp;|&nbsp;
+					<a href="javascript:void(0);" onclick="textSelection('<strong>', '</strong>');"><strong>B</strong></a>&nbsp;|&nbsp;
+					<a href="javascript:void(0);" onclick="textSelection('<em>', '</em>');"><strong>I</strong></a>&nbsp;|&nbsp;
+					<a href="javascript:void(0);" onclick="textSelection('<h1>', '</h1>');"><strong>H1</strong></a>&nbsp;|&nbsp;
+					<a href="javascript:void(0);" onclick="textSelection('<h2>', '</h2>');"><strong>H2</strong></a>&nbsp;|&nbsp;
+					<a href="javascript:void(0);" onclick="textSelection('<h3>', '</h3>');"><strong>H3</strong></a>&nbsp;|&nbsp;
+					<a href="javascript:void(0);" onclick="textSelection('<h4>', '</h4>');"><strong>H4</strong></a>&nbsp;|&nbsp;
+					<a href="javascript:void(0);" onclick="textSelection('<h5>', '</h5>');"><strong>H5</strong></a>&nbsp;|&nbsp;
+					<a href="javascript:void(0);" onclick="textSelection('<div class=&quot;&quot; id=&quot;&quot;>', '</div>');"><strong>DIV</strong></a>&nbsp;|&nbsp;
+					<a href="javascript:void(0);" onclick="textSelection('<a href=&quot;&quot; title=&quot;&quot;>', '</a>');"><strong>A</strong></a>&nbsp;|&nbsp;
+					<a href="javascript:void(0);" onclick="textSelection('<img src=&quot;&quot; alt=&quot;&quot; />', '');"><strong>IMG</strong></a>&nbsp;|&nbsp;
+					<a href="javascript:void(0);" onclick="textSelection('<span>', '</span>');"><strong>SPAN</strong></a>&nbsp;|&nbsp;
+					<a href="javascript:void(0);" onclick="textSelection('<pre>', '</pre>');"><strong>PRE</strong></a>&nbsp;|&nbsp;
+					<a href="javascript:void(0);" onclick="textSelection('<br />', '');"><strong>BR</strong></a>&nbsp;|&nbsp;
+					<a href="javascript:void(0);" onclick="textSelection('\t', '');"><strong>TAB</strong></a>
+					&nbsp;|
+                 </td>
+            </tr>
+	</table>
+</div>
+
+    <script language="Javascript" type="text/javascript">
+{literal}
+      var editor = CodeMirror.fromTextArea(document.getElementById("contact_form_message_scripts"), {
+        lineNumbers: true,
+		lineWrapping: true,
+        matchBrackets: true,
+        mode: "application/x-httpd-php",
+        indentUnit: 4,
+        indentWithTabs: true,
+        enterMode: "keep",
+        tabMode: "shift",
+        onChange: function(){editor.save();},
+		onCursorActivity: function() {
+		  editor.setLineClass(hlLine, null, null);
+		  hlLine = editor.setLineClass(editor.getCursor().line, null, "activeline");
+		}
+      });
+	  editor.setSize("100%", 200);
+      function getSelectedRange() {
+        return { from: editor.getCursor(true), to: editor.getCursor(false) };
+      }
+
+      function textSelection(startTag,endTag) {
+        var range = getSelectedRange();
+        editor.replaceRange(startTag + editor.getRange(range.from, range.to) + endTag, range.from, range.to)
+        editor.setCursor(range.from.line, range.from.ch + startTag.length);
+      }
+
+	  var hlLine = editor.setLineClass(0, "activeline");
+{/literal}
+    </script>

@@ -33,6 +33,7 @@ $modul_sql_install[] = "CREATE TABLE CPPREFIX_modul_contacts (
   `contact_form_allow_group` varchar(255) NOT NULL default '1,2,3,4',
   `contact_form_send_copy` enum('1','0') NOT NULL default '1',
   `contact_form_message_noaccess` text NOT NULL,
+  `contact_form_message_scripts` text NOT NULL,
   PRIMARY KEY  (`Id`)
 ) ENGINE=MyISAM PACK_KEYS=0 DEFAULT CHARSET=utf8;";
 
@@ -70,13 +71,12 @@ $modul_sql_install[] = "CREATE TABLE CPPREFIX_modul_contact_info (
   PRIMARY KEY  (`Id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;";
 
-$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contacts` VALUES (1, 'Обратная Связь', 5000, 'youremail@yourdomain.ru', '', '1', 120, '0', '', '1,2,3,4', '0', 'У Вас недостаточно прав для использования этой формы.');";
+$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contacts` VALUES (1, 'Обратная Связь', 5000, 'youremail@yourdomain.ru', '', '1', 120, '0', '', '1,2,3,4', '0', 'У Вас недостаточно прав для использования этой формы', '<script src=\"/modules/contact/templates/js/jquery.uniform.min.js\" type=\"text/javascript\" charset=\"utf-8\"></script>\r\n<script type=\"text/javascript\" charset=\"utf-8\">\r\n	$(function(){\r\n		$(\"input, textarea, select, button\").uniform();\r\n	});\r\n</script>\r\n<link rel=\"stylesheet\" href=\"/modules/contact/templates/css/uniform.default.css\" type=\"text/css\" media=\"screen\">\r\n<link rel=\"stylesheet\" href=\"/modules/contact/templates/css/uniform.aristo.css\" type=\"text/css\" media=\"screen\">\r\n<link rel=\"stylesheet\" href=\"/modules/contact/templates/css/module.contact.css\" type=\"text/css\" media=\"screen\">');";
 
-$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (1, 1, 'textfield', 1, 'Сообщение', '1', '', '1', 698, '1', 'anysymbol', '', '');";
-$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (2, 1, 'dropdown', 2, 'Как Вы оцените наш сайт?', '0', 'Плохо,Средне,Супер,Очень мега круто', '1', 200, '1', 'anysymbol', '', '');";
-$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (3, 1, 'fileupload', 3, 'Прикрепить файл', '1', '', '1', 600, '1', 'anysymbol', '', '');";
-$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (4, 1, 'fileupload', 4, 'Прикрепить файл', '0', '', '1', 600, '1', 'anysymbol', '', '');";
-$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (5, 1, 'checkbox', 5, 'Чекбокс', '1', 'Чекбокс деф', '1', 300, '1', 'anysymbol', '', 'Не заполнено обязательное поле');";
+$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (1, 1, 'textfield', 1, 'Сообщение', '1', '', '1', '', '1', 'anysymbol', '', 'Вы забыли написать сообщение');";
+$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (2, 1, 'dropdown', 2, 'Как Вы оцените наш сайт?', '0', 'Плохо,Средне,Нормально,Отлично', '1', '', '1', 'anysymbol', '', '');";
+$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (3, 1, 'fileupload', 3, 'Прикрепить файл', '0', '', '1', '', '1', 'anysymbol', '', '');";
+$modul_sql_install[] = "INSERT INTO `CPPREFIX_modul_contact_fields` VALUES (4, 1, 'checkbox', 4, 'Чекбокс', '1', 'Поставьте галочку', '1', '', '1', 'anysymbol', '', 'Вы не поставили галочку');";
 
 
 $modul_sql_update[] = "UPDATE CPPREFIX_module SET CpEngineTag = '" . $modul['CpEngineTag'] . "', CpPHPTag = '" . $modul['CpPHPTag'] . "', Version = '" . $modul['ModulVersion'] . "' WHERE ModulPfad = '" . $modul['ModulPfad'] . "' LIMIT 1;";

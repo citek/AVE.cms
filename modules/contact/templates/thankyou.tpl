@@ -1,4 +1,3 @@
 <body onload="location.href='#form'">
 <a name="form"></a>
-{#CONTACT_THANKYOU#}
-<p>&nbsp;</p>
+<h3 class="message_info">{#CONTACT_THANKYOU#}</h3>

@@ -811,7 +811,7 @@ class AVE_Core
 						",CACHE_LIFETIME)->GetCell();
 						
 		//$rubheader = preg_replace('/\[tag:rfld:([a-zA-Z0-9-_]+)]\[(more|esc|img|[0-9-]+)]/e', "request_get_document_field(\"$1\", $id, \"$2\")", $rubheader);
-		$out = str_replace('[tag:rubheader]', $rubheader, $out);
+		$out = str_replace('[tag:rubheader]', $rubheader.'[tag:rubheader]', $out);
 		$out = preg_replace('/\[tag:rfld:([a-zA-Z0-9-_]+)]\[(more|esc|img|[0-9-]+)]/e', "request_get_document_field(\"$1\", $id, \"$2\")", $out);
 		// Если в запросе пришел параметр print, т.е. страница для печати, парсим контент, который обрамлен
         // тегами только для печати
@@ -1024,7 +1024,7 @@ class AVE_Core
 			$_GET['doc'] = $_REQUEST['doc'] = $this->curentdoc->document_alias;
 
 			// перенаправление на адреса с суффиксом
-			if ($test_url !== $get_url.URL_SUFF && !$pages && $test_url && !$_REQUEST['ajax'] && !$_REQUEST['print']) {
+			if ($test_url !== $get_url.URL_SUFF && !$pages && $test_url && !$_REQUEST['ajax'] && !$_REQUEST['print']&& !$_REQUEST['tag']) {
 				header('HTTP/1.1 301 Moved Permanently');
 				header('Location:' . ABS_PATH.$get_url.URL_SUFF);
 			}

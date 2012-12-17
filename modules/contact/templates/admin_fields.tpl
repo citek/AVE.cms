@@ -50,14 +50,12 @@ $(document).ready(function(){ldelim}
 
 <form method="post" action="{$formaction}" class="mainForm" id="add_form">
 
-	<div class="widget first">
-	<div class="head"><h5 class="iFrames">{#CONTACT_FORM_FIELDS#}</h5></div>
-
 	{include file="$include_path/admin_formsettings.tpl"}
 
 	{if $smarty.request.id != '' && $items}
-		</div>
+
 		<div class="widget first">
+			<div class="head"><h5 class="iFrames">{#CONTACT_EDIT_FIELDS#}</h5></div>
 		<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 			<thead>
 			<tr>
@@ -82,9 +80,9 @@ $(document).ready(function(){ldelim}
 			{foreach from=$items item=item}
 			<tr>
 				<td width="1%" rowspan="2" align="center"><input title="{#CONTACT_MARK_DELETE#}" name="del[{$item->Id}]" type="checkbox" id="del[{$item->Id}]" value="1" /></td>
-				<td><input placeholder="{#CONTACT_FILED_NAME#}" style="width:200px;" name="contact_field_title[{$item->Id}]" type="text" id="contact_field_title[{$item->Id}]" value="{$item->contact_field_title|escape|stripslashes}" /></td>
+				<td><input placeholder="{#CONTACT_FILED_NAME#}" style="width:150px;" name="contact_field_title[{$item->Id}]" type="text" id="contact_field_title[{$item->Id}]" value="{$item->contact_field_title|escape|stripslashes}" /></td>
 				<td>
-						<select style="width:200px;" name="contact_field_type[{$item->Id}]" id="contact_field_type[{$item->Id}]">
+						<select style="width:150px;" name="contact_field_type[{$item->Id}]" id="contact_field_type[{$item->Id}]">
 							<option value="title"{if $item->contact_field_type == 'title'} selected{/if}>{#CONTACT_TITLE_FILED#}</option>
 							<option value="text"{if $item->contact_field_type == 'text'} selected{/if}>{#CONTACT_TEXT_FILED#}</option>
 							<option value="textfield"{if $item->contact_field_type == 'textfield'} selected{/if}>{#CONTACT_MULTI_FIELD#}</option>
@@ -107,12 +105,9 @@ $(document).ready(function(){ldelim}
 				<td align="center" rowspan="2"><input name="contact_field_status[{$item->Id}]" type="checkbox" id="contact_field_status[{$item->Id}]"{if $item->contact_field_status!=0} checked{/if} value="1" /></td>
 			</tr>
 			<tr>
-				<td colspan="2"><input placeholder="{#CONTACT_DEFAULT_VALUE#}" style="width:400px;" type="text" name="contact_field_default[{$item->Id}]" value="{$item->contact_field_default|escape|stripslashes}"{if $item->contact_field_type == 'fileupload'} disabled{/if} /></td>
+				<td colspan="2"><input placeholder="{#CONTACT_DEFAULT_VALUE#}" style="width:300px;" type="text" name="contact_field_default[{$item->Id}]" value="{$item->contact_field_default|escape|stripslashes}"{if $item->contact_field_type == 'fileupload'} disabled{/if} /></td>
 				<td colspan="2" align="center"><input type="radio" name="contact_field_newline[{$item->Id}]" value="1"{if $item->contact_field_newline==1} checked{/if} /><label>{#CONTACT_YES#}</label> <input type="radio" name="contact_field_newline[{$item->Id}]" value="0"{if $item->contact_field_newline!=1} checked{/if} /><label>{#CONTACT_NO#}</label></td>
 				<td colspan="3" align="center"><input placeholder="{#CONTACT_REG_STRING#}" style="width:264px;" type="text" name="contact_field_value[{$item->Id}]" value="{$item->contact_field_value|escape|stripslashes}"{if $item->contact_field_type != 'textfield' && $item->contact_field_type != 'text' && $item->contact_field_required != 1} disabled{/if} /></td>
-			</tr>
-			<tr>
-				<td colspan="9"></td>
 			</tr>
 			{/foreach}
 			</tbody>
@@ -155,9 +150,9 @@ $(document).ready(function(){ldelim}
 
 			<tr>
 				<td width="1%" rowspan="2" align="center"></td>
-				<td><input placeholder="{#CONTACT_FILED_NAME#}" style="width:200px;" name="contact_field_title" type="text" id="contact_field_title" value="" /></td>
+				<td><input placeholder="{#CONTACT_FILED_NAME#}" style="width:150px;" name="contact_field_title" type="text" id="contact_field_title" value="" /></td>
 				<td>
-						<select style="width:200px;" name="contact_field_type" id="contact_field_type">
+						<select style="width:150px;" name="contact_field_type" id="contact_field_type">
 							<option value="title">{#CONTACT_TITLE_FILED#}</option>
 							<option value="text">{#CONTACT_TEXT_FILED#}</option>
 							<option value="textfield">{#CONTACT_MULTI_FIELD#}</option>
@@ -180,7 +175,7 @@ $(document).ready(function(){ldelim}
 				<td align="center" rowspan="2"><input name="contact_field_status" type="checkbox" id="contact_field_status" value="1" /></td>
 			</tr>
 			<tr>
-				<td colspan="2"><input placeholder="{#CONTACT_DEFAULT_VALUE#}" style="width:400px;" type="text" name="contact_field_default" value="" /></td>
+				<td colspan="2"><input placeholder="{#CONTACT_DEFAULT_VALUE#}" style="width:300px;" type="text" name="contact_field_default" value="" /></td>
 				<td colspan="2" align="center"><input type="radio" name="contact_field_newline" value="1" /><label>{#CONTACT_YES#}</label> <input type="radio" name="contact_field_newline" value="0" /><label>{#CONTACT_NO#}</label></td>
 				<td colspan="3" align="center"><input placeholder="{#CONTACT_REG_STRING#}" style="width:264px;" type="text" name="contact_field_value" value="" /></td>
 			</tr>

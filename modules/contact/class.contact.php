@@ -132,7 +132,7 @@ class Contact
 			}
 		}
 
-		return $attach;
+		return UPDIR.$attach;
 	}
 
 	/**
@@ -209,7 +209,6 @@ class Contact
         $contact_form_id = preg_replace('/\D/', '', $contact_form_id);
 
 		$AVE_Template->config_load($lang_file);
-
         // Получаем всю информацию о данной форме по ее идентификатору
 		$row = $AVE_DB->Query("
 			SELECT *
@@ -217,6 +216,7 @@ class Contact
 			WHERE Id = '" . $contact_form_id . "'
 		")->FetchRow();
 
+			$GLOBALS['user_header'][]=$row->contact_form_message_scripts;
         // Определяем группы, которым разрешен доступ к данной контактной форме
         $allowed_groups = array();
         if (isset($row->contact_form_allow_group))
@@ -242,6 +242,7 @@ class Contact
             $AVE_Template->assign('im', $spam_protect === null ? $row->contact_form_antispam : $spam_protect);
             $AVE_Template->assign('maxupload', $max_upload === null ? $row->contact_form_max_upload : $max_upload);
             $AVE_Template->assign('send_copy', $row->contact_form_send_copy);
+			
 
 		    // Формируем список получателей данного сообщения (если их несколько)
 		    $recievers = array();
@@ -562,7 +563,8 @@ class Contact
 						contact_form_max_upload       = '" . $_REQUEST['contact_form_max_upload'] . "',
 						contact_form_allow_group      = '" . $this->_contactAllowGroupGet() . "',
 						contact_form_message_noaccess = '" . $_REQUEST['contact_form_message_noaccess'] . "',
-						contact_form_send_copy        = '" . $_REQUEST['contact_form_send_copy'] . "'
+						contact_form_send_copy        = '" . $_REQUEST['contact_form_send_copy'] . "',
+						contact_form_message_scripts  = '" . $_REQUEST['contact_form_message_scripts'] . "'
 				");
 				$iid = $AVE_DB->InsertId();
 
@@ -712,8 +714,9 @@ class Contact
 				contact_form_subject_show     = '" . $_REQUEST['contact_form_subject_show'] . "',
 				contact_form_subject_default  = '" . $_REQUEST['contact_form_subject_default'] . "',
 				contact_form_allow_group      = '" . $this->_contactAllowGroupGet() . "',
-				contact_form_message_noaccess = '" . $_POST['contact_form_message_noaccess'] . "',
-				contact_form_send_copy        = '" . $_POST['contact_form_send_copy'] . "'
+				contact_form_message_noaccess = '" . $_REQUEST['contact_form_message_noaccess'] . "',
+				contact_form_send_copy        = '" . $_REQUEST['contact_form_send_copy'] . "',
+				contact_form_message_scripts  = '" . $_REQUEST['contact_form_message_scripts'] . "'
 			WHERE
 				Id = '" . $contact_form_id . "'
 		");

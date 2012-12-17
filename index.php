@@ -51,8 +51,10 @@ if ($_REQUEST['id'] == PAGE_NOT_FOUND_ID){
 	header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found', true);
 }
  
-
-eval ('?>' . $content . '<?');
+$cont=eval2var ('?>' . $content . '<?');
+$rubheader=(empty($GLOBALS["user_header"]) ? "" : implode(chr(10),$GLOBALS["user_header"]));
+$cont = str_replace('[tag:rubheader]', $rubheader, $cont);
+echo $cont;
 
 if (((isset($_REQUEST['apage']) && is_numeric($_REQUEST['apage']) && $_REQUEST['apage'] > $GLOBALS['page_id'][$_REQUEST['id']]['apage']))
 		OR ((isset($_REQUEST['page']) && is_numeric($_REQUEST['page']) && $_REQUEST['page'] > $GLOBALS['page_id'][$_REQUEST['id']]['page']))
