@@ -56,7 +56,7 @@
 				</thead>
 				{foreach from=$doc_start item=item}
 					<tr>
-						<td nowrap="nowrap">{$item->Id}</td>
+						<td nowrap="nowrap"><strong><a class="toprightDir" title="{#DOC_SHOW_TITLE#}" href="../{if $item->Id!=1}index.php?id={$item->Id}&amp;cp={$sess}{/if}" target="_blank">{$item->Id}</a></strong></td>
 						<td>
 							<strong>
 							{if $item->cantEdit==1}
@@ -65,7 +65,7 @@
 								{$item->document_title}
 							{/if}
 							</strong><br />
-								<a href="/{if $item->Id!=1}{$item->document_alias}{/if}" target="_blank"><span class="dgrey doclink">{$item->document_alias}</span></a>
+								<a href="../{if $item->Id!=1}{$item->document_alias}{/if}" target="_blank"><span class="dgrey doclink">{$item->document_alias}</span></a>
 						</td>
 						<td align="center">
 							{if check_permission('rubric_edit')}

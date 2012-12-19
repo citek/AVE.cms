@@ -57,7 +57,7 @@ $lang_i['nopass']                  = "Пожалуйста, укажите па�
 $lang_i['pass_no_specialchars']    = "Ошибка! Пароль содержит специальные символы.";
 $lang_i['install_finish_body']    .= "<ul class=\"messages\"><li class=\"highlight red\"><span>Удалите, пожалуйста, папку</span><h5>/install/</h5></li></ul>";
 $lang_i['install_finish_body']    .= "<div class=\"clearfix\"></div><br /><div class=\"clearfix\"></div>";
-$lang_i['install_finish_body']    .= "<ul class=\"messages\"><li class=\"highlight grey\">Для перехода в панель управления нажмите <a href=\"/admin/\"><strong>здесь</strong></a><br />Для перехода на сайт нажмите<a href=\"/\"><strong>здесь</strong></a></li></ul>";
+$lang_i['install_finish_body']    .= "<ul class=\"messages\"><li class=\"highlight grey\">Для перехода в панель управления нажмите <a href=\"../admin/\"><strong>здесь</strong></a><br />Для перехода на сайт нажмите<a href=\"../\"><strong>здесь</strong></a></li></ul>";
 
 $lang_i['structure']               = "Создание структуры базы данных:";
 $lang_i['erroro']                  = "Возникла ошибка...";

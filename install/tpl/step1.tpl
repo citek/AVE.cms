@@ -12,22 +12,22 @@
 		<meta name="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT" />
 
 	<!-- CSS files -->
-	<link type="text/css" href="/install/tpl/css/reset.css" rel="stylesheet" media="screen" />
-	<link type="text/css" href="/install/tpl/css/gs.css" rel="stylesheet" media="screen" />
-    <link type="text/css" href="/install/tpl/css/styles.css" rel="stylesheet" media="screen" />
+	<link type="text/css" href="tpl/css/reset.css" rel="stylesheet" media="screen" />
+	<link type="text/css" href="tpl/css/gs.css" rel="stylesheet" media="screen" />
+    <link type="text/css" href="tpl/css/styles.css" rel="stylesheet" media="screen" />
 
 	<!-- IE "fixes" -->
 	<!--[if gte IE 7]>
-		<link type="text/css" href="/install/tpl/css/styles_ie.css" rel="stylesheet" media="screen" />
+		<link type="text/css" href="tpl/css/styles_ie.css" rel="stylesheet" media="screen" />
 	<![endif]-->
 
 	<!--[if IE 7]>
-		<link type="text/css" href="/install/tpl/css/styles_ie7.css" rel="stylesheet" media="screen" />
+		<link type="text/css" href="tpl/css/styles_ie7.css" rel="stylesheet" media="screen" />
 	<![endif]-->
 
 	<!-- JS files are loaded at the top of the page -->
-	<script src="/install/tpl/js/jquery.js" type="text/javascript"></script>
-	<script src="/install/tpl/js/jquery.tipsy.js" type="text/javascript"></script>
+	<script src="tpl/js/jquery.js" type="text/javascript"></script>
+	<script src="tpl/js/jquery.tipsy.js" type="text/javascript"></script>
 	
 	<script type="text/javascript">
 	{literal}
@@ -43,7 +43,7 @@
 		//
 		$('#ask-cancel').click(function(e) {
 			e.preventDefault();
-			thisHref = '/install/exit.html';
+			thisHref = 'exit.html';
 			if(confirm('{/literal}{$la.confirm_exit}{literal}')) {
 				window.location = thisHref;
 			}
@@ -68,7 +68,7 @@
 </div>
 
 <div class="grid_14">
-    <div class="logo_header fleft" ><img src="/install/tpl/images/logo.png" alt="AVE.cms" /></div>
+    <div class="logo_header fleft" ><img src="tpl/images/logo.png" alt="AVE.cms" /></div>
     <div class="text_header fleft"><h1>{$la.install} {$version_setup}</h1></div>
     <div class="text_header_step fright"><h1>{$la.install_step} 1</h1></div>
 </div>
