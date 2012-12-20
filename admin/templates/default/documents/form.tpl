@@ -33,7 +33,7 @@
 {/if}
 
 {if $smarty.session.use_editor == 3}
-	<script type="text/javascript" src="/admin/ckeditor3/ckeditor.js"></script>
+	<script type="text/javascript" src="{$ABS_PATH}admin/ckeditor3/ckeditor.js"></script>
 {/if}
 
 <script type="text/javascript">

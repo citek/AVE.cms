@@ -16,7 +16,7 @@ if (defined('ACP'))
 {
     $modul['ModulName'] = 'Рассылка / Подписка';
     $modul['ModulPfad'] = 'mailer';
-    $modul['ModulVersion'] = '2.1';
+    $modul['ModulVersion'] = '2.2';
     $modul['description'] = 'Данный модуль позволяет создавать внутренние (по группам пользователей сайта), внешние (по спискам) и комбинированные рассылки. Для вывода в публичной части сайта формы подписки на рассылку, используйте системный тег <strong>[mod_subscribe:XXX]</strong>, где XXX - идентификатор списка рассылки, в который будет добавлен подписчик.';
     $modul['Autor'] = 'val005';
     $modul['MCopyright'] = '&copy; 2007-2012 Overdoze.Ru';
@@ -153,12 +153,7 @@ if (defined('ACP') && $_REQUEST['mod'] == 'mailer')
 			break;
 
 		case 'countmail':
-			echo $mailer->mailerCountMail();
-			exit;
-
-		case 'showcount':
-			global $AVE_Template;
-			$AVE_Template->assign('content', $AVE_Template->fetch($mailer->tpl_dir . 'admin_count_mail.tpl'));
+			$mailer->mailerCountMail($_REQUEST['id']);
 			break;
 
 		case 'testsend':

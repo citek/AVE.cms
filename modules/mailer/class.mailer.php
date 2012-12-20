@@ -355,6 +355,7 @@ class mailer
 	{
 		global $AVE_DB, $AVE_Template, $AVE_User;
 
+		// удаление
 		if ($act=='delete' && $mail_id)
 		{
 			$AVE_DB->Query("
@@ -365,8 +366,10 @@ class mailer
 			header('Location:index.php?do=modules&action=modedit&mod=mailer&moduleaction=1&cp=' . SESSION . ($_REQUEST['page']?'&page='.$_REQUEST['page']:''));
 			exit;
 		}
-		
-		// записываем вложения
+
+		// сохранение, отправка
+
+		// записываем вложения, если оправка
 		if ($act == 'send') $attach = $this->_mailerAttach();
 
 		if (!$mail_id)
@@ -389,13 +392,17 @@ class mailer
 					appeal		= '" . trim($_POST['appeal']) . "',
 					body		= '" . trim($_POST['body']) . "',
 					saveattach	= '" . $_POST['saveattach'] . "',
+					timing		= '" . $_POST['timing'] . "',
 					attach		= '" . @implode(';',$attach) . "',
 					sent		= '0'
 			");
 			$mail_id = $AVE_DB->Query("
-				SELECT MAX(id) 
-				FROM " . PREFIX . "_modul_mailer_mails"
-			)->GetCell();
+				SELECT LAST_INSERT_ID(id)
+				FROM " . PREFIX . "_modul_mailer_mails
+				ORDER BY id DESC LIMIT 1
+			")->GetCell();
+
+			reportLog($_SESSION['user_name'] . ' - создал(а) рассылку "' . trim($_POST['subject']) . '" (' . $mail_id . ')', 2, 2);
 		}
 		else
 		{
@@ -413,13 +420,15 @@ class mailer
 					appeal		= '" . trim($_POST['appeal']) . "',
 					body		= '" . trim($_POST['body']) . "',
 					saveattach	= '" . $_POST['saveattach'] . "',
+					timing		= '" . $_POST['timing'] . "',
 					attach		= '" . @implode(';',$attach) . "',
 					sent		= '0'
 				WHERE id=" . $mail_id
 			);
+			reportLog($_SESSION['user_name'] . ' - отредактировал(а) рассылку "' . trim($_POST['subject']) . '" (' . $mail_id . ')', 2, 2);
 		}
 
-		// Отправляем письмо
+		// отправка
 		if ($act == 'send') {
 
 			// Сохраняем все данные в одну переменную
@@ -510,7 +519,10 @@ class mailer
 	
 			// записываем все данные в сессию
 			$_SESSION['mailer'][$mail_id] = $mailer;
+
+			reportLog($_SESSION['user_name'] . ' - запустил(а) процесс отправки рассылки "' . trim($mailer['subject']) . '" (' . $mail_id . ')', 2, 2);
 		}
+
 		// если сохранение через ajax, выходим
 		if ($act == 'ajaxsave' || $act == 'send')
 		{
@@ -575,19 +587,26 @@ class mailer
 					sent		= '1'
 				WHERE id=" . $mail_id
 			);
+			
+			$count = (int)$_SESSION['mailer'][$mail_id]['count'];
+			$timing = (int)$_SESSION['mailer'][$mail_id]['timing'];
+			$number = (int)$_SESSION['mailer'][$mail_id]['number'];
 
 			// округлённый процент выполнения
-			$procent = floor($_SESSION['mailer'][$mail_id]['count']/$_SESSION['mailer'][$mail_id]['number']*100);
+			$result = floor($count / $number * 100);
+
+			// если просили отсылать по частям и осталось много писем, ставим процесс на паузу)
+			if($timing != 0 && $count % $timing == 0 && $number - $count > 10) $result = 'pause';
 
 			// считаем
 			$_SESSION['mailer'][$mail_id]['count']++;
 
 			// возвращаем в AJAX число
-			echo $procent;
+			echo $result;
 		}
 		else
 		{
-			// Удаяем вложения, если просили
+			// Удаляем вложения, если просили
 			if ($_SESSION['mailer'][$mail_id]['attach'] && !(int)$_SESSION['mailer'][$mail_id]['saveattach'])
 			{
 				foreach ($_SESSION['mailer'][$mail_id]['attach'] as $file)
@@ -595,6 +614,7 @@ class mailer
 					@unlink($file);
 				}
 			}
+			reportLog($_SESSION['user_name'] . ' - процесс отправки рассылки "' . trim($_SESSION['mailer']['subject']) . '" (' . $mail_id . ') завершён', 2, 2);
 			unset ($_SESSION['mailer'][$mail_id]);
 			echo 'finish';
 		}
@@ -778,9 +798,12 @@ class mailer
 					date		= '" . time() . "'
 			");
 			$list_id = $AVE_DB->Query("
-				SELECT MAX(id) 
-				FROM " . PREFIX . "_modul_mailer_lists"
-			)->GetCell();
+				SELECT LAST_INSERT_ID(id)
+				FROM " . PREFIX . "_modul_mailer_lists
+				ORDER BY id DESC LIMIT 1
+			")->GetCell();
+
+			reportLog($_SESSION['user_name'] . ' - создал(а) список рассылки "' . trim($_POST['title']) . '" (' . $list_id . ')', 2, 2);
 		}
 		else
 		{
@@ -792,6 +815,7 @@ class mailer
 					descr		= '" . $_POST['descr'] . "'
 				WHERE id=" . $list_id
 			);
+			reportLog($_SESSION['user_name'] . ' - отредактировал(а) список рассылки "' . trim($_POST['title']) . '" (' . $list_id . ')', 2, 2);
 		}
 		if ($_POST['status'])
 		{
@@ -969,6 +993,7 @@ class mailer
 				$emails_new[] = $email;
 			}
 		}
+		reportLog($_SESSION['user_name'] . ' - разослал(а) тестовую рассылку "' . trim($_POST['subject']) . '" (' . $id . ') по адресам: ' . implode(', ',$emails_new), 2, 2);
 		return $emails_new;
 	}
 
@@ -1006,18 +1031,28 @@ class mailer
 			}
 		}
 		$_SESSION['mailer']['multi_add'] = $_POST['lists'];
+		reportLog($_SESSION['user_name'] . ' - выполнил(а) мульти-добавление получателей в списки: ' . implode(', ',$_POST['lists']), 2, 2);
 		header('Location:index.php?do=modules&action=modedit&mod=mailer&moduleaction=' . ($_REQUEST['return'] ? 'multiadd' : 'showlists') . '&cp=' . SESSION);
 	}
 
 	/**
 	 * Метод подсчёта получателей при создании рассылки
 	 */
-	function mailerCountMail()
+	function mailerCountMail($mail_id)
 	{
-		global $AVE_DB;
+		global $AVE_DB, $AVE_Template;
+		
+		$mailer = $AVE_DB->Query("
+			SELECT subject, to_lists, to_groups, to_add, from_email, from_copy
+			FROM " . PREFIX . "_modul_mailer_mails
+			WHERE id=" . $mail_id
+		)->FetchRow();
+		$mailer->to_lists = explode(';',$mailer->to_lists);
+		$mailer->to_groups = explode(';',$mailer->to_groups);
+		$mailer->to_add = explode(';',$mailer->to_add);
 
 		// получатели из списков
-		foreach ($_POST['to_lists'] as $list_id)
+		foreach ($mailer->to_lists as $list_id)
 		{
 			$list_name = $AVE_DB->Query("
 				SELECT title
@@ -1045,7 +1080,7 @@ class mailer
 		unset($rec);
 
 		// получатели из групп
-		foreach ($_POST['to_groups'] as $group_id)
+		foreach ($mailer->to_groups as $group_id)
 		{
 			$group_name = $AVE_DB->Query("
 				SELECT user_group_name
@@ -1073,8 +1108,7 @@ class mailer
 		unset($rec);
 
 		// дополнительные получатели
-		$rec_add = explode(';',$_POST['to_add']);
-		foreach ($rec_add as $email)
+		foreach ($mailer->to_add as $email)
 		{
 			$rec = array();
 			$email = trim($email);
@@ -1099,21 +1133,21 @@ class mailer
 		unset($rec);
 
 		// отправитель
-		$_POST['from_email'] = trim($_POST['from_email']);
-		if ($_POST['from_copy'])
+		if ($mailer->from_copy)
 		{
-			if(in_array($_POST['from_email'],$rec_clean)) $rec['s'] = 1;
-			if($this->_mailerCheckEmail($_POST['from_email']) != 1) $rec['s'] = 2;
-			$rec['email'] = $_POST['from_email'];
+			$rec = array();
+			$rec['email'] = trim($mailer->from_email);
+			if(in_array($rec['email'],$rec_clean)) $rec['s'] = 1;
+			if($this->_mailerCheckEmail($rec['email']) != 1) $rec['s'] = 2;
 			$rec['from'] = true;
 			$rec_all['add'][] = $rec;
 		}
 
-		unset($_SESSION['mailer'][$_REQUEST['id']]);
-		$_SESSION['mailer'][$_REQUEST['id']] = $rec_all;
-		$_SESSION['mailer'][$_REQUEST['id']]['title'] = $_POST['subject'];
-		$_SESSION['mailer'][$_REQUEST['id']]['number'] = count($rec_clean);
-		return count($rec_clean);
+		$count_mail = $rec_all;
+		$count_mail['title'] = $mailer->subject;
+		$count_mail['number'] = count($rec_clean);
+		$AVE_Template->assign('count_mail', $count_mail);
+		$AVE_Template->assign('content', $AVE_Template->fetch($this->tpl_dir . 'admin_count_mail.tpl'));
 	}
 }
 ?>

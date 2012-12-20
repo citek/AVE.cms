@@ -74,7 +74,7 @@ $().ready(function() {
                    oncomplete : 'destroy'
                }
 	           },
-	          getFileCallback : callback
+	          getFileCallback: function(file) {callback(file['url']);}
 	      })
 		}	
 	};

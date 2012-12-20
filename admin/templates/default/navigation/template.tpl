@@ -46,7 +46,7 @@
 	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 		<tr class="noborder">
 			<td width="200"><strong>{#NAVI_TITLE#}</strong></td>
-			<td><input class="mousetrap" style="width:400px" name="navi_titel" type="text" id="navi_titel" value="{$nav->navi_titel|default:$smarty.request.navi_titel|escape}"></td>
+			<td><input class="mousetrap" style="width:400px" name="navi_titel" type="text" id="navi_titel" value="{$nav->navi_titel|default:$smarty.request.NaviName|escape}"></td>
 		</tr>
 
 		<tr>

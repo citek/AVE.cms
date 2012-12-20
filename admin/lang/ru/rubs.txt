@@ -104,6 +104,7 @@ RUBRIK_CODE_END		  = "Код, выполняемый после сохранен
 RUBRIK_TAGS           = "Тег"
 RUBRIK_HTML_T         = "HTML код шаблона"
 RUBRIK_TAG_DESC       = "Описание тега"
+RUBRIK_NEW_FIEL_TITLE = "Для полей <strong>Выпадающий список</strong> и <strong>Мульти список</strong>, Значение по умолчанию пишутся через запятую"
 
 RUBRIK_TEMPLATES_TAGS         = "Тег"
 RUBRIK_TEMPLATES_TAG_DESC     = "Описание тега"

@@ -157,7 +157,18 @@
       <tr>
         <td>{#MAILER_MAILS_FINAL_REC#}</td>
         <td><div class="pr12">
-            <input type="button" class="greenBtn" onclick="openLinkWinId('document_parent','document_parent');" value="{#MAILER_MAILS_MAKE_FIN#}"/>
+            <input type="button" class="greenBtn" onclick="countMail();" value="{#MAILER_MAILS_MAKE_FIN#}"/>&nbsp;&nbsp;({#MAILER_MAILS_FINAL_TXT#})
+          </div></td>
+      </tr>
+      <tr>
+        <td>{#MAILER_MAILS_TIMING#}</td>
+        <td><div class="pr12">
+            <select name="timing" id="timing">
+              <option value="" {if $mail->timing==''}selected=selected{/if}>{#MAILER_MAILS_TIM_ALL#}</option>
+              <option value="100" {if $mail->timing=='100'}selected=selected{/if}>{#MAILER_MAILS_TIM_100#}</option>
+              <option value="200" {if $mail->timing=='200'}selected=selected{/if}>{#MAILER_MAILS_TIM_200#}</option>
+              <option value="300" {if $mail->timing=='300'}selected=selected{/if}>{#MAILER_MAILS_TIM_300#}</option>
+            </select>
           </div></td>
       </tr>
     </table>
@@ -168,9 +179,10 @@
       &nbsp;
       <input type="button" onclick="test();" class="greenBtn" value="{#MAILER_MAILS_TEST_BTN#}" />
       &nbsp;
-      <input type="button" onclick="presend();" id="butt_send" class="redBtn" value="{#MAILER_MAILS_SEND_BTN#}" />
+      <input type="button" onclick="presend();" id="butt_send" class="redBtn" value="{#MAILER_MAILS_SEND_BTN#}" /><span id="send_stop" style="display:none">&nbsp;&nbsp;{#MAILER_MAILS_STOP#}</span>
       <div id="progressbar" style="display:none;clear:both;margin-top:10px;"></div>
-      <div id="sent_ok" class="highlight yellow" style="{if !$mail->sent}display:none;{/if}margin-top:10px;">{if $mail->sent}{$mail->date|date_format:$TIME_FORMAT|pretty_date}: {/if}{#MAILER_SENT_OK_TEXT#}
+      <div id="delay" class="highlight yellow" style="display:none;margin-top:10px;">{#MAILER_MAILS_DELAY#}</div>
+      <div id="sent_ok" class="highlight yellow" style="{if !$mail->sent}display:none;{/if}margin-top:10px;">{if $mail->sent}{$mail->date|date_format:$TIME_FORMAT|pretty_date}&nbsp;&nbsp;{/if}{#MAILER_SENT_OK_TEXT#}
       <strong><a href="index.php?do=modules&amp;action=modedit&amp;mod=mailer&amp;moduleaction=1&amp;cp={$sess}">&raquo;&nbsp;{#MAILER_SENT_OK_LINK#}</a></strong></div>
     </div>
   </div>
@@ -204,6 +216,7 @@ if (full_check(true)) {ldelim}
 				data: ({ldelim}act:'send'{rdelim}),
 				beforeSubmit: function() {ldelim}
 					$("#progressbar").show().progressbar({ldelim}value: 0{rdelim});
+					$('#send_stop').fadeIn();
 					$.alerts._overlay('show');
 				{rdelim},
 				success: function(data) {ldelim}
@@ -218,6 +231,11 @@ if (full_check(true)) {ldelim}
 {rdelim}
 
 function send() {ldelim}
+	if(delay) {ldelim}
+		$('#delay').fadeOut();
+		$.alerts._overlay('show');
+		delay = false;
+	{rdelim}
 	$("#mail_form").ajaxSubmit({ldelim}
 		url: 'index.php?do=modules&action=modedit&mod=mailer&moduleaction=sendmail&id={$smarty.request.id}&cp={$sess}',
 		data: ({ldelim}mail_id: mail_id{rdelim}),
@@ -227,6 +245,20 @@ function send() {ldelim}
 				$.jGrowl("{#MAILER_SENT_OK#}");
 				$("#sent_ok").show();
 				location.reload();
+			{rdelim}
+			else if (data == 'pause') {ldelim}
+				// считаем время + час
+				var current = new Date();
+				var hour = current.getTime() + 3600000;
+				var d = new Date(hour);
+				var month = d.getMonth()+1;
+				var date_str = d.getDate()+'.'+month+'.'+d.getFullYear()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+				// вставляем в сообщение и показываем
+				$('#delay_time').text(date_str);
+				$('#delay').fadeIn();
+				$.alerts._overlay('hide');
+				delay = true;
+				send_delay = setTimeout(function(){ldelim}send(){rdelim},3600000);
 			{rdelim}
 			else {ldelim}
 				$("#progressbar").progressbar({ldelim}value: Number(data){rdelim});
@@ -272,10 +304,29 @@ function save_func(ajax) {ldelim}
 {if !$mail->sent}
 	{literal}
 	$(document).ready(function() {
+		delay = false;
+
 		Mousetrap.bind(['ctrl+s', 'meta+s'], function(e) {
 			if (e.preventDefault) e.preventDefault();
 			else e.returnValue = false;
 			save_func(true);
+			return false;
+		});
+
+		Mousetrap.bind(['ctrl+g', 'meta+g'], function(e) {
+			if (e.preventDefault) e.preventDefault();
+			else e.returnValue = false;
+			if(delay) {
+				clearInterval(send_delay);
+				send();
+			}
+			return false;
+		});
+
+		Mousetrap.bind(['ctrl+q', 'meta+q'], function(e) {
+			if (e.preventDefault) e.preventDefault();
+			else e.returnValue = false;
+			location.reload();
 			return false;
 		});
 	
@@ -291,6 +342,7 @@ function save_func(ajax) {ldelim}
 
 {literal}
 $(document).ready(function() {
+
 	var active_type = $("input[name=type]:checked").attr("value");
 	if (active_type == 'text') {
 		$("#html").hide(); $("#text").show(); $("#html textarea").attr("name","");
@@ -314,16 +366,11 @@ $(document).ready(function() {
 		}
 	});
 });
-
-function openLinkWinId(target,doc) {
-	save_func(true);
-	var width = screen.width * 0.9;
-	var height = screen.height * 0.9;
-	var left = ( screen.width - width ) / 2;
-	var top = ( screen.height - height ) / 2;
-	window.open('index.php?do=modules&action=modedit&mod=mailer&moduleaction=showcount&id={$smarty.request.id}&pop=1&cp={$sess}','pop','left='+left+',top='+top+',width='+width+',height='+height+',scrollbars=1,resizable=1');
-}
 {/literal}
+
+function countMail() {ldelim}
+	window.open('index.php?do=modules&action=modedit&mod=mailer&moduleaction=countmail&id={$smarty.request.id}&cp={$sess}&pop=1','mailer_countmail_{$smarty.request.id}','top=0,left=0,width=900,height=600,scrollbars=1,resizable=1');
+{rdelim}
 
 function checkemail(in_email){ldelim}
 	emails = in_email.split(";");

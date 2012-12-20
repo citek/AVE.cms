@@ -207,6 +207,7 @@ $(document).ready(function(){ldelim}
 
 <div class="widget first">
 	<div class="head collapsible" id="opened"><h5>{#RUBRIK_NEW_FIELD#}</h5></div>
+	<div class="body">{#RUBRIK_NEW_FIEL_TITLE#}</div>
 	<div style="display: block;">
 	<form id="newfld" action="index.php?do=rubs&amp;action=edit&amp;Id={$smarty.request.Id|escape}&amp;cp={$sess}" method="post" class="mainForm">
 	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">

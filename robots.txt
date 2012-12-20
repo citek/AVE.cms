@@ -1,1 +1,10 @@
 User-Agent: *
+Disallow: /admin/
+Disallow: /cache/
+Disallow: /class/
+Disallow: /functions/
+Disallow: /inc/
+Disallow: /modules/
+Disallow: /session/
+Disallow: /templates/
+Disallow: /uploads/
