@@ -383,7 +383,7 @@ function get_field_bild_multi($field_value,$type,$field_id='',$rubric_field_temp
 				'<img height=\"120px\" id=\"_img_feld__'+field_id+'_'+_id+'\" src=\"'+img_path+'\" alt=\"'+alt+'\" border=\"0\" />' +
 			'</div>' +
 			'<input class=\"docm finder\" type=\"text\" style=\"width:70%;\" name=\"feld[' + field_id + '][]\" value=\"' + field_value + '\" id=\"img_feld__' + field_id +'_' + _id+'\" />&nbsp;'+
-			'<span class=\"basicBtn\" onClick=\"dialog_images($(this))\" rel=\"'+ field_id + '_'+_id+'\">".$AVE_Template->get_config_vars('MAIN_OPEN_MEDIAPATH')."</span>'";
+			'<input type=\"button\" class=\"basicBtn\" onClick=\"dialog_images($(this))\" rel=\"'+ field_id + '_'+_id+'\" value=\"".$AVE_Template->get_config_vars('MAIN_OPEN_MEDIAPATH')."\">&nbsp;'";
 		break;
 
 		case '3': // стандартный редактор
@@ -510,8 +510,7 @@ BLOCK;
 			}
 
 			$field.="
-				<div id=\"feld_{$field_id}\">
-				</div>
+				<div id=\"feld_{$field_id}\"></div><br />
 				<input type='button' class='basicBtn' onclick=\"field_image_multi_add({$field_id},'','','');\" value='Добавить' /> <input type='button' class='basicBtn' id='on".$field_id."' onclick=\"field_image_multi_opimport({$field_id});\" value='Импорт' />
 				<script language=\"javascript\" type=\"text/javascript\">";
 				$massa=unserialize($field_value);
