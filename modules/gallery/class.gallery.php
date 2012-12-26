@@ -178,7 +178,7 @@ class Gallery
 					$row_gs->id,
 					ABS_PATH . $folder . '/',
 					ABS_PATH,
-					str_ireplace('"//"','"/"',str_ireplace('///','/',rewrite_link($row->image_link. '&amp;doc=' . (empty($row->image_link_alias) ? prepare_url($row->image_title) : $row->image_link_alias))))
+					str_ireplace('"//"','"/"',str_ireplace('//','/',rewrite_link($row->image_link)))
 				);
 				$image = str_replace($search, $replace, $row_gs->gallery_image_template);
 					if(($i+1)%$row_gs->gallery_image_on_line==0){
@@ -307,8 +307,7 @@ class Gallery
 						image_title = '" . $_POST['image_title'][$image_id] . "',
 						image_description = '" . $_POST['image_description'][$image_id] . "',
 						image_position = '" . intval($_POST['image_position'][$image_id]) . "',
-						image_link = '" . $_POST['image_link'][$image_id] . "',
-						image_link_alias = '" . $_POST['image_link_alias'][$image_id] . "'
+						image_link = '" . $_POST['image_link'][$image_id] . "'
 					WHERE
 						id = '" . (int)$image_id . "'
 					AND

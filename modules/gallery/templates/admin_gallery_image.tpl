@@ -1,13 +1,11 @@
 <script language="Javascript" type="text/javascript">
 
-function openLinkWindow(target,doc,document_alias) {ldelim}
+function openLinkWin(target) {ldelim}
 	if (typeof width=='undefined' || width=='') var width = screen.width * 0.6;
 	if (typeof height=='undefined' || height=='') var height = screen.height * 0.6;
-	if (typeof doc=='undefined') var doc = 'Title';
-	if (typeof scrollbar=='undefined') var scrollbar=1;
 	var left = ( screen.width - width ) / 2;
 	var top = ( screen.height - height ) / 2;
-	window.open('index.php?doc='+doc+'&target='+target+'&document_alias='+document_alias+'&do=docs&action=showsimple&cp={$sess}&pop=1','pop','left='+left+',top='+top+',width='+width+',height='+height+',scrollbars='+scrollbar+',resizable=1');
+	window.open('index.php?do=docs&action=showsimple&target='+target+'&selurl=1&pop=1','pop','left='+left+',top='+top+',width='+Math.min(screen.width, 1000)+',height='+Math.min(screen.height, 600)+',scrollbars=1,resizable=1');
 {rdelim}
 
 $(document).ready(function(){ldelim}
@@ -122,9 +120,8 @@ $(document).ready(function(){ldelim}
 				<td valign="top">
 					<input placeholder="{#FileTitle#}" name="image_title[{$image.id}]" type="text" style="width:350px" id="image_title[{$image.id}]" value="{$image.image_title|escape}">
                     <br /><br />
-                    <input type="hidden" name="image_link_alias[{$image.id}]" id="Url_{$image.id}" value="{$image.image_link_alias|stripslashes}" />
                     <input placeholder="{#LinkDoc#}" name="image_link[{$image.id}]" type="text" id="Link_{$image.id}" value="{$image.image_link}" style="width: 70%;" />
-					<input title="{#LinkToDoc#}" onclick="openLinkWindow('Link_{$image.id}','Titel_{$image.id}','Url_{$image.id}');" type="button" class="basicBtn topDir" value="... " />
+					<input title="{#LinkToDoc#}" onclick="openLinkWin('Link_{$image.id}','Link_{$image.id}');" type="button" class="basicBtn topDir" value="... " />
 				</td>
 
 				<td valign="top">
