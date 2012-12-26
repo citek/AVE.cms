@@ -88,13 +88,15 @@ $(document).ready(function(){ldelim}
 		<col width="20">
 		<col width="50">
 		<col width="120">
-		<col width="366">
+		<col width="">
+		<col width="">
         <thead>
 		<tr>
 			<td align="center"><div align="center"><input title="{#MarAllDel#}" type="checkbox" id="selall" value="1" /></div></td>
             <td align="center">{#Position#}</td>
 			<td>{#FilePrev#}</td>
-			<td>{#FileTitle#} / {#FileDesc#}</td>
+			<td>{#FileTitle#}</td>
+			<td>{#FileDesc#}</td>
 			<td>{#MoreInfos#}</td>
 		</tr>
         </thead>
