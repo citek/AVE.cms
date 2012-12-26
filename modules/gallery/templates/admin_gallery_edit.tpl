@@ -67,7 +67,7 @@
 		<tr>
 			<td>{#Watermark#}</td>
 			<td>
-				<div><img id="preview__0" src="../{$gallery.gallery_watermark|escape}" alt="" border="0" /></div>
+				<div><img id="preview__0" src="{if $gallery.gallery_watermark != ""}../{$gallery.gallery_watermark|escape}{else}{$blank}{/if}" alt="" border="0" /></div>
 				<input class="mousetrap" placeholder="{#Watermark#}" name="gallery_watermark" type="text" id="image__0" value="{$gallery.gallery_watermark|escape}" size="40" style="width:500px" />&nbsp;
 				<input type="button" class="basicBtn topDir" value="..." title="{#MAIN_OPEN_MEDIAPATH#}" onclick="browse_uploads('image__0');" />
 			</td>
@@ -256,7 +256,7 @@
     <tbody>
 			<tr>
 				<td><strong><a class="rightDir" title="{#GalleryTagId#}" href="javascript:void(0);" onclick="textSelection2('[tag:gal:id]', '');">[tag:gal:id]</a></strong></td>
-                <td rowspan="10"><textarea name="gallery_image_template" cols="80" rows="10" id="gallery_image_template" style="width:100%">{$gallery.gallery_image_template|escape}</textarea></td>
+                <td rowspan="10"><textarea name="gallery_image_template" cols="80" rows="11" id="gallery_image_template" style="width:100%">{$gallery.gallery_image_template|escape}</textarea></td>
 			</tr>
 
 			<tr>
@@ -292,6 +292,9 @@
 				<td><strong><a class="rightDir" title="{#GalleryTagImgSize#}" href="javascript:void(0);" onclick="textSelection2('[tag:img:size]', '');">[tag:img:size]</a></strong></td>
 			</tr>
 			<tr>
+				<td><strong><a class="rightDir" title="{#GalleryTagLink#}" href="javascript:void(0);" onclick="textSelection2('[tag:link]', '');">[tag:link]</a></strong></td>
+			</tr>
+			<tr>
 				<td></td>
 			</tr>
             <tr>
@@ -320,7 +323,8 @@
             </tr>
     		<tr>
     			<td colspan="2">
-    				<input type="submit" class="basicBtn" value="{#ButtonSave#}" />&nbsp;или&nbsp;
+    				<input type="submit" class="basicBtn" value="{#ButtonSave#}" />
+					{#Or#}
     				<input type="submit" class="blackBtn SaveEdit" value="{#ButtonSaveEdit#}" />
     			</td>
     		</tr>

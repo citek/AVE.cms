@@ -50,6 +50,15 @@ class Gallery
 	 */
 	var	$_size = '%1$s%2$ux%3$u';
 	//var	$_size = 'c%1$ux%1$u';
+
+	/**
+	 * Размер и тип формирования миниатюр в админке
+	 *
+	 * @var string
+	 */
+	var	$admin_size = 'c100x100';
+	//var	$_size = 'c%1$ux%1$u';
+
 /**
  *	ВНЕШНИЕ МЕТОДЫ
  */
@@ -156,7 +165,8 @@ class Gallery
 					'[tag:img:size]',
 					'[tag:gal:id]',
 					'[tag:gal:folder]',
-					'[tag:path]'
+					'[tag:path]',
+					'[tag:link]'
 				);
 				$replace = array(
 					$row->id,
@@ -167,7 +177,8 @@ class Gallery
 					$row->image_size,
 					$row_gs->id,
 					ABS_PATH . $folder . '/',
-					ABS_PATH
+					ABS_PATH,
+					str_ireplace('"//"','"/"',str_ireplace('///','/',rewrite_link($row->image_link. '&amp;doc=' . (empty($row->image_link_alias) ? prepare_url($row->image_title) : $row->image_link_alias))))
 				);
 				$image = str_replace($search, $replace, $row_gs->gallery_image_template);
 					if(($i+1)%$row_gs->gallery_image_on_line==0){
@@ -295,7 +306,9 @@ class Gallery
 					SET
 						image_title = '" . $_POST['image_title'][$image_id] . "',
 						image_description = '" . $_POST['image_description'][$image_id] . "',
-						image_position = '" . intval($_POST['image_position'][$image_id]) . "'
+						image_position = '" . intval($_POST['image_position'][$image_id]) . "',
+						image_link = '" . $_POST['image_link'][$image_id] . "',
+						image_link_alias = '" . $_POST['image_link_alias'][$image_id] . "'
 					WHERE
 						id = '" . (int)$image_id . "'
 					AND
@@ -385,6 +398,7 @@ class Gallery
 
 			$path = ABS_PATH . trim(UPLOAD_GALLERY_DIR . '/' . $row->gallery_folder, '/');
 			$size = sprintf($this->_size, $row_gs->gallery_thumb_method, $row_gs->gallery_thumb_width, $row_gs->gallery_thumb_height);
+			$admin_size = sprintf($this->admin_size, $row_gs->gallery_thumb_method, $row_gs->gallery_thumb_width, $row_gs->gallery_thumb_height);
 
 			if (!empty($_REQUEST['fromfolder']) && $_REQUEST['fromfolder'] == 1)
 			{
@@ -504,7 +518,8 @@ class Gallery
 									$this->_galleryImageRebuild($dst_dir, $upload_filename, $row->gallery_watermark);
 								}
 
-								$images[] = make_thumbnail(array('link' => $path . '/' . $upload_filename, 'size' => $size));
+								//$images[] = make_thumbnail(array('link' => $path . '/' . $upload_filename, 'size' => $_size));
+								$images[] = make_thumbnail(array('size' => $admin_size, 'link' => $path . '/' . $upload_filename));
 
 								$AVE_DB->Query("
 									INSERT
@@ -552,7 +567,8 @@ class Gallery
 							$this->_galleryImageRebuild($dst_dir, $upload_filename, $row->gallery_watermark);
 						}
 
-						$images[] = make_thumbnail(array('link' => $path . '/' . $upload_filename, 'size' => $size));
+						//$images[] = make_thumbnail(array('link' => $path . '/' . $upload_filename, 'size' => $size));
+						$images[] = make_thumbnail(array('size' => $admin_size, 'link' => $path . '/' . $upload_filename));
 
 						$AVE_DB->Query("
 							INSERT
@@ -810,7 +826,9 @@ class Gallery
 			WHERE id = '" . $gallery_id . "'
 		");
 		$row = $sql->FetchAssocArray();
+		$blanc = 'templates/' . $_SESSION['admin_theme'] . '/images/blanc.gif';
 
+		$AVE_Template->assign('blank', $blanc);
 		$AVE_Template->assign('gallery', $row);
 		$AVE_Template->assign('content', $AVE_Template->fetch($tpl_dir . 'admin_gallery_edit.tpl'));
 	}

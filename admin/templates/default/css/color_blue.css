@@ -37,12 +37,13 @@ ul.sub_stat li ul { border: none; border-top: 1px solid #c9c9c9; }
 ul.sub_stat li ul li { padding-left: 10px; }
 
 /* ===== Right side content ===== */
-.widget { /*width: 342px;*/ /*width: 100%;*/ margin-top: 40px; border: 1px solid #484848; display: block; background: #fff; clear: both; }
-.widgetS { /*width: 342px;*/ /*width: 100%;*/ margin-top: 40px; border: 1px solid #595959; display: block; background: #fafafa; border-top: none; min-width: 25%; float: left; margin-right: 40px; }
+.widget { margin-top: 20px; border: 1px solid #484848; display: block; background: #fff; clear: both; }
+.widgetS { margin-top: 20px; border: 1px solid #595959; display: block; background: #fafafa; border-top: none; min-width: 25%; float: left; margin-right: 40px; }
 
+.widgets .left { float: left; width: 49%; margin-right: 2%; }
+.widgets .right { float: right; width: 49%; }
 
 .head { background: url(theme_color_blue/head.png) repeat-x; height: 38px; border-top: 1px solid #353E47; border-bottom: 1px solid #353E47; position: relative; color: #fff; border-top: none;}
-
 
 /* ========== Pagination ========== */
 .pagination { margin: auto; width: auto; text-align: center; margin-top: 40px; }

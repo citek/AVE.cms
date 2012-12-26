@@ -17,8 +17,11 @@ $(document).ready(function(){ldelim}
 	<li><span class="icon_sprite ico_edit floatleft"></span>&nbsp;<a href="index.php?do=docs&action=edit&Id={$document_id}&cp={$sess}">{#DOC_EDIT_THIS_DOCUMENT#}</a></li>
 	<li><span class="icon_sprite ico_look floatleft"></span>&nbsp;<a href="/index.php?id={$document_id}" target="_blank">{#DOC_DISPLAY_NEW_WINDOW#}</a><br /><br /></li>
 	<li><span class="icon_sprite ico_look floatleft"></span>&nbsp;<a href="/{if $document_id!=1}index.php?id={$document_id}&amp;cp={$sess}{/if}" target="_blank">{#DOC_DISPLAY_NEW_WINDOW#}</a><br /><br /></li>
-	{if $innavi}<li class="navig"><a href="javascript:void(0);" onclick="$('#addInNav').toggle();">{#DOC_INCLUDE_NAVIGATION#}</a><br /><br /></li>
-	{/if}<li><span class="icon_sprite ico_add floatleft"></span>&nbsp;<a href="index.php?do=docs&action=new&rubric_id={$rubric_id}&cp={$sess}">{#DOC_ADD_NEW_DOCUMENT#}</a><br /><br /></li>
+	{if $innavi}
+		<li class="navig"><span class="icon_sprite ico_navigation floatleft"></span><a href="javascript:void(0);" onclick="$('#addInNav').toggle();">{#DOC_INCLUDE_NAVIGATION#}</a><br /><br /></li>
+	{/if}
+	<li><span class="icon_sprite ico_add floatleft"></span>&nbsp;<a href="index.php?do=docs&action=copy&rubric_id={$rubric_id}&Id={$document_id}&cp={$sess}">{#DOC_ADD_COPY_DOCUMENT#}</a><br /></li>
+	<li><span class="icon_sprite ico_add floatleft"></span>&nbsp;<a href="index.php?do=docs&action=new&rubric_id={$rubric_id}&cp={$sess}">{#DOC_ADD_NEW_DOCUMENT#}</a><br /><br /></li>
 	<li><span class="icon_sprite ico_copy floatleft"></span>&nbsp;<a href="index.php?do=docs&rubric_id={$rubric_id}&cp={$sess}">{#DOC_CLOSE_WINDOW_RUBRIC#}</a></li>
 	<li><span class="icon_sprite ico_copy floatleft"></span>&nbsp;<a href="index.php?do=docs&cp={$sess}">{#DOC_CLOSE_WINDOW#}</a></li>
 </ul>
@@ -34,34 +37,35 @@ $(document).ready(function(){ldelim}
 		<table width="100%" border="0" cellpadding="8" cellspacing="1" class="tableborder">
 			<col width="200">
 			<tr>
-				<td colspan="2" class="tableheader">{#DOC_TO_NAVI_TITLE#}</td>
+				<td colspan="2">{#DOC_TO_NAVI_TITLE#}</td>
 			</tr>
 
 			<tr>
-				<td class="first">{#DOC_ADD_IN_NAVIGATION#}</td>
-				<td class="second" nowrap>
+				<td>{#DOC_ADD_IN_NAVIGATION#}</td>
+				<td nowrap>
 					{include file='navigation/tree_docform.tpl'} {#DOC_IN_MENU#}&nbsp;
 					<select name="navi_id">
-						{foreach from=$navis item=menu}<option value="{$menu->id}">{$menu->navi_titel|escape}</option>
+						{foreach from=$navis item=menu}
+							<option value="{$menu->id}">{$menu->navi_titel|escape}</option>
 						{/foreach}
 					</select>
 				</td>
 			</tr>
 
 			<tr>
-				<td class="first">{#DOC_NAVIGATION_POSITION#}</td>
-				<td class="second"><input style="width:45px" name="navi_item_position" type="text" value="10" maxlength="4"></td>
+				<td>{#DOC_NAVIGATION_POSITION#}</td>
+				<td><input style="width:45px" name="navi_item_position" type="text" value="10" maxlength="4"></td>
 			</tr>
 
 			<tr>
-				<td class="first">{#DOC_NAVIGATION_TITLE#}</td>
-				<td class="second"><input style="width:98%" name="navi_title" type="text" value="{$document_title|escape}"></td>
+				<td>{#DOC_NAVIGATION_TITLE#}</td>
+				<td><input style="width:98%" name="navi_title" type="text" value="{$document_title|escape}"></td>
 			</tr>
 
 			<tr>
-				<td class="first">{#DOC_TARGET#}</td>
-				<td class="second">
-					<select  style="width:150px" name="navi_item_target">
+				<td>{#DOC_TARGET#}</td>
+				<td>
+					<select style="width:150px" name="navi_item_target">
 						<option value="_self">{#DOC_TARGET_SELF#}</option>
 						<option value="_blank">{#DOC_TARGET_BLANK#}</option>
 					</select>
@@ -69,7 +73,7 @@ $(document).ready(function(){ldelim}
 			</tr>
 
 			<tr>
-				<td colspan="2" class="third"><input type="submit" class="button" value="{#DOC_BUTTON_ADD_MENU#}"></td>
+				<td colspan="2"><input type="submit" class="button" value="{#DOC_BUTTON_ADD_MENU#}"></td>
 			</tr>
 		</table>
 	</form>

@@ -1,8 +1,7 @@
 <script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
 <script type="text/javascript" src="{$tpl_dir}/js/uploader/jquery.plupload.queue.js"></script>
 <script type="text/javascript" src="{$tpl_dir}/js/uploader/plupload.full.js"></script>
-
-<script language="javascript">
+<script language="javascript" type="text/javascript">
 {literal}
 $(document).ready(function(){
 	//===== File uploader =====//

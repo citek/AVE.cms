@@ -1,4 +1,15 @@
 <script language="Javascript" type="text/javascript">
+
+function openLinkWindow(target,doc,document_alias) {ldelim}
+	if (typeof width=='undefined' || width=='') var width = screen.width * 0.6;
+	if (typeof height=='undefined' || height=='') var height = screen.height * 0.6;
+	if (typeof doc=='undefined') var doc = 'Title';
+	if (typeof scrollbar=='undefined') var scrollbar=1;
+	var left = ( screen.width - width ) / 2;
+	var top = ( screen.height - height ) / 2;
+	window.open('index.php?doc='+doc+'&target='+target+'&document_alias='+document_alias+'&do=docs&action=showsimple&cp={$sess}&pop=1','pop','left='+left+',top='+top+',width='+width+',height='+height+',scrollbars='+scrollbar+',resizable=1');
+{rdelim}
+
 $(document).ready(function(){ldelim}
 
 	$("#selall").click(function(){ldelim}
@@ -111,7 +122,13 @@ $(document).ready(function(){ldelim}
 				<td valign="top">
 					<input placeholder="{#FileTitle#}" name="image_title[{$image.id}]" type="text" style="width:350px" id="image_title[{$image.id}]" value="{$image.image_title|escape}">
                     <br /><br />
-					<textarea placeholder="{#FileDesc#}" name="image_description[{$image.id}]" cols="40" rows="4" style="width:350px" id="image_description[{$image.id}]">{$image.image_description|escape}</textarea>
+                    <input type="hidden" name="image_link_alias[{$image.id}]" id="Url_{$image.id}" value="{$image.image_link_alias|stripslashes}" />
+                    <input placeholder="{#LinkDoc#}" name="image_link[{$image.id}]" type="text" id="Link_{$image.id}" value="{$image.image_link}" style="width: 70%;" />
+					<input title="{#LinkToDoc#}" onclick="openLinkWindow('Link_{$image.id}','Titel_{$image.id}','Url_{$image.id}');" type="button" class="basicBtn topDir" value="... " />
+				</td>
+
+				<td valign="top">
+					<textarea placeholder="{#FileDesc#}" name="image_description[{$image.id}]" cols="40" rows="5" style="width:300px" id="image_description[{$image.id}]">{$image.image_description|escape}</textarea>
 				</td>
 
 				<td valign="top">

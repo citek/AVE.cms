@@ -60,7 +60,7 @@
 						<td>
 							<strong>
 							{if $item->cantEdit==1}
-								<a class="docname" href="index.php?do=docs&action=edit&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}">{$item->document_title}</a>
+								<a class="docname" href="index.php?do=docs&action=edit&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}">{if $item->document_breadcrum_title != ""}{$item->document_breadcrum_title}{else}{$item->document_title}{/if}</a>
 							{else}
 								{$item->document_title}
 							{/if}

@@ -353,7 +353,7 @@ function get_redirect_link($exclude = '')
 			}
 		}
 
-		if (sizeof($params)) $link .= '?' . implode('&amp;', $params);
+		if (sizeof($params)) $link .= '?' . implode('&', $params);
 	}
 
 	return $link;

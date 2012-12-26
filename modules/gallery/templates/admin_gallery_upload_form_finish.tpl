@@ -21,7 +21,9 @@
 <div class="widget">
       <div class="head">
             <h5>{#UploadProgT#}</h5>
-                    <div class="num"><a class="basicNum" href="index.php?do=modules&action=modedit&mod=gallery&moduleaction=showimages&id={$smarty.request.id|escape}&cp={$sess}&compile=1">{#ImageView#}</a></div>
+            <div class="num"><a class="basicNum" href="index.php?do=modules&action=modedit&mod=gallery&moduleaction=add&id={$smarty.request.id|escape}&cp={$sess}">{#AddnewImages#}</a></div>
+			<div class="num"><a class="basicNum" href="index.php?do=modules&action=modedit&mod=gallery&moduleaction=showimages&id={$smarty.request.id|escape}&cp={$sess}&compile=1">{#ImageView#}</a></div>
+			<div class="num"><a class="basicNum" href="index.php?do=modules&action=modedit&mod=gallery&moduleaction=editgallery&id={$smarty.request.id|escape}&cp={$sess}">{#EditGallery#}</a></div>
       </div>
 
 	<div class="rowElem">
