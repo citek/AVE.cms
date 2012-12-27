@@ -52,7 +52,7 @@ $modul_sql_install[] = "CREATE TABLE `CPPREFIX_modul_gallery_images` (
   `image_file_ext` char(4) NOT NULL,
   `image_date` int(10) unsigned NOT NULL default '0',
   `image_position` smallint(3) unsigned NOT NULL default '1',
-  `image_link` varchar(255) NOT NULL
+  `image_link` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `image_position` (`image_position`),
   KEY `image_date` (`image_date`),
