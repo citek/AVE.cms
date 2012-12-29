@@ -7,6 +7,9 @@
  * @filesource
  */
 
+error_reporting(E_ERROR);
+ini_set('display_errors',1);
+
 if (!defined('BASE_DIR')) exit;
 
 /**

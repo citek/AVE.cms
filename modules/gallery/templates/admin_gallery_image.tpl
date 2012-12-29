@@ -90,6 +90,8 @@ $(document).ready(function(){ldelim}
 		<col width="120">
 		<col width="">
 		<col width="">
+		<col width="">
+		<col width="16">
         <thead>
 		<tr>
 			<td align="center"><div align="center"><input title="{#MarAllDel#}" type="checkbox" id="selall" value="1" /></div></td>
@@ -98,6 +100,7 @@ $(document).ready(function(){ldelim}
 			<td>{#FileTitle#}</td>
 			<td>{#FileDesc#}</td>
 			<td>{#MoreInfos#}</td>
+			<td></td>
 		</tr>
         </thead>
 		{foreach from=$images item=image}
@@ -120,7 +123,7 @@ $(document).ready(function(){ldelim}
 				</td>
 
 				<td valign="top">
-					<input placeholder="{#FileTitle#}" name="image_title[{$image.id}]" type="text" style="width:350px" id="image_title[{$image.id}]" value="{$image.image_title|escape}">
+					<input placeholder="{#FileTitle#}" name="image_title[{$image.id}]" type="text" style="width:250px" id="image_title[{$image.id}]" value="{$image.image_title|escape}">
                     <br /><br />
                     <input placeholder="{#LinkDoc#}" name="image_link[{$image.id}]" type="text" id="Link_{$image.id}" value="{$image.image_link}" style="width: 70%;" />
 					<input title="{#LinkToDoc#}" onclick="openLinkWin('Link_{$image.id}','Link_{$image.id}');" type="button" class="basicBtn topDir" value="... " />
@@ -135,6 +138,9 @@ $(document).ready(function(){ldelim}
 					<strong>{#UploadOn#}</strong>: {$image.image_date|date_format:$TIME_FORMAT|pretty_date}<br />
                     <strong>{#Filename#}</strong>: {$image.image_filename|escape}<br />
 					<strong>{#Filesize#}</strong>: {$image.image_size} kb
+				</td>
+				<td valign="top" style="width: 16px;">
+					<input title="{#MarAct#}" name="image_status[{$image.id}]" class="checkbox" type="checkbox" id="image_status[{$image.id}]" value="1" {if $image.image_status == '1'} checked="checked"{/if} />
 				</td>
 			</tr>
 		{/foreach}

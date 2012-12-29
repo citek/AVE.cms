@@ -105,14 +105,14 @@ class Gallery
 		$sql = $AVE_DB->Query("
 			SELECT COUNT(*)
 			FROM " . PREFIX . "_modul_gallery_images
-			WHERE gallery_id = '" . $gallery_id . "'
+			WHERE gallery_id = '" . $gallery_id . "' AND image_status = '1'
 		");
 		$num = $sql->GetCell();
 
 		$sql = $AVE_DB->Query("
 			SELECT *
 			FROM " . PREFIX . "_modul_gallery_images
-			WHERE gallery_id = '" . $gallery_id . "'
+			WHERE gallery_id = '" . $gallery_id . "' AND image_status = '1'
 			ORDER BY " . $order_by . "
 			LIMIT " . $start . "," . $limit . "
 		");
@@ -307,7 +307,8 @@ class Gallery
 						image_title = '" . $_POST['image_title'][$image_id] . "',
 						image_description = '" . $_POST['image_description'][$image_id] . "',
 						image_position = '" . intval($_POST['image_position'][$image_id]) . "',
-						image_link = '" . $_POST['image_link'][$image_id] . "'
+						image_link = '" . $_POST['image_link'][$image_id] . "',
+						image_status = '" . ((empty($_POST['image_status'][$image_id]) || empty($_POST['image_status'][$image_id])) ? 0 : 1) . "'
 					WHERE
 						id = '" . (int)$image_id . "'
 					AND

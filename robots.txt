@@ -7,4 +7,3 @@ Disallow: /inc/
 Disallow: /modules/
 Disallow: /session/
 Disallow: /templates/
-Disallow: /uploads/
