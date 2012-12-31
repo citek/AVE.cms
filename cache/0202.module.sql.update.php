@@ -9,7 +9,7 @@ $gallery = $AVE_DB->Real_Query("
 if ($gallery -> ModulPfad == "gallery")
 {
 	$check = $AVE_DB->Real_Query("
-		SELECT image_status
+		SELECT image_link
 		FROM " . PREFIX . "_modul_gallery_images
 	",false) -> _result;
 	if($check === false)
@@ -17,9 +17,9 @@ if ($gallery -> ModulPfad == "gallery")
 		$AVE_DB->Real_Query("
 			ALTER TABLE `".PREFIX."_modul_gallery_images`
 			ADD
-				`image_status`
-			enum('1','0') NOT NULL DEFAULT '1' AFTER
 				`image_link`
+			varchar(255) NOT NULL default '' AFTER
+				`image_position`
 			";
 	}
 }
