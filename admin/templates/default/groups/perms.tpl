@@ -16,14 +16,14 @@
 
 {if !$no_group && !$own_group}
 
-<form method="post" action="index.php?do=groups&amp;action=grouprights&amp;cp={$sess}&amp;Id={$smarty.request.Id|escape}&amp;sub=save" class="mainForm">
+<form method="post" action="index.php?do=groups&action=grouprights&cp={$sess}&Id={$smarty.request.Id|escape}&sub=save" class="mainForm">
 <fieldset>
 
 <div class="breadCrumbHolder module">
 	<div class="breadCrumb module">
 	    <ul>
 	        <li class="firstB"><a href="index.php">Главное меню</a> </li>
-	        <li><a href="index.php?do=groups&amp;cp={$sess}">{#UGROUP_TITLE#}</a></li>
+	        <li><a href="index.php?do=groups&cp={$sess}">{#UGROUP_TITLE#}</a></li>
 	        <li><strong class="code">{$g_name|escape}</strong></li>
 	    </ul>
 	</div>
@@ -43,10 +43,10 @@
 <div class="rowElem">
 	<label>{#UGROUP_MODULES_RIGHT#}</label>
 	<div class="formRight">
-				<select name="perms[]" style="width:300px" size="12" multiple="multiple" id="xxx">
+				<select name="perms[]" style="width:300px" size="12" multiple="multiple" id="xxx" class="select">
 					{foreach from=$modules item=module}
 						{if $module->mod_path != 'mod_navigation'}
-							<option value="{$module->mod_path}"{if in_array($module->mod_path, $g_group_permissions) || in_array('alles', $g_group_permissions)} selected="selected"{/if}{if $smarty.request.Id == 1 || $smarty.request.Id == $PAGE_NOT_FOUND_ID || in_array('alles', $g_group_permissions)} disabled="disabled"{/if}>{$module->ModulName|escape}</option>
+							<option value="{$module->mod_path}"{if in_array($module->mod_path, $g_group_permissions) || in_array('alles', $g_group_permissions)} selected="selected"{/if}{if $smarty.request.Id == 1 || $smarty.request.Id == $PAGE_NOT_FOUND_ID || in_array('alles', $g_group_permissions)} disabled="disabled"{/if}>{$module->ModuleName|escape}</option>
 						{/if}
 					{/foreach}
 				</select>
@@ -58,9 +58,8 @@
 					<tbody>
 {foreach from=$g_all_permissions item=perm}
 			<tr>
-				<td width="20">
+				<td width="20" align="center">
 					<input type="checkbox" name="perms[]" value="{$perm}"{if in_array($perm, $g_group_permissions) || in_array('alles', $g_group_permissions)} checked="checked"{/if}{if $smarty.request.Id == 1 || $smarty.request.Id == $PAGE_NOT_FOUND_ID || in_array('alles', $g_group_permissions)} disabled="disabled"{/if} />
-					<label></label>
 				</td>
 
 				<td>

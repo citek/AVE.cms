@@ -66,17 +66,36 @@ $(document).ready(function(){ldelim}
 	<div class="breadCrumb module">
 	    <ul>
 	        <li class="firstB"><a href="index.php" title="{#MAIN_PAGE#}">{#MAIN_PAGE#}</a></li>
-	        <li><a href="index.php?do=rubs&amp;cp={$sess}">{#RUBRIK_SUB_TITLE#}</a></li>
+	        <li><a href="index.php?do=rubs&cp={$sess}">{#RUBRIK_SUB_TITLE#}</a></li>
 	        <li>{#RUBRIK_EDIT_FIELDS#}</li>
 	        <li><strong class="code">{$rubric->rubric_title}</strong></li>
 	    </ul>
 	</div>
 </div>
 
+<form action="index.php?do=rubs&action=edit&Id={$smarty.request.Id|escape}&cp={$sess}" method="post" class="mainForm" id="Rubric">
+<div class="widget first">
+<div class="head"><h5 class="iFrames">{#RUBRIK_DESCRIPTION#}</h5></div>
+<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic" id="Fields">
+	<tr>
+		<td>
+			<div class="pr12"><textarea wrap="off" placeholder="{#RUBRIK_DESCRIPTION#}" style="width:100%; height:40px" name="rubric_description">{$rubric->rubric_description|escape}</textarea></div>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="hidden" name="submit" value="" id="nd_sub" />
+			<input type="submit" class="basicBtn" value="{#RUBRIK_BUTTON_SAVE#}" onclick="document.getElementById('nd_sub').value='description'" />
+		</td>
+	</tr>
+</table>
+</div>
+
+</form>
 
 {if $rub_fields}
 
-<form action="index.php?do=rubs&amp;action=edit&amp;Id={$smarty.request.Id|escape}&amp;cp={$sess}" method="post" class="mainForm" id="Rubric">
+<form action="index.php?do=rubs&action=edit&Id={$smarty.request.Id|escape}&cp={$sess}" method="post" class="mainForm" id="Rubric">
 
 <div class="widget first">
 <div class="head"><h5 class="iFrames">{#RUBRIK_FIELDS_TITLE#}</h5><div class="num"><a class="basicNum" href="index.php?do=rubs&action=template&Id={$smarty.request.Id|escape}&cp={$sess}">{#RUBRIK_EDIT_TEMPLATE#}</a></div></div>
@@ -108,11 +127,10 @@ $(document).ready(function(){ldelim}
 		<tbody>
 		{foreach from=$rub_fields item=rf}
 			<tr>
-				<td align="center"><input title="{#RUBRIK_MARK_DELETE#}" name="del[{$rf->Id}]" type="checkbox" id="del[{$rf->Id}]" value="1" class="checkbox" /></td>
+				<td align="center"><input title="{#RUBRIK_MARK_DELETE#}" name="del[{$rf->Id}]" type="checkbox" id="del[{$rf->Id}]" value="1" class="checkbox topDir" /></td>
 				<td align="center">{$rf->Id}</td>
 				<td nowrap>
-					<input name="alias[{$rf->Id}]" type="text" id="alias_{$rf->Id}" value="{$rf->rubric_field_alias|escape}" style="width: 100px;" readonly />
-					&nbsp;
+					<input name="alias[{$rf->Id}]" type="text" id="alias_{$rf->Id}" value="{$rf->rubric_field_alias|escape}" style="width: 100px;" readonly />&nbsp;
 					<input type="button" class="button blackBtn topDir" onclick="openAliasWindow('{$rf->Id}','{$smarty.request.Id|escape}','750','400','alias_{$rf->Id}')" value="...">
 				</td>
 				<td><div class="pr12"><input name="title[{$rf->Id}]" type="text" id="title[{$rf->Id}]" value="{$rf->rubric_field_title|escape}" style="width:100%;" /></div></td>
@@ -132,7 +150,7 @@ $(document).ready(function(){ldelim}
 				</td>
 			</tr>
 			<tr id="tpl_{$rf->Id}" class="tpls">
-				<td colspan="7">
+				<td colspan="8">
 
 				<div style="padding-right: 12px">
 				<div style="width:50%; float:left;">
@@ -207,9 +225,9 @@ $(document).ready(function(){ldelim}
 
 <div class="widget first">
 	<div class="head collapsible" id="opened"><h5>{#RUBRIK_NEW_FIELD#}</h5></div>
-	<div class="body">{#RUBRIK_NEW_FIEL_TITLE#}</div>
 	<div style="display: block;">
-	<form id="newfld" action="index.php?do=rubs&amp;action=edit&amp;Id={$smarty.request.Id|escape}&amp;cp={$sess}" method="post" class="mainForm">
+	<div class="body">{#RUBRIK_NEW_FIEL_TITLE#}</div>
+	<form id="newfld" action="index.php?do=rubs&action=edit&Id={$smarty.request.Id|escape}&cp={$sess}" method="post" class="mainForm">
 	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 		<col width="356" class="second">
 		<col width="220" class="second">
@@ -258,11 +276,48 @@ $(document).ready(function(){ldelim}
 </div>
 </div>
 
+<div class="widget first">
+	<div class="head closed active"><h5>{#RUBRIK_LINK#}</h5></div>
+	<div style="display: block;">
+	<form id="newfld" action="index.php?do=rubs&amp;action=edit&amp;Id={$smarty.request.Id|escape}&amp;cp={$sess}" method="post" class="mainForm">
+	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+		<col width="50%">
+		<col width="50%">
+		<tbody>
+		<tr>
+			<td>
+				<div class="pr12">
+					{#RUBRIK_LINK_DESC#}
+				</div>
+			</td>
+
+			<td>
+				<div class="pr12">
+					<select name="RubLink" id="RubLink" style="width: 250px;">
+						{foreach from=$rubs item=rub}
+							<option value="{$rub->Id}" {if $rubric->rubric_linked_rubric==$rub->Id}selected{/if}>{$rub->rubric_title}</option>
+						{/foreach}
+					</select>
+				</div>
+			</td>
+		</tr>
+
+		<tr>
+			<td colspan="4" class="third">
+				<input type="hidden" name="submit" value="linked_rubric" id="linked_rubric" />
+				<input class="basicBtn" type="submit" value="{#RUBRIK_BUTTON_SAVE#}" /><br />
+			</td>
+		</tr>
+		</tbody>
+	</table>
+</form>
+</div>
+</div>
 
 <div class="widget first">
 	<div class="head closed active"><h5>{#RUBRIK_CODE#}</h5></div>
 	<div style="display: block;">
-	<form id="newfld" action="index.php?do=rubs&amp;action=edit&amp;Id={$smarty.request.Id|escape}&amp;cp={$sess}" method="post" class="mainForm">
+	<form id="newfld" action="index.php?do=rubs&action=edit&Id={$smarty.request.Id|escape}&cp={$sess}" method="post" class="mainForm">
 	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 		<col width="50%">
 		<col width="50%">
@@ -306,7 +361,7 @@ $(document).ready(function(){ldelim}
 <div class="widget first">
 	<div class="head closed active"><h5>{#RUBRIK_SET_PERMISSION#}</h5></div>
 	<div style="display: block;">
-	<form id="rubperm" action="index.php?do=rubs&amp;action=edit&amp;Id={$smarty.request.Id|escape}&amp;cp={$sess}" method="post" class="mainForm">
+	<form id="rubperm" action="index.php?do=rubs&action=edit&Id={$smarty.request.Id|escape}&cp={$sess}" method="post" class="mainForm">
 	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 		<col width="28%">
 		<col width="12%">
@@ -318,12 +373,12 @@ $(document).ready(function(){ldelim}
 		<thead>
 		<tr>
 			<td>{#RUBRIK_USER_GROUP#}</td>
-			<td align="center">{#RUBRIK_DOC_READ#} <div align="center"><a title="{#RUBRIK_VIEW_TIP#}" href="javascript:void(0);" class="toprightDir icon_sprite ico_info_no"></a></div></td>
-			<td align="center">{#RUBRIK_ALL_PERMISSION#} <div align="center"><a title="{#RUBRIK_ALL_TIP#}" href="javascript:void(0);" class="toprightDir icon_sprite ico_info_no"></a></div></td>
-			<td align="center">{#RUBRIK_CREATE_DOC#} <div align="center"><a title="{#RUBRIK_DOC_TIP#}" href="javascript:void(0);" class="toprightDir icon_sprite ico_info_no"></a></div></td>
-			<td align="center">{#RUBRIK_CREATE_DOC_NOW#} <div align="center"><a title="{#RUBRIK_DOC_NOW_TIP#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_info_no"></a></div></td>
-			<td align="center">{#RUBRIK_EDIT_OWN#} <div align="center"><a title="{#RUBRIK_OWN_TIP#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_info_no"></a></div></td>
-			<td align="center">{#RUBRIK_EDIT_OTHER#} <div align="center"><a title="{#RUBRIK_OTHER_TIP#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_info_no"></a></div></td>
+			<td align="center">{#RUBRIK_DOC_READ#} <a href="javascript:void(0);" class="topDir link" style="cursor: help;" title="{#RUBRIK_VIEW_TIP#}">[?]</a></td>
+			<td align="center">{#RUBRIK_ALL_PERMISSION#} <a href="javascript:void(0);" class="topDir link" style="cursor: help;" title="{#RUBRIK_ALL_TIP#}">[?]</a></td>
+			<td align="center">{#RUBRIK_CREATE_DOC#} <a href="javascript:void(0);" class="topDir link" style="cursor: help;" title="{#RUBRIK_DOC_TIP#}">[?]</a></td>
+			<td align="center">{#RUBRIK_CREATE_DOC_NOW#} <a href="javascript:void(0);" class="topDir link" style="cursor: help;" title="{#RUBRIK_DOC_NOW_TIP#}">[?]</a></td>
+			<td align="center">{#RUBRIK_EDIT_OWN#} <a href="javascript:void(0);" class="topDir link" style="cursor: help;" title="{#RUBRIK_OWN_TIP#}">[?]</a></td>
+			<td align="center">{#RUBRIK_EDIT_OTHER#} <a href="javascript:void(0);" class="topleftDir link" style="cursor: help;" title="{#RUBRIK_OTHER_TIP#}">[?]</a></td>
 		</tr>
 		</thead>
 		<tbody>

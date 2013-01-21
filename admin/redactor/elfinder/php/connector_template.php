@@ -186,8 +186,8 @@ $opts = array(
 		array(
 			// 'id' => 'x5',
 			'driver'  => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-			'path'    => '../../../../templates/'.DEFAULT_ADMIN_THEME_FOLDER,         // path to files (REQUIRED)
-			'URL'     => '/'.DEFAULT_ADMIN_THEME_FOLDER.'/', // URL to files (REQUIRED)
+			'path'    => '../../../../templates/'.DEFAULT_THEME_FOLDER,         // path to files (REQUIRED)
+			'URL'     => '/'.DEFAULT_THEME_FOLDER.'/', // URL to files (REQUIRED)
 			'alias'  => 'File system',
 			'disabled' => array(),
 			'acceptedName' => 'validName',

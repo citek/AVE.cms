@@ -57,6 +57,10 @@ $(document).ready(function(){ldelim}
 			);
 	{rdelim});
 
+	 $(".docaction").hover(
+		  function() {ldelim}$(this).children(".actions").show("fade", 10);{rdelim},
+		  function() {ldelim}$(this).children(".actions").hide("fade", 10);{rdelim}
+	 );
 
 
 {literal}
@@ -136,13 +140,13 @@ $(document).ready(function(){ldelim}
 	</thead>
 	<tbody>
 	<tr>
-		<td class="second" style="padding:8px;">
+		<td style="padding:8px;">
 			<form action="index.php" method="get" id="add_docum" class="mainForm">
 				<input type="hidden" name="cp" value="{$sess}" />
 				<input type="hidden" name="do" value="docs" />
 				<input type="hidden" name="action" value="new" />
-				<select style="width: 200px;" name="rubric_id" id="DocName">
-					<option value="">Выберите рубрику</option>
+				<select name="rubric_id" id="DocName">
+					<option value="">{#DOC_CHOSE_RUB#}</option>
 					{foreach from=$rubrics item=rubric}
 						{if $rubric->Show==1}
 							<option value="{$rubric->Id}">{$rubric->rubric_title|escape}</option>
@@ -154,11 +158,11 @@ $(document).ready(function(){ldelim}
 			</form>
 		</td>
 
-		<td class="second" style="padding:8px;">
+		<td style="padding:8px;">
 			<form action="index.php" method="get" class="mainForm">
 				<input type="hidden" name="cp" value="{$sess}" />
 				<input type="hidden" name="do" value="docs" />
-				<select style="width: 200px;" name="rubric_id" id="RubrikSort">
+				<select name="rubric_id" id="RubrikSort">
 					<option value="all">{#MAIN_ALL_RUBRUKS#}</option>
 					{foreach from=$rubrics item=rubric}
 						{if $rubric->Show==1}
@@ -182,6 +186,46 @@ $(document).ready(function(){ldelim}
 <div class="widget first">
 <div class="head"><h5 class="iFrames">{#MAIN_DOCUMENTS_ALL#}</h5></div>
 <form class="mainForm" method="post" action="index.php?do=docs&action=editstatus&cp={$sess}">
+    <div class="body">
+		<strong>{#DOC_SORT_TEXT#}</strong>
+
+		<span class="mrl5">
+		{if $smarty.request.sort=='id'}<span class="arrow">&uarr;</span>{elseif $smarty.request.sort=='id_desc'}<span class="arrow">&darr;</span>{/if}
+		<a class="link" href="{$link}&sort=id{if $smarty.request.sort=='id'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_ID#}</a>
+		</span>
+
+		<span class="mrl5">
+		{if $smarty.request.sort=='title'}<span class="arrow">&uarr;</span>{elseif $smarty.request.sort=='title_desc'}<span class="arrow">&darr;</span>{/if}
+		<a class="link" href="{$link}&sort=title{if $smarty.request.sort=='title'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_TITLE#}</a>
+		</span>
+
+		<span class="mrl5">
+		{if $smarty.request.sort=='alias'}<span class="arrow">&uarr;</span>{elseif $smarty.request.sort=='alias_desc'}<span class="arrow">&darr;</span>{/if}
+		<a class="link" href="{$link}&sort=alias{if $smarty.request.sort=='alias'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_URL_RUB#}</a>
+		</span>
+
+		<span class="mrl5">
+		{if $smarty.request.sort=='rubric'}<span class="arrow">&uarr;</span>{elseif $smarty.request.sort=='rubric_desc'}<span class="arrow">&darr;</span>{/if}
+		<a class="link" href="{$link}&sort=rubric{if $smarty.request.sort=='rubric'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_IN_RUBRIK#}</a>
+		</span>
+
+		<span class="mrl5">
+		{if $smarty.request.sort=='published'}<span class="arrow">&uarr;</span>{elseif $smarty.request.sort=='published_desc'}<span class="arrow">&darr;</span>{/if}
+		<a class="link" href="{$link}&sort=published{if $smarty.request.sort=='published'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_CREATED#}</a>
+		</span>
+
+		<span class="mrl5">
+		{if $smarty.request.sort=='changed'}<span class="arrow">&uarr;</span>{elseif $smarty.request.sort=='changed_desc'}<span class="arrow">&darr;</span>{/if}
+		<a class="link" href="{$link}&sort=changed{if $smarty.request.sort=='changed' || !$smarty.request.sort}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_EDIT#}</a>
+		</span>
+
+		<span class="mrl5">
+		{if $smarty.request.sort=='author'}<span class="arrow">&uarr;</span>{elseif $smarty.request.sort=='author_desc'}<span class="arrow">&darr;</span>{/if}
+		<a class="link" href="{$link}&sort=author{if $smarty.request.sort=='author'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_AUTHOR#}</a>
+		</span>
+
+
+    </div>
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic" id="Fields">
 	<col width="10">
 	<col width="10">
@@ -191,53 +235,148 @@ $(document).ready(function(){ldelim}
 	<col width="80">
 	{*<col width="100">*}
 	<col width="100">
-	<col width="20">
-	<col width="20">
-	<col width="20">
-	<col width="20">
-	<col width="20">
-	<col width="20">
+	{if !$smarty.const.ADMIN_EDITMENU}<col width="141">{/if}
+	{if $docs}
 	<thead>
 	<tr>
 		<td><div align="center"><input type="checkbox" id="selall" value="1" /></div></td>
-		<td><a href="{$link}&sort=id{if $smarty.request.sort=='id'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_ID#}</a></td>
+		<td>{#DOC_ID#}</td>
 		<td nowrap="nowrap">
-			<a href="{$link}&sort=title{if $smarty.request.sort=='title'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_TITLE#}</a>
-			&nbsp;|&nbsp;
-			<a href="{$link}&sort=alias{if $smarty.request.sort=='alias'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_URL_RUB#}</a>
+			{#DOC_TITLE#}&nbsp;|&nbsp;{#DOC_URL_RUB#}
 		</td>
-		<td><a href="{$link}&sort=rubric{if $smarty.request.sort=='rubric'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_IN_RUBRIK#}</a></td>
-		<td><a href="{$link}&sort=published{if $smarty.request.sort=='published'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_CREATED#}</a> | <a href="{$link}&sort=changed{if $smarty.request.sort=='changed' || !$smarty.request.sort}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_EDIT#}</a></td>
-		<td><a href="{$link}&sort=view{if $smarty.request.sort=='view'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_CLICKS#}</a></td>
-		{*<td><a href="{$link}&sort=print{if $smarty.request.sort=='print'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_PRINTED#}</a></td>*}
-		<td><a href="{$link}&sort=author{if $smarty.request.sort=='author'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_AUTHOR#}</a></td>
-		<td colspan="6" align="center">{#DOC_ACTIONS#}</td>
+		<td>{#DOC_IN_RUBRIK#}</td>
+		<td>{#DOC_CREATED#}&nbsp;|&nbsp;{#DOC_EDIT#}</td>
+		<td>{#DOC_CLICKS#}</td>
+		<td>{#DOC_AUTHOR#}</td>
+		{if !$smarty.const.ADMIN_EDITMENU}<td {if $smarty.const.ADMIN_EDITMENU}colspan="7"{else}colspan="14"{/if} align="center">{#DOC_ACTIONS#}</td>{/if}
 	</tr>
 	</thead>
+	{/if}
 	<tbody>
+	{if $docs}
 	{foreach from=$docs item=item}
 		<tr>
 			<td nowrap="nowrap"><input class="checkbox" name="document[{$item->Id}]" type="checkbox" value="1" {if ($item->cantEdit!=1 || $item->canOpenClose!=1 || $item->canEndDel!=1) && ($item->Id == 1 || $item->Id == $PAGE_NOT_FOUND_ID)}disabled{/if} /></td>
-			<td nowrap="nowrap"><strong><a class="toprightDir" title="{#DOC_SHOW_TITLE#}" href="../{if $item->Id!=1}index.php?id={$item->Id}&amp;cp={$sess}{/if}" target="_blank">{$item->Id}</a></strong></td>
+			<td align="center" nowrap="nowrap"><strong><a class="toprightDir" title="{#DOC_SHOW_TITLE#}" href="../{if $item->Id!=1}index.php?id={$item->Id}&amp;cp={$sess}{/if}" target="_blank">{$item->Id}</a></strong></td>
 
 			<td>
-				<strong>
-					{if $item->cantEdit==1}
-						<a class="toprightDir docname" title="{#DOC_EDIT_TITLE#}" href="index.php?do=docs&action=edit&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}">{if $item->document_breadcrum_title != ""}{$item->document_breadcrum_title}{else}{$item->document_title}{/if}</a>
+				<div class="docaction">
+				{if $item->cantEdit==1}
+					{if $item->rubric_admin_teaser_template != ""}
+						{$item->rubric_admin_teaser_template}
 					{else}
-						{$item->document_title}
+					<strong>
+						<a class="toprightDir docname" title="{#DOC_EDIT_TITLE#}" href="index.php?do=docs&action=edit&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}">
+							{if $item->document_breadcrum_title != ""}
+								{$item->document_breadcrum_title}{else}{$item->document_title}
+							{/if}
+						</a>
+					</strong><br />
+					<a class="toprightDir" title="{#DOC_SHOW2_TITLE#}" href="../{if $item->Id!=1}{$item->document_alias}{/if}" target="_blank">
+						<span class="dgrey doclink">{$item->document_alias}</span>
+					</a>
 					{/if}
-				</strong><br />
-				<a class="toprightDir" title="{#DOC_SHOW2_TITLE#}" href="../{if $item->Id!=1}{$item->document_alias}{/if}" target="_blank"><span class="dgrey doclink">{$item->document_alias}</span></a>
+
+					<div class="doc_message">
+						{if $item->ist_remark!='0'}
+							<div class="remarks"><span title="{#DOC_ICON_COMMENT#}" class="icon_sprite_doc icon_comment topDir"></span></div>
+						{/if}
+
+						{if $item->document_status!='1'}
+							<div class="public"><span title="{#DOC_ICON_PUBLIC#}" class="icon_sprite_doc icon_public_on topDir"></span></div>
+						{/if}
+
+						{if $item->document_deleted!='0'}
+							<div class="recylce"><span title="{#DOC_ICON_RECYCLE#}" class="icon_sprite_doc icon_recylce topDir"></span></div>
+						{/if}
+
+					</div>
+
+					<div class="actions" style="display: none;">
+
+				{if $smarty.const.ADMIN_EDITMENU}
+
+				<!-- Редактировать -->
+				{if $item->cantEdit==1}
+					<a class="topDir floatleft" title="{#DOC_EDIT_TITLE#}" href="index.php?do=docs&action=edit&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}">
+						<span class="icon_sprite_doc icon_edit"></span>
+					</a>
+				{/if}
+
+				<!-- Копировать -->
+				{if $item->cantEdit==1 && $item->Id != 1 && $item->Id != $PAGE_NOT_FOUND_ID}
+					<a class="topDir CopyDocs floatleft" title="{#DOC_COPY#}" href="index.php?do=docs&action=copy&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}">
+						<span class="icon_sprite_doc icon_copy"></span>
+					</a>
+				{/if}
+
+				<!-- Заметки -->
+				{if check_permission("remarks")}
+					{if $item->ist_remark=='0'}
+					<a class="topDir floatleft" title="{#DOC_CREATE_NOTICE_TITLE#}" href="javascript:void(0);" onclick="cp_pop('index.php?do=docs&action=remark&Id={$item->Id}&pop=1&cp={$sess}','800','700','1','docs');">
+						<span class="icon_sprite_doc icon_comment"></span>
+					</a>
+					{else}
+					<a class="topDir floatleft" title="{#DOC_CREATE_NOTICE_TITLE#}" href="javascript:void(0);" onclick="cp_pop('index.php?do=docs&action=remark_reply&Id={$item->Id}&pop=1&cp={$sess}','800','700','1','docs');">
+						<span class="icon_sprite_doc icon_comment"></span>
+					</a>
+					{/if}
+				{/if}
+
+				<!-- Публикация -->
+				{if $item->document_deleted!=1}
+					{if $item->document_status==1}
+						{if $item->canOpenClose==1 && $item->Id != 1 && $item->Id != $PAGE_NOT_FOUND_ID}
+							<a class="topDir floatleft" title="{#DOC_DISABLE_TITLE#}" href="index.php?do=docs&action=close&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}">
+								<span class="icon_sprite_doc icon_public_on"></span>
+							</a>
+						{/if}
+					{else}
+						{if $item->canOpenClose==1}
+							<a class="topDir floatleft" title="{#DOC_ENABLE_TITLE#}" href="index.php?do=docs&action=open&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}">
+								<span class="icon_sprite_doc icon_public"></span>
+							</a>
+						{/if}
+					{/if}
+				{/if}
+
+				<!-- Корзина -->
+				{if $item->document_deleted==1}
+					<a class="topDir floatleft" title="{#DOC_RESTORE_DELETE#}" href="index.php?do=docs&action=redelete&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}">
+						<span class="icon_sprite_doc icon_recylce_on"></span>
+					</a>
+				{else}
+					{if $item->canDelete==1}
+					<a class="ConfirmRecycle topDir floatleft" title="{#DOC_TEMPORARY_DELETE#}"  href="index.php?do=docs&action=delete&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}">
+						<span class="icon_sprite_doc icon_recylce"></span>
+					</a>
+					{/if}
+				{/if}
+
+				<!-- Удалить -->
+				{if $item->canEndDel==1 && $item->Id != 1 && $item->Id != $PAGE_NOT_FOUND_ID}
+					<a class="ConfirmDelete topDir" title="{#DOC_FINAL_DELETE#}" dir="{#DOC_FINAL_DELETE#}" name="{#DOC_FINAL_CONFIRM#}" href="index.php?do=docs&action=enddelete&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"><span class="icon_sprite_doc icon_delete floatleft"></span></a>
+				{/if}
+
+
+				{/if}
+					</div>
+
+				{else}
+					{$item->document_title}
+				{/if}
+				</div>
 			</td>
 
-			<td nowrap="nowrap">
+			<td nowrap="nowrap" align="center">
 				{if $item->cantEdit==1}
-					<select style="width: 200px;" {if $item->cantEdit==1}onchange="cp_pop('index.php?do=docs&action=change&Id={$item->Id}&rubric_id={$item->rubric_id}&NewRubr='+this.value+'&pop=1&cp={$sess}','550','550','1','docs');"{else}disabled="disabled"{/if}>
-						{foreach from=$rubrics item=rubric}
-							<option value="{$rubric->Id}"{if $item->rubric_id == $rubric->Id} selected="selected"{/if}>{$rubric->rubric_title|escape}</option>
-						{/foreach}
-					</select>
+					{foreach from=$rubrics item=rubric}
+						{if $item->rubric_id == $rubric->Id}
+							<a href="javascript:void(0);" title="{#DOC_CHANGE_RUBRIC#}" class="link topDir" onclick="cp_pop('index.php?do=docs&action=change&Id={$item->Id}&rubric_id={$item->rubric_id}&pop=1&cp={$sess}','550','550','1','docs');">
+								{$rubric->rubric_title|escape}
+							</a>
+						{/if}
+					{/foreach}
 				{else}
 					{foreach from=$rubrics item=rubric}
 						{if $item->rubric_id == $rubric->Id}{$rubric->rubric_title|escape}{/if}
@@ -252,112 +391,111 @@ $(document).ready(function(){ldelim}
 			{*<td align="center">{$item->document_count_print}</td>*}
 
 			<td align="center">{$item->document_author|escape}</td>
-
-			<td align="center" nowrap="nowrap">
+			{if !$smarty.const.ADMIN_EDITMENU}
+			<td align="center" nowrap="nowrap" class="actions">
 				{if check_permission("remarks")}
 					{if $item->ist_remark=='0'}
-						<a class="topleftDir icon_sprite ico_comment" title="{#DOC_CREATE_NOTICE_TITLE#}" href="javascript:void(0);" onclick="cp_pop('index.php?do=docs&action=remark&Id={$item->Id}&pop=1&cp={$sess}','800','700','1','docs');"></a>
+						<a class="topleftDir floatleft" title="{#DOC_CREATE_NOTICE_TITLE#}" href="javascript:void(0);" onclick="cp_pop('index.php?do=docs&action=remark&Id={$item->Id}&pop=1&cp={$sess}','800','700','1','docs');"><span class="icon_sprite ico_comment"></span></a>
 					{else}
-						<a class="topleftDir icon_sprite ico_comment" title="{#DOC_REPLY_NOTICE_TITLE#}" href="javascript:void(0);" onclick="cp_pop('index.php?do=docs&action=remark_reply&Id={$item->Id}&pop=1&cp={$sess}','800','700','1','docs');"></a>
+						<a class="topleftDir floatleft" title="{#DOC_REPLY_NOTICE_TITLE#}" href="javascript:void(0);" onclick="cp_pop('index.php?do=docs&action=remark_reply&Id={$item->Id}&pop=1&cp={$sess}','800','700','1','docs');"><span class="icon_sprite ico_comment"></span></a>
 					{/if}
 				{else}
-					<span title="" class="topleftDir icon_sprite ico_comment_no"></span>
+					{*<span class="topleftDir icon_sprite ico_comment_no floatleft"></span>*}
 				{/if}
-			</td>
 
-			<td align="center" nowrap="nowrap">
 				{if $item->cantEdit==1 && $item->Id != 1 && $item->Id != $PAGE_NOT_FOUND_ID}
-					<a class="topleftDir icon_sprite ico_copy CopyDocs" title="{#DOC_COPY#}" href="index.php?do=docs&action=copy&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
+					<a class="topleftDir CopyDocs floatleft" title="{#DOC_COPY#}" href="index.php?do=docs&action=copy&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"><span class="icon_sprite ico_copy"></span></a>
 	 				{else}
-					<span title="" class="topleftDir icon_sprite ico_copy_no"></span>
+					{*<span class="icon_sprite ico_copy_no floatleft"></span>*}
 				{/if}
-			</td>
 
-			<td align="center" nowrap="nowrap">
 				{if $item->cantEdit==1}
-					<a class="topleftDir icon_sprite ico_edit" title="{#DOC_EDIT_TITLE#}" href="index.php?do=docs&action=edit&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
+					<a class="topleftDir floatleft" title="{#DOC_EDIT_TITLE#}" href="index.php?do=docs&action=edit&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"><span class="icon_sprite ico_edit"></span></a>
 				{else}
-					<span title="" class="topleftDir icon_sprite ico_edit_no"></span>
+					{*<span class="icon_sprite ico_edit_no floatleft"></span>*}
 				{/if}
-			</td>
 
-			<td align="center" nowrap="nowrap">
 				{if $item->document_deleted==1}
-					<span title="" class="topleftDir icon_sprite ico_blank"></span>
+					{*<span class="icon_sprite ico_blank floatleft"></span>*}
 				{else}
 					{if $item->document_status==1}
 						{if $item->canOpenClose==1 && $item->Id != 1 && $item->Id != $PAGE_NOT_FOUND_ID}
-							<a ajax="index.php?do=docs&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}" class="topleftDir lock icon_sprite ico_unlock" title="{#DOC_DISABLE_TITLE#}" href="index.php?do=docs&action=close&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
+							<a class="topleftDir lock floatleft" ajax="index.php?do=docs&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}" title="{#DOC_DISABLE_TITLE#}" href="index.php?do=docs&action=close&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"><span class="icon_sprite ico_unlock"></span></a>
 						{else}
 							{if $item->cantEdit==1 && $item->Id != 1 && $item->Id != $PAGE_NOT_FOUND_ID}
-				   			<span title="" class="topleftDir icon_sprite ico_unlock_no"></span>
+				   			{*<span class="icon_sprite ico_unlock_no floatleft"></span>*}
 							{else}
-							<span title="" class="topleftDir icon_sprite ico_unlock_no"></span>
+							{*<span class="icon_sprite ico_unlock_no floatleft"></span>*}
 							{/if}
 						{/if}
 					{else}
 						{if $item->canOpenClose==1}
-							<a ajax="index.php?do=docs&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}" class="topleftDir lock icon_sprite ico_lock" title="{#DOC_ENABLE_TITLE#}" href="index.php?do=docs&action=open&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
+							<a class="topleftDir floatleft" ajax="index.php?do=docs&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}" title="{#DOC_ENABLE_TITLE#}" href="index.php?do=docs&action=open&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"><span class="icon_sprite ico_lock"></span></a>
 						{else}
 							{if $item->cantEdit==1 && $item->Id != 1 && $item->Id != $PAGE_NOT_FOUND_ID}
-							<span title="" class="topleftDir icon_sprite ico_lock_no"></span>
+							{*<span class="icon_sprite ico_lock_no floatleft"></span>*}
 							{else}
-							<span title="" class="topleftDir icon_sprite ico_lock_no"></span>
+							{*<span class="icon_sprite ico_lock_no floatleft"></span>*}
 							{/if}
 						{/if}
 					{/if}
 				{/if}
-			</td>
 
-			<td align="center" nowrap="nowrap">
 				{if $item->document_deleted==1}
-					<a class="topleftDir icon_sprite ico_recylce_on" title="{#DOC_RESTORE_DELETE#}" href="index.php?do=docs&action=redelete&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
+					<a class="topleftDir floatleft" title="{#DOC_RESTORE_DELETE#}" href="index.php?do=docs&action=redelete&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"><span class="icon_sprite ico_recylce_on"></span></a>
 				{else}
 					{if $item->canDelete==1}
-						<a class="ConfirmRecycle topleftDir icon_sprite ico_recylce" title="{#DOC_TEMPORARY_DELETE#}"  href="index.php?do=docs&action=delete&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
+						<a class="ConfirmRecycle topleftDir floatleft" title="{#DOC_TEMPORARY_DELETE#}"  href="index.php?do=docs&action=delete&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"><span class="icon_sprite ico_recylce"></span></a>
 					{else}
-						<span title="" class="topleftDir icon_sprite ico_recylce_no"></span>
+						{*<span class="icon_sprite ico_recylce_no floatleft"></span>*}
 					{/if}
 				{/if}
-			</td>
 
-			<td align="center" nowrap="nowrap">
 				{if $item->canEndDel==1 && $item->Id != 1 && $item->Id != $PAGE_NOT_FOUND_ID}
-					<a class="ConfirmDelete topleftDir icon_sprite ico_delete" title="{#DOC_FINAL_DELETE#}" dir="{#DOC_FINAL_DELETE#}" name="{#DOC_FINAL_CONFIRM#}" href="index.php?do=docs&action=enddelete&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"></a>
+					<a class="ConfirmDelete topleftDir floatleft" title="{#DOC_FINAL_DELETE#}" dir="{#DOC_FINAL_DELETE#}" name="{#DOC_FINAL_CONFIRM#}" href="index.php?do=docs&action=enddelete&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}"><span class="icon_sprite ico_delete"></span></a>
 				{else}
-					<span title="" class="topleftDir icon_sprite ico_delete_no"></span>
+					{*<span class="icon_sprite ico_delete_no floatleft"></span>*}
 				{/if}
 			</td>
+			{/if}
 		</tr>
 	{/foreach}
+	{else}
+			<tr>
+				<td {if $smarty.const.ADMIN_EDITMENU}colspan="7"{else}colspan="14"{/if}>
+					<ul class="messages">
+						<li class="highlight yellow">{#DOC_NO_DOCS#}</li>
+					</ul>
+				</td>
+			</tr>
+	{/if}
+	{if $docs}
 	<thead>
 	<tr>
-		<td></td>
-		<td><a href="{$link}&sort=id{if $smarty.request.sort=='id'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_ID#}</a></td>
+		<td><div align="center"><input type="checkbox" id="selall" value="1" /></div></td>
+		<td>{#DOC_ID#}</td>
 		<td nowrap="nowrap">
-			<a href="{$link}&sort=title{if $smarty.request.sort=='title'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_TITLE#}</a>
-			&nbsp;|&nbsp;
-			<a href="{$link}&sort=alias{if $smarty.request.sort=='alias'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_URL_RUB#}</a>
+			{#DOC_TITLE#}&nbsp;|&nbsp;{#DOC_URL_RUB#}
 		</td>
-		<td><a href="{$link}&sort=rubric{if $smarty.request.sort=='rubric'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_IN_RUBRIK#}</a></td>
-		<td><a href="{$link}&sort=published{if $smarty.request.sort=='published'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_CREATED#}</a> | <a href="{$link}&sort=changed{if $smarty.request.sort=='changed' || !$smarty.request.sort}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_EDIT#}</a></td>
-		<td><a href="{$link}&sort=view{if $smarty.request.sort=='view'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_CLICKS#}</a></td>
-		{*<td><a href="{$link}&sort=print{if $smarty.request.sort=='print'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_PRINTED#}</a></td>*}
-		<td><a href="{$link}&sort=author{if $smarty.request.sort=='author'}_desc{/if}&page={$smarty.request.page|escape|default:'1'}&cp={$sess}">{#DOC_AUTHOR#}</a></td>
-		<td colspan="6" align="center">{#DOC_ACTIONS#}</td>
+		<td>{#DOC_IN_RUBRIK#}</td>
+		<td>{#DOC_CREATED#}&nbsp;|&nbsp;{#DOC_EDIT#}</td>
+		<td>{#DOC_CLICKS#}</td>
+		<td>{#DOC_AUTHOR#}</td>
+		{if !$smarty.const.ADMIN_EDITMENU}<td colspan="6" align="center">{#DOC_ACTIONS#}</td>{/if}
 	</tr>
 	</thead>
+	{/if}
 		<tr>
-			<td colspan="14">
+			<td {if $smarty.const.ADMIN_EDITMENU}colspan="7"{else}colspan="14"{/if}>
 			<select name="moderation" class="action-in-moderation">
-				<option value="none" selected="selected">Действие с выбранными</option>
-				<option value="1">Активный</option>
-				<option value="0">Не активный</option>
-				<option value="intrash">Временно удалить</option>
-				<option value="outtrash">Восстановить</option>
-				<option value="trash">Удалить</option>
+				<option value="none" selected="selected">{#DOC_ACTION_SELECT#}</option>
+				<option value="1">{#DOC_ACTION_SELECT_ACT#}</option>
+				<option value="0">{#DOC_ACTION_SELECT_NACT#}</option>
+				<option value="intrash">{#DOC_ACTION_SELECT_TRASH#}</option>
+				<option value="outtrash">{#DOC_ACTION_SELECT_OUTTRASH#}</option>
+				<option value="trash">{#DOC_ACTION_SELECT_DEL#}</option>
 			</select>
-			&nbsp;&nbsp;<input type="submit" class="basicBtn" value="Сохранить изменения" onclick="document.getElementById('nf_save_next').value='save'" />
+			&nbsp;&nbsp;<input type="submit" class="basicBtn" value="{#DOC_ACTION_BUTTON#}" onclick="document.getElementById('nf_save_next').value='save'" />
 			</td>
 		</tr>
 </tbody>

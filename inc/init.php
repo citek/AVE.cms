@@ -7,7 +7,7 @@
  * @filesource
  */
 
-error_reporting(E_ERROR);
+error_reporting(E_ALL);
 ini_set('display_errors',1);
 
 if (!defined('BASE_DIR')) exit;
@@ -123,11 +123,11 @@ ini_set('session.use_trans_sid',    0);
 ini_set('url_rewriter.tags',        '');
 
 mb_internal_encoding("UTF-8"); // переключение для нормальной работы с русскими буквами в некоторых функциях
-require(BASE_DIR . '/inc/config.php');
+require_once(BASE_DIR . '/inc/config.php');
 require(BASE_DIR . '/functions/func.common.php');
 require(BASE_DIR . '/functions/func.login.php');
 require(BASE_DIR . '/functions/func.pagination.php');
-if (!defined('ACP'))
+//if (!defined('ACP'))
 {
 	require(BASE_DIR . '/functions/func.navigation.php');
 	require(BASE_DIR . '/functions/func.sysblock.php');
@@ -230,7 +230,9 @@ if (!defined('ACPL') && !auth_sessions())
 		define('UNAME', $_SESSION['user_name']);
 	}
 }
+if(!empty($_SESSION['user_id'])) $AVE_DB->Query("UPDATE ".PREFIX."_users SET last_visit='".time()."' WHERE Id='".intval($_SESSION['user_id'])."'");
 
+	
 // Заглушка пока нет поддержки многоязычности
 $_SESSION['user_language'] = DEFAULT_LANGUAGE;
 

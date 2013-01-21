@@ -151,6 +151,7 @@ a {
 .el-dialogform table {
 	width:100%;
 	border: none;
+	background: #fff;
 }
 .el-dialogform table td {
 	padding: 2px;
@@ -645,7 +646,7 @@ a {
 	margin: .3em .4em .1em 0; /*font-size:.9em;*/
 }
 .ui-dialog .ui-dialog-titlebar {
-	padding: .3em 1em .3em;
+	/*padding: .3em 1em .3em;*/
 }
 /*.ui-dialog-buttonset { padding:0; background-color:#333;}*/
 /* диалоговые окна */
@@ -666,6 +667,7 @@ a {
 .el-dialogform fieldset {
 	border:1px solid #ccc;
 	padding : 0;
+	background-color: #fff;
 }
 .el-dialogform fieldset legend {
 	/*font-size:.9em;*/

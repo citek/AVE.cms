@@ -30,7 +30,8 @@ class AVE_Navigation
 	 */
 	function _replace_wildcode($text)
 	{
-		$text = preg_replace('#[^(\w)|(\x7F-\xFF)|(\s)|\/-]#', '', $text);
+		//$text = preg_replace('#[^(\w)|(\x7F-\xFF)|(\s)|\/-]#', '', $text);
+		$text = preg_replace('#[^(\w)|(\?)|(-)|(\x7F-\xFF)|(\s)|\/-]#', '', $text);
 //		$text = htmlspecialchars($text, ENT_QUOTES);
 
 		return $text;

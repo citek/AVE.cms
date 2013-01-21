@@ -203,126 +203,139 @@ class AVE_Template extends Smarty
 	 * Метод очистки кэша
 	 *
 	 */
-	function templateCacheClear()
+	function CacheClear()
 	{
-		$this->clear_all_cache();
-		foreach (glob($this->cache_dir_root."/cache_*") as $filename) {
-			@unlink($filename);
-		}
-		
-		$filename = $this->cache_dir . '/.htaccess';
-		if (!file_exists($filename))
-		{
-			$fp = @fopen($filename, 'w');
-			if ($fp)
-			{
-				fputs($fp, 'Deny from all');
-				fclose($fp);
+		global $AVE_DB, $AVE_Template;
+
+		$message = array();
+
+		//Метод очистки кэша
+		if (isset($_REQUEST['templateCache']) && $_REQUEST['templateCache'] == '1'){
+			$this->clear_all_cache();
+			foreach (glob($this->cache_dir_root."/cache_*") as $filename) {
+				@unlink($filename);
 			}
+			
+			$filename = $this->cache_dir . '/.htaccess';
+			if (!file_exists($filename))
+			{
+				$fp = @fopen($filename, 'w');
+				if ($fp)
+				{
+					fputs($fp, 'Deny from all');
+					fclose($fp);
+				}
+			}
+
+			if($_REQUEST['ajax'] && Memcached_Server && Memcached_Port) {
+				$memcache = new Memcache;
+				$memcache->connect(Memcached_Server, Memcached_Port);
+				$memcache->flush();
+			}
+
+			// Очищаем кэш шаблона документов рубрики
+			$GLOBALS['AVE_DB']->Query("
+				DELETE
+				FROM " . PREFIX . "_rubric_template_cache
+			");
+			
+			$message[] = $AVE_Template->get_config_vars('TEMPLATES_CACHE_SUCCESS');
+			reportLog($_SESSION['user_name'] . ' - ' . $AVE_Template->get_config_vars('TEMPLATES_CACHE_SUCCESS_LOG'), 2, 2);
 		}
 
-		if($_REQUEST['ajax'] && Memcached_Server && Memcached_Port) {
-			$memcache = new Memcache;
-			$memcache->connect(Memcached_Server, Memcached_Port);
-			$memcache->flush();
-		}
-		
-		// Очищаем кэш шаблона документов рубрики
-		$GLOBALS['AVE_DB']->Query("
-			DELETE
-			FROM " . PREFIX . "_rubric_template_cache
-		");
+		//Метод удаления скомпилированных шаблонов
+		if (isset($_REQUEST['templateCompiledTemplate']) && $_REQUEST['templateCompiledTemplate'] == '1'){
+			$this->clear_compiled_tpl();
 
-		reportLog($_SESSION['user_name'] . ' - очистил кэш', 2, 2);
+			$filename = $this->compile_dir . '/.htaccess';
+			if (!file_exists($filename))
+			{
+				$fp = @fopen($filename, 'w');
+				if ($fp)
+				{
+					fputs($fp, 'Deny from all');
+					fclose($fp);
+				}
+			}
+			$message[] = $AVE_Template->get_config_vars('TEMPLATES_CACHE_CT_SUCCESS');
+			reportLog($_SESSION['user_name'] . ' - ' . $AVE_Template->get_config_vars('TEMPLATES_CACHE_CT_SUCCESS_LOG'), 2, 2);
+		}
+
+		//Метод удаления скомпилированных шаблонов модулей
+		if (isset($_REQUEST['moduleCache']) && $_REQUEST['moduleCache'] == '1'){
+			rrmdir($this->module_cache_dir);
+			mkdir($this->module_cache_dir,0777,true);
+			$filename = $this->module_cache_dir . '/.htaccess';
+			if (!file_exists($filename))
+			{
+				$fp = @fopen($filename, 'w');
+				if ($fp)
+				{
+					fputs($fp, 'Deny from all');
+					fclose($fp);
+				}
+			}
+			$message[] = $AVE_Template->get_config_vars('TEMPLATES_CACHE_MC_SUCCESS');
+			reportLog($_SESSION['user_name'] . ' - ' . $AVE_Template->get_config_vars('TEMPLATES_CACHE_MC_SUCCESS_LOG'), 2, 2);
+		}
+
+		//Метод удаления всех сессий
+		if (isset($_REQUEST['sessionUsers']) && $_REQUEST['sessionUsers'] == '1'){
+			rrmdir($this->session_dir);
+			mkdir($this->session_dir,0777,true);
+			$filename = $this->session_dir . '/.htaccess';
+			if (!file_exists($filename))
+			{
+				$fp = @fopen($filename, 'w');
+				if ($fp)
+				{
+					fputs($fp, 'Deny from all');
+					fclose($fp);
+				}
+			}
+			$message[] = $AVE_Template->get_config_vars('TEMPLATES_CACHE_SU_SUCCESS');
+			reportLog($_SESSION['user_name'] . ' - ' . $AVE_Template->get_config_vars('TEMPLATES_CACHE_SU_SUCCESS_LOG'), 2, 2);
+		}
+
+		//Метод удаления кэша запросов
+		if (isset($_REQUEST['sqlCache']) && $_REQUEST['sqlCache'] == '1'){
+			rrmdir($this->sql_cache_dir);
+			mkdir($this->sql_cache_dir,0777,true);
+			$filename = $this->sql_cache_dir . '/.htaccess';
+			if (!file_exists($filename))
+			{
+				$fp = @fopen($filename, 'w');
+				if ($fp)
+				{
+					fputs($fp, 'Deny from all');
+					fclose($fp);
+				}
+			}
+			$message[] = $AVE_Template->get_config_vars('TEMPLATES_CACHE_SC_SUCCESS');
+			reportLog($_SESSION['user_name'] . ' - ' . $AVE_Template->get_config_vars('TEMPLATES_CACHE_SC_SUCCESS_LOG'), 2, 2);
+		}
+
+		echo json_encode(array($AVE_Template->get_config_vars('TEMPLATES_MESSAGE') . "<br />" . implode('<br />', $message), 'accept'));
 	}
 
 	/**
-	 * Метод удаления скомпилированных шаблонов
+	 * Метод очистки миниатюр
 	 *
 	 */
-	function templateCompiledTemplateClear()
+	function ThumbnailsClear()
 	{
-		$this->clear_compiled_tpl();
+		global $AVE_DB, $AVE_Template;
 
-		$filename = $this->compile_dir . '/.htaccess';
-		if (!file_exists($filename))
-		{
-			$fp = @fopen($filename, 'w');
-			if ($fp)
-			{
-				fputs($fp, 'Deny from all');
-				fclose($fp);
-			}
-		}
+		$message = array();
 
-		reportLog($_SESSION['user_name'] . ' - удалил скомпилированные шаблоны', 2, 2);
+		$thumb_dirs = bfglob(BASE_DIR . '/' . UPLOAD_DIR . '/', THUMBNAIL_DIR, GLOB_NOSORT+GLOB_ONLYDIR, -1);
+		foreach($thumb_dirs as $thumb_dir) rrmdir($thumb_dir);
+
+		$message[] = $AVE_Template->get_config_vars('TEMPLATES_THUMBNAILS_SUCCESS');
+		reportLog($_SESSION['user_name'] . ' - ' . $AVE_Template->get_config_vars('TEMPLATES_THUMBNAILS_SUCCESS_LOG'), 2, 2);
+
+		echo json_encode(array($AVE_Template->get_config_vars('TEMPLATES_MESSAGE') . "<br />" . implode('<br />', $message), 'accept'));
 	}
-	
-	/**
-	 * Метод удаления скомпилированных шаблонов модулей
-	 *
-	 */	
-	function moduleCacheClear()
-    {
-		rrmdir($this->module_cache_dir);
-		mkdir($this->module_cache_dir,0777,true);
-		$filename = $this->module_cache_dir . '/.htaccess';
-		if (!file_exists($filename))
-		{
-			$fp = @fopen($filename, 'w');
-			if ($fp)
-			{
-				fputs($fp, 'Deny from all');
-				fclose($fp);
-			}
-		}
 
-		reportLog($_SESSION['user_name'] . ' - удалил скомпилированные шаблоны модулей', 2, 2);
-    }
-    
-	/**
-	 * Метод удаления всех сессий
-	 *
-	 */	
-	function sessionClear()
-    {
-		rrmdir($this->session_dir);
-		mkdir($this->session_dir,0777,true);
-		$filename = $this->session_dir . '/.htaccess';
-		if (!file_exists($filename))
-		{
-			$fp = @fopen($filename, 'w');
-			if ($fp)
-			{
-				fputs($fp, 'Deny from all');
-				fclose($fp);
-			}
-		}
-
-		reportLog($_SESSION['user_name'] . ' - удалил сессии пользователей', 2, 2);
-    }
-
-    /**
-	 * Метод удаления кэша запросов
-	 *
-	 */	
-	function sqlCacheClear()
-    {	
-		rrmdir($this->sql_cache_dir);
-		mkdir($this->sql_cache_dir,0777,true);
-		$filename = $this->sql_cache_dir . '/.htaccess';
-		if (!file_exists($filename))
-		{
-			$fp = @fopen($filename, 'w');
-			if ($fp)
-			{
-				fputs($fp, 'Deny from all');
-				fclose($fp);
-			}
-		}
-
-		reportLog($_SESSION['user_name'] . ' - удалил кэш sql запросов', 2, 2);
-    }
-	
 }
 ?>

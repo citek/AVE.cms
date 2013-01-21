@@ -22,7 +22,7 @@ class AVE_Document
 	 *
 	 * @var int
 	 */
-	var $_limit = 50;
+	var $_limit = 25;
 
 	/**
 	 * Ширина поля ввода (для элементов input)
@@ -80,8 +80,8 @@ class AVE_Document
 	function _documentListStart()
 	{
 		$published = explode(".", $_REQUEST['document_published']);
-		
-		if (!empty($published))
+		$timestamp=time(0);
+		if (!empty($published[0]))
 		{
 			$timestamp = mktime(
 				0,
@@ -92,7 +92,7 @@ class AVE_Document
 				$published[2]
 			);
 		}
-		return $timestamp;
+		return ($timestamp==time(0) ? '' : $timestamp);
 	}
 
 	/**
@@ -105,7 +105,8 @@ class AVE_Document
 	function _documentListEnd()
 	{
 		$expire = explode(".", $_REQUEST['document_expire']);
-		if (!empty($expire))
+		$timestamp=time(0);
+		if (!empty($expire[0]))
 		{
 			$timestamp = mktime(
 				23,
@@ -116,7 +117,7 @@ class AVE_Document
 				$expire[2]
 			);
 		}
-		return $timestamp;
+		return ($timestamp==time(0) ? '' : $timestamp);
 	}
 
 	/**
@@ -237,7 +238,7 @@ class AVE_Document
 				{
 					if (strpos($und_wort, '+') !== false)
 					{
-						$ex_titel .= " AND (document_title LIKE '%" . substr($und_wort, 1) . "%')";
+						$ex_titel .= " AND ((UPPER(document_title) LIKE '%" . mb_strtoupper(substr($und_wort, 1)) . "%')OR(UPPER(document_alias) LIKE '%" . mb_strtoupper(substr($und_wort, 1)) . "%'))";
 					}
 				}
 
@@ -255,7 +256,7 @@ class AVE_Document
 				$start = $start[0];
 			}
 
-			$ex_titel = "AND (document_title LIKE '%" . $start . "%')" . $ex_titel;
+			$ex_titel = "AND ((UPPER(document_title) LIKE '%" . mb_strtoupper($start) . "%')OR(UPPER(document_alias) LIKE '%" . mb_strtoupper($start) . "%'))" . $ex_titel;
 			$nav_titel = '&QueryTitel=' . urlencode($request);
 		}
 
@@ -275,16 +276,16 @@ class AVE_Document
 			$ex_rub = " AND rubric_docs_active = '1'";
 
 			// формаируем условия для бд
-			$ex_db = "JOIN " . PREFIX . "_rubrics as rub on rub.Id = rubric_id";
+			$ex_db = "LEFT JOIN " . PREFIX . "_rubrics as rub on rub.Id = rubric_id";
 		}
 
 		// Поиск с выводом всех результатов из всех рубрик
-		if ($_REQUEST['rubric_id'] == 'all') {
+		if (@$_REQUEST['rubric_id'] == 'all') {
 			$nav_rub = '&rubric_id=all';
 		}
 
 		// Если в запросе пришел параметр на фильтрацию документов по определенному временному интервалу
-		if ($_REQUEST['document_published'] && $_REQUEST['document_expire'])
+		if (@$_REQUEST['document_published'] && @$_REQUEST['document_expire'])
 		{
 			// Формируем условия, которые будут применены в запросе к БД
 			$ex_zeit = 'AND ((document_published BETWEEN ' . $this->_documentListStart() . ' AND ' . $this->_documentListEnd() . ') OR document_published = 0)';
@@ -335,9 +336,8 @@ class AVE_Document
 		$num = $AVE_DB->Query("
 			SELECT COUNT(doc.Id)
 			FROM " . PREFIX . "_documents as doc
-			". $ex_db ."
+			". @$ex_db ."
 			WHERE 1
-			" . $ex_rub . "
 			" . $ex_Geloescht . "
 			" . $ex_zeit . "
 			" . $ex_titel . "
@@ -488,22 +488,25 @@ class AVE_Document
 		// Выполняем запрос к БД на получение уже не количества документов, отвечающих условиям, а уже на
 		// получение всех данных, с учетом всех условий, а также типа сортировки и лимита для вывода на
 		// одну страницу.
-		$sql = $AVE_DB->Query("
-			SELECT doc.*
+		$sql = "
+			SELECT 
+				doc.*,
+				rub.rubric_admin_teaser_template
 			FROM " . PREFIX . "_documents as doc
-			". $ex_db ."
+			LEFT JOIN " . PREFIX . "_rubrics AS rub ON rub.Id = doc.rubric_id
+
 			WHERE 1
 			" . $ex_rub . "
 			" . $ex_Geloescht . "
 			" . $ex_zeit . "
 			" . $ex_titel . "
-			" . $ex_rub . "
 			" . $ex_docstatus . "
 			" . $w_id . "
 			" . $db_sort . "
 			LIMIT " . $start . "," . $limit . "
-		");
-
+		";
+		$sql=$AVE_DB->Query($sql);
+		
 		// Циклически обрабатываем полученные данные с целью приведения некоторых из них к удобочитаемому виду
 		while ($row = $sql->FetchRow())
 		{
@@ -523,6 +526,7 @@ class AVE_Document
 			$row->canDelete       = 0;
 			$row->canEndDel       = 0;
 			$row->canOpenClose    = 0;
+			$row->rubric_admin_teaser_template=@eval2var('?>'.($row->rubric_admin_teaser_template>'' ? @showrequestelement($row,$row->rubric_admin_teaser_template) : '').'<?');
 
 			// разрешаем редактирование и удаление
 			// если автор имеет право изменять свои документы в рубрике
@@ -711,13 +715,25 @@ class AVE_Document
 				$rows[$row['rubric_field_id']] = pretty_chars(clean_no_print_char($row['field_value']));
 			}
 			$dtime = $AVE_DB->Query('SELECT document_changed FROM ' . PREFIX . '_documents WHERE Id=' . $document_id)->GetCell();
-			$AVE_DB->Query("INSERT INTO " . PREFIX . "_document_rev
-			SET
-				doc_id   ='" . $document_id . "',
-				doc_revision ='". $dtime . "',
-				doc_data   ='" . addslashes(serialize($rows)) . "',
-				user_id ='".$_SESSION['user_id']."'
-			");
+			$last_rev=@unserialize($AVE_DB->Query("SELECT doc_data FROM ".PREFIX."_document_rev WHERE doc_id=".$document_id." ORDER BY doc_revision DESC LIMIT 1")->GetCell());
+			// это я долго пытался понять почему всегда старая ревизия не равна новой даже если просто нажали лишний раз сохранить
+			// оказывается редактор подсовывет alt="" если альта в имге нету и сносит его если он есть там пустой ))))))))))
+			// но пусть проверка будет - может редакторы сменятся/апдейтятся а может кто просто хардкором будет код править)))
+			$dorev=false;
+			foreach($rows as $k=>$v)
+				if($rows[$k]<>$last_rev[$k]){
+						$dorev=true;
+					}
+				
+			if($dorev){
+				$AVE_DB->Query("INSERT INTO " . PREFIX . "_document_rev
+				SET
+					doc_id   ='" . $document_id . "',
+					doc_revision ='". $dtime . "',
+					doc_data   ='" . addslashes(serialize($rows)) . "',
+					user_id ='".$_SESSION['user_id']."'
+				");
+			}	
 			return $rows;
 		}
 
@@ -754,17 +770,20 @@ class AVE_Document
 	 */
 	static	function DeleteRevission($document_id,$revision,$rubric_id){
 
-	global $AVE_DB;
+	global $AVE_DB, $AVE_Rubric, $AVE_Template;
 
 			$AVE_DB->Query("
 				DELETE
 				FROM " . PREFIX . "_document_rev
 				WHERE doc_id = '" . $document_id . "' AND doc_revision='".$revision."'
 			");
-
+	
 			// Сохраняем системное сообщение в журнал
 			reportLog($_SESSION['user_name'] . " - Удалил версию документа (Doc: $document_id Rev: $revision)", 2, 2);
-			header('Location:index.php?do=docs&action=edit&document_id=' . $document_id . '&rubric_id=' . $rubric_id . '&cp=' . SESSION);
+
+			if(!isset($_REQUEST['ajax'])){
+				header('Location:index.php?do=docs&action=edit&rubric_id=' . $rubric_id . '&Id=' . $document_id . '&cp=' . SESSION);
+			}
 		}
 
 
@@ -931,16 +950,16 @@ class AVE_Document
 							SET
 								rubric_id                 = '" . $rubric_id . "',
 								document_parent           = '" . (int)$data['document_parent'] . "',
-								document_title            = '" . clean_no_print_char($data['doc_title']) . "',
-								document_breadcrum_title  = '" . clean_no_print_char($data['doc_breadcrum_title']) . "',
+								document_title            = '" . addslashes(clean_no_print_char($data['doc_title'])) . "',
+								document_breadcrum_title  = '" . addslashes(clean_no_print_char($data['doc_breadcrum_title'])) . "',
 								document_alias            = '" . $data['document_alias'] . "',
 								document_published        = '" . $docstart . "',
 								document_expire           = '" . $docend . "',
 								document_changed          = '" . time() . "',
 								$author
 								document_in_search        = '" . $suche . "',
-								document_meta_keywords    = '" . clean_no_print_char($data['document_meta_keywords']) . "',
-								document_meta_description = '" . clean_no_print_char($data['document_meta_description']) . "',
+								document_meta_keywords    = '" . addslashes(clean_no_print_char($data['document_meta_keywords'])) . "',
+								document_meta_description = '" . addslashes(clean_no_print_char($data['document_meta_description'])) . "',
 								document_meta_robots      = '" . $data['document_meta_robots'] . "',
 								document_status           = '" . $data['document_status'] . "',
 								document_linked_navi_id   = '" . (int)$data['document_linked_navi_id'] . "'
@@ -1003,7 +1022,7 @@ class AVE_Document
 							SET
 								rubric_field_id    = '" . $fld_id . "',
 								document_id        = '" . $document_id . "',
-								field_value        = '" . (is_array($fld_val) ? serialize($fld_val) : $fld_val) . "',
+								field_value        = '" . (is_array($fld_val) ? (serialize($fld_val)) : ($fld_val)) . "',
 								field_number_value = '" . (int)(is_array($fld_val) ? serialize($fld_val) : $fld_val) . "',
 								document_in_search = '" . $suche . "'
 							$where	
@@ -1164,6 +1183,27 @@ class AVE_Document
 						FROM " . PREFIX . "_documents
 					")->GetCell();
 
+					// получения списка документов из связанной рубрики
+					$linked_id = $AVE_DB->Query("
+						SELECT rubric_linked_rubric
+						FROM " . PREFIX . "_rubrics
+						WHERE Id = '".$rubric_id."'
+					")->GetCell();
+
+					$sql = $AVE_DB->Query("
+						SELECT document_alias, document_title, document_breadcrum_title, Id
+						FROM " . PREFIX . "_documents
+						WHERE rubric_id = '".$linked_id."'
+					");
+
+					$document_alias = array();
+					while ($row = $sql->FetchRow())
+					{
+						array_push($document_alias, $row);
+					}
+					$AVE_Template->assign('document_alias', $document_alias);
+					// получения списка документов из связанной рубрики
+
 					// Формируем данные и передаем в шаблон
 					$document->fields = $fields;
 					$document->rubric_title = $AVE_Rubric->rubricNameByIdGet($rubric_id)->rubric_title;
@@ -1300,6 +1340,8 @@ class AVE_Document
 						SELECT *
 						FROM " . PREFIX . "_document_rev
 						WHERE doc_id = '" . $document_id . "'
+						ORDER BY doc_revision DESC
+						LIMIT 7
 					");
 			        // Формируем массив из полученных данных
 			        while ($result = $sql_rev->FetchRow())
@@ -1309,6 +1351,27 @@ class AVE_Document
 					}
 
 					$AVE_Template->assign('document_rev', $document_rev);
+
+					// получения списка документов из связанной рубрики
+					$linked_id = $AVE_DB->Query("
+						SELECT rubric_linked_rubric
+						FROM " . PREFIX . "_rubrics
+						WHERE Id = '".(int)$document->rubric_id."'
+					")->GetCell();
+
+					$sql = $AVE_DB->Query("
+						SELECT document_alias, document_title, Id
+						FROM " . PREFIX . "_documents
+						WHERE rubric_id = '".$linked_id."'
+					");
+
+					$document_alias = array();
+					while ($row = $sql->FetchRow())
+					{
+						array_push($document_alias, $row);
+					}
+					$AVE_Template->assign('document_alias', $document_alias);
+					// получения списка документов из связанной рубрики
 
 					$AVE_Template->assign('document', $document);
 
@@ -1694,11 +1757,11 @@ class AVE_Document
 			if (empty($errors))
 			{
 				// Если ошибок не найдено, формируем сообщение об успешной операции
-				echo json_encode(array((($openclose==1) ? $AVE_Template->get_config_vars('DOC_DOCUMENT_OPEN') : $AVE_Template->get_config_vars('DOC_DOCUMENT_CLOSE')) . implode(',<br />', $errors), accept));
+				echo json_encode(array((($openclose==1) ? $AVE_Template->get_config_vars('DOC_DOCUMENT_OPEN') : $AVE_Template->get_config_vars('DOC_DOCUMENT_CLOSE')) . implode(',<br />', $errors), 'accept'));
 			}else{
 
 				// В противном случае формируем сообщение с ошибкой
-				echo json_encode(array($AVE_Template->get_config_vars('DOC_URL_CHECK_ER') . implode(',<br />', $errors), error));
+				echo json_encode(array($AVE_Template->get_config_vars('DOC_URL_CHECK_ER') . implode(',<br />', $errors), 'error'));
 
 			}
 
@@ -1969,10 +2032,10 @@ class AVE_Document
 	function documentAliasCreate()
 	{
 		$alias  = empty($_REQUEST['alias'])  ? '' : prepare_url($_REQUEST['alias']);
-		$title  = empty($_REQUEST['title'])  ? '' : prepare_url($_REQUEST['title']);
 		$prefix = empty($_REQUEST['prefix']) ? '' : prepare_url($_REQUEST['prefix']);
-
-		//if ($alias != $title && $alias != trim($prefix . '/' . $title, '/')) $alias = trim($prefix . $alias . '/' . $title, '/');
+		$title  = empty($_REQUEST['title'])  ? '' : $_REQUEST['title'];
+		$title  = (URL_YANDEX==true) ? y_translate($title) : prepare_url($title);
+		
 		if ($alias != $title && $alias != trim($prefix . '/' . $title, '/')) $alias = trim($alias . '/' . $title, '/');
 
 		return $alias;
@@ -1995,7 +2058,7 @@ class AVE_Document
 		if (!empty($document_alias))
 		{
 			// Проверяем, чтобы данный URL соответствовал требованиям
-			if (preg_match(TRANSLIT_URL ? '/[^\.a-z0-9\/-]+/' : '/[^\.a-zа-яёїєі0-9\/-]+/', $document_alias))
+			if (preg_match(TRANSLIT_URL ? '/[^\.a-z0-9\/-]+/' : '/^[^0-9A-Za-zА-Яа-яЁё]+$/u', $document_alias))
 			{
 				$errors[] = $AVE_Template->get_config_vars('DOC_URL_ERROR_SYMBOL');
 			}
@@ -2032,11 +2095,11 @@ class AVE_Document
 		// Если ошибок не найдено, формируем сообщение об успешной операции
 		if (empty($errors))
 		{
-			return json_encode(array($AVE_Template->get_config_vars('DOC_URL_CHECK_OK') . implode(',<br />', $errors), accept));
+			return json_encode(array($AVE_Template->get_config_vars('DOC_URL_CHECK_OK') . implode(',<br />', $errors), 'accept'));
 		}
 		else
 		{ // В противном случае формируем сообщение с ошибкой
-			return json_encode(array($AVE_Template->get_config_vars('DOC_URL_CHECK_ER') . implode(',<br />', $errors), error));
+			return json_encode(array($AVE_Template->get_config_vars('DOC_URL_CHECK_ER') . implode(',<br />', $errors), 'error'));
 		}
 	}
 
@@ -2196,6 +2259,7 @@ class AVE_Document
 			{
 				$row['remark_author'] = get_username_by_id($row['remark_author_id']);
 				$row['remark_text'] = nl2br($row['remark_text']);
+				$row['remark_avatar'] = getAvatar($row['remark_author_id'],40);
 				array_push($answers, $row);
 			}
 

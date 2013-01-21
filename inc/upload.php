@@ -1,14 +1,4 @@
 <?php
-/**
- * upload.php
- *
- * Copyright 2009, Moxiecode Systems AB
- * Released under GPL License.
- *
- * License: http://www.plupload.com/license
- * Contributing: http://www.plupload.com/contributing
- */
-
 // HTTP headers for no cache etc
 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
@@ -16,11 +6,21 @@ header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
-define('BASE_DIR', str_replace("\\", "/", dirname(__FILE__)));
+ob_start();
+ob_implicit_flush(0);
+
+define('BASE_DIR', str_replace("\\", "/", dirname(dirname(__FILE__))));
+
+require(BASE_DIR . '/inc/init.php');
+
+if (!isset($_SESSION['user_id']))
+{
+	header('Location:index.php');
+	exit;
+}
 
 // Settings
-//$targetDir = ini_get("upload_tmp_dir") . DIRECTORY_SEPARATOR . "plupload";
-$targetDir = "../uploads/" . $_REQUEST["path_upload"] . "";
+$targetDir = BASE_DIR.'/uploads/'.$_REQUEST["path_upload"];
 
 $cleanupTargetDir = true; // Remove old files
 $maxFileAge = 5 * 3600; // Temp file age in seconds

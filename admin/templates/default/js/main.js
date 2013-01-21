@@ -69,8 +69,8 @@ function cp_insert(what,feldname, form) {
 }
 
 function browse_uploads(target, width, height, scrollbar) {
-	if (typeof width=='undefined' || width=='') var width = Math.min(screen.width, 950);
-	if (typeof height=='undefined' || height=='') var height = Math.min(screen.height, 750);
+	if (typeof width=='undefined' || width=='') var width = screen.width * 0.8;
+	if (typeof height=='undefined' || height=='') var height = screen.height * 0.8;
 	if (typeof scrollbar=='undefined') var scrollbar=0;
 	var targetVal = document.getElementById(target).value;
 	var left = ( screen.width - width ) / 2;
@@ -94,7 +94,7 @@ function cp_imagepop(url, width, height, scrollbar) {
 	if (typeof scrollbar=='undefined') var scrollbar=1;
 	var left = ( screen.width - width ) / 2;
 	var top = ( screen.height - height ) / 2;
-	window.open('browser.php?typ=bild&mode=fck&target='+url+'','imgpop','left='+left+',top='+top+',width='+width+',height='+height+',scrollbars='+scrollbar+',resizable=1,center=yes');
+	window.open('browser.php?typ=bild&mode=fck&target='+url+'','imgpop','left='+left+',top='+top+',width='+width+',height='+height+',scrollbars='+scrollbar+',resizable=1');
 }
 
 function cp_pop(url, width, height, scrollbar, winname) {
@@ -124,19 +124,75 @@ function confirmDelete(){
 			);
 	});
 }
+
+$(function() {
+    $.ajaxSetup({
+    	cache: false,
+        error: function(jqXHR, exception) {
+            if (jqXHR.status === 0) {
+            	$.alerts._overlay('hide');
+                $.jGrowl(ajaxErrorStatus,{theme: 'error'});
+            } else if (jqXHR.status == 404) {
+            	$.alerts._overlay('hide');
+                $.jGrowl(ajaxErrorStatus404,{theme: 'error'});
+            } else if (jqXHR.status == 401) {
+            	$.alerts._overlay('hide');
+                $.jGrowl(ajaxErrorStatus401,{theme: 'error'});
+            } else if (jqXHR.status == 500) {
+            	$.alerts._overlay('hide');
+                $.jGrowl(ajaxErrorStatus500,{theme: 'error'});
+            } else if (exception === 'parsererror') {
+            	$.alerts._overlay('hide');
+                $.jGrowl(ajaxErrorStatusJSON,{theme: 'error'});
+            } else if (exception === 'timeout') {
+            	$.alerts._overlay('hide');
+				$.jGrowl(ajaxErrorStatusTimeOut,{theme: 'error'});
+            } else if (exception === 'abort') {
+            	$.alerts._overlay('hide');
+                $.jGrowl(ajaxErrorStatusAbort,{theme: 'error'});
+            } else {
+            	$.alerts._overlay('hide');
+                $.jGrowl(ajaxErrorStatusMess + jqXHR.responseText,{theme: 'error'});
+            }
+        }
+    });
+});
+
 $(document).ready(function(){
 
 	confirmDelete();
 
+		if (typeof width=='undefined' || width=='') var width = screen.width * 0.7;
+		if (typeof height=='undefined' || height=='') var height = screen.height * 0.7;
+
+	$("a.iframe").fancybox({
+		padding: 0,
+		margin: 0,
+		width: width,
+		height: height,
+		autoScale: true,
+		speedIn: 100,
+		speedOut: 100,
+		overlayOpacity: 0.2,
+		overlayColor: "#000",
+		centerOnScroll: true
+	});  
+
+	$('.actions a').hover(function(){
+		$(this).animate({opacity: 1.0},100);
+			},function(){
+		$(this).animate({opacity: 0.5},100);
+	});
+
     //===== Преобразование форм =====//
-    $("form.mainForm").jqTransform({imgPath:"../images"});
+    $(".mainForm").jqTransform({imgPath:"../images"});
 
     //===== Выход =====//
 	$(".ConfirmLogOut").click( function(e) {
 		e.preventDefault();
 		var href = $(this).attr('href');
-		var title = "Выход из панели управления";
-		var confirm = "Вы уверены, что хотите выйти?";
+		var title = logoutTitle;
+		var confirm = logoutConfirm;
 		jConfirm(
 				confirm,
 				title,
@@ -151,8 +207,8 @@ $(document).ready(function(){
     //===== Окно очистки кэша =====//
 	$(".clearCache").click( function(e) {
 		e.preventDefault();
-		var title = "Очистка кэша";
-		var confirm = "Вы уверены, что хотите очистить кэш?";
+		var title = clearCacheTitle;
+		var confirm = clearCacheConfirm;
 		jConfirm(
 				confirm,
 				title,
@@ -160,12 +216,24 @@ $(document).ready(function(){
 					if (b){
                         $.alerts._overlay('hide');
                         $.alerts._overlay('show');
-            		    $.post(ave_path+'admin/index.php?do=settings&sub=clearcache&ajax=run&templateCacheClear=1&templateCompiledTemplateClear=1&moduleCacheClear=1&sqlCacheClear=1', function(){
-                            $.alerts._overlay('hide');
-                            $.jGrowl('Кэш очищен');
-                            $('#cachesize').html('0 Kb');
-							$('.cachesize').html('0 Kb');
-                        });
+						$.ajax({
+						    url: ave_path+'admin/index.php?do=settings&sub=clearcache&ajax=run',
+						    type: 'POST',
+						    dataType: "json",
+						    data: ({
+						    	templateCache: 1,
+						    	templateCompiledTemplate: 1,
+						    	moduleCache: 1,
+						    	sqlCache: 1
+						    	}),
+						    success: function (data) {
+						    	$.alerts._overlay('hide');
+	                            $.jGrowl(data[0],{theme: data[1]});
+	                            $('#cachesize').html('0 Kb');
+								$('.cachesize').html('0 Kb');
+						    }
+						});
+
             		}
 				}
 			);
@@ -174,8 +242,8 @@ $(document).ready(function(){
     //===== Окно очистки кэша + Сессий =====//
 	$(".clearCacheSess").click( function(e) {
 		e.preventDefault();
-		var title = "Очистка кэша";
-		var confirm = "Вы уверены, что хотите очистить кэш?";
+		var title = clearCacheSessTitle;
+		var confirm = clearCacheSessConfirm;
 		jConfirm(
 				confirm,
 				title,
@@ -183,10 +251,24 @@ $(document).ready(function(){
 					if (b){
                         $.alerts._overlay('hide');
                         $.alerts._overlay('show');
-            		    $.post(ave_path+'admin/index.php?do=settings&sub=clearcache&ajax=run&templateCacheClear=1&templateCompiledTemplateClear=1&moduleCacheClear=1&sqlCacheClear=1&sessionClear=1', function(){
-                            $.alerts._overlay('hide');
-                            $.jGrowl('Кэш очищен');
-                        });
+						$.ajax({
+						    url: ave_path+'admin/index.php?do=settings&sub=clearcache&ajax=run',
+						    type: 'POST',
+						    dataType: "json",
+						    data: ({
+						    	templateCache: 1,
+						    	templateCompiledTemplate: 1,
+						    	moduleCache: 1,
+						    	sqlCache: 1,
+						    	sessionUsers: 1
+						    	}),
+						    success: function (data) {
+						    	$.alerts._overlay('hide');
+	                            $.jGrowl(data[0],{theme: data[1]});
+	                            $('#cachesize').html('0 Kb');
+								$('.cachesize').html('0 Kb');
+						    }
+						});
             		}
 				}
 			);
@@ -195,29 +277,32 @@ $(document).ready(function(){
     //===== Окно очистки миниатюр изображений =====//
 	$(".clearThumb").click( function(e) {
 		e.preventDefault();
-		var title = "Удаление миниатюр";
-		var confirm = "Вы уверены, что хотите удалить все миниатюры изображений<br/>из директории для хранения файлов (UPLOAD_DIR)?";
+		var title = clearThumbTitle;
+		var confirm = clearThumbConfirm;
 		jConfirm(
 				confirm,
 				title,
 				function(b){
 					if (b){
-                        $.alerts._overlay('hide');
-                        $.alerts._overlay('show');
-            		    $.post(ave_path+'admin/index.php?do=settings&sub=clearthumb', function(){
-                            $.alerts._overlay('hide');
-                            $.jGrowl('Миниатюры удалены');
-                        });
+						$.ajax({
+						    url: ave_path+'admin/index.php?do=settings&sub=clearthumb&ajax=run',
+						    type: 'POST',
+						    dataType: "json",
+						    success: function (data) {
+						    	$.alerts._overlay('hide');
+	                            $.jGrowl(data[0],{theme: data[1]});
+						    }
+						});
             		}
 				}
 			);
 	});
 
-    //===== Окно очистки кэша =====//
-	$("#cacheShow").click( function(e) {
+    //===== Показать размер кэша =====//
+	$("#cacheShow").click( function(e, x) {
 		e.preventDefault();
-		var title = "Показать размер кеша";
-		var confirm = "Вы уверены, что хотите посмотреть размер кэша?<br />Это может занять какое-то время.";
+		var title = cacheShowTitle;
+		var confirm = cacheShowConfirm;
 		jConfirm(
 				confirm,
 				title,
@@ -225,22 +310,48 @@ $(document).ready(function(){
 					if (b){
                         $.alerts._overlay('hide');
                         $.alerts._overlay('show');
-            		    $.post(ave_path+'admin/index.php?do=settings&sub=showcache&showCache=1', function(data){
-                            $.alerts._overlay('hide');
-                            $('#cachesize').html(data);
-                        });
+						$.ajax({
+						    url: ave_path+'admin/index.php?do=settings&sub=showcache&ajax=run',
+						    type: 'POST',
+						    dataType: "json",
+						    data: ({
+						    	showCache: 1
+						    	}),
+						    success: function (data) {
+	                            $.alerts._overlay('hide');
+	                            $('#cachesize').html(data[0]);
+						    }
+						});
             		}
 				}
 			);
 	});
-
-
 
 	//===== ToTop =====//
 	$().UItoTop({ easingType: 'easeOutQuart' });
 
-
 	//===== UI dialog =====//
+	$( "#dialog-message" ).dialog({
+		autoOpen: false,
+		modal: true
+	});
+
+	$( "#opener" ).click(function() {
+		$( "#dialog-message" ).dialog( "open" );
+		return false;
+	});
+
+	$(".dropdown").on("mouseenter mouseleave", function(event) {
+		var ul = $(this).children("ul");
+
+		ul.stop(true, true);
+		if (event.type === "mouseenter") {
+			ul.slideToggle(10);
+		} else {
+			ul.hide(10);
+		}
+	});
+
 	$( "#dialog-message" ).dialog({
 		autoOpen: false,
 		modal: true,
@@ -249,62 +360,6 @@ $(document).ready(function(){
 				$( this ).dialog( "close" );
 			}
 		}
-	});
-
-	$( "#opener" ).click(function() {
-		$( "#dialog-message" ).dialog( "open" );
-		return false;
-	});
-
-
-    //===== Выпадашка в меню =====//
-	$('.dd_modul').click(function () {
-		$('ul.menu_modul').slideToggle(100);
-	});
-	$(document).bind('click', function(e) {
-	var $clicked = $(e.target);
-	if (! $clicked.parents().hasClass("dd_modul"))
-		$("ul.menu_modul").hide(10);
-	});
-
-    //===== Выпадашка в меню =====//
-	$('.dd_settings').click(function () {
-		$('ul.menu_settings').slideToggle(100);
-	});
-	$(document).bind('click', function(e) {
-	var $clicked = $(e.target);
-	if (! $clicked.parents().hasClass("dd_settings"))
-		$("ul.menu_settings").hide(10);
-	});
-
-    //===== Выпадашка в меню =====//
-	$('.dd_add').click(function () {
-		$('ul.menu_add').slideToggle(100);
-	});
-	$(document).bind('click', function(e) {
-	var $clicked = $(e.target);
-	if (! $clicked.parents().hasClass("dd_add"))
-		$("ul.menu_add").hide(10);
-	});
-
-    //===== Выпадашка в меню =====//
-	$('.dd_page').click(function () {
-		$('ul.menu_page').slideToggle(100);
-	});
-	$(document).bind('click', function(e) {
-	var $clicked = $(e.target);
-	if (! $clicked.parents().hasClass("dd_page"))
-		$("ul.menu_page").hide(10);
-	});
-
-    //===== Выпадашка в меню =====//
-	$('.dd_login').click(function () {
-		$('ul.menu_login').slideToggle(100);
-	});
-	$(document).bind('click', function(e) {
-	var $clicked = $(e.target);
-	if (! $clicked.parents().hasClass("dd_login"))
-		$("ul.menu_login").hide(10);
 	});
 
 	//===== Custom single file input =====//
@@ -336,11 +391,6 @@ $(document).ready(function(){
 	//===== Tabs =====//
 	$.fn.simpleTabs = function(){
 
-		//Default Action
-//		$(this).find(".tab_content").hide(); //Hide all content
-//		$(this).find("ul.tabs li:first").addClass("activeTab").show(); //Activate first tab
-//		$(this).find(".tab_content:first").show(); //Show first tab content
-
 		//On Click Event
 		$("ul.tabs li").click(function() {
 			$(this).parent().parent().find("ul.tabs li").removeClass("activeTab"); //Remove any "active" class
@@ -357,12 +407,12 @@ $(document).ready(function(){
 
 
 	//===== Tooltip =====//
-	$('.topleftDir').tipsy({fade: false, gravity: 'se'});
-	$('.toprightDir').tipsy({fade: false, gravity: 'sw'});
-	$('.leftDir').tipsy({fade: false, gravity: 'e'});
-	$('.rightDir').tipsy({fade: false, gravity: 'w'});
-	$('.topDir').tipsy({fade: false, gravity: 's'});
-	$('.botDir').tipsy({fade: false, gravity: 'n'});
+	$('.topleftDir').tipsy({fade: false, gravity: 'se', opacity: 0.9});
+	$('.toprightDir').tipsy({fade: false, gravity: 'sw', opacity: 0.9});
+	$('.leftDir').tipsy({fade: false, gravity: 'e', opacity: 0.9});
+	$('.rightDir').tipsy({fade: false, gravity: 'w', opacity: 0.9});
+	$('.topDir').tipsy({fade: false, gravity: 's', opacity: 0.9});
+	$('.botDir').tipsy({fade: false, gravity: 'n', opacity: 0.9});
 
 	//===== Collapsible elements management =====//
 	$('.opened').collapsible({
@@ -388,42 +438,27 @@ $(document).ready(function(){
     	},
 		speed: 200
 	});
-
-	//===== Date & Time Pickers =====//
-	$.datepicker.regional['ru'] = {
-		closeText: 'Закрыть',
-		prevText: '<Пред',
-		nextText: 'След>',
-		currentText: 'Сегодня',
-		monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь',
-		'Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
-		monthNamesShort: ['Янв','Фев','Мар','Апр','Май','Июн',
-		'Июл','Авг','Сен','Окт','Ноя','Дек'],
-		dayNames: ['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'],
-		dayNamesShort: ['вск','пнд','втр','срд','чтв','птн','сбт'],
-		dayNamesMin: ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
-		weekHeader: 'Не',
-		dateFormat: 'dd.mm.yy',
-		firstDay: 1,
-		isRTL: false,
-		showMonthAfterYear: false,
-		yearSuffix: ''
-	};
-	$.datepicker.setDefaults($.datepicker.regional['ru']);
-
-	$.timepicker.regional['ru'] = {
-		timeOnlyTitle: 'Выберите время',
-		timeText: 'Время',
-		hourText: 'Часы',
-		minuteText: 'Минуты',
-		secondText: 'Секунды',
-		millisecText: 'миллисекунды',
-		currentText: 'Теперь',
-		closeText: 'Закрыть',
-		ampm: false
-	};
-	$.timepicker.setDefaults($.timepicker.regional['ru']);
 });
+
+$(document).keydown(function(event) {
+var numberOfOptions= $("#rubric_id > option").length;
+var selectedIndex = $("#rubric_id option:selected").val();
+
+switch (event.keyCode) {
+    case 38: // UP Key
+        if(selectedIndex > 0){
+            $("#rubric_id").val(parseInt($("#rubric_id option:selected").val()) - 1);   
+        }
+        break;
+    case 40: // DOWN Key
+        if(selectedIndex < numberOfOptions - 1){
+            $("#rubric_id").val(parseInt($("#rubric_id option:selected").val()) + 1);   
+        }
+        break;
+}
+
+});
+
 
 (function ($) {
     $.fn.extend({

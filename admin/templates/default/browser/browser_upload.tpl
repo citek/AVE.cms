@@ -13,12 +13,16 @@
 	<meta name="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT">
 
 	<!-- CSS Files -->
-	<link href="{$tpl_dir}/css/combine.php?css=reset.css,main.css,data_table.css,jquery-ui_custom.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/reset.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/main.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/data_table.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/jquery-ui_custom.css" rel="stylesheet" type="text/css" media="screen" />
 	<link href="{$tpl_dir}/css/color_{$smarty.const.DEFAULT_THEME_FOLDER_COLOR}.css" rel="stylesheet" type="text/css" media="screen" />
 	<link href="{$tpl_dir}/css/browser.css" rel="stylesheet" type="text/css" media="screen" />
 
 	<!-- JS files -->
-	<script src="{$tpl_dir}/js/combine.php?js=jquery-1.7.1.js,jquery-ui.min.js,jquery.form.js,jquery.transform.js,jquery.jgrowl.js,jquery.alerts.js,jquery.tipsy.js,jquery.totop.js,jquery.filestyle.js,jquery.collapsible.min.js,jquery.dataTables.js,jquery-ui-time.js,jquery.placeholder.min.js,jquery.cookie.js" type="text/javascript"></script>
+	{include file="../scripts.tpl"}
+
 	<script src="{$tpl_dir}/js/main.js" type="text/javascript"></script>
 
 	<!-- JS Scripts -->
@@ -29,10 +33,10 @@
 	  var path_upload = "{$smarty.request.pfad|escape}";
     </script>
 
-<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
-<script type="text/javascript" src="{$tpl_dir}/js/uploader/plupload.full.js"></script>
-<script type="text/javascript" src="{$tpl_dir}/js/uploader/jquery.plupload.queue.js"></script>
-
+	<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
+	<script type="text/javascript" src="/lib/scripts/uploader/plupload.full.js"></script>
+	<script type="text/javascript" src="/lib/scripts/uploader/i18n/{$smarty.session.admin_language}.js"></script>
+	<script type="text/javascript" src="/lib/scripts/uploader/jquery.plupload.queue.js"></script>
 
 <script language="javascript">
 {literal}
@@ -52,7 +56,7 @@ $(document).ready(function(){
 			{title : "Zip files", extensions : "zip,rar"}
 		],
         // Flash settings
-        flash_swf_url : '{/literal}{$tpl_dir}{literal}/js/uploader/plupload.flash.swf',
+        flash_swf_url : '{/literal}}{literal}/lib/scripts/uploader/plupload.flash.swf',
 	});
 
 	// Client side form validation
@@ -84,36 +88,35 @@ $(document).ready(function(){
 	<!-- Content -->
     <div class="content" id="contentPage">
 
+		<form class="mainForm" action="browser.php?typ={$smarty.request.typ|escape}&action=upload2&pfad={$smarty.request.pfad|escape}" method="post" enctype="multipart/form-data" name="upform" id="upform" style="display:inline;">
+		<input name="fromuploader" type="hidden" id="fromuploader" value="1" />
 
-<form class="mainForm" action="browser.php?typ={$smarty.request.typ|escape}&action=upload2&pfad={$smarty.request.pfad|escape}" method="post" enctype="multipart/form-data" name="upform" id="upform" style="display:inline;">
-<input name="fromuploader" type="hidden" id="fromuploader" value="1" />
+		<fieldset>
+		<div class="widget">
+		      <div class="head">
+		        <h5>{#MAIN_MP_SELECT_FILES#}</h5>
+		      </div>
+		      <div id="uploader" style="position: relative;">
+					<p>You browser doesn't have Flash, Silverlight, Gears, BrowserPlus or HTML5 support.</p>
+			  </div>
+		</div>
+		</fieldset>
 
-<fieldset>
-<div class="widget">
-      <div class="head">
-        <h5>{#MAIN_MP_SELECT_FILES#}</h5>
-      </div>
-      <div id="uploader" style="position: relative;">
-			<p>You browser doesn't have Flash, Silverlight, Gears, BrowserPlus or HTML5 support.</p>
-	  </div>
-</div>
-</fieldset>
+		{if $smarty.request.typ=='bild'}
+		<!--
+		<div class="rowElem">
+		<input name="w" type="text" value="" size="3" style="width: 50px;" />&nbsp;{#MAIN_MP_IMAGE_WIDTH#}&nbsp;&nbsp;&nbsp;
+		<input name="h" type="text" value="" size="3" style="width: 50px;"  />&nbsp;{#MAIN_MP_IMAGE_HEIGHT#}
+		</div>
+		-->
+		{/if}
 
-{if $smarty.request.typ=='bild'}
-<!--
-<div class="rowElem">
-<input name="w" type="text" value="" size="3" style="width: 50px;" />&nbsp;{#MAIN_MP_IMAGE_WIDTH#}&nbsp;&nbsp;&nbsp;
-<input name="h" type="text" value="" size="3" style="width: 50px;"  />&nbsp;{#MAIN_MP_IMAGE_HEIGHT#}
-</div>
--->
-{/if}
+		<div class="rowElem">
+			<input name="button" type="submit" class="basicBtn" value="{#MAIN_BUTTON_UPLOAD#}" />
+		</div>
 
-<div class="rowElem">
-	<input name="button" type="submit" class="basicBtn" value="{#MAIN_BUTTON_UPLOAD#}" />
-</div>
+		</form>
 
-
-</form>
     </div>
     <div class="fix"></div>
 </div>

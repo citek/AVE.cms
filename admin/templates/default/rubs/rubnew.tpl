@@ -5,7 +5,7 @@
 	<div class="breadCrumb module">
 	    <ul>
 	        <li class="firstB"><a href="index.php" title="{#MAIN_PAGE#}">{#MAIN_PAGE#}</a></li>
-	        <li><a href="index.php?do=rubs&amp;cp={$sess}">{#RUBRIK_SUB_TITLE#}</a></li>
+	        <li><a href="index.php?do=rubs&cp={$sess}">{#RUBRIK_SUB_TITLE#}</a></li>
 	        <li>{#RUBRIK_NEW#}</li>
 	        <li>{$smarty.request.rubric_title|escape|stripslashes}</li>
 	    </ul>
@@ -19,7 +19,7 @@
 	</ul>
 {/if}
 
-<form name="form1" method="post" action="index.php?do=rubs&amp;action=new&amp;sub=save&amp;cp={$sess}" class="mainForm">
+<form name="form1" method="post" action="index.php?do=rubs&action=new&sub=save&cp={$sess}" class="mainForm">
 
 <div class="widget first">
 <div class="head"><h5 class="iFrames">{#RUBRIK_NEW#}</h5></div>

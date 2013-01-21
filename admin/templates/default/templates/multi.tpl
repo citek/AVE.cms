@@ -10,7 +10,7 @@
 	<div class="breadCrumb module">
 	    <ul>
 	        <li class="firstB"><a href="index.php" title="{#MAIN_PAGE#}">{#MAIN_PAGE#}</a></li>
-	        <li><a href="index.php?do=templates&amp;cp={$sess}" title="">{#TEMPLATES_SUB_TITLE#}</a></li>
+	        <li><a href="index.php?do=templates&cp={$sess}" title="">{#TEMPLATES_SUB_TITLE#}</a></li>
 	        <li>{#TEMPLATES_COPY_TITLE#}</li>
 	    </ul>
 	</div>
@@ -25,7 +25,7 @@
 
 <div class="widget first">
 <div class="head"><h5 class="iFrames">{#TEMPLATES_COPY_TITLE#}</h5></div>
-<form name="m" method="post" action="?do=templates&amp;action=multi&amp;sub=save&amp;Id={$smarty.request.Id|escape}" class="mainForm">
+<form name="m" method="post" action="?do=templates&action=multi&sub=save&Id={$smarty.request.Id|escape}" class="mainForm">
 <div class="rowElem noborder">
 
 	<label>{#TEMPLATES_NAME2#}</label>

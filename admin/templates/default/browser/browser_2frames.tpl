@@ -13,12 +13,15 @@
 	<meta name="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT">
 
 	<!-- CSS Files -->
-	<link href="{$tpl_dir}/css/combine.php?css=reset.css,main.css,data_table.css,jquery-ui_custom.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/reset.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/main.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/data_table.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/jquery-ui_custom.css" rel="stylesheet" type="text/css" media="screen" />
 	<link href="{$tpl_dir}/css/color_{$smarty.const.DEFAULT_THEME_FOLDER_COLOR}.css" rel="stylesheet" type="text/css" media="screen" />
 	<link href="{$tpl_dir}/css/browser.css" rel="stylesheet" type="text/css" media="screen" />
 
 	<!-- JS files -->
-	<script src="{$tpl_dir}/js/combine.php?js=jquery-1.7.1.js,jquery-ui.min.js,jquery.form.js,jquery.transform.js,jquery.jgrowl.js,jquery.alerts.js,jquery.tipsy.js,jquery.totop.js,jquery.filestyle.js,jquery.collapsible.min.js,jquery.dataTables.js,jquery-ui-time.js,jquery.placeholder.min.js,jquery.cookie.js" type="text/javascript"></script>
+	{include file="../scripts.tpl"}
 	<script src="{$tpl_dir}/js/main.js" type="text/javascript"></script>
 
 	<!-- JS Scripts -->
@@ -40,7 +43,7 @@
 	<div class="title"><h5>{#MAIN_FILE_MANAGER_TITLE#}</h5></div>
 	<div class="widget" style="margin-top: 0px;">
 	    <div class="body">
-			Выберите нужный файл и нажмите по кнопке &quot;Вставить файл&quot;
+			{#MAIN_FILE_MANAGER_TIP#}
 	    </div>
 	</div>
 
@@ -102,57 +105,55 @@ function getUrlParam(paramName)
   return (match && match.length > 1) ? match[1] : '' ;
 {rdelim}
 
-
-
-
 function submitTheForm() {ldelim}
 	if (document.bForm.bFileName.value == '' && '{$target}' != 'dir') {ldelim}
 		alert('{#MAIN_MP_PLEASE_SELECT#}');
 	{rdelim}
 	else {ldelim}
-{if		$target=='link'}
-		
-		
+
+{if	$target=='link'}
+
 var funcNum = getUrlParam('CKEditorFuncNum');
 var fileUrl = '{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
 window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
-		
-		
+
 
 {elseif $target=='link_image'}
-		window.opener.document.getElementById('txtLnkUrl').value = '{$cppath}/{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
+window.opener.document.getElementById('txtLnkUrl').value = '{$cppath}/{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
 
 {elseif $target=='txtUrl'}
-
-
-
 var funcNum = getUrlParam('CKEditorFuncNum');
 var fileUrl = '{$cppath}/{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value
 window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
 //window.opener.UpdatePreview();
 
 {elseif $target=='navi'}
+window.opener.document.getElementById('{$smarty.request.id|escape}').value = '{$cppath}/{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
 
-		window.opener.document.getElementById('{$smarty.request.id|escape}').value = '{$cppath}/{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
+{elseif $target=='img_feld' || $target_img=='img_feld'}
+		window.opener.document.getElementById('img_feld__{$target_id}').value = '{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
+		window.opener.document.getElementById('span_feld__{$target_id}').style.display = '';
+		window.opener.document.getElementById('_img_feld__{$target_id}').src = '../index.php?mode=t&thumb=/{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
 
 {elseif $target!='' && $target_id!='' && $target_id!=null}
 {if $target=='image'}
-		window.opener.document.getElementById('preview__{$target_id}').src = '../{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
+	window.opener.document.getElementById('preview__{$target_id}').src = '../{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
 {/if}
+
 {if $target=='dir'}
-		var bdn = document.bForm.bDirName.value.split('/').reverse();
-		window.opener.document.getElementById('{$target}__{$target_id}').value = bdn[1];
+	var bdn = document.bForm.bDirName.value.split('/').reverse();
+	window.opener.document.getElementById('{$target}__{$target_id}').value = bdn[1];
 {else}
-		window.opener.document.getElementById('{$target}__{$target_id}').value = '{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
-		//window.opener.document.getElementById('_{$target}__{$target_id}').src = '../{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
+	window.opener.document.getElementById('{$target}__{$target_id}').value = '{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
+	//window.opener.document.getElementById('_{$target}__{$target_id}').src = '../{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
 {/if}
 
 {elseif $target!='all'}
-{if $smarty.request.fillout=='dl'}
-		window.opener.document.getElementById('{$smarty.request.target|escape}').value = '{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
-{else}
-		window.opener.updatePreview();
-{/if}
+	{if $smarty.request.fillout=='dl'}
+			window.opener.document.getElementById('{$smarty.request.target|escape}').value = '{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
+	{else}
+			window.opener.updatePreview();
+	{/if}
 {/if}
 		setTimeout("self.close();", 100);
     {rdelim}
@@ -190,7 +191,11 @@ function updlg() {ldelim}
 {rdelim}
 </script>
 
-	{else}
+
+
+{else}
+
+
 
 <script type="text/javascript">
 function submitTheForm() {ldelim}
@@ -214,17 +219,26 @@ function submitTheForm() {ldelim}
 		window.opener.document.getElementById('{$smarty.request.id|escape}').value = '{$cppath}/{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
 		/*window.opener.document.getElementById('Titel_{$smarty.request.id|escape}').value = document.bForm.bFileName.value;*/
 
+{elseif $target=='img_feld' || $target_img=='img_feld'}
+		window.opener.document.getElementById('img_feld__{$target_id}').value = '{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
+		window.opener.document.getElementById('span_feld__{$target_id}').style.display = '';
+		window.opener.document.getElementById('_img_feld__{$target_id}').src = '../index.php?mode=t&thumb=/{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
+
 {elseif $target!='' && $target_id!='' && $target_id!=null}
 {if $target=='image'}
-		window.opener.document.getElementById('preview__{$target_id}').src = '../{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
+		window.opener.document.getElementById('preview__{$target_id}').src = '../index.php?mode=t&thumb=/{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
 {/if}
+
 {if $target=='dir'}
+		//1
 		var bdn = document.bForm.bDirName.value.split('/').reverse();
 		window.opener.document.getElementById('{$target}__{$target_id}').value = bdn[1];
 {elseif $target=='img_importfeld'}
+		//2
 		var bdn = document.bForm.bDirName.value.split('/').reverse();
 		window.opener.document.getElementById('{$target}__{$target_id}').value = '{$mediapath}/'+bdn[1]+'/';
 {else}
+		//3
 		window.opener.document.getElementById('{$target}__{$target_id}').value = '{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
 {/if}
 

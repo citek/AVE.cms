@@ -4,16 +4,18 @@
  * AVE.cms
  *
  * @package AVE.cms
+ * @version 3.x
  * @filesource
+ * @copyright © 2007-2013 AVE.CMS, http://www.ave-cms.ru
+ *
  */
 
 @date_default_timezone_set('Europe/Moscow');
 
 define('START_MICROTIME', microtime());
 define('BASE_DIR', str_replace("\\", "/", dirname(__FILE__)));
-
 if (! @filesize(BASE_DIR . '/inc/db.config.php')) { header('Location:install/index.php'); exit; }
-if (! empty($_REQUEST['thumb'])) { require(BASE_DIR . '/functions/func.thumbnail.php'); exit; }
+if (! empty($_REQUEST['thumb'])) { require(BASE_DIR . '/inc/thumb.php'); exit; }
 
 ob_start();
 
@@ -37,6 +39,10 @@ $AVE_Core->coreSiteFetch(get_current_document_id());
 
 $content = ob_get_clean();
 ob_start();
+eval('?>' . $content . '<?');
+$cont=ob_get_clean();
+$rubheader=(empty($GLOBALS["user_header"]) ? "" : implode(chr(10),$GLOBALS["user_header"]));
+$cont = str_replace('[tag:rubheader]', $rubheader, $cont);
 
 if ($_REQUEST['id'] == PAGE_NOT_FOUND_ID){
 	report404(
@@ -44,17 +50,12 @@ if ($_REQUEST['id'] == PAGE_NOT_FOUND_ID){
 		. "<br />" .
 		"<strong class=\"code\">HTTP_USER_AGENT</strong> - ". $_SERVER['HTTP_USER_AGENT']
 		. "<br />" .
-		"<strong class=\"code\">HTTP_REFERER</strong> - ". $_SERVER['HTTP_REFERER']
+		"<strong class=\"code\">HTTP_REFERER</strong> - ". @$_SERVER['HTTP_REFERER']
 		. "<br />" .
 		"<strong class=\"code\">REQUEST_URI</strong> - " . $_SERVER['REQUEST_URI']
 		, 2, 2);
 	header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found', true);
 }
- 
-$cont=eval2var ('?>' . $content . '<?');
-$rubheader=(empty($GLOBALS["user_header"]) ? "" : implode(chr(10),$GLOBALS["user_header"]));
-$cont = str_replace('[tag:rubheader]', $rubheader, $cont);
-echo $cont;
 
 if (((isset($_REQUEST['apage']) && is_numeric($_REQUEST['apage']) && $_REQUEST['apage'] > $GLOBALS['page_id'][$_REQUEST['id']]['apage']))
 		OR ((isset($_REQUEST['page']) && is_numeric($_REQUEST['page']) && $_REQUEST['page'] > $GLOBALS['page_id'][$_REQUEST['id']]['page']))
@@ -63,6 +64,7 @@ if (((isset($_REQUEST['apage']) && is_numeric($_REQUEST['apage']) && $_REQUEST['
 	if($_REQUEST['id']==1){header('Location:' . ABS_PATH);}else{header('Location:' . ABS_PATH.$AVE_Core->curentdoc->document_alias.URL_SUFF);}
 	exit;
 }
+echo $cont;
 
 //if (isset($cache) && is_object($cache)) $cache->end();
 

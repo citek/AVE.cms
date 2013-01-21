@@ -113,7 +113,13 @@ function changeRub(select) {ldelim}
 					<input type="checkbox" name="reedit" value="1" checked="checked" class="float" /> <label>{#REQUEST_ACTION_AFTER#}</label>
 				{/if}
 				{if $iframe!='no'}
-					<input name="button" type="button" class="basicBtn" onclick="windowOpen('index.php?do=request&action=konditionen&rubric_id={$smarty.request.rubric_id|escape}&Id={$smarty.request.Id|escape}&pop=1&cp={$sess}','920','620','1')" value="{#REQUEST_BUTTON_COND#}" />
+
+					{if $smarty.const.ADMIN_MODAL}
+						<a class="iframe btn basicBtn" href="index.php?do=request&action=konditionen&rubric_id={$smarty.request.rubric_id|escape}&Id={$smarty.request.Id|escape}&pop=1&cp={$sess}">{#REQUEST_BUTTON_COND#}</a>
+					{else}
+						<input name="button" type="button" class="basicBtn" onclick="windowOpen('index.php?do=request&action=konditionen&rubric_id={$smarty.request.rubric_id|escape}&Id={$smarty.request.Id|escape}&pop=1&cp={$sess}','920','620','1')" value="{#REQUEST_BUTTON_COND#}" />
+					{/if}
+
 				{/if}
 			</td>
 		</tr>
@@ -123,6 +129,7 @@ function changeRub(select) {ldelim}
 			<td>
 				<select {$dis} style="width:250px" name="request_order_by" id="request_order_by">
 					<option value="document_published"{if $row->request_order_by=='document_published'} selected="selected"{/if}>{#REQUEST_BY_DATE#}</option>
+					<option value="document_changed"{if $row->request_order_by=='document_changed'} selected="selected"{/if}>{#REQUEST_BY_DATECHANGE#}</option>
 					<option value="document_title"{if $row->request_order_by=='document_title'} selected="selected"{/if}>{#REQUEST_BY_NAME#}</option>
 					<option value="document_author_id"{if $row->request_order_by=='document_author_id'} selected="selected"{/if}>{#REQUEST_BY_EDIT#}</option>
 					<option value="document_count_print"{if $row->request_order_by=='document_count_print'} selected="selected"{/if}>{#REQUEST_BY_PRINTED#}</option>
@@ -339,7 +346,7 @@ function changeRub(select) {ldelim}
 <div class="head"><h5 class="iFrames">Поля рубрики</h5></div>
 
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
-<col width="150" />
+<col width="200" />
 <col />
 <col width="200" />
 	<thead>

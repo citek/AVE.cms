@@ -16,6 +16,8 @@ function parse_sysblock($id)
 {
 	global $AVE_DB, $AVE_Core;
 
+	$gen_time = microtime();
+
 	if (is_array($id)) $id = $id[1];
 
 	if (is_numeric($id))
@@ -53,6 +55,9 @@ function parse_sysblock($id)
 		$return = preg_replace_callback('/\[tag:request:(\d+)\]/', 'request_parse', $return);
 
 		$return = eval2var('?>' . $return . '<?');
+
+		$gen_time = microtime()-$gen_time;
+		$GLOBALS['block_generate'][] = array('SYSBLOCK_'.$id=>$gen_time);
 
 		return $return;
 	}

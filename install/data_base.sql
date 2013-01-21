@@ -240,40 +240,48 @@ INSERT INTO `%%PRFX%%_countries` VALUES
 INSERT INTO `%%PRFX%%_document_fields` VALUES
   (1, 1, 1, 0, 'Поздравляем!', '0'),
   (2, 2, 1, 0, '<p>Установка <strong>%%SITENAME%%</strong> прошла успешно!</p>', '0'),
-  (3, 1, 2, 0, 'Ошибка 404', '0'),
-  (4, 2, 2, 0, 'Извините, запрошенный Вами документ не найден.', '0');#inst#
+  (3, 3, 2, 0, 'Ошибка 404', '0'),
+  (4, 4, 2, 0, 'Извините, запрошенный Вами документ не найден.', '0');#inst#
 
 INSERT INTO `%%PRFX%%_documents` VALUES
   (1, 1, 0, '/', 'Главная', 'Главная страница', 0, 0, 0, 1, '0', '', '', 'index,follow', '1', '0', 0, 0, 0, ''),
-  (2, 1, 0, '404-not-found', '404 - Документ не найден', 'Ошибка 404', 0, 0, 0, 1, '0', '', '', 'noindex,nofollow', '1', '0', 0, 0, 0, '');#inst#
+  (2, 2, 0, '404-not-found', '404 - Документ не найден', 'Ошибка 404', 0, 0, 0, 1, '0', '', '', 'noindex,nofollow', '1', '0', 0, 0, 0, '');#inst#
 
 INSERT INTO `%%PRFX%%_navigation` VALUES
   (1, 'Основное меню', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');#inst#
 
 INSERT INTO `%%PRFX%%_rubric_fields` VALUES
   (1, 1, 'header', 'Заголовок', 'kurztext', 1, '', '', ''),
-  (2, 1, 'text', 'Текст', 'langtext', 2, '', '', '');#inst#
+  (2, 1, 'text', 'Текст', 'langtext', 2, '', '', ''),
+  (3, 2, 'header', 'Заголовок', 'kurztext', 1, '', '', ''),
+  (4, 2, 'text', 'Текст', 'langtext', 2, '', '', '');#inst#
 
 INSERT INTO `%%PRFX%%_rubric_permissions` VALUES
   (1, 1, 1, 'alles'),
   (2, 1, 2, 'docread'),
   (3, 1, 3, 'docread'),
-  (4, 1, 4, 'docread');#inst#
+  (4, 1, 4, 'docread'),
+  (5, 2, 1, 'alles'),
+  (6, 2, 2, 'docread'),
+  (7, 2, 3, 'docread'),
+  (8, 2, 4, 'docread');#inst#
 
 INSERT INTO `%%PRFX%%_rubrics` VALUES
-  (1, 'Основные страницы', '', '<h1>[tag:fld:header]</h1>[tag:fld:text]', 1, 1, 0, 1, '', '', '', '');#inst#
+  (1, 'Основные страницы', '', '<h1>[tag:fld:header]</h1>[tag:fld:text]', 1, 1, 0, 1, '', '', '', '', '', '0', '', '0'),
+  (2, 'Ошибка 404', '', '<h1>[tag:fld:header]</h1>[tag:fld:text]', 1, 1, 0, 0, '', '', '', '', '', '0', '', '1');#inst#
 
 INSERT INTO `%%PRFX%%_settings` VALUES
-  (1, '%%SITENAME%%', 'mail', 'text/plain', 465, 'smtp.gmail.com', 'yourusername@gmail.com', 'yourpassword', 'ssl', '/usr/sbin/sendmail', 800, '%%EMAIL%%', '%%USERNAME%%', 'Здравствуйте %NAME%,\r\nВаша регистрация на сайте %HOST%. \r\n\r\nТеперь Вы можете войти на %HOST% со следующими данными:: \r\n\r\nПароль: %PASSWORD%\r\nE-Mail: %EMAIL%\r\n\r\n-----------------------\r\n%EMAILSIGNATURE%\r\n\r\n', '--------------------\r\nOverdoze Team\r\nwww.overdoze.ru\r\ninfo@overdoze.ru\r\n--------------------', 2, '<h2>Ошибка...</h2>\r\n<br />\r\nУ Вас нет прав на просмотр этого документа!.', '<div class="page_navigation_box">%s</div>', 'Первая «', '» Последняя', '…', '»', '«', 'Страница %d из %d', '%d %B %Y', '%d %B %Y, %H:%M', 'RU', '0', '0', '<div class="hidden_box">Содержимое скрыто. Пожалуйста, <a href="index.php?module=login&action=register">зарегистрируйтесь</a></div>');#inst#
+  (1, '%%SITENAME%%', 'mail', 'text/plain', 465, 'smtp.gmail.com', 'yourusername@gmail.com', 'yourpassword', 'ssl', '/usr/sbin/sendmail', 800, '%%EMAIL%%', '%%USERNAME%%', 'Здравствуйте %NAME%,\r\nВаша регистрация на сайте %HOST%. \r\n\r\nТеперь Вы можете войти на %HOST% со следующими данными:: \r\n\r\nПароль: %PASSWORD%\r\nE-Mail: %EMAIL%\r\n\r\n--------------------------------------------------\r\n%EMAILSIGNATURE%\r\n\r\n', 'С уважением,\r\nслужба поддержки AVE.CMS\r\nsupport@ave-cms.ru | www.ave-cms.ru', 2, '<h2>Ошибка...</h2>\r\n<br />\r\nУ Вас нет прав на просмотр этого документа!.', '<div class="page_navigation_box">%s</div>', 'Первая «', '» Последняя', '…', '»', '«', 'Страница %d из %d', '%d %B %Y', '%d %B %Y, %H:%M', 'RU', '0', '0', '<div class="hidden_box">Содержимое скрыто. Пожалуйста, <a href="index.php?module=login&action=register">зарегистрируйтесь</a></div>');#inst#
 
 INSERT INTO `%%PRFX%%_templates` VALUES
-  (1, 'Основной шаблон', '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">\r\n<html xmlns="http://www.w3.org/1999/xhtml">\r\n<head>\r\n<meta http-equiv="content-type" content="text/html; charset=UTF-8" />\r\n</head>\r\n<body>\r\n[tag:maincontent]\r\n</body>\r\n</html>', 1, 0);#inst#
+  (1, 'Основной шаблон', '<!DOCTYPE html>\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"ru\">\r\n\t<head>\r\n\t\t<title>[tag:title] - [tag:sitename]</title>\r\n\t\t<meta name=\"robots\" content=\"[tag:robots]\" />\r\n\t\t<meta name=\"keywords\" content=\"[tag:keywords]\" />\r\n\t\t<meta name=\"description\" content=\"[tag:description]\" />\r\n\r\n\t\t<link href=\"[tag:canonical]\" rel=\"canonical\" />\r\n\r\n\t\t<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\r\n\t\t<script type=\"text/javascript\" src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js\"></script>\r\n\t\t<script type=\"text/javascript\" src=\"[tag:path]lib/bootstrap/js/bootstrap.min.js\"></script>\r\n\t\t<script type=\"text/javascript\" src=\"[tag:mediapath]js/main.js\"></script>\r\n\r\n\t\t<script type=\"text/javascript\">\r\n\t\t\tvar aveabspath = \'[tag:path]\';\r\n\t\t</script>\r\n\r\n\t\t<link rel=\"stylesheet\" type=\"text/css\" href=\"[tag:path]lib/bootstrap/css/bootstrap.min.css\" />\r\n\t\t<link rel=\"stylesheet\" type=\"text/css\" href=\"[tag:path]lib/bootstrap/css/bootstrap-responsive.min.css\" />\r\n\t\t<link rel=\"stylesheet\" type=\"text/css\" href=\"[tag:mediapath]css/styles.css\" />\r\n\t\t[tag:rubheader]\r\n\t</head>\r\n\t<body>\r\n\t\t<div class=\"container inner_content\">\r\n\t\t\t<div class=\"row\">\r\n\t\t\t\t<!--Page contetn-->\r\n\t\t\t\t<div class=\"span12\">\r\n\t\t\t\t\t[tag:maincontent]\r\n\t\t\t\t</div>\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</body>\r\n</html>', 1, 0);#inst#
 
 INSERT INTO `%%PRFX%%_user_groups` VALUES
   (1, 'Администраторы', '1', '0', '', 'alles'),
   (2, 'Анонимные пользователи', '1', '0', '', ''),
   (3, 'Модераторы', '1', '0', '', ''),
-  (4, 'Зарегистрированные', '1', '0', '', '');#inst#
+  (4, 'Зарегистрированные', '1', '0', '', ''),
+  (5, 'Через логинзу', '1', '0', '', '');#inst#
 
 INSERT INTO `%%PRFX%%_users` VALUES
-  (1, '%%PASS%%', '%%EMAIL%%', '%%STRASSE%%', '%%HNR%%', '%%PLZ%%', '%%ORT%%', '%%FON%%', '', '', '%%VORNAME%%', '%%NACHNAME%%', '%%USERNAME%%', 1, '', '%%ZEIT%%', '1', '%%ZEIT%%', 'RU', '', '0', '0', '0', '0', '', '', '', '%%SALT%%', '', 0);
+  (1, '%%PASS%%', '%%EMAIL%%', '', '', '', '', '', '', '', '', '', '%%USERNAME%%', 1, '', '', '1', '', 'RU', '', '0', '0', '0', '0', '', '', '', '%%SALT%%', '', 0);

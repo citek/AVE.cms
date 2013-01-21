@@ -1,10 +1,19 @@
 <script language="javascript" type="text/javascript">
+{if $smarty.const.ADMIN_MODAL}
+function insertLink(o) {ldelim}
+	for (var key in o) {ldelim}
+		$('#'+key, window.parent.document).val(o[key]);
+	{rdelim}
+	parent.$.fancybox.close();
+{rdelim}
+{else}
 function insertLink(o) {ldelim}
 	for (var key in o) {ldelim}
 		$('#'+key, window.opener.document).val(o[key]);
 	{rdelim}
 	window.close();
 {rdelim}
+{/if}
 </script>
 
 <div class="first"></div>

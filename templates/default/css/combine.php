@@ -1,21 +1,49 @@
 <?php
+// включить/выключить кэширование
+$cache = true;
 
-$cache 	  = true;		// Кеширование
-$cachedir = '../../../cache';	// Путь к кэшу
+// уровень вложенности текущей директории относительно корня
+// для определения правильного пути к папке кэша
+// (например, если combine.php лежит в корне, пишем 0).
+// можно передать через адр. строку: level=(int)
+$level = 0;
 
-// Определяем тип файлов, полный путь к файлам
-// и получаем список имен файлов
+// имя папки кэша относительно корня
+$cachedir = '/cache/combine';
+
+###############################################################
+
+
+// определяем путь до папки кэша
+if ($cache)
+{
+	$level = ($_GET['level']) ? $_GET['level'] : $level;
+	$cachedir = trim($cachedir,'/');
+	for ($i=0; $i<$level; $i++)
+	{
+		$cachedir = '../' . $cachedir;
+	}
+	$cachedir = str_replace("\\", "/", dirname(__FILE__)) . '/' . $cachedir;
+	if(!is_dir($cachedir))
+	{
+		header ("HTTP/1.0 503 Not Implemented");
+		exit("/*
+combine.php: Error!
+Неверно указан путь к папке кэша. Проверьте уровень вложенности.
+*/");
+	}
+}
+
+// Определяем тип файлов, полный путь к файлам и получаем список имен файлов
 if (!empty($_GET['css']))
 {
 	$type = 'css';
-	$base = realpath(dirname(__FILE__));
 	$hash = md5($_GET['css']);
 	$elements = explode(',', $_GET['css']);
 }
 elseif (!empty($_GET['js']))
 {
 	$type = 'javascript';
-	$base = realpath(dirname(__FILE__));
 	$hash = md5($_GET['js']);
 	$elements = explode(',', $_GET['js']);
 }
@@ -24,6 +52,8 @@ else
 	@header ("HTTP/1.0 503 Not Implemented");
 	exit;
 }
+$base = realpath(dirname(__FILE__));
+
 // Determine last modification date of the files
 $lastmodified = 0;
 while (list(,$element) = each($elements)) {

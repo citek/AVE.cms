@@ -108,7 +108,6 @@
 	<label class="step3">{$la.install_setting_desc}</label>
 	<select name="demo">
 		<option value="0" selected>{$la.install_clear}</option>
-		<option value="1">{$la.install_demo}</option>
 	</select>
 </div>
 

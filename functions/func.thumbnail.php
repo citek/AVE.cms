@@ -98,7 +98,7 @@ elseif (! $file = realpath(BASE_DIR . '/uploads/images/noimage.gif'))
 	exit;
 }
 
-define('IMAGE_TOOLBOX_DEFAULT_JPEG_QUALITY', 90);
+define('IMAGE_TOOLBOX_DEFAULT_JPEG_QUALITY', 75);
 
 require(BASE_DIR . '/class/class.thumbnail.php');
 

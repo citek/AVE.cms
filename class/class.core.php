@@ -175,8 +175,8 @@ class AVE_Core
             $out = $AVE_DB->Query("
 				SELECT tmpl.template_text
 				FROM " . PREFIX . "_templates AS tmpl
-				LEFT JOIN " . PREFIX . "_module AS mdl ON tmpl.Id = mdl.Template
-				WHERE ModulPfad = '" . $_REQUEST['module'] . "'
+				LEFT JOIN " . PREFIX . "_module AS mdl ON tmpl.Id = mdl.ModuleTemplate
+				WHERE ModuleSysName = '" . $_REQUEST['module'] . "'
 			")->GetCell();
 
 			// Если шаблон, установленный для модуля не найден в системе, принудительно устанавливаем для него
@@ -548,38 +548,38 @@ class AVE_Core
 			{
 				// Если в запросе пришел вызов модуля или у модуля есть функция вызываемая тегом,
                 // который присутствует в шаблоне
-                if ((isset($_REQUEST['module']) && $_REQUEST['module'] == $row->ModulPfad) ||
-					(1 == $row->IstFunktion && !empty($row->CpEngineTag) && 1 == preg_match($row->CpEngineTag, $template)))
+                if ((isset($_REQUEST['module']) && $_REQUEST['module'] == $row->ModuleSysName) ||
+					(1 == $row->ModuleIsFunction && !empty($row->ModuleAveTag) && 1 == preg_match($row->ModuleAveTag, $template)))
 				{
 					// Проверяем, существует ли для данного модуля функция. Если да,
                     // получаем php код функции.
-                    if (function_exists($row->ModulFunktion))
+                    if (function_exists($row->ModuleStatus))
 					{
-						$pattern[] = $row->CpEngineTag;
-						$replace[] = $row->CpPHPTag;
+						$pattern[] = $row->ModuleAveTag;
+						$replace[] = $row->ModulePHPTag;
 					}
 					else // В противном случае
 					{
-						// Проверяем, существует ли для данного модуля файл modul.php в его персональной директории
-						$mod_file = BASE_DIR . '/modules/' . $row->ModulPfad . '/modul.php';
+						// Проверяем, существует ли для данного модуля файл module.php в его персональной директории
+						$mod_file = BASE_DIR . '/modules/' . $row->ModuleSysName . '/module.php';
                         if (is_file($mod_file) && include_once($mod_file))
 						{
 							// Если файл модуля найден, тогда
-                            if ($row->CpEngineTag)
+                            if ($row->ModuleAveTag)
 							{
-								$pattern[] = $row->CpEngineTag;  // Получаем его системный тег
+								$pattern[] = $row->ModuleAveTag;  // Получаем его системный тег
 
                                 // Проверяем, существует ли для данного модуля функция. Если да,
                                 // получаем php код функции, в противном случае формируем сообщение с ошибкой
-                                $replace[] = function_exists($row->ModulFunktion)
-									? $row->CpPHPTag
-									: ($this->_module_error . ' &quot;' . $row->ModulName . '&quot;');
+                                $replace[] = function_exists($row->ModuleStatus)
+									? $row->ModulePHPTag
+									: ($this->_module_error . ' &quot;' . $row->ModuleName . '&quot;');
 							}
 						}
-						// Если файла modul.php не существует, формируем сообщение с ошибкой
-                        elseif ($row->CpEngineTag)
-						{	$pattern[] = $row->CpEngineTag;
-							$replace[] = $this->_module_error . ' &quot;' . $row->ModulName . '&quot;';
+						// Если файла module.php не существует, формируем сообщение с ошибкой
+                        elseif ($row->ModuleAveTag)
+						{	$pattern[] = $row->ModuleAveTag;
+							$replace[] = $this->_module_error . ' &quot;' . $row->ModuleName . '&quot;';
 						}
 					}
 				}
@@ -597,7 +597,7 @@ class AVE_Core
 			$sql = $AVE_DB->Query("
 				SELECT *
 				FROM " . PREFIX. "_module
-				WHERE Status = '1'
+				WHERE ModuleStatus = '1'
 			");
 
             // Циклически обрабатываем полученные данные
@@ -605,35 +605,35 @@ class AVE_Core
 			{
 				// Если в запросе пришел параметр module и для данного названия модуля существует
                 // директория или данный модуль имеет функцию и его системный тег указан в каком-либо шаблоне, тогда
-                if ((isset($_REQUEST['module']) && $_REQUEST['module'] == $row->ModulPfad) ||
-					(1 == $row->IstFunktion && !empty($row->CpEngineTag) && 1 == preg_match($row->CpEngineTag, $template)))
+                if ((isset($_REQUEST['module']) && $_REQUEST['module'] == $row->ModuleSysName) ||
+					(1 == $row->ModuleIsFunction && !empty($row->ModuleAveTag) && 1 == preg_match($row->ModuleAveTag, $template)))
 				{
-					// Проверяем, существует ли для данного модуля файл modul.php в его персональной директории
-					$mod_file = BASE_DIR . '/modules/' . $row->ModulPfad . '/modul.php';
+					// Проверяем, существует ли для данного модуля файл module.php в его персональной директории
+					$mod_file = BASE_DIR . '/modules/' . $row->ModuleSysName . '/module.php';
                     if (is_file($mod_file) && include_once($mod_file))
 					{	// Если файл модуля найден, тогда
-						if (!empty($row->CpEngineTag))
+						if (!empty($row->ModuleAveTag))
 						{
-							$pattern[] = $row->CpEngineTag;  // Получаем его системный тег
+							$pattern[] = $row->ModuleAveTag;  // Получаем его системный тег
 
                             // Проверяем, существует ли для данного модуля функция. Если да,
                             // получаем php код функции, в противном случае формируем сообщение с ошибкой
-                            $replace[] = function_exists($row->ModulFunktion)
-								? $row->CpPHPTag
-								: ($this->_module_error . ' &quot;' . $row->ModulName . '&quot;');
+                            $replace[] = function_exists($row->ModuleFunction)
+								? $row->ModulePHPTag
+								: ($this->_module_error . ' &quot;' . $row->ModuleName . '&quot;');
 						}
 						// Сохряняем информацию о модуле
-                        $this->install_modules[$row->ModulPfad] = $row;
+                        $this->install_modules[$row->ModuleSysName] = $row;
 					}
-					elseif ($row->CpEngineTag) // Если файла modul.php не существует, формируем сообщение с ошибкой
+					elseif ($row->ModuleAveTag) // Если файла module.php не существует, формируем сообщение с ошибкой
 					{
-                        $pattern[] = $row->CpEngineTag;
-						$replace[] = $this->_module_error . ' &quot;' . $row->ModulName . '&quot;';
+                        $pattern[] = $row->ModuleAveTag;
+						$replace[] = $this->_module_error . ' &quot;' . $row->ModuleName . '&quot;';
 					}
 				}
 				else
 				{	// Если у модуля нет функции или тег модуля не используется - просто помещаем в массив информацию о модуле
-					$this->install_modules[$row->ModulPfad] = $row;
+					$this->install_modules[$row->ModuleSysName] = $row;
 				}
 			}
             // Выполняем замену систеного тега на php код и возвращаем результат
@@ -775,7 +775,7 @@ class AVE_Core
 					{
 						// парсим теги полей в шаблоне документа
 						$main_content = preg_replace_callback('/\[tag:fld:([a-zA-Z0-9-_]+)\]/', 'document_get_field', $rubTmpl);
-						$main_content = preg_replace_callback('/\[tag:([r|c|f]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $main_content);
+						$main_content = preg_replace_callback('/\[tag:([r|c|f|t]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $main_content);
 
 						// удаляем ошибочные теги полей
 						$main_content = preg_replace('/\[tag:fld:\d*\]/', '', $main_content);
@@ -798,20 +798,21 @@ class AVE_Core
 				$main_content = preg_replace('/\[tag:date:([a-zA-Z0-9-]+)\]/e', "RusDate(date('$1', ".$this->curentdoc->document_published."))", $main_content);
 				$main_content = str_replace('[tag:docdate]', pretty_date(strftime(DATE_FORMAT, $this->curentdoc->document_published)), $main_content);
 				$main_content = str_replace('[tag:doctime]', pretty_date(strftime(TIME_FORMAT, $this->curentdoc->document_published)), $main_content);
+				$main_content = str_replace('[tag:docauthorid]', $this->curentdoc->document_author_id, $main_content);
 				$main_content = str_replace('[tag:docauthor]', get_username_by_id($this->curentdoc->document_author_id), $main_content);
 			}
 			$out = str_replace('[tag:maincontent]', $main_content, $this->_coreDocumentTemplateGet(RUB_ID));
 		}	// /вывод документа
 		// Тут мы вводим в хеадер иньекцию скриптов.
-		$rubheader=$AVE_DB->Query("
+		if(defined('RUB_ID')){
+			$rubheader=$AVE_DB->Query("
 							SELECT rubric_header_template
 							FROM " . PREFIX . "_rubrics
 							WHERE Id = '" . RUB_ID . "'
 							LIMIT 1
 						",CACHE_LIFETIME)->GetCell();
-						
-		//$rubheader = preg_replace('/\[tag:rfld:([a-zA-Z0-9-_]+)]\[(more|esc|img|[0-9-]+)]/e', "request_get_document_field(\"$1\", $id, \"$2\")", $rubheader);
-		$out = str_replace('[tag:rubheader]', $rubheader.'[tag:rubheader]', $out);
+			$out = str_replace('[tag:rubheader]', $rubheader.'[tag:rubheader]', $out);
+		}
 		$out = preg_replace('/\[tag:rfld:([a-zA-Z0-9-_]+)]\[(more|esc|img|[0-9-]+)]/e', "request_get_document_field(\"$1\", $id, \"$2\")", $out);
 		// Если в запросе пришел параметр print, т.е. страница для печати, парсим контент, который обрамлен
         // тегами только для печати
@@ -838,7 +839,7 @@ class AVE_Core
 
 		if ( isset($_REQUEST['module'])
 			&& ! (isset($this->install_modules[$_REQUEST['module']])
-				&& '1' == $this->install_modules[$_REQUEST['module']]->Status) )
+				&& '1' == $this->install_modules[$_REQUEST['module']]->ModuleStatus) )
 		{
 			display_notice($this->_module_error);
 		}
@@ -865,6 +866,7 @@ class AVE_Core
 			'[tag:alias]',
 			'[tag:home]',
 			'[tag:robots]',
+			'[tag:canonical]',
 			'[tag:docid]',
 			'[tag:breadcrumb]'
 		);
@@ -874,9 +876,10 @@ class AVE_Core
 			ABS_PATH,
 			htmlspecialchars(get_settings('site_name'), ENT_QUOTES),
 			get_redirect_link('print'),
-			$this->curentdoc->document_alias,
+			@$this->curentdoc->document_alias,
 			get_home_link(),
 			(isset ($this->curentdoc->document_meta_robots) ? $this->curentdoc->document_meta_robots : ''),
+			canonical($_SERVER['REQUEST_URI']),
 			(isset ($this->curentdoc->Id) ? $this->curentdoc->Id : ''),
 			get_breadcrumb()
 		);
@@ -913,6 +916,7 @@ class AVE_Core
 
 		// парсим тизер документа
 		$out = preg_replace_callback('/\[tag:teaser:(\d+)\]/', "showteaser", $out);
+		if(defined('RUB_ID'))$out = preg_replace('/\[tag:docauthoravatar:(\d+)\]/e', "getAvatar(".intval($this->curentdoc->document_author_id).",\"$1\")", $out);
 		// парсим остальные теги основного шаблона
 		$out = str_replace($search, $replace, $out);
 		unset ($search, $replace);
@@ -936,8 +940,10 @@ class AVE_Core
 	function coreUrlParse($get_url = '')
 	{
 		global $AVE_DB;
-
-		if(substr($get_url,0,strlen('/index.php'))!='/index.php'&&strpos($get_url,'?')!==false)$get_url=substr($get_url,0,strpos($get_url,'?'));
+		$get_url=(strpos($get_url,ABS_PATH.'?')===0 ? str_replace(ABS_PATH.'?',ABS_PATH.'index.php?',$get_url) : $get_url);
+		if(
+			substr($get_url,0,strlen(ABS_PATH.'index.php'))!=ABS_PATH.'index.php'&&strpos($get_url,'?')!==false
+			)$get_url=substr($get_url,0,strpos($get_url,'?'));
 
 		$get_url = rawurldecode($get_url);
 		$get_url = mb_substr($get_url, strlen(ABS_PATH));
@@ -984,7 +990,7 @@ class AVE_Core
 		{
 			$get_url = implode('/', $get_url);
 		}
-
+		//var_dump($pages);
 //		if ($get_url == 'index.php') $get_url = '';
 
 //		unset ($pages);
@@ -1027,6 +1033,7 @@ class AVE_Core
 			if ($test_url !== $get_url.URL_SUFF && !$pages && $test_url && !$_REQUEST['ajax'] && !$_REQUEST['print']&& !$_REQUEST['tag']) {
 				header('HTTP/1.1 301 Moved Permanently');
 				header('Location:' . ABS_PATH.$get_url.URL_SUFF);
+				exit();
 			}
 		}
 		else

@@ -26,8 +26,9 @@ FCKConfig.ToolbarSets["cpengine_small"] = [
 ] ;
 
 FCKConfig.ToolbarSets["Simple"] = [
-  ['Source','Bold','Italic','-','OrderedList','UnorderedList','-','Link','Unlink','-','Image','-','RemoveFormat','-','Preview',
-  'FontFormat','FontName','FontSize','AnchorMore','PageBreak','typograf','SyntaxHighLight2','googlemaps','OnlineVideo','flvS3Player','Switchtoolbar']
+  ['Source','Bold','Italic','-','OrderedList','UnorderedList','-','Link','Unlink','-','Image','-','RemoveFormat','-','Preview'],
+  ['FontFormat','FontName','FontSize','AnchorMore','PageBreak'],
+  ['typograf','SyntaxHighLight2','googlemaps','OnlineVideo','flvS3Player','Switchtoolbar']
 ] ;
 
 FCKConfig.SwitchtoolbarCycle = ['cpengine','cpengine_small','Simple'];

@@ -9,11 +9,11 @@
     </style>
 {/literal}
 
-<div class="title"><h5>Редактор файлов</h5></div>
+<div class="title"><h5>{#TEMPLATES_CSS_EDITOR#}</h5></div>
 
 <div class="widget" style="margin-top: 0px;">
     <div class="body">
-		Пожалуйста, будьте предельно внимательны при редактировании файлов и помните, что неверно указанный код может испортить внешнее оформление сайта
+		{#TEMPLATES_CSS_TITLE#}
     </div>
 </div>
 
@@ -21,8 +21,8 @@
 	<div class="breadCrumb module">
 	    <ul>
 	        <li class="firstB"><a href="index.php" title="{#MAIN_PAGE#}">{#MAIN_PAGE#}</a></li>
-	        <li><a href="index.php?do=templates&amp;cp={$sess}" title="">{#TEMPLATES_SUB_TITLE#}</a></li>
-	        <li>Редактор файлов</li>
+	        <li><a href="index.php?do=templates&cp={$sess}" title="">{#TEMPLATES_SUB_TITLE#}</a></li>
+	        <li>{#TEMPLATES_CSS_EDITOR#}</li>
 			<li><strong class="code">{$smarty.request.name_file|escape}</strong></li>
 	    </ul>
 	</div>
@@ -34,13 +34,13 @@
 <div class="head"><h5 class="iFrames">{$smarty.request.name_file|escape}</h5></div>
 
 <div class="rowElem" style="padding: 0">
-					<textarea id="code_text" name="code_text">{$code_text}</textarea>
+					<textarea id="code_text" name="code_text">{$code_text|escape}</textarea>
 	<div class="fix"></div>
 </div>
 
 <div class="rowElem">
 <button class="basicBtn">{if $smarty.request.action=='new'}{#TEMPLATES_BUTTON_ADD#}{else}{#TEMPLATES_BUTTON_SAVE#}{/if}</button>
-&nbsp;или&nbsp;
+{#TEMPLATES_OR#}
 <input type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#TEMPLATES_BUTTON_SAVE_NEXT#}" />
 	<div class="fix"></div>
 </div>
@@ -61,7 +61,7 @@
 
 	function Response(){ldelim}
 		$.alerts._overlay('hide');
-		$.jGrowl('{#TEMPLATES_FILE_SAVED#}');
+		$.jGrowl('{#TEMPLATES_FILE_SAVED#}',{ldelim}theme: 'accept'{rdelim});
 	{rdelim}
 
 	$(document).ready(function(){ldelim}

@@ -862,6 +862,27 @@ class Image_Toolbox {
 				$cpy_w_offset = 0;
 				$cpy_h_offset = 0;
 			}
+			elseif ($mode == 3) {
+				//fill remaining background with a color to keep aspectratio
+				$final_aspectratio = $width / $height;
+				if ($final_aspectratio < $this->_img['main']['aspectratio']) {
+					$this->_img['target']['width'] = $width;
+					$this->_img['target']['height'] = (integer) $width / $this->_img['main']['aspectratio'];
+					$cpy_w_offset2 = 0;
+					$cpy_h_offset2 = (integer) (($height - $this->_img['target']['height']) / 2);
+				}
+				else {
+					$this->_img['target']['height'] = $height;
+					$this->_img['target']['width'] = (integer) $height * $this->_img['main']['aspectratio'];
+					$cpy_h_offset2 = 0;
+					$cpy_w_offset2 = 0;
+				}
+				$this->_img['target']['aspectratio'] = $this->_img['main']['aspectratio'];
+				$cpy_w = $this->_img['main']['width'];
+				$cpy_h = $this->_img['main']['height'];
+				$cpy_w_offset = 0;
+				$cpy_h_offset = 0;
+			}
 		} elseif (($width == 0 && $height > 0) || ($width > 0 && $height == 0) && is_int($width) && is_int($height)) {
 			//keep aspectratio
 			if ($autorotate == true) {

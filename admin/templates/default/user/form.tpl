@@ -54,7 +54,7 @@ function mail_status(){
 	<div class="breadCrumb module">
 	    <ul>
 	        <li class="firstB"><a href="index.php" title="{#MAIN_PAGE#}">{#MAIN_PAGE#}</a></li>
-	        <li><a href="index.php?do=user&amp;cp={$sess}" title="">{#USER_SUB_TITLE#}</a></li>
+	        <li><a href="index.php?do=user&cp={$sess}" title="">{#USER_SUB_TITLE#}</a></li>
 			{if $smarty.request.action=='new'}{$smarty.request.user_name}{else}<li>{if $row->firstname|escape==""}{$row->user_name|escape}{else}{$row->firstname|escape} {$row->lastname|escape}{/if}</li>{/if}
 	    </ul>
 	</div>
@@ -62,7 +62,7 @@ function mail_status(){
 
 
 	{if $errors}
-		<ul class="messages">
+		<ul class="messages first">
 			<li class="highlight red"><strong>{#USER_ERRORS#}</strong><br />{foreach from=$errors item=error}{$error}<br />{/foreach}</li>
 		</ul>
 	{/if}
@@ -109,10 +109,9 @@ function mail_status(){
           <input onchange="mail_pass(this.id);" onkeydown="mail_pass(this.id);" onkeyup="mail_pass(this.id);" name="password" type="password" id="password_pass" size="40" style="width:250px;" maxlength="50" autocomplete="off" />
           <input onchange="mail_pass(this.id);" onkeydown="mail_pass(this.id);" onkeyup="mail_pass(this.id);" type="text" id="password_text" size="40" style="width:250px;display:none;" maxlength="50" autocomplete="off" />
         </div>
-       <div class="pr12">
-         <input class="float" type="checkbox" id="password_show" value="1" onchange="pass_show();" />
-         <label>{#USER_PASSWORD_SHOW#}</label>
-        </div>
+		<div class="pr12 mt5">
+			<input class="float" type="checkbox" id="password_show" value="1" onchange="pass_show();" /> <label>{#USER_PASSWORD_SHOW#}</label>
+		</div>
         {if $smarty.request.action=='edit'}
         <div class="pr12" id="mail_pass" style="display:none; clear:left">
             <input name="PassChange" type="checkbox" value="1" class="float" /> <label style="cursor: pointer;">{#USER_SEND_INFO#}</label>
@@ -138,10 +137,20 @@ function mail_status(){
 		{if $row_fp->Avatar != ''}
 			<img src="../modules/forums/avatars/{$row_fp->Avatar|escape}" alt="" /><br />
 		{/if}
-		<input type="text" name="Avatar_fp" size="40" style="width:250px;" value="{$row_fp->Avatar|escape}" />
+		<input type="file" name="avatar" />
 	</div></td>
 </tr>
 {/if}
+
+<tr>
+    <td>{#USER_AVATAR#}</td>
+    <td><div class="pr12">
+		{if $row->avatar}<img src="{$row->avatar}">{/if}
+		<div class="fix"></div>
+		<input type="file" name="avatar" class="fileInput" id="fileInput" />
+	</div></td>
+</tr>
+
 
 {if $is_shop==1}
 <tr>
@@ -232,7 +241,7 @@ function mail_status(){
 <tr>
     <td>{#USER_SECOND_GROUP#}<br /><small>{#USER_SECOND_INFO#}</small></td>
     <td><div class="pr12">
-		<select name="user_group_extra[]" size="8" multiple="multiple" id="user_group_extra" style="width:250px;">
+		<select name="user_group_extra[]" size="8" multiple="multiple" id="user_group_extra" style="width:250px;" class="select">
 			{foreach from=$ugroups item=g}
 				<option value="{$g->user_group}"{if $row->Id==1 && $g->user_group!=1} disabled="disabled"{elseif $user_group_extra && in_array($g->user_group,$user_group_extra)} selected="selected"{/if}>{$g->user_group_name|escape}</option>
 			{/foreach}

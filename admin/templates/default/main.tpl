@@ -19,11 +19,17 @@
     {/if}
 
 	<!-- CSS Files -->
-	<link href="{$tpl_dir}/css/combine.php?css=reset.css,main.css,data_table.css,jquery-ui.css,jquery-ui_custom.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/reset.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/main.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/data_table.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/jquery-ui_custom.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/jquery.fancybox.css" rel="stylesheet" type="text/css" media="screen" />
 	<link href="{$tpl_dir}/css/color_{$smarty.const.DEFAULT_THEME_FOLDER_COLOR}.css" rel="stylesheet" type="text/css" media="screen" />
 
 	<!-- JS files -->
-	<script src="{$tpl_dir}/js/combine.php?js=jquery-1.7.1.js,jquery-ui.min.js,jquery.form.js,jquery.transform.js,jquery.jgrowl.js,jquery.alerts.js,jquery.tipsy.js,jquery.totop.js,jquery.filestyle.js,jquery.collapsible.min.js,jquery.dataTables.js,jquery-ui-time.js,jquery.placeholder.min.js,jquery.cookie.js,mousetrap.js,jquery.MultiFile.js" type="text/javascript"></script>
+	{include file='scripts.tpl'}
+	
+	<script type="text/javascript" src="/admin/lang/{$smarty.session.admin_language}/scripts.js"></script>
 	<script src="{$tpl_dir}/js/main.js" type="text/javascript"></script>
 
 	<!-- JS Scripts -->
@@ -35,6 +41,48 @@
 
 	<script type="text/javascript" language="JavaScript">
 	$(document).ready(function(){ldelim}
+
+
+    {literal}
+
+	var admin = {
+		Toggle : function(){
+			$.each(["LeftMenu"], function(key, value) {
+				//Считываем cookie
+				var toggle = $.cookie(value);
+				//Проверяем cookie
+				if (toggle == 'hidden') {
+					$(".leftNav").addClass("hidden");
+					$(".dd_page").css("display","");
+				} else {
+	                $("#leftNav_show span").addClass("close");
+					$(".dd_page").css("display","none");
+				}
+
+				$("[id='toggle-"+this+"']").click(function() {
+					if ($(".leftNav").hasClass('hidden')) {
+						$(".dd_page").css("display","none");
+						$(".leftNav").removeClass('hidden').addClass('visible');
+	                    $("#leftNav_show span").addClass("close");
+						$.cookie(value, 'visible');
+					} else {
+						$(".dd_page").css("display","");
+						$(".leftNav").removeClass('visible').addClass('hidden');
+	                    $("#leftNav_show span").removeClass("close");
+						$.cookie(value, 'hidden');
+					}
+				});
+			});
+	  	}
+	}
+
+	if($("[id^='toggle']").length){admin.Toggle();}
+
+    {/literal}
+
+		{if $smarty.const.ADMIN_MENU}
+		$("#menu").sticky({ldelim}topSpacing:56{rdelim});
+		{/if}
 
 		{if check_permission('group_new')}
 		$(".ulAddGroup").click( function(e) {ldelim}
@@ -162,45 +210,6 @@
 		{rdelim});
 		{/if}
 
-    {literal}
-
-var admin = {
-	Toggle : function(){
-		$.each(["LeftMenu"], function(key, value) {
-
-			//Считываем cookie
-			var toggle = $.cookie(value);
-
-			//Проверяем cookie
-			if (toggle == 'hidden') {
-				$(".leftNav").addClass("hidden");
-				$(".dd_page").css("display","");
-			} else {
-                $("#leftNav_show span").addClass("close");
-				$(".dd_page").css("display","none");
-			}
-
-			$("[id='toggle-"+this+"']").click(function() {
-				if ($(".leftNav").hasClass('hidden')) {
-					$(".leftNav").removeClass('hidden').addClass('visible');
-                    $(".dd_page").css("display","none");
-                    $("#leftNav_show span").addClass("close");
-					$.cookie(value, 'visible');
-				} else {
-					$(".leftNav").removeClass('visible').addClass('hidden');
-                    $("#leftNav_show span").removeClass("close");
-                    $(".dd_page").css("display","");
-					$.cookie(value, 'hidden');
-				}
-			});
-		});
-  	}
-}
-
-	if($("[id^='toggle']").length){admin.Toggle();}
-
-    {/literal}
-
 	{rdelim});
 	</script>
 
@@ -209,7 +218,7 @@ var admin = {
 <body>
 
 <div id="leftNav_show">
-    <a href="javascript:void(0);" id="toggle-LeftMenu"><span class="rightDir" title="Показать/Скрыть меню"></span></a>
+    <a href="javascript:void(0);" id="toggle-LeftMenu"><span class="rightDir {if $smarty.cookies.LeftMenu != "hidden"}close{/if}" title="Показать/Скрыть меню"></span></a>
 </div>
 
 
@@ -217,24 +226,31 @@ var admin = {
 <div id="topNav">
     <div class="fixed">
         <div class="wrapper">
-            <div class="welcome"><a href="index.php" title="{#MAIN_LINK_HOME#}"><img src="{$tpl_dir}/images/userPic.png" alt="" /></a><span>{#MAIN_USER_ONLINE#} <strong>{$smarty.session.user_name|escape}</strong></span></div>
-            <div class="userNav">
+			<div class="welcome">
+            	{if $user_avatar}
+            		<img src="{$user_avatar}" class="avatar" alt="{$smarty.session.user_name|escape}" />
+				{else}
+					<img src="{$tpl_dir}/images/userPic.png" alt="" />
+            	{/if}
+            	<span>{#MAIN_USER_ONLINE#} <strong>{$smarty.session.user_name|escape}</strong></span>
+			</div>
+			<div class="userNav">
                 <ul>
 
-                    <li class="dd_add"><img src="{$tpl_dir}/images/icons/add.png" alt="" /><span>Добавить</span>
-                        <ul class="menu_add">
-							 {if check_permission('documents')}<li><a onclick="cp_pop('index.php?do=docs&action=add_new&pop=1&cp={$sess}','750','600','1')" href="javascript:void(0);">Документ</a></li>{/if}
+                    <li class="dropdown"><a title=""><img src="{$tpl_dir}/images/icons/add.png" alt="" /><span>Добавить</span></a>
+                        <ul>
+							 {if check_permission('documents')}<li><a onclick="cp_pop('index.php?do=docs&action=add_new&pop=1&cp={$sess}','750','500','1')" href="javascript:void(0);">Документ</a></li>{/if}
 							 {if check_permission('rubric_new')}<li><a class="ulAddRub" href="index.php?do=rubs&action=new&cp={$sess}">Рубрику</a></li>{/if}
 							 {if check_permission('request_new')}<li><a class="ulAddRequest" href="index.php?do=request&action=new&cp={$sess}">Запрос</a></li>{/if}
 							 {if check_permission('sysblocks')}<li><a class="ulAddBlock" href="index.php?do=sysblocks&action=new&cp={$sess}">Системный блок</a></li>{/if}
 							 {if check_permission('template_new')}<li><a class="ulAddTempl" href="index.php?do=templates&action=new&cp={$sess}">Шаблон</a></li>{/if}
 							 {if check_permission('navigation_new')}<li><a class="ulAddNav" href="index.php?do=navigation&action=new&cp={$sess}">Навигацию</a></li>{/if}
 							 {if check_permission('user_new')}<li><a class="ulAddUser" href="index.php?do=user&action=new&cp={$sess}">Пользователя</a></li>{/if}
-							 {if check_permission('group_new')}<li><a class="ulAddGroup" href="index.php?do=groups&amp;action=new&amp;cp={$sess}">Группу</a></li>{/if}
+							 {if check_permission('group_new')}<li><a class="ulAddGroup" href="index.php?do=groups&action=new&cp={$sess}">Группу</a></li>{/if}
                         </ul>
 					</li>
 
-                    <li class="dd_page hidden"><img src="{$tpl_dir}/images/icons/tasks.png" alt="" /><span>Разделы</span>
+                    <li class="dropdown dd_page {if $smarty.cookies.LeftMenu == "visible"}hidden{/if}"><a title=""><img src="{$tpl_dir}/images/icons/tasks.png" alt="" /><span>Разделы</span></a>
                         <ul class="menu_page">
 							 {$navi_top}
                         </ul>
@@ -243,34 +259,34 @@ var admin = {
                     <!-- <li><img src="{$tpl_dir}/images/icons/messages.png" alt="" /><span>Messages</span><span class="numberTop">8</span></li> -->
                     {if check_permission('modules')}
 					{if $modules}
-					<li class="dd_modul"><img src="{$tpl_dir}/images/icons/subInbox.png" alt="" /><span>{#MAIN_LINK_MODULES_H#}</span>
-                        <ul class="menu_modul">
+					<li class="dropdown"><a title=""><img src="{$tpl_dir}/images/icons/subInbox.png" alt="" /><span>{#MAIN_LINK_MODULES_H#}</span></a>
+                        <ul>
 						{if $modules && check_permission('modules')}
 								{foreach from=$modules item=modul}
-										<li><a href="index.php?do=modules&action=modedit&mod={$modul->ModulPfad}&moduleaction=1&cp={$sess}">{$modul->ModulName}</a></li>
+										<li><a href="index.php?do=modules&action=modedit&mod={$modul->ModuleSysName}&moduleaction=1&cp={$sess}">{$modul->ModuleName}</a></li>
 								{/foreach}
 						{/if}
                         </ul>
                     </li>
 					{/if}
 					{/if}
-                    <li class="dd_settings"><img src="{$tpl_dir}/images/icons/settings.png" alt="" /><span>{#MAIN_LINK_SETTINGS_H#}</span>
-                        <ul class="menu_settings">
-							 {if check_permission('gen_settings')}<li><a href="index.php?do=settings&amp;cp={$sess}">{#MAIN_SETTINGS_EDIT_1#}</a></li>
-							 <li><a href="index.php?do=settings&amp;sub=case&amp;cp={$sess}">{#MAIN_SETTINGS_EDIT_2#}</a></li>
-							 <li><a href="index.php?do=settings&amp;sub=countries&amp;cp={$sess}">{#MAIN_SETTINGS_EDIT_3#}</a></li>{/if}
+                    <li class="dropdown"><a title=""><img src="{$tpl_dir}/images/icons/settings.png" alt="" /><span>{#MAIN_LINK_SETTINGS_H#}</span></a>
+                        <ul>
+							 {if check_permission('gen_settings')}<li><a href="index.php?do=settings&cp={$sess}">{#MAIN_SETTINGS_EDIT_1#}</a></li>
+							 <li><a href="index.php?do=settings&sub=case&cp={$sess}">{#MAIN_SETTINGS_EDIT_2#}</a></li>
+							 <li><a href="index.php?do=settings&sub=countries&cp={$sess}">{#MAIN_SETTINGS_EDIT_3#}</a></li>{/if}
                              {if check_permission('dbactions')}<li><a href="index.php?do=dbsettings&action=dump_top&cp={$sess}">{#MAIN_SETTINGS_EDIT_4#}</a></li>{/if}
                         </ul>
 					</li>
-					{if check_permission('session_clear')}<li><a href="#" class="clearCache" title="{#MAIN_STAT_CLEAR_CACHE#}"><img src="{$tpl_dir}/images/icons/subTrash.png" alt="" /><span>{#MAIN_STAT_CLEAR_CACHE#}</span></a></li>{/if}
+					{if check_permission('session_clear')}<li><a href="javascript:void(0);" class="clearCache" title="{#MAIN_STAT_CLEAR_CACHE#}"><img src="{$tpl_dir}/images/icons/subTrash.png" alt="" /><span>{#MAIN_STAT_CLEAR_CACHE#}</span></a></li>{/if}
                     {*<li><a href="#" title="{#MAIN_LOGIN_HELP#}"><img src="{$tpl_dir}/images/icons/help.png" alt="" /><span>{#MAIN_LOGIN_HELP#}</span></a></li>*}
 					{if $login_menu}
-					<li class="dd_login"><img src="{$tpl_dir}/images/icons/preview.png" alt="" /><span>{#MAIN_LINK_SITE#}</span>
+					<li class="dropdown"><a title=""><img src="{$tpl_dir}/images/icons/preview.png" alt="" /><span>{#MAIN_LINK_SITE#}</span></a>
 					{else}
 					<li><a href="../" title="{#MAIN_LINK_SITE#}" target="_blank"><img src="{$tpl_dir}/images/icons/preview.png" alt="" /><span>{#MAIN_LINK_SITE#}</span></a>
 					{/if}
 						{if $login_menu}
-						<ul class="menu_login">
+						<ul>
 							 <li><a href="../index.php?module=login&action=wys_adm&sub=on" target="_blank">{#MAIN_LINK_SITE_ON#}</a></li>
 							 <li><a href="../index.php?module=login&action=wys_adm&sub=off" target="_blank">{#MAIN_LINK_SITE_OFF#}</a></li>
                         </ul>
@@ -286,7 +302,7 @@ var admin = {
 
 <!-- Header -->
 <div id="header" class="wrapper">
-    <div class="logo"><a href="index.php" class="box"></a></div>
+    <!-- <div class="logo"><a href="index.php" class="box"></a></div> -->
     <div class="fix"></div>
 </div>
 
@@ -294,19 +310,13 @@ var admin = {
 <div class="wrapper">
 
 	<!-- Left navigation -->
-    <div class="leftNav">
-    	<ul id="menu">
-        	<li><a href="index.php" {if $smarty.request.do == ''}class="active collapse-close"{/if}><span>{#MAIN_LINK_HOME#}</span></a></li>
-            {$navi}
-			{*
-            {if $smarty.request.do!=''}
-            <ul class="sub_stat" style="display: block; ">
-            	<li><div>{#MAIN_STAT_MYSQL#} - <strong>{$mysql_size}</strong></div></li>
-            	<li><div>{#MAIN_STAT_CACHE#} - <strong class="cachesize code clearCache rightDir" title="{#MAIN_STAT_CLEAR_CACHE#}" style="cursor: pointer;">{$cache_size}</strong></div></li>
-            </ul>
-            {/if}
-			*}
-        </ul>
+    <div class="leftNav {if $smarty.cookies.LeftMenu == "hidden"}hidden{/if}">
+		{*<div class="logo"><a href="index.php" class="box"></a></div>*}
+
+		<ul id="menu">
+			<li><a href="index.php" {if $smarty.request.do == ''}class="active collapse-close"{/if}><span>{#MAIN_LINK_HOME#}</span></a></li>
+			{$navi}
+		</ul>
     </div>
 
 	<!-- Content -->
@@ -322,7 +332,7 @@ var admin = {
 <!-- Footer -->
 <div id="footer">
 	<div class="wrapper">
-    	<span>{$smarty.const.APP_INFO} | {$smarty.const.APP_NAME} {$smarty.const.APP_VERSION} rev. {$smarty.const.BILD_VERSION}</span>
+    	<span>{$smarty.const.APP_INFO} | {$smarty.const.APP_NAME} v{$smarty.const.APP_VERSION}</span>
     </div>
 </div>
 

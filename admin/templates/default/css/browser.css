@@ -13,14 +13,26 @@
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
 	position:relative;
+	cursor: pointer;
 }
 .imageBlock1 {
 	font-size: 11px;
 }
+.imageBlock {
+	margin:36px auto 0 auto;
+	width: 128px;
+	height: 128px;
+	vertical-align: middle;
+}
+.imageBlock div {
+	text-align:center; /* horizontal in all browsers */
+	display:table-cell; vertical-align:middle; /* ~= valign=center in CSS2 browsers */
+	height: 128px;
+	width: 128px;
+}
 
 .imageBlock img {
-	display:block;
-	margin:36px auto 0 auto;
+	vertical-align: middle;
 }
 
 .imageName {

@@ -8,6 +8,38 @@
  * @filesource
  */
 
+ 
+function getLogRecords($count=6){
+	global $AVE_DB, $AVE_Template;
+		$logdata=array();
+		$logfile = BASE_DIR.'/cache/log.php';
+		if(file_exists($logfile))
+			@eval('?>'.file_get_contents($logfile).'<?');
+		arsort($logdata);
+		// Передаем данные в шаблон для вывода
+		$AVE_Template->assign('logs', array_slice($logdata,0,$count));
+}
+ 
+/**
+ * Список пользователей за последние $onlinetime секунд
+ *
+ * @param int $onlinetime количество секунд
+ * @return Array массив из пользователей отсортированный по последней активности
+ */
+function get_online_users($onlinetime=USERS_TIME_SHOW){
+	global $AVE_DB, $AVE_Template;
+	$time=(time()-intval($onlinetime));
+	$sql=@$AVE_DB->Query("SELECT * FROM ".PREFIX."_users WHERE last_visit>".$time." ORDER BY last_visit DESC");
+	$online_users=Array();
+	while ($row = $sql->FetchRow())
+	{
+		$row->user_name = get_username_by_id($row->Id);
+		$row->user_group_name = get_usergroup_by_id($row->user_group);
+		array_push($online_users,$row);
+	}
+	$AVE_Template->assign('online_users', $online_users);
+}
+
 /**
  * Форматированный вывод размера
  *
@@ -53,14 +85,14 @@ function get_ave_info()
 
 	$sql = $AVE_DB->Query("
 		SELECT
-			`Status`,
-			COUNT(`Status`) AS cntStatus
+			`ModuleStatus`,
+			COUNT(`ModuleStatus`) AS cntStatus
 		FROM " . PREFIX . "_module
-		GROUP BY `Status`
+		GROUP BY `ModuleStatus`
 	");
 	while ($row = $sql->FetchRow())
 	{
-		$cnts['modules_' . $row->Status] = $row->cntStatus;
+		$cnts['modules_' . $row->ModuleStatus] = $row->cntStatus;
 	}
 
 	$sql = $AVE_DB->Query("
@@ -191,16 +223,16 @@ function get_editable_module()
 	$modules = array();
 	$sql = $AVE_DB->Query("
 		SELECT
-			ModulName,
-			ModulPfad
+			ModuleName,
+			ModuleSysName
 		FROM " . PREFIX . "_module
-		WHERE `Status` = '1'
-		AND `AdminEdit` = '1'
-		ORDER BY ModulName ASC
+		WHERE `ModuleStatus` = '1'
+		AND `ModuleAdminEdit` = '1'
+		ORDER BY ModuleName ASC
 	");
 	while ($row = $sql->FetchRow())
 	{
-		if (check_permission('mod_' . $row->ModulPfad))
+		if (check_permission('mod_' . $row->ModuleSysName))
 		{
 			array_push($modules, $row);
 		}
@@ -356,7 +388,7 @@ function check_permission_acp($perm)
 function ContactsModuleCheck() {
 	global $AVE_DB, $AVE_Template;
 
-  $sql = $AVE_DB->Query("SELECT * FROM " . PREFIX . "_module WHERE ModulFunktion = 'contact' and  Status  = '1'");
+  $sql = $AVE_DB->Query("SELECT * FROM " . PREFIX . "_module WHERE ModuleFunction = 'contact' and  ModuleStatus  = '1'");
 	$enable = $sql->numrows();
 	if ($enable != "0" || $enable != ""){
 		$contacts = "1";
@@ -373,7 +405,7 @@ function ContactsModuleCheck() {
 function LoginModuleCheck() {
 	global $AVE_DB, $AVE_Template;
 
-  $sql = $AVE_DB->Query("SELECT * FROM " . PREFIX . "_module WHERE ModulFunktion = 'mod_login' and  Status  = '1'");
+  $sql = $AVE_DB->Query("SELECT * FROM " . PREFIX . "_module WHERE ModuleFunction = 'mod_login' and  ModuleStatus  = '1'");
 	$enable = $sql->numrows();
 	if ($enable != "0" || $enable != ""){
 		$login_menu = "1";
@@ -388,15 +420,22 @@ function DisplayMainDocuments() {
 	global $AVE_DB, $AVE_Template;
 
 	$doc_start = array();
-	$sql = $AVE_DB->Query("SELECT * FROM " . PREFIX . "_documents ORDER BY document_published DESC LIMIT 0,15");
+	$sql = $AVE_DB->Query("
+		SELECT 
+			doc.*,
+			rub.rubric_admin_teaser_template
+		FROM " . PREFIX . "_documents doc
+		LEFT JOIN " . PREFIX . "_rubrics AS rub ON rub.Id = doc.rubric_id
+		ORDER BY doc.document_published DESC LIMIT 0,10");
 		while($row = $sql->fetchrow()) {
 			$row->rubric_title = showrubricName($row->rubric_id);
-			$row->document_author = showuserName($row->document_author_id);
-
+			$row->document_author = get_username_by_id($row->document_author_id); // Получаем имя пользователя (Автора)
 			$row->cantEdit        = 0;
 			$row->canDelete       = 0;
 			$row->canEndDel       = 0;
 			$row->canOpenClose    = 0;
+			$row->rubric_admin_teaser_template=@eval2var('?>'.($row->rubric_admin_teaser_template>'' ? @showrequestelement($row,$row->rubric_admin_teaser_template) : '').'<?');
+
 
 			// разрешаем редактирование и удаление
 			// если автор имеет право изменять свои документы в рубрике
@@ -459,7 +498,7 @@ function cacheShow() {
 	global $AVE_Template;
 
     $showCache = format_size(get_dir_size($AVE_Template->compile_dir)+get_dir_size($AVE_Template->cache_dir_root));
-	echo $showCache;
+	echo json_encode(array($showCache, 'accept'));
 }
 
 ?>

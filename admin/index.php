@@ -25,6 +25,12 @@ $AVE_Template->assign('admin_favicon', ADMIN_FAVICON);
 
 if (!isset($_SESSION['user_id'])){
 	@session_destroy();
+
+	if (isset($_REQUEST['ajax']) && $_REQUEST['ajax'] == 'run'){
+		header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorised access', true);
+		exit;
+	}
+
 	$AVE_Template->assign('captcha',ADMIN_CAPTCHA);
 	$AVE_Template->display('login.tpl');
 	exit;
@@ -59,6 +65,8 @@ if (empty($_SESSION['admin_language']))
 get_editable_module();
 LoginModuleCheck();
 
+$AVE_Template->assign('user_avatar', getAvatar($_SESSION['user_id'],25));
+
 /* Вывод информации на всех страницах */
 //$AVE_Template->assign('cache_size', format_size(get_dir_size($AVE_Template->compile_dir)+get_dir_size($AVE_Template->cache_dir_root)));
 //$AVE_Template->assign('mysql_size', get_mysql_size());
@@ -80,13 +88,10 @@ $do = (!empty($_REQUEST['do']) && in_array($_REQUEST['do'], $allowed)) ? $_REQUE
 header("Cache-Control: no-store, no-cache, must-revalidate");
 header("Expires: " . date("r"));
 
-include(BASE_DIR . '/lib/subversion/work_svn.php');
 include(BASE_DIR . '/admin/' . $do . '.php');
 
 if (defined('NOPERM')) $AVE_Template->assign('content', $config_vars['MAIN_NO_PERMISSION']);
 
-//$tpl = (isset($_REQUEST['css']) && $_REQUEST['css'] == 'inline') ? 'iframe.tpl' : 'pop.tpl';
-//$tpl = (isset($_REQUEST['pop']) && $_REQUEST['pop'] == 1) ? $tpl : 'main.tpl';
 $tpl = (isset($_REQUEST['pop']) && $_REQUEST['pop'] == 1) ? 'pop.tpl' : 'main.tpl';
 
 $AVE_Template->display($tpl);

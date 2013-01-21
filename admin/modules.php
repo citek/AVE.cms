@@ -89,8 +89,14 @@ switch($_REQUEST['action'])
 		if (check_permission_acp('modules'))
 		{
 			$mod_path = preg_replace('/[^\w]/', '', $_REQUEST['mod']);
-			$mod_path = BASE_DIR . '/modules/' . $mod_path . '/modul.php';
+			$mod_path = BASE_DIR . '/modules/' . $mod_path . '/module.php';
 			if (is_file($mod_path)) include($mod_path);
+		}
+		break;
+	case 'remove':
+		if (check_permission_acp('modules_admin'))
+		{
+			$AVE_Module->moduleRemove($_REQUEST['module']);
 		}
 		break;
 }

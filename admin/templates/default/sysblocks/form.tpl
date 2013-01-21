@@ -61,7 +61,7 @@
 			<td>
 				<a class="rightDir" title="{#SYSBLOCK_MEDIAPATH#}" href="javascript:void(0);" onclick="textSelection('[tag:mediapath]','');"><strong>[tag:mediapath]</strong></a>
 			</td>
-                     <td rowspan="6"><textarea class="mousetrap" id="sysblock_text" name="sysblock_text" style="width: 100%; height: 400px;">{$sysblock_text}</textarea></td>
+                     <td rowspan="6"><textarea class="mousetrap" id="sysblock_text" name="sysblock_text" style="width: 100%; height: 400px;">{$sysblock_text|escape}</textarea></td>
 		</tr>
 
 		<tr>
@@ -127,7 +127,7 @@
 					<input name="submit" type="submit" class="basicBtn" value="{#SYSBLOCK_SAVE#}" />
 				{/if}
 
-				&nbsp;или&nbsp;
+				{#SYSBLOCK_OR#}
 
 				{if $smarty.request.action=='edit'}
 					<input type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#SYSBLOCK_SAVEDIT_NEXT#}" />

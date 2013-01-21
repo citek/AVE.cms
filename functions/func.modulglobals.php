@@ -25,7 +25,7 @@
  * @param string $modulepath имя папки модуля
  * @param string $lang_section секция языкового файла
  */
-function set_modul_globals($modulepath, $lang_section = false)
+function set_module_globals($modulepath, $lang_section = false)
 {
 	global $mod, $AVE_Template;
 

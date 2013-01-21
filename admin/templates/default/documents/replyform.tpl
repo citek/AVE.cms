@@ -1,14 +1,9 @@
-<div class="widget first"></div>
-
-<div class="title"><h5>{#DOC_NEW_NOTICE_TITLE#}</h5></div>
-
-<div class="widget" style="margin-top: 0px;">
+<div class="widget first">
+<div class="head"><h5>{#DOC_NEW_NOTICE_TITLE#}</h5></div>
     <div class="body">
 		{#DOC_SEND_NOTICE_INFO#}
     </div>
-</div>
 
-<div class="widget first">
 <form method="post" action="{$formaction}" class="mainForm">
 	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 		<tr>

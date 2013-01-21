@@ -1,9 +1,7 @@
 Options -Indexes +FollowSymLinks
-
 AddDefaultCharset utf-8
 
 # 	php_value error_reporting E_NONE
-
 
 #	Этот параметр устанавливает максимальное время в секундах, позволяющее скрипту запускаться прежде, чем он завершается синтаксическим анализатором.
 #	php_value max_execution_time 600
@@ -42,8 +40,6 @@ AddDefaultCharset utf-8
 #	RewriteCond %{REQUEST_URI} /$ [NC]
 #	RewriteRule ^(.*)(/)$ $1 [L,R=301]
 
-#	RewriteCond %{REQUEST_URI} !^/robots\.txt$ [NC]
-
 #	Редирект с www.domain.com на domain.com
 #	http://site
 #	RewriteCond %{HTTP_HOST} ^www\.(.+) [NC]
@@ -56,13 +52,15 @@ AddDefaultCharset utf-8
 
 	RewriteCond %{REQUEST_URI} !^/(class|functions|inc|modules|templates|cache)/
 
+	#Robots
+	RewriteCond %{REQUEST_URI} !^/robots\.txt$ [NC]
+
 	#Sitemap
 	RewriteRule ^sitemap.xml$ inc/sitemap.php [QSA,L]
 
 	## RSS
 	RewriteRule ^rss/rss-([0-9]+).xml$ inc/rss.php?id=$1 [QSA,L]
 
-	RewriteRule \.(css|js|ico|gif|jpg|jpeg|png|swf|mp3|txt)$ - [NC,L]
 	RewriteRule ^index.php$ - [L]
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d

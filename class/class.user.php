@@ -427,7 +427,7 @@ class AVE_User
 			// для комментариев
 			//$sqla = $AVE_DB->Query("SELECT * FROM " . PREFIX . "_modul_comment_info WHERE comment_author_id = '".(int)$row->Id."'");
 			//$row->comments = $sqla->numrows();
-
+			$row->avatar=getAvatar($row->Id,40);
 			array_push($users, $row);
 		}
 
@@ -500,6 +500,15 @@ class AVE_User
 							taxpay      = '" . $_POST['taxpay'] . "',
 							user_group_extra = '" . @implode(';', $_POST['user_group_extra']) . "'
 					");
+					$user_id=$AVE_DB->InsertId();
+					if(is_uploaded_file($_FILES["avatar"]["tmp_name"]))
+					   {
+						 // Если файл загружен успешно, перемещаем его
+						 // из временной директории в конечную
+						 $newf_n= BASE_DIR.'/'. UPLOAD_DIR.'/avatars/new/'.$_FILES["avatar"]["name"];
+						 move_uploaded_file($_FILES["avatar"]["tmp_name"],$newf_n);
+						 SetAvatar($user_id,$newf_n);
+					   }
 
 					$message = get_settings('mail_new_user');
 					$message = str_replace('%NAME%', $_POST['user_name'], $message);
@@ -547,7 +556,7 @@ class AVE_User
 					header('Location:index.php?do=user&cp=' . SESSION);
 					exit;
 				}
-
+				$row->avatar=getAvatar($user_id,70);
 				$AVE_Template->assign('row', $row);
 				$AVE_Template->assign('user_group_extra', explode(';', $row->user_group_extra));
 
@@ -604,7 +613,15 @@ class AVE_User
 					
 					$times = ($_REQUEST['deleted'] == "1") ? time() : '';
 					
-					
+					if(is_uploaded_file($_FILES["avatar"]["tmp_name"]))
+					   {
+						 // Если файл загружен успешно, перемещаем его
+						 // из временной директории в конечную
+						 $newf_n= BASE_DIR.'/'. UPLOAD_DIR.'/avatars/new/'.$_FILES["avatar"]["name"];
+						 move_uploaded_file($_FILES["avatar"]["tmp_name"],$newf_n);
+						 SetAvatar($user_id,$newf_n);
+					   }
+					   
 					$AVE_DB->Query("
 						UPDATE " . PREFIX . "_users
 						SET

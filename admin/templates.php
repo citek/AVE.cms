@@ -131,7 +131,7 @@ switch ($_REQUEST['action'])
 						" . PREFIX . "_module AS module
 					WHERE
 						rubric.rubric_template_id = '" . $row->Id . "' OR
-						module.Template = '" . $row->Id . "'
+						module.ModuleTemplate = '" . $row->Id . "'
 					LIMIT 1
 				")->NumRows();
 

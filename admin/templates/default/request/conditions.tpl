@@ -35,18 +35,18 @@
 
 		{foreach name=cond from=$afkonditionen item=condition}
 			<tr>
-				<td width="1"><input title="{#REQUEST_MARK_DELETE#}" name="del[{$condition->Id}]" type="checkbox" id="del_{$condition->Id}" value="1" class="float" /></td>
+				<td width="1"><input title="{#REQUEST_MARK_DELETE#}" name="del[{$condition->Id}]" type="checkbox" id="del_{$condition->Id}" value="1" class="toprightDir float" /></td>
 
-				<td width="200">
-					<select name="condition_field_id[{$condition->Id}]" id="Feld_{$condition->Id}" style="width:200px">
+				<td width="300">
+					<select name="condition_field_id[{$condition->Id}]" id="Feld_{$condition->Id}" style="width:300px">
 						{foreach from=$fields item=field}
 							<option value="{$field->Id}" {if $condition->condition_field_id==$field->Id}selected{/if}>{$field->rubric_field_title|escape}</option>
 						{/foreach}
 					</select>
 				</td>
 
-				<td width="200">
-					<select style="width:200px" name="condition_compare[{$condition->Id}]" id="Operator_{$condition->Id}">
+				<td width="300">
+					<select style="width:300px" name="condition_compare[{$condition->Id}]" id="Operator_{$condition->Id}">
 						<option value="==" {if $condition->condition_compare=='=='}selected{/if}>{#REQUEST_COND_SELF#}</option>
 						<option value="!=" {if $condition->condition_compare=='!='}selected{/if}>{#REQUEST_COND_NOSELF#}</option>
 						<option value="%%" {if $condition->condition_compare=='%%'}selected{/if}>{#REQUEST_COND_USE#}</option>
@@ -90,16 +90,16 @@
 		</thead>
 		<tbody>
 		<tr>
-			<td width="200">
-				<select name="Feld_Neu" id="Feld_Neu" style="width:200px">
+			<td width="300">
+				<select name="Feld_Neu" id="Feld_Neu" style="width:300px">
 					{foreach from=$fields item=field}
 						<option value="{$field->Id}">{$field->rubric_field_title|escape}</option>
 					{/foreach}
 				</select>
 			</td>
 
-			<td width="200">
-				<select style="width:200px" name="Operator_Neu" id="Operator_Neu">
+			<td width="300">
+				<select style="width:300px" name="Operator_Neu" id="Operator_Neu">
 					<option value="==" selected>{#REQUEST_COND_SELF#}</option>
 					<option value="!=">{#REQUEST_COND_NOSELF#}</option>
 					<option value="%%">{#REQUEST_COND_USE#}</option>
@@ -134,7 +134,11 @@
 		<tr>
 			<td colspan="4">
 				<input type="submit" value="{#BUTTON_SAVE#}" class="basicBtn" />
-				<input onclick="self.close();" type="button" class="redBtn" value="{#REQUEST_BUTTON_CLOSE#}" />
+				{if $smarty.const.ADMIN_MODAL}
+					<input onclick="parent.$.fancybox.close();" type="button" class="redBtn" value="{#REQUEST_BUTTON_CLOSE#}" />
+				{else}
+					<input onclick="self.close();" type="button" class="redBtn" value="{#REQUEST_BUTTON_CLOSE#}" />
+				{/if}
 			</td>
 		</tr>
 		</tbody>

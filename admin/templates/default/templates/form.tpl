@@ -10,7 +10,7 @@
 {literal}
     <style type="text/css">
       .activeline {background: #e8f2ff !important;}
-      .CodeMirror-scroll {height: 620px;}
+      .CodeMirror-scroll {height: 640px;}
     </style>
 {/literal}
 
@@ -26,7 +26,7 @@
 	<div class="breadCrumb module">
 	    <ul>
 	        <li class="firstB"><a href="index.php" title="{#MAIN_PAGE#}">{#MAIN_PAGE#}</a></li>
-	        <li><a href="index.php?do=templates&amp;cp={$sess}" title="">{#TEMPLATES_SUB_TITLE#}</a></li>
+	        <li><a href="index.php?do=templates&cp={$sess}" title="">{#TEMPLATES_SUB_TITLE#}</a></li>
 			<li><strong class="code">{$row->template_title|escape}{$smarty.request.TempName|escape}</strong></li>
 	    </ul>
 	</div>
@@ -88,7 +88,7 @@
 						<td>
 							<strong><a class="rightDir" title="{#TEMPLATES_THEME_FOLDER#}" href="javascript:void(0);" onclick="textSelection('[tag:theme:',']');">[tag:theme:folder]</a></strong>
 						</td>
-                        <td rowspan="19"><textarea {$read_only} class="{if $php_forbidden==1}tpl_code_readonly{else}{/if}" wrap="off" style="width:100%; height:100%;" name="template_text" id="template_text">{$row->template_text|default:$prefab|escape}</textarea></td>
+                        <td rowspan="21"><textarea {$read_only} class="{if $php_forbidden==1}tpl_code_readonly{else}{/if}" wrap="off" style="width:100%; height:100%;" name="template_text" id="template_text">{$row->template_text|default:$prefab|escape}</textarea></td>
 					</tr>
 
 					<tr>
@@ -127,6 +127,11 @@
 						</td>
 					</tr>
 
+					<tr>
+						<td>
+							<strong><a class="rightDir" title="{#TEMPLATES_CANONICAL#}" href="javascript:void(0);" onclick="textSelection('[tag:canonical]','');">[tag:canonical]</a></strong>
+						</td>
+					</tr>
 					<tr>
 						<td>
 							<strong><a class="rightDir" title="{#TEMPLATES_PATH#}" href="javascript:void(0);" onclick="textSelection('[tag:path]','');">[tag:path]</a></strong>
@@ -185,18 +190,6 @@
 
 					<tr>
 						<td>
-							<strong><a class="rightDir" title="{#TEMPLATES_IF_PRINT#}" href="javascript:void(0);" onclick="textSelection('[tag:if_print]\n','\n[/tag:if_print]');">[tag:if_print][/tag:if_print]</a></strong>
-						</td>
-					</tr>
-
-					<tr>
-						<td>
-							<strong><a class="rightDir" title="{#TEMPLATES_DONOT_PRINT#}" href="javascript:void(0);" onclick="textSelection('[tag:if_notprint]\n','\n[/tag:if_notprint]');">[tag:if_notprint][/tag:if_notprint]</a></strong>
-						</td>
-					</tr>
-
-					<tr>
-						<td>
 							<strong><a class="rightDir" title="{#TEMPLATES_NAVIGATION#}" href="javascript:void(0);" onclick="textSelection('[tag:navigation:]','');">[tag:navigation:XXX]</a></strong>
 						</td>
 					</tr>
@@ -204,6 +197,18 @@
 					<tr>
 						<td>
 							<strong><a class="rightDir" title="{#TEMPLATES_QUICKFINDER#}" href="javascript:void(0);" onclick="textSelection('[mod_quickfinder:]','');">[mod_quickfinder:XXX]</a></strong>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<strong><a class="rightDir" title="{#TEMPLATES_IF_PRINT#}" href="javascript:void(0);" onclick="textSelection('[tag:if_print]\n','\n[/tag:if_print]');">[tag:if_print][/tag:if_print]</a></strong>
+						</td>
+					</tr>
+
+					<tr>
+						<td>
+							<strong><a class="rightDir" title="{#TEMPLATES_DONOT_PRINT#}" href="javascript:void(0);" onclick="textSelection('[tag:if_notprint]\n','\n[/tag:if_notprint]');">[tag:if_notprint][/tag:if_notprint]</a></strong>
 						</td>
 					</tr>
 
@@ -241,7 +246,7 @@
 		{else}
 			<input class="basicBtn" type="submit" value="{#TEMPLATES_BUTTON_SAVE#}" />
 		{/if}
-      	&nbsp;или&nbsp;
+      	{#TEMPLATES_OR#}
 		{if $smarty.request.action=='edit'}
 			<input type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#TEMPLATES_BUTTON_SAVE_NEXT#}" />
 		{else}
@@ -265,7 +270,7 @@
 
 	function Response(){ldelim}
 		$.alerts._overlay('hide');
-		$.jGrowl('{#TEMPLATES_SAVED#}');
+		$.jGrowl('{#TEMPLATES_SAVED#}',{ldelim}theme: 'accept'{rdelim});
 	{rdelim}
 
 	$(document).ready(function(){ldelim}

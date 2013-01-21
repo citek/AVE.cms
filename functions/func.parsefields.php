@@ -22,7 +22,7 @@ function document_pagination($text)
 // FF                     <div style="page-break-after: always;"><span style="display: none;">&nbsp;</span></div>
 	$pages = preg_split('#<div style="page-break-after:[; ]*always[; ]*"><span style="display:[ ]*none[;]*">&nbsp;</span></div>#i', $text);
 	$total_page = @sizeof($pages);
-
+	
 	if ($total_page > 1)
 	{
 		$text = @$pages[get_current_page('artpage')-1];
@@ -37,8 +37,10 @@ function document_pagination($text)
 
 		$text .= rewrite_link($page_nav);
 	}
+	
+	$pages='<?php $GLOBALS[\'page_id\']['.$_REQUEST['id'].'][\'artpage\']='.$total_page.'; ?>';
 
-	return $text;
+	return $pages.$text;
 }
 
 /**
@@ -97,7 +99,7 @@ function document_get_field($field_id)
 			$f_value_end .= '</div>';
 		}
 	}
-	return $f_value.$field_value.$f_value_end;
+	return @$f_value.@$field_value.@$f_value_end;
 }
 
 /**

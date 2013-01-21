@@ -15,11 +15,12 @@
 {/if}
 
 <!-- CSS Files -->
-<link href="{$tpl_dir}/css/combine.php?css=reset.css,login.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="{$tpl_dir}/css/reset.css" rel="stylesheet" type="text/css" media="screen" />
+<link href="{$tpl_dir}/css/login.css" rel="stylesheet" type="text/css" media="screen" />
 <link href="{$tpl_dir}/css/color_{$smarty.const.DEFAULT_THEME_FOLDER_COLOR}.css" rel="stylesheet" type="text/css" media="screen" />
 
 <!-- JS files -->
-<script src="{$tpl_dir}/js/combine.php?js=jquery-1.7.1.js,jquery.transform.js" type="text/javascript"></script>
+{include file='login_scripts.tpl'}
 <script src="{$tpl_dir}/js/login.js" type="text/javascript"></script>
 </head>
 
@@ -62,7 +63,7 @@
         <div class="loginRow">
           <label for="user_login">{#MAIN_LOGIN_NAME#}</label>
           <div class="loginInput">
-            <input type="text" name="user_login" value="{$smarty.request.user_login|escape}">
+            <input type="text" name="user_login" value="{$smarty.request.user_login|escape}" class="loginEmail">
           </div>
           <div class="fix">
           </div>
@@ -70,7 +71,7 @@
         <div class="loginRow">
           <label for="user_pass">{#MAIN_LOGIN_PASSWORD#}</label>
           <div class="loginInput">
-            <input type="password" name="user_pass">
+            <input type="password" name="user_pass" class="loginPassword">
           </div>
           <div class="fix">
           </div>
@@ -85,7 +86,7 @@
           </div>
         </div>
         <div class="loginRow">
-          <label for="securecode">Введите код:</label>
+          <label for="securecode">{#MAIN_LOGIN_CAPTCHA#}</label>
           <div class="loginInput">
             <input name="securecode" type="text" id="securecode"  class="field" autocomplete="off"/>
           </div>
@@ -95,7 +96,7 @@
         {/if}
         <div class="loginRow">
           <div class="rememberMe">
-            <input type="checkbox" id="check2" name="chbox">
+            <input type="checkbox" id="SaveLogin" name="SaveLogin" value="1" />
             <label style="cursor: pointer; ">{#MAIN_LOGIN_REMEMBER#}</label>
           </div>
           <input type="submit" value="{#MAIN_LOGIN_BUTTON#}" class="basicBtn submitForm" style="margin-bottom:14px">
@@ -113,7 +114,7 @@
 </div>
 <div id="footer">
   <div class="wrapper">
-    <span>&copy; Copyright 2012. All rights reserved.</span>
+    <span>{$smarty.const.APP_INFO} | {$smarty.const.APP_NAME} {$smarty.const.APP_VERSION}</span>
   </div>
 </div>
 </body>

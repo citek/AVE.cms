@@ -86,7 +86,7 @@ $(document).ready(function(){ldelim}
 			<tr id="tr{$sysblock->id}">
 				<td class="itcen">{$sysblock->id}</td>
 				<td>
-					<a class="topDir" title="{#SYSBLOCK_EDIT_HINT#}" href="index.php?do=sysblocks&action=edit&cp={$sess}&id={$sysblock->id}">
+					<a class="topDir link" title="{#SYSBLOCK_EDIT_HINT#}" href="index.php?do=sysblocks&action=edit&cp={$sess}&id={$sysblock->id}">
 						<strong>{$sysblock->sysblock_name|escape}</strong>
 					</a>
 				</td>

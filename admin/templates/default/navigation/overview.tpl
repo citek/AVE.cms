@@ -77,7 +77,7 @@ $(document).ready(function(){ldelim}
 			<td>
 				<strong>
 					{if check_permission('navigation_edit')}
-						<a title="{#NAVI_EDIT_ITEMS#}" href="index.php?do=navigation&amp;action=entries&amp;cp={$sess}&amp;id={$item->id}" class="topDir">{$item->navi_titel|escape:html|stripslashes}</a>
+						<a title="{#NAVI_EDIT_ITEMS#}" href="index.php?do=navigation&action=entries&cp={$sess}&id={$item->id}" class="topDir link">{$item->navi_titel|escape:html|stripslashes}</a>
 					{else}
 						{$item->navi_titel|escape:html|stripslashes}
 					{/if}
@@ -86,21 +86,21 @@ $(document).ready(function(){ldelim}
 			<td><div class="pr12"><input type="text" value="[tag:navigation:{$item->id}]" size="15" readonly></div></td>
 			<td width="1%" align="center">
 				{if check_permission('navigation_edit')}
-					<a title="{#NAVI_EDIT_TEMPLATE#}" href="index.php?do=navigation&amp;action=templates&amp;cp={$sess}&amp;id={$item->id}" class="topleftDir icon_sprite ico_template"></a>
+					<a title="{#NAVI_EDIT_TEMPLATE#}" href="index.php?do=navigation&action=templates&cp={$sess}&id={$item->id}" class="topleftDir icon_sprite ico_template"></a>
 				{else}
 					<span title="" class="topleftDir icon_sprite ico_template_no"></span>
 				{/if}
 			</td>
 			<td width="1%" align="center">
 				{if check_permission('navigation_edit')}
-					<a title="{#NAVI_EDIT_ITEMS#}" href="index.php?do=navigation&amp;action=entries&amp;cp={$sess}&amp;id={$item->id}" class="topleftDir icon_sprite ico_navigation"></a>
+					<a title="{#NAVI_EDIT_ITEMS#}" href="index.php?do=navigation&action=entries&cp={$sess}&id={$item->id}" class="topleftDir icon_sprite ico_navigation"></a>
 				{else}
 					<span title="" class="topleftDir icon_sprite ico_navigation_no"></span>
 				{/if}
 			</td>
 			<td width="1%" align="center">
 				{if check_permission('navigation_new')}
-					<a title="{#NAVI_COPY_TEMPLATE#}" href="index.php?do=navigation&amp;action=copy&amp;cp={$sess}&amp;id={$item->id}" class="topleftDir CopyNavi icon_sprite ico_copy"></a>
+					<a title="{#NAVI_COPY_TEMPLATE#}" href="index.php?do=navigation&action=copy&cp={$sess}&id={$item->id}" class="topleftDir CopyNavi icon_sprite ico_copy"></a>
 				{else}
 					<span title="" class="topleftDir icon_sprite ico_copy_no"></span>
 				{/if}
@@ -110,7 +110,7 @@ $(document).ready(function(){ldelim}
 						<span href="javascript:void(0);" class="topleftDir icon_sprite ico_delete_no"></span>
 				{else}
 					{if check_permission('navigation_edit')}
-						<a title="{#NAVI_DELETE#}" dir="{#NAVI_DELETE#}" name="{#NAVI_DELETE_CONFIRM#}" href="index.php?do=navigation&amp;action=delete&amp;cp={$sess}&amp;id={$item->id}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
+						<a title="{#NAVI_DELETE#}" dir="{#NAVI_DELETE#}" name="{#NAVI_DELETE_CONFIRM#}" href="index.php?do=navigation&action=delete&cp={$sess}&id={$item->id}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
 					{else}
 						<span title="" class="topleftDir icon_sprite ico_delete_no"></span>
 					{/if}
@@ -125,7 +125,7 @@ $(document).ready(function(){ldelim}
 		</div>
 		<div id="tab2" class="tab_content" style="display:none;">
 		{if check_permission('navigation_new')}
-			<form id="add_nav" method="post" action="index.php?do=navigation&amp;action=new&amp;cp={$sess}" class="mainForm">
+			<form id="add_nav" method="post" action="index.php?do=navigation&action=new&cp={$sess}" class="mainForm">
 			<div class="rowElem">
 				<label>{#NAVI_TITLE2#}</label>
 				<div class="formRight"><input placeholder="{#NAVI_NAME#}" name="NaviName" type="text" id="NaviName" value="" style="width: 400px">

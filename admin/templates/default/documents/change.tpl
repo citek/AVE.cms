@@ -6,6 +6,7 @@ function ChangeRazd() {ldelim}
 {rdelim}
 </script>
 
+<div class="first"></div>
 
 <div class="title"><h5>{#DOC_CHANGE_TITLE#}</h5></div>
 
@@ -58,7 +59,7 @@ function ChangeRazd() {ldelim}
 			<tr>
 				<td>{$field.title}</td>
 				<td>
-					{html_options name=$Id options=$field.Options selected=$field.Selected style="width:200px"}
+					{html_options name=$Id options=$field.Options selected=$field.Selected}
 				</td>
 			</tr>
 		{/foreach}

@@ -6,6 +6,51 @@
  * @filesource
  */
 
+/**
+ * Возвращаем аватар по пользователю 
+ *
+ * @param int $id Ид пользователя- если не придет то текущий пользователь
+ * @param int $size размер картинки по краю 
+ * @return string путь до файла с превью
+ */
+function getAvatar($id=null,$size=58, $prefix="")
+{
+	global $AVE_DB;
+	static $result=array();
+	
+	if ($id===null) $id=$_SESSION['user_id'];
+	if(!isset($result[$id])){
+		$user=get_user_rec_by_id($id);
+		$ava = ABS_PATH. UPLOAD_DIR .'/avatars/'.(($prefix==="")?"":$prefix).md5($user->user_name);
+		$ava = (file_exists(BASE_DIR.$ava.'.jpg') ? $ava.'.jpg' : (file_exists(BASE_DIR.$ava.'.png') ? $ave.'.png' : (file_exists(BASE_DIR.$ava.'.gif') ? $ava.'.gif' : '')));
+		$result[$id]=$ava;
+	}
+	$ava=$result[$id];
+	$src = (file_exists(BASE_DIR.$ava) ? 
+		make_thumbnail(array('link' => $ava,'size' => 'c'.$size.'x'.$size)):
+		make_thumbnail(array('link' => $AVE_DB->Query("SELECT default_avatar FROM ".PREFIX."_user_groups WHERE user_group=".$user->user_group)->GetCell(),'size' => 'c'.$size.'x'.$size))
+		);
+	return $src;
+}
+
+/**
+ * Устанавливаем аватар пользователю 
+ *
+ * @param int $id Ид пользователя
+ * @param int $ava путь до картинки которая будет автаром 
+ * @return bool установился аватар или нет
+ */
+function SetAvatar($id,$ava){
+	if ($id===null) $id=$_SESSION['user_id'];
+	$user=get_user_rec_by_id($id); 
+	$file_ext=explode('.',basename($ava));
+	$file_ext=$file_ext[count($file_ext)-1];
+	if (!file_exists($ava)) return false;
+	@file_put_contents(BASE_DIR.'/'. UPLOAD_DIR .'/avatars/'.md5($user->user_name).'.'.$file_ext,file_get_contents($ava));
+	@unlink($ava);
+	return true;
+}
+
 // вставляем файл с пользовательскими функциями
 if (file_exists(BASE_DIR."/functions/func.custom.php")) include (BASE_DIR."/functions/func.custom.php");
 
@@ -80,6 +125,7 @@ function rrmdir($dir) {
  * @return string
  */
 function eval2var( $expression ) {
+	global $AVE_DB,$AVE_Core,$AVE_Template;
 	ob_start();
 	eval( $expression );
 	$content = ob_get_clean();
@@ -581,30 +627,9 @@ function translit_string($st)
 //	$st = preg_replace('/&#x([0-9a-f]{1,7});/ei', 'chr(hexdec("\\1"))', $st);
 //	$st = preg_replace('/&#([0-9]{1,7});/e', 'chr("\\1")', $st);
 //
-	$st = strtr($st, array('ье'=>'ye', 'ъе'=>'ye', 'ьи'=>'yi',  'ъи'=>'yi',
-							'ъо'=>'yo', 'ьо'=>'yo', 'ё'=>'yo',   'ю'=>'yu',
-							'я'=>'ya',  'ж'=>'zh',  'х'=>'kh',   'ц'=>'ts',
-							'ч'=>'ch',  'ш'=>'sh',  'щ'=>'shch', 'ъ'=>'',
-							'ь'=>'',    'ї'=>'yi',  'є'=>'ye')
-	);
-	$st = strtr($st,'абвгдезийклмнопрстуфыэі',
-					'abvgdeziyklmnoprstufyei');
 
-	return trim($st, '-');
-}
-
-/**
- * Подготовка URL
- *
- * @param string $st
- * @return string
- */
-function prepare_url($url)
-{
-	$new_url = strip_tags($url);
-
-    $table = array(
-                'А' => 'A',
+	$table=Array(
+	                'А' => 'A',
                 'Б' => 'B',
                 'В' => 'V',
                 'Г' => 'G',
@@ -671,22 +696,102 @@ function prepare_url($url)
                 'э' => 'e',
                 'ю' => 'yu',
                 'я' => 'ya',
-    );
+// українська мова:				
+                'і' => 'ya',				
+                'І' => 'ya',				
+                'ї' => 'ya',				
+                'Ї' => 'ya',				
+                'є' => 'ya',
+                'Є' => 'ya',
 
+// polski język			
+                'Ą' => 'ya',				
+                'ą' => 'ya',				
+                'Ć' => 'ya',				
+                'ć' => 'ya',
+                'Ę' => 'ya',				
+                'ę' => 'ya',				
+                'Ł' => 'ya',				
+                'ł' => 'ya',
+                'Ń' => 'ya',				
+                'ń' => 'ya',				
+                'Ó' => 'ya',				
+                'ó' => 'ya',
+                'Ś' => 'ya',				
+                'ś' => 'ya',				
+                'Ź' => 'ya',				
+                'ź' => 'ya',
+                'Ż' => 'ya',				
+                'ż' => 'ya',	
+
+);
+    $st = str_replace(array_keys($table),  array_values($table), $st); 
+	
+	$st = strtr($st, array('ье'=>'ye', 'ъе'=>'ye', 'ьи'=>'yi',  'ъи'=>'yi',
+							'ъо'=>'yo', 'ьо'=>'yo', 'ё'=>'yo',   'ю'=>'yu',
+							'я'=>'ya',  'ж'=>'zh',  'х'=>'kh',   'ц'=>'ts',
+							'ч'=>'ch',  'ш'=>'sh',  'щ'=>'shch', 'ъ'=>'',
+							'ь'=>'',    'ї'=>'yi',  'є'=>'ye')
+	);
+	$st = strtr($st,'абвгдезийклмнопрстуфыэі',
+					'abvgdeziyklmnoprstufyei');
+
+	return trim($st, '-');
+}
+
+/**
+ * Подготовка текста через API Яндекса
+ *
+ * @param string $st
+ * @return string
+ */
+function y_translate($text) {
+	include_once BASE_DIR.'/lib/translate/Yandex_Translate.php';
+	$translator = new Yandex_Translate();
+	$translatedText = $translator->yandexTranslate('ru', 'en', $text);
+	$translatedText = strtolower($translatedText);
+	$translatedText = preg_replace(
+		array('/^[\/-]+|[\/-]+$|^[\/_]+|[\/_]+$|[^\.a-zа-яеёA-ZА-ЯЕЁ0-9\/_-]/u', '/--+/', '/-*\/+-*/', '/\/\/+/'),
+		array('-',                                                      '-',     '/',         '/'),
+		$translatedText
+	);
+	return $translatedText;
+}
+
+/**
+ * Подготовка URL
+ *
+ * @param string $st
+ * @return string
+ */
+function prepare_url($url)
+{
+	$new_url = strip_tags($url);
+
+    $table = array(
+
+// спецсимволы
+                '«' => '',				
+                '»' => '',
+                '—' => '',
+                '–' => '',
+                '“' => '',
+                '”' => ''
+				
+    );
     $new_url = str_replace(array_keys($table),  array_values($table), $new_url); 
-    
 	if (defined('TRANSLIT_URL') && TRANSLIT_URL) $new_url = translit_string(trim(strtolower($new_url)));
 
 	$new_url = preg_replace(
-		array('/^[\/-]+|[\/-]+$|^[\/_]+|[\/_]+$|[^\.a-zа-яA-ZА-Я0-9\/_-]/', '/--+/', '/-*\/+-*/', '/\/\/+/'),
-		array('-',                                                      '-',     '/',         '/'),
+		array('/^[\/-]+|[\/-]+$|^[\/_]+|[\/_]+$|[^\.a-zа-яеёA-ZА-ЯЕЁ0-9\/_-]/u', '/--+/', '/-*\/+-*/', '/\/\/+/'),
+		array('-',                                                          '-',     '/',         '/'),
 		$new_url
 	);
 	$new_url = trim($new_url, '-');
 
 	if (substr(URL_SUFF, 0, 1) != '/' && substr($url, -1) == '/') $new_url = $new_url . "/";
 	
-	return $new_url;
+	return rtrim($new_url,'.');
 }
 
 /**
@@ -808,7 +913,11 @@ function get_document_fields($document_id,$values=null)
 					ON doc.Id = doc_field.document_id
 			" . $where
 		,-1,'doc_'.$document_id);
-
+		//Вдруг памяти мало!!!!
+		if(memory_panic()&&(count($document_fields)>3))
+			{
+				$document_fields=array();
+			}	
 		while ($row = $sql->FetchAssocArray())
 		{
 			$row['tpl_req_empty'] = (trim($row['rubric_field_template_request']) == '');
@@ -916,6 +1025,33 @@ function get_user_rec_by_id($id){
 
 }
 
+/**
+ * Возвращает запись из юзерс групс по идентификатору
+ * не делает лишних запросов
+ *
+ * @param int $id - идентификатор группы
+ * @return string
+ */
+
+function get_usergroup_rec_by_id($id){
+	global $AVE_DB;
+
+	static $usergroups = array();
+
+	if (!isset($usergroups[$id]))
+	{
+		$row = $AVE_DB->Query("
+			SELECT
+				*
+			FROM " . PREFIX . "_user_groups
+			WHERE user_group = '" . (int)$id . "'
+		")->FetchRow();
+
+		$usergroups[$id] = $row;
+	}
+	return $usergroups[$id];
+
+}
 
 /**
  * Возвращает имя пользователя по его идентификатору
@@ -928,6 +1064,20 @@ function get_userlogin_by_id($id)
 	$rec=get_user_rec_by_id($id);
 	
 	return $rec->user_name;
+}
+
+
+/**
+ * Возвращает имя группы пользователя по его идентификатору
+ *
+ * @param int $id - идентификатор группы пользователя
+ * @return string
+ */
+function get_usergroup_by_id($id)
+{
+	$rec=get_usergroup_rec_by_id($id);
+	
+	return $rec->user_group_name;
 }
 
 /**
@@ -1099,23 +1249,28 @@ function get_country_list($status = '')
 
 /**
  * Получение списка изображений из заданной папки
- **/
+ * @param $path путь до директории с изображениями
+ * @return array
+ */
 function image_multi_import($path) {
-	
+	$images_ext =  array('jpg', 'jpeg', 'png', 'gif');
 	$dir = BASE_DIR."/".$path;
+
 	if($handle = opendir($dir))
 	{
 		while (false !== ($file = readdir($handle)))
 		{
-			if ($file != "." && $file != "..")
+			$nameParts = explode('.', $file);
+			$ext = strtolower(end($nameParts));
+
+			if ($file != "." && $file != ".." && $ext == "png" || $ext == "jpg" || $ext == "gif")
 			{
 			  if(!is_dir($dir."/".$file))
 				$files[] = $file;
 			}
 		}
 		closedir($handle);
-	} 
-	
+	}
 	return $files;
 }
 
@@ -1333,11 +1488,11 @@ function make_thumbnail($params)
 	{
 		$size = $params['size'];
 
-		if (!preg_match('/^[r|c|f]\d+x\d+r*$/', $size)) return;
+		if (!preg_match('/^[r|c|f|t]\d+x\d+r*$/', $size)) return;
 	}
 	else
 	{
-		$size = 'r120x0';
+		$size = 't128x128';
 	}
 
 	$nameParts = explode('.', basename($params['link']));
@@ -1408,7 +1563,7 @@ function _var($var,$echo=false)
 /**
  * Функция записывает в указанную папку .htaccess с содержанием "Deny from all"
  *
- * @param string $dir путь
+ * @return bool превышение лимита использования памяти
  */
 function write_htaccess_deny($dir)
 {
@@ -1418,5 +1573,24 @@ function write_htaccess_deny($dir)
 		if(!is_dir($dir)) @mkdir($dir);
 		@file_put_contents($dir . '/.htaccess','Deny from all');
 	}
+}
+
+/**
+ * Функция которая паникует если приблизились к мемори лимит
+ *
+ * @param string $dir путь
+ */function memory_panic(){
+	if(defined('MEMORY_LIMIT_PANIC')&&MEMORY_LIMIT_PANIC!=-1){
+		$use_mem=memory_get_usage();
+		$lim=MEMORY_LIMIT_PANIC*1024*1024;
+		return ($use_mem>$lim ? true : false);
+	}	
+	else 
+	return false;
+}
+
+function canonical($url) { 
+	$link = preg_replace('/^(.+?)(\?.*?)?(#.*)?$/', '$1$3', $url);
+return $link;
 }
 ?>

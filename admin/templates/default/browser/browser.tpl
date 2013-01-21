@@ -13,11 +13,15 @@
 	<meta name="Expires" content="Mon, 06 Jan 1990 00:00:01 GMT">
 
 	<!-- CSS Files -->
-	<link href="{$tpl_dir}/css/combine.php?css=reset.css,main.css,data_table.css,jquery-ui_custom.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/reset.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/main.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/data_table.css" rel="stylesheet" type="text/css" media="screen" />
+	<link href="{$tpl_dir}/css/jquery-ui_custom.css" rel="stylesheet" type="text/css" media="screen" />
 	<link href="{$tpl_dir}/css/color_{$smarty.const.DEFAULT_THEME_FOLDER_COLOR}.css" rel="stylesheet" type="text/css" media="screen" />
 	<link href="{$tpl_dir}/css/browser.css" rel="stylesheet" type="text/css" media="screen" />
+	
 	<!-- JS files -->
-	<script src="{$tpl_dir}/js/combine.php?js=jquery-1.7.1.js,jquery-ui.min.js,jquery.form.js,jquery.transform.js,jquery.jgrowl.js,jquery.alerts.js,jquery.tipsy.js,jquery.totop.js,jquery.filestyle.js,jquery.collapsible.min.js,jquery.dataTables.js,jquery-ui-time.js,jquery.placeholder.min.js,jquery.cookie.js" type="text/javascript"></script>
+	{include file="../scripts.tpl"}
 	<script src="{$tpl_dir}/js/main.js" type="text/javascript"></script>
 
 	<!-- JS Scripts -->
@@ -64,7 +68,7 @@ parent.document.bForm.bDirName.value='{$dir}';
 
 
 {foreach from=$files item=file key=file_name}
-<div class="imageBlock0">
+<div class="imageBlock0" onClick="javascript:fileAction('{$file_name}', 'select');">
 	<div class="imageBlock1">
 		<div class="mb_icon_file"><img src="{$tpl_dir}/images/mediapool/{$file.icon}.gif" alt="" border="0" /></div>
 		{if !$recycled}
@@ -79,11 +83,9 @@ parent.document.bForm.bDirName.value='{$dir}';
 
 		<div class="imageBlock" align="center">
 			{if $recycled}
-				<img src="{$file.bild}" alt="" border="0" width="{$max_size}" height="{$max_size}" />
+				<img src="{$file.bild}" alt="" border="0" />
 			{else}
-				<a href="javascript:;" onClick="javascript:fileAction('{$file_name}', 'select');">
-					<img class="topDir" title="Выбрать файл" src="{$file.bild}" alt="" border="0" width="{$max_size}" height="{$max_size}" />
-				</a>
+				<div><img src="{$file.bild}" alt="" border="0" /></div>
 			{/if}
 		</div>
 
@@ -119,11 +121,15 @@ $(document).ready(function(){
 		}
 	});
 
-	$('#insertImage').click(function(){
-		$('.imageBlockAct').trigger('dblclick');
-		Window.close();
+	//Дв.Клик на файле
+	$('.imageBlock0').live('dblclick', function(){
+		parent.window.submitTheForm();
 	});
 
+	$('#insertImage').click(function(){
+		$('.imageBlock0').trigger('dblclick');
+		Window.close();
+	});
 
 	$('.imageBlock0').live('click', function(){
 		if(ctrlState) {
@@ -140,7 +146,6 @@ $(document).ready(function(){
 			$(this).addClass('imageBlockAct');
 		}
 	});
-
 
 	$(this).blur(function(event){
 		ctrlState = false;

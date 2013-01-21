@@ -471,7 +471,7 @@ class AVE_Request
 
 				// Нет смысла каждый раз формировать SQL-запрос с условиями Запроса
 				// поэтому формируем SQL-запрос только при изменении условий
-				require(BASE_DIR . '/functions/func.parserequest.php');
+				// require(BASE_DIR . '/functions/func.parserequest.php');
 				request_get_condition_sql_string($request_id);
 
 				// Выполняем обновление страницы

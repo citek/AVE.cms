@@ -65,6 +65,7 @@ class AVE_Rubric
 				" . PREFIX . "_documents AS doc
 					ON rubric_id = rub.Id
 			GROUP BY rub.Id
+			ORDER BY rub.rubric_position
 			LIMIT " . $set_start . "," . $page_limit
 		);
 		while ($row = $sql->FetchRow())
@@ -110,7 +111,7 @@ class AVE_Rubric
 
 					if (!empty($_POST['rubric_alias']))
 					{
-						if (preg_match(TRANSLIT_URL ? '/[^\%HYa-z0-9\/-]+/' : '/[^\%HYa-zа-яёїєі0-9\/-]+/', $_POST['rubric_alias']))
+						if (preg_match(TRANSLIT_URL ? '/[^\%HYa-z0-9\/-]+/' : '/[^\%HYa-zа-яА-Яёїєі0-9\/-]+/u', $_POST['rubric_alias']))
 						{
 							array_push($errors, $AVE_Template->get_config_vars('RUBRIK_PREFIX_BAD_CHAR'));
 						}
@@ -213,7 +214,7 @@ class AVE_Rubric
 
 					if (isset($_POST['rubric_alias'][$rubric_id]) && $_POST['rubric_alias'][$rubric_id] != '')
 					{
-						$pattern = TRANSLIT_URL ? '/[^\%HYa-z0-9\/-]+/' : '/[^\%HYa-zа-яёїєі0-9\/-]+/';
+						$pattern = TRANSLIT_URL ? '/[^\%HYa-z0-9\/-]+/' : '/[^\%HYa-zа-яА-Яёїєі0-9\/-]+/u';
 						if (!(preg_match($pattern, $_POST['rubric_alias'][$rubric_id])))
 						{
 							$prefix_exist = $AVE_DB->Query("
@@ -243,7 +244,8 @@ class AVE_Rubric
 							" . $set_rubric_title . "
 							" . $set_rubric_alias . "
 							rubric_template_id = '" . $_POST['rubric_template_id'][$rubric_id] . "',
-							rubric_docs_active = '".(int)$_POST['rubric_docs_active'][$rubric_id]."'
+							rubric_docs_active = '".(int)$_POST['rubric_docs_active'][$rubric_id]."',
+							rubric_position = '".(int)$_POST['rubric_position'][$rubric_id]."'
 						WHERE
 							Id = '" . $rubric_id . "'
 					");
@@ -326,7 +328,8 @@ class AVE_Rubric
 					rubric_author_id   = '" . (int)$_SESSION['user_id'] . "',
 					rubric_created     = '" . time() . "',
 					rubric_teaser_template    = '" . addslashes($row->rubric_teaser_template) . "',
-					rubric_header_template    = '" . addslashes($row->rubric_header_template) . "'
+					rubric_header_template    = '" . addslashes($row->rubric_header_template) . "',
+					rubric_admin_teaser_template    = '" . addslashes($row->rubric_admin_teaser_template) . "'
 			");
 			$iid = $AVE_DB->InsertId();
 
@@ -480,7 +483,7 @@ class AVE_Rubric
 			array_push($groups,$row);
 		}
 		$sql = $AVE_DB->Query("
-			SELECT rubric_title, rubric_code_start, rubric_code_end
+			SELECT rubric_title, rubric_code_start, rubric_code_end, rubric_linked_rubric, rubric_description
 			FROM " . PREFIX . "_rubrics
 			WHERE id = '" . $rubric_id . "'
 			LIMIT 1
@@ -489,7 +492,44 @@ class AVE_Rubric
 		$AVE_Template->assign('rubric', $rubrik);
 		$AVE_Template->assign('groups', $groups);
 		$AVE_Template->assign('felder', get_field_type());
+		$AVE_Template->assign('rubs', $this->rubricShow());
 		$AVE_Template->assign('content', $AVE_Template->fetch('rubs/rub_fields.tpl'));
+	}
+
+	/**
+	 * Вывод списка рубрик
+	 *
+	 * @param int $rubric_id	идентификатор текущей рубрики
+	 */
+	function rubricShow($RubLink=0)
+	{
+		global $AVE_DB;
+
+		if ($RubLink) {			
+			$AVE_DB->Query("
+				UPDATE " . PREFIX . "_rubrics
+				SET
+					rubric_linked_rubric = '" . $RubLink . "'
+				WHERE
+					Id = '" . (int)$_REQUEST['Id'] . "'
+			");
+			header('Location:index.php?do=rubs&action=edit&Id=' . (int)$_REQUEST['Id'] . '&cp=' . SESSION);
+			exit;
+		} else {
+			$rubs = array();
+			$sql = $AVE_DB->Query("
+				SELECT rubric_title, Id
+				FROM " . PREFIX . "_rubrics
+				ORDER BY rubric_position ASC
+			");
+
+			while ($row = $sql->FetchRow())
+			{
+				array_push($rubs,$row);
+			}
+
+			return $rubs;
+		}
 	}
 
 	/**
@@ -564,6 +604,26 @@ class AVE_Rubric
 					SET
 						rubric_code_start           = '" . $_POST['rubric_code_start'] . "',
 						rubric_code_end             = '" . $_POST['rubric_code_end'] . "'
+					WHERE
+						Id = '" . $rubric_id . "'
+		");
+
+		header('Location:index.php?do=rubs&action=edit&Id=' . $rubric_id . '&cp=' . SESSION);
+		exit;
+	}
+	/**
+	 * Редактирование кода для рубрики
+	 *
+	 * @param int $rubric_id	идентификатор рубрики
+	 */
+	function rubricDesc($rubric_id = 0)
+	{
+		global $AVE_DB;
+
+		$AVE_DB->Query("
+					UPDATE " . PREFIX . "_rubrics
+					SET
+						rubric_description           = '" . $_POST['rubric_description'] . "'
 					WHERE
 						Id = '" . $rubric_id . "'
 		");
@@ -671,7 +731,9 @@ class AVE_Rubric
 				rubric_title,
 				rubric_template,
 				rubric_header_template,
-				rubric_teaser_template
+				rubric_teaser_template,
+				rubric_admin_teaser_template,
+				rubric_description
 			FROM " . PREFIX . "_rubrics
 			WHERE Id = '" . $fetchId . "'
 		")
@@ -717,7 +779,7 @@ class AVE_Rubric
 	 *
 	 * @param string $data
 	 */
-	function rubricTemplateSave($Rtemplate,$Htemplate='',$Ttemplate='')
+	function rubricTemplateSave($Rtemplate,$Htemplate='',$Ttemplate='',$Atemplate='')
 	{
 		global $AVE_DB;
 
@@ -726,9 +788,10 @@ class AVE_Rubric
 		$AVE_DB->Query("
 			UPDATE " . PREFIX . "_rubrics
 			SET 
-				rubric_template = '" . $Rtemplate . "',
+				rubric_template = '" . ($Rtemplate) . "',
 				rubric_header_template = '" . $Htemplate . "',
-				rubric_teaser_template = '" . $Ttemplate . "'
+				rubric_teaser_template = '" . $Ttemplate . "',
+				rubric_admin_teaser_template = '" . $Atemplate . "'
 			WHERE Id = '" . $rubric_id . "'
 		");
 		// Очищаем кэш шаблона документов рубрики
@@ -833,8 +896,10 @@ class AVE_Rubric
 		$sql = $AVE_DB->Query("
 			SELECT
 				Id,
-				rubric_title
+				rubric_title,
+				rubric_docs_active
 			FROM " . PREFIX . "_rubrics
+			ORDER BY rubric_position
 		");
 		while ($row = $sql->FetchRow())
 		{

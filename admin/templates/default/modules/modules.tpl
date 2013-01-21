@@ -33,9 +33,9 @@ $(document).ready(function(){ldelim}
 </div>
 
 {if $errors}
-	<ul class="infobox_error">
+	<ul class="messages first">
 		{foreach from=$errors item=message}
-			<li>{$message}</li>
+			<li class="highlight red minmarg">{$message}</li>
 		{/foreach}
 	</ul>
 {/if}
@@ -82,12 +82,12 @@ $(document).ready(function(){ldelim}
 		{if $module->mod_permission}
 			<tr>
 				<td align="center">
-					<a title="<strong>{$module->name}</strong><br />{$module->info|escape|default:''}" href="javascript:void(0);" style="cursor:help;" class="rightDir icon_sprite ico_info"></a>
+					<a title="<strong>{$module->name}</strong><br /><br />{$module->info|escape|default:''}" href="javascript:void(0);" style="cursor:help;" class="rightDir icon_sprite ico_info"></a>
 				</td>
 
 				<td nowrap="nowrap">
 					{if $module->adminedit && $module->status}
-						<strong><a href="index.php?do=modules&action=modedit&mod={$module->path}&moduleaction=1&cp={$sess}" title="{#MODULES_SETUP#}" class="toprightDir docname">{$module->name}</a></strong>
+						<strong><a href="index.php?do=modules&action=modedit&mod={$module->path}&moduleaction=1&cp={$sess}" title="{#MODULES_SETUP#}" class="toprightDir link">{$module->name}</a></strong>
                         {if $module->taglink != ""}<br /><span class="dgrey doclink">{$module->taglink}</span>{/if}
 					{else}
 						<strong>{$module->name}</strong>
@@ -109,28 +109,28 @@ $(document).ready(function(){ldelim}
 
 				<td>{if $module->tag != ""}<input readonly type="text" value="{$module->tag|stripslashes|default:'&nbsp;'}" style="width: 150px;" />{/if}</td>
 
-				<td align="center" class="webStatsLink">{$module->version|escape|default:''}</td>
+				<td align="center"><span class="cmsStats">{$module->version|escape|default:''}</span></td>
 
 				{if $permission_modules_admin}
 					<td align="center" width="20">
 						{if $module->status}
-							<a title="{#MODULES_STOP#}" href="index.php?do=modules&amp;action=onoff&amp;module={$module->path}&amp;cp={$sess}" class="topDir icon_sprite ico_stop"></a>
+							<a title="{#MODULES_STOP#}" href="index.php?do=modules&action=onoff&module={$module->path}&cp={$sess}" class="topDir icon_sprite ico_stop"></a>
 						{else}
-							<a title="{#MODULES_START#}" href="index.php?do=modules&amp;action=onoff&amp;module={$module->path}&amp;cp={$sess}" class="topDir icon_sprite ico_start"></a>
+							<a title="{#MODULES_START#}" href="index.php?do=modules&action=onoff&module={$module->path}&cp={$sess}" class="topDir icon_sprite ico_start"></a>
 						{/if}
 					</td>
 
 					<td align="center" width="20">
 						{if $module->status}
-							<a title="{#MODULES_REINSTALL#}" href="index.php?do=modules&amp;action=reinstall&amp;module={$module->path}&amp;cp={$sess}" class="topleftDir ConfirmReInstall icon_sprite ico_reinstall"></a>
+							<a title="{#MODULES_REINSTALL#}" href="index.php?do=modules&action=reinstall&module={$module->path}&cp={$sess}" class="topleftDir ConfirmReInstall icon_sprite ico_reinstall"></a>
 						{else}
-							<a title="{#MODULES_DELETE#}" dir="{#MODULES_DELETE#}" name="{#MODULES_DELETE_CONFIRM#}" href="index.php?do=modules&amp;action=delete&amp;module={$module->path}&amp;cp={$sess}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
+							<a title="{#MODULES_DELETE#}" dir="{#MODULES_DELETE#}" name="{#MODULES_DELETE_CONFIRM#}" href="index.php?do=modules&action=delete&module={$module->path}&cp={$sess}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
 						{/if}
 					</td>
 
 					<td align="center" width="20">
 						{if $module->need_update}
-							<a title="{#MODULES_UPDATE#}" href="index.php?do=modules&amp;action=update&amp;module={$module->path}&amp;cp={$sess}" class="topleftDir icon_sprite ico_globus"></a>
+							<a title="{#MODULES_UPDATE#}" href="index.php?do=modules&action=update&module={$module->path}&cp={$sess}" class="topleftDir icon_sprite ico_globus"></a>
 						{else}
 							<span title="" class="topleftDir icon_sprite ico_blanc"></span>
 						{/if}
@@ -178,16 +178,14 @@ $(document).ready(function(){ldelim}
 
 </div>
 
-<div id="tab2" class="tab_content" style="display: none; ">
+<div id="tab2" style="display: none;" class="tab_content">
 
 {if $not_installed_modules}
-<form class="mainForm">
-<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic mainForm">
 	<thead>
 		<tr>
 			<td width="30">?</td>
 			<td>{#MODULES_NAME#}</td>
-			<td width="200">{#MODULES_TEMPLATE#}</td>
 			<td width="150">{#MODULES_SYSTEM_TAG#}</td>
 			<td width="50">{#MODULES_VERSION#}</td>
 			{if $permission_modules_admin}
@@ -203,14 +201,8 @@ $(document).ready(function(){ldelim}
 					<a title="<strong>{$module->name}</strong><br />{$module->info|escape|default:''}" href="javascript:void(0);" style="cursor: help;" class="rightDir icon_sprite ico_info_no"></a>
 				</td>
 
-				<td>{if $module->adminedit}<strong>{$module->name}</strong>{else}{$module->name}{/if}{if $module->taglink != ""}<br /><span class="dgrey doclink">{$module->taglink}</span>{/if}</td>
-
 				<td>
-					{if $module->template}
-						<select style="width: 200px;" disabled="disabled"><option>{$all_templates[1]}</option></select>
-					{else}
-						&nbsp;
-					{/if}
+					{if $module->adminedit}<strong>{$module->name}</strong>{else}{$module->name}{/if}{if $module->taglink != ""}<br /><span class="dgrey dotted">{$module->taglink}</span>{/if}
 				</td>
 
 				<td>{if $module->tag != ""}<input readonly type="text" value="{$module->tag|stripslashes|default:'&nbsp;'}" style="width: 150px;" />{/if}</td>
@@ -219,17 +211,17 @@ $(document).ready(function(){ldelim}
 
 				{if $permission_modules_admin}
 					<td align="center" width="20">
-						<a title="{#MODULES_INSTALL#}" href="index.php?do=modules&amp;action=install&amp;module={$module->path}&amp;cp={$sess}" class="topDir icon_sprite ico_install"></a>
+						<a title="{#MODULES_INSTALL#}" href="index.php?do=modules&action=install&module={$module->path}&cp={$sess}" class="topDir icon_sprite ico_install"></a>
 					</td>
-
-					<td align="center" width="20"><span title="" class="topleftDir icon_sprite ico_delete_no"></span></td>
+					<td align="center" width="20">
+						<a title="{#MODULES_REMOVE#}" href="index.php?do=modules&action=remove&module={$module->path}&cp={$sess}" class="topleftDir icon_sprite ico_delete"></a>
+					</td>
 				{/if}
 			</tr>
 		{/if}
 	{/foreach}
                         </tbody>
                     </table>
-</form>
 {else}
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 	<thead>

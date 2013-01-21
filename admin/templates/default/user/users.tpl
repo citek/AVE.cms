@@ -88,27 +88,39 @@ $(document).ready(function(){ldelim}
 		<div id="tab1" class="tab_content" style="display: block;">
 
 	{if !$users}
-		<ul class="messages">
+		<ul class="messages first">
 			<li class="highlight red"><strong>Ошибка:</strong> {#USER_LIST_EMPTY#}</li>
 		</ul>
 	{else}
 
 	{if check_permission('user_edit')}
-		<form method="post" action="index.php?do=user&amp;cp={$sess}&amp;action=quicksave" class="mainForm">
+		<form method="post" action="index.php?do=user&cp={$sess}&action=quicksave" class="mainForm">
 	{/if}
 
 
 
 			<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+	<col width="20">
+	<col width="20">
+	<col width="50">
+	<col>
+	<col width="220">
+	<col width="150">
+	<col width="150">
+	<col width="16">
+	<col width="16">
+	<col width="16">
+	<col width="16">
 				<thead>
                 	<tr>
-			<td width="30">{#USER_ID#}</td>
-			<td width="30">-</td>
+			<td>{#USER_ID#}</td>
+			<td>-</td>
+			<td>{#USER_AVATAR#}</td>
 			<td>{#USER_NAME#}</td>
-			<td width="250">{#USER_GROUP#}</td>
-			<td width="150">{#USER_LAST_VISIT#}</td>
-			<td width="150">{#USER_REGISTER_DATE#}</td>
-			<td colspan="4" width="80"><div align="center">{#USER_ACTION#}</div></td>
+			<td>{#USER_GROUP#}</td>
+			<td>{#USER_LAST_VISIT#}</td>
+			<td>{#USER_REGISTER_DATE#}</td>
+			<td colspan="4"><div align="center">{#USER_ACTION#}</div></td>
                     </tr>
 				</thead>
 				<tbody>
@@ -118,10 +130,11 @@ $(document).ready(function(){ldelim}
 		{foreach from=$users item=user}
 			<tr>
 				<td align="center">{$user->Id}</td>
-				<td align="center"><input title="{#USER_MARK_DELETE#}"  name="del[{$user->Id}]" type="checkbox" id="del[{$user->Id}]" value="1" {if !check_permission('user_loesch') || $user->user_group==1 || $user->Id==$smarty.session.user_id}disabled="disabled"{/if} /></td>
+				<td align="center"><input title="{#USER_MARK_DELETE#}" class="topDir" name="del[{$user->Id}]" type="checkbox" id="del[{$user->Id}]" value="1" {if !check_permission('user_loesch') || $user->user_group==1 || $user->Id==$smarty.session.user_id}disabled="disabled"{/if} /></td>
+				<td align="center">{if $user->avatar}<img src="{$user->avatar}" class="rounded">{/if}</td>
 				<td>
 					{if check_permission('user_edit')}
-						<a title="{#USER_EDIT#}" href="index.php?do=user&amp;action=edit&amp;Id={$user->Id}&amp;cp={$sess}" class="topDir docname">
+						<a title="{#USER_EDIT#}" href="index.php?do=user&action=edit&Id={$user->Id}&cp={$sess}" class="topDir link">
 					{/if}
 					<strong>{$user->user_name|escape}{if $user->firstname && $user->lastname} ({$user->firstname|escape} {$user->lastname|escape}){/if}</strong>
 					{if check_permission('user_edit')}</a>{/if}<br /><small>{$user->email|escape} (IP:{$user->reg_ip|escape})</small>
@@ -142,7 +155,7 @@ $(document).ready(function(){ldelim}
 				</td>
 
 				<td align="center">
-					{if $user->status}
+					{if $user->status AND $user->last_visit>0}
 						<span class="date_text dgrey">{$user->last_visit|date_format:$TIME_FORMAT|pretty_date}</span>
 					{else}
 						-
@@ -153,7 +166,7 @@ $(document).ready(function(){ldelim}
 
 				<td nowrap="nowrap" align="center" width="20">
 					{if check_permission('user_edit')}
-						<a title="{#USER_EDIT#}" href="index.php?do=user&amp;action=edit&amp;Id={$user->Id}&amp;cp={$sess}" class="topDir icon_sprite ico_edit"></a>
+						<a title="{#USER_EDIT#}" href="index.php?do=user&action=edit&Id={$user->Id}&cp={$sess}" class="topDir icon_sprite ico_edit"></a>
 					{else}
 						<a title="{#USER_NO_CHANGE#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_edit_no"></a>
 					{/if}
@@ -162,7 +175,7 @@ $(document).ready(function(){ldelim}
 				<td nowrap="nowrap" align="center" width="20">
 					{if $user->Id != 1}
 						{if check_permission('user_loesch') && $user->Id!=$smarty.session.user_id}
-							<a title="{#USER_DELETE#}" dir="{#USER_DELETE#}" name="{#USER_DELETE_CONFIRM#}" href="index.php?do=user&amp;action=delete&amp;Id={$user->Id}&amp;cp={$sess}" class="topDir ConfirmDelete icon_sprite ico_delete"></a>
+							<a title="{#USER_DELETE#}" dir="{#USER_DELETE#}" name="{#USER_DELETE_CONFIRM#}" href="index.php?do=user&action=delete&Id={$user->Id}&cp={$sess}" class="topDir ConfirmDelete icon_sprite ico_delete"></a>
 						{else}
 							<span title="" class="topleftDir icon_sprite ico_delete_no"></span>
 						{/if}
@@ -203,7 +216,7 @@ $(document).ready(function(){ldelim}
 		</div>
 
 		<div id="tab2" class="tab_content" style="display: none;">
-			<form id="add_user" method="post" action="index.php?do=user&amp;action=new&amp;cp={$sess}" class="mainForm">
+			<form id="add_user" method="post" action="index.php?do=user&action=new&cp={$sess}" class="mainForm">
 			<div class="rowElem">
 				<label>{#USER_FIRSTNAME_ADD#}</label>
 				<div class="formRight"><input placeholder="{#USER_NAME2#}" name="user_name" type="text" id="user_name" value="" style="width: 400px">

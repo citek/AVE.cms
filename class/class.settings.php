@@ -74,8 +74,8 @@ class AVE_Settings
 	 */
 	function settingsCase() 	{
 		 global $AVE_Template;
-		 if ($_REQUEST['dop']) {
-			$set='<?';
+		 if (@$_REQUEST['dop']) {
+			$set='<?php';
 			foreach($_REQUEST['GLOB'] as $k=>$v){
 				switch ($GLOBALS['CMS_CONFIG'][$k]['TYPE']) {
 						case 'bool' : $v=$v ? 'true' : 'false'; break;
@@ -84,12 +84,13 @@ class AVE_Settings
 						case 'dropdown' : $v="'".add_slashes($v)."'";break;
 						default : $v="'".add_slashes($v)."'";break;
 				}
-				$set.="	//".$GLOBALS['CMS_CONFIG'][$k]['DESCR']."\r\n";
+				$set.="
+				//".$GLOBALS['CMS_CONFIG'][$k]['DESCR']."\r\n";
 				$set.="	define('".$k."',".$v.");\r\n\r\n";
 			}
 			$set.='?>';
 			file_put_contents(BASE_DIR.'/inc/config.inc.php',$set);
-			reportLog($_SESSION['user_name'] . " - изменил дополнительные настройки системы", 2, 2);
+			reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('SETTINGS_SAVE_DOP'), 2, 2);
  		}
 		$AVE_Template->assign('CMS_CONFIG',$GLOBALS['CMS_CONFIG']);
 		$AVE_Template->assign('content', $AVE_Template->fetch('settings/settings_case.tpl'));
@@ -149,7 +150,7 @@ class AVE_Settings
 				Id = 1
 		");
 		
-		//reportLog($_SESSION['user_name'] . " - изменил общие настройки системы", 2, 2);
+		reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('SETTINGS_SAVE_MAIN'), 2, 2);
 		//header('Location:index.php?do=settings&clear=1&cp=' . SESSION);
 		exit;
 	}
@@ -194,7 +195,7 @@ class AVE_Settings
 	 */
 	function settingsCountriesSave()
 	{
-		global $AVE_DB;
+		global $AVE_DB, $AVE_Template;
 
 		foreach ($_POST['country_name'] as $id => $country_name)
 		{
@@ -208,6 +209,8 @@ class AVE_Settings
 					Id = '" . $id . "'
 			");
 		}
+
+		reportLog($_SESSION['user_name'] . " - " . $AVE_Template->get_config_vars('SETTINGS_SAVE_COUNTRY'), 2, 2);
 	}
 }
 

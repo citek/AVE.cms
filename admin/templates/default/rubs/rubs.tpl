@@ -64,9 +64,10 @@ $(document).ready(function(){ldelim}
 <strong>%d-%m-%Y</strong> - {#RUBRIK_FORMAT_TIME#}<br />
 <strong>%id</strong> - {#RUBRIK_FORMAT_ID#}
 </div>
-<form class="mainForm" method="post" action="index.php?do=rubs&amp;cp={$sess}&amp;sub=quicksave{if $smarty.request.page!=''}&amp;page={$smarty.request.page|escape}{/if}">
+<form class="mainForm" method="post" action="index.php?do=rubs&cp={$sess}&sub=quicksave{if $smarty.request.page!=''}&page={$smarty.request.page|escape}{/if}">
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 	<col width="20">
+	<col width="60">
 	<col>
 	<col width="200">
 	<col width="200">
@@ -79,18 +80,26 @@ $(document).ready(function(){ldelim}
 	<thead>
 	<tr>
 		<td>{#RUBRIK_ID#}</td>
+		<td>{#RUBRIK_POSITION#}</td>
 		<td>{#RUBRIK_NAME#}</td>
 		<td>{#RUBRIK_URL_PREFIX#}</td>
 		<td>{#RUBRIK_TEMPLATE_OUT#}</td>
 		<td align="center">{#RUBRIK_COUNT_DOCS#}</td>
-		<td align="center"><div align="center"><a href="javascript:void(0);" class="topleftDir icon_sprite ico_info" title="{#RUBRIK_DOCS_VI#}"></a></div></td>
+		<td align="center"><div align="center"><a href="javascript:void(0);" class="topDir link" style="cursor: help;" title="{#RUBRIK_DOCS_VI#}">[?]</a></div></td>
 		<td align="center" colspan="4">{#RUBRIK_ACTION#}</td>
 	</tr>
 	</thead>
 	<tbody>
 	{foreach from=$rubrics item=rubric}
 		<tr>
-			<td align="center">{$rubric->Id}</td>
+			<td align="center">
+				{if $rubric->rubric_description}
+					<a href="javascript:void(0);" class="toprightDir link" style="cursor: help;" title="{$rubric->rubric_description|escape}"><strong>[{$rubric->Id}]</strong></a>
+				{else}
+					<strong>{$rubric->Id}</strong>
+				{/if}
+			</td>
+			<td><div class="pr12"><input type="text" name="rubric_position[{$rubric->Id}]" value="{$rubric->rubric_position|escape}" /></div></td>
 			<td>
 				{if check_permission('rubric_edit')}
 					<div class="pr12"><input style="width:100%" type="text" name="rubric_title[{$rubric->Id}]" value="{$rubric->rubric_title|escape}" /></div>
@@ -109,7 +118,7 @@ $(document).ready(function(){ldelim}
 
 			<td>
 				{if check_permission('rubric_edit')}
-					<select name="rubric_template_id[{$rubric->Id}]" style="width: 170px">
+					<select name="rubric_template_id[{$rubric->Id}]" style="min-width: 180px">
 						{foreach from=$templates item=template}
 							<option value="{$template->Id}" {if $template->Id==$rubric->rubric_template_id}selected="selected" {/if}/>{$template->template_title|escape}</option>
 						{/foreach}
@@ -150,7 +159,7 @@ $(document).ready(function(){ldelim}
 				{if $rubric->Id != 1}
 					{if $rubric->doc_count==0}
 						{if check_permission('rubric_del')}
-							<a class="topleftDir ConfirmDelete icon_sprite ico_delete" title="{#RUBRIK_DELETE#}" dir="{#RUBRIK_DELETE#}" name="{#RUBRIK_DELETE_CONFIRM#}" href="index.php?do=rubs&amp;action=delete&amp;Id={$rubric->Id}&amp;cp={$sess}"></a>
+							<a class="topleftDir ConfirmDelete icon_sprite ico_delete" title="{#RUBRIK_DELETE#}" dir="{#RUBRIK_DELETE#}" name="{#RUBRIK_DELETE_CONFIRM#}" href="index.php?do=rubs&action=delete&Id={$rubric->Id}&cp={$sess}"></a>
 						{else}
 							<a title="{#RUBRIK_NO_PERMISSION#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_delete_no"></a>
 						{/if}
@@ -178,7 +187,7 @@ $(document).ready(function(){ldelim}
 
 <div id="tab2" class="tab_content" style="display: none;">
 				{if check_permission('rubric_new')}
-					<form id="add_rub" method="post" action="index.php?do=rubs&amp;action=new&amp;cp={$sess}" class="mainForm">
+					<form id="add_rub" method="post" action="index.php?do=rubs&action=new&cp={$sess}" class="mainForm">
 					<div class="rowElem">
 						<label>{#RUBRIK_NAME2#}</label>
 						<div class="formRight"><input placeholder="{#RUBRIK_NAME#}" name="rubric_title" type="text" id="rubric_title" value="" style="width: 400px">

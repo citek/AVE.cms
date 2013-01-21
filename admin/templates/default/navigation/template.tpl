@@ -27,7 +27,7 @@
 	<div class="breadCrumb module">
 	    <ul>
 			<li class="firstB"><a href="index.php" title="{#MAIN_PAGE#}">{#MAIN_PAGE#}</a></li>
-	        <li><a href="index.php?do=navigation&amp;cp={$sess}" title="">{#NAVI_SUB_TITLE#}</a></li>
+	        <li><a href="index.php?do=navigation&cp={$sess}" title="">{#NAVI_SUB_TITLE#}</a></li>
 			{if $smarty.request.action == 'new'}
 	        <li>{#NAVI_SUB_TITLE4#}</li>
 			{else}
@@ -41,7 +41,7 @@
 <form name="navitemplate" id="navitemplate" method="post" action="{$formaction}" class="mainForm">
 
 <div class="widget first">
-<div class="head"><h5 class="iFrames">{#NAVI_SUB_TITLE3#}</h5><div class="num"><a class="basicNum" href="index.php?do=navigation&amp;action=entries&amp;cp={$sess}&amp;id={$smarty.request.id}">{#NAVI_EDIT_ITEMS#}</a></div></div>
+<div class="head"><h5 class="iFrames">{#NAVI_SUB_TITLE3#}</h5><div class="num"><a class="basicNum" href="index.php?do=navigation&action=entries&cp={$sess}&id={$smarty.request.id}">{#NAVI_EDIT_ITEMS#}</a></div></div>
 
 	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 		<tr class="noborder">
@@ -62,7 +62,7 @@
 		<tr>
 			<td width="200"><strong>{#NAVI_GROUPS#}</strong></td>
 			<td>
-				<select class="mousetrap" name="navi_user_group[]" multiple="multiple" size="5" style="width:200px">
+				<select class="mousetrap select" name="navi_user_group[]" multiple="multiple" size="5" style="width:300px">
 					{if $smarty.request.action=='new'}
 						{foreach from=$row->AvGroups item=g}
 							<option value="{$g->user_group}" selected="selected">{$g->user_group_name|escape}</option>

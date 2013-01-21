@@ -18,7 +18,7 @@
 
       {foreach from=$errors item=e}
       {assign var=message value=$e}
-		<ul class="messages">
+		<ul class="messages first">
 			<li class="highlight red"><strong>Ошибка:</strong> {$message}</li>
 		</ul>
       {/foreach}
@@ -29,7 +29,7 @@
 <div class="rowElem noborder">
 
 	<label>{#SYSBLOCK_NAME#}</label>
-	<div class="formRight"><input name="sysblock_name" type="text" value="{$smarty.request.sysblock_name|escape|default:"Название"}" maxlength="50" style="width: 250px;" />&nbsp;<input class="basicBtn" type="submit" value="{#SYSBLOCK_BUTTON_COPY#}" /></div>
+	<div class="formRight"><input name="sysblock_name" type="text" value="{$smarty.request.sysblock_name|escape|default:"Default"}" maxlength="50" style="width: 250px;" />&nbsp;<input class="basicBtn" type="submit" value="{#SYSBLOCK_BUTTON_COPY#}" /></div>
 	<div class="fix"></div>
 	<input name="oId" type="hidden" id="oId" value="{$smarty.request.id|escape}" />
 </div>

@@ -76,7 +76,7 @@ $(document).ready(function(){ldelim}
 							<td align="center">{$item->Id}</td>
 
 							<td>
-								<a title="{$item->request_description|escape|default:#REQUEST_NO_DESCRIPTION#}" href="index.php?do=request&amp;action=edit&amp;Id={$item->Id}&amp;cp={$sess}&amp;rubric_id={$item->rubric_id}" class="topDir docname">
+								<a title="{$item->request_description|escape|default:#REQUEST_NO_DESCRIPTION#}" href="index.php?do=request&action=edit&Id={$item->Id}&rubric_id={$item->rubric_id}&cp={$sess}" class="topDir link">
 									<strong>{$item->request_title|escape}</strong>
 								</a>
 							</td>
@@ -90,7 +90,7 @@ $(document).ready(function(){ldelim}
 							</td>
 
 							<td width="1%" align="center">
-								<a title="{#REQUEST_EDIT#}" href="index.php?do=request&amp;action=edit&amp;Id={$item->Id}&amp;cp={$sess}&amp;rubric_id={$item->rubric_id}" class="topleftDir icon_sprite ico_edit"></a>
+								<a title="{#REQUEST_EDIT#}" href="index.php?do=request&action=edit&Id={$item->Id}&cp={$sess}&rubric_id={$item->rubric_id}" class="topleftDir icon_sprite ico_edit"></a>
 							</td>
 
 							<td width="1%" align="center">
@@ -118,7 +118,7 @@ $(document).ready(function(){ldelim}
 					<tr>
 						<td colspan="6">
 					        <ul class="messages">
-					            <li class="highlight yellow"><strong>Сообщение:</strong><br />В системе нет ниодного запроса.</li>
+					            <li class="highlight yellow">{#REQUEST_NO_REQUST#}</li>
 					        </ul>
 				        </td>
 					</tr>
@@ -131,7 +131,7 @@ $(document).ready(function(){ldelim}
 			</div>
 			<div id="tab2" class="tab_content" style="display: none;">
 				{if check_permission('request_new')}
-					<form id="add_request" method="post" action="index.php?do=request&amp;action=new&amp;cp={$sess}" class="mainForm">
+					<form id="add_request" method="post" action="index.php?do=request&action=new&cp={$sess}" class="mainForm">
 					<div class="rowElem">
 						<label>{#REQUEST_NAME3#}</label>
 						<div class="formRight"><input placeholder="{#REQUEST_NAME#}" name="request_title_new" type="text" id="request_title_new" value="" style="width: 400px">

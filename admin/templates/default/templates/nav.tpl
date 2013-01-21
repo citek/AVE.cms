@@ -1,1 +1,1 @@
-<li><a {if $smarty.request.do=='templates'}class="active"{else}{/if} href="index.php?do=templates&amp;cp={$sess}"><span>{#MAIN_TEMPLATES#}</span></a></li>
+<li><a {if $smarty.request.do=='templates'}class="active"{else}{/if} href="index.php?do=templates&cp={$sess}"><span>{#MAIN_TEMPLATES#}</span></a></li>

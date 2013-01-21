@@ -1,13 +1,8 @@
 <script type="text/javascript">
 	$(document).ready(function(){ldelim}
 		$('#document_published').datepicker({ldelim}
-			timeOnlyTitle: 'Выберите время',
-			timeText: 'Время',
-			hourText: 'Часы',
-			minuteText: 'Минуты',
-			secondText: 'Секунды',
-			currentText: 'Теперь',
-			closeText: 'Закрыть',
+			changeMonth: true,
+        	changeYear: true,
 
 			onClose: function(dateText, inst) {ldelim}
 	        var endDateTextBox = $('#document_expire');
@@ -42,13 +37,8 @@
 		{/literal}
 
 		$('#document_expire').datepicker({ldelim}
-			timeOnlyTitle: 'Выберите время',
-			timeText: 'Время',
-			hourText: 'Часы',
-			minuteText: 'Минуты',
-			secondText: 'Секунды',
-			currentText: 'Теперь',
-			closeText: 'Закрыть',
+			changeMonth: true,
+        	changeYear: true,
 
 			onClose: function(dateText, inst) {ldelim}
 	        var startDateTextBox = $('#document_published');
@@ -88,19 +78,24 @@
 	<div style="display: block;">
 
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+		<col width="150">
+		<col width="120">
+		<col width="160">
+		<col>
+		<col width="120">
+		<col width="400">
 		<tr class="noborder">
 			<td rowspan="2"><strong>{#MAIN_TIME_PERIOD#}</strong></td>
-			<td nowrap="nowrap">
-				<div class="pr12"><input id="document_published" name="document_published" type="text" value="{$smarty.request.document_published|date_format:"%d.%m.%Y"}" /></div>
+			<td>
+				<div class="pr12"><input id="document_published" name="document_published" type="text" value="{$smarty.request.document_published|date_format:"%d.%m.%Y"}" placeholder="{#MAIN_TIME_START#}" /></div>
 			</td>
-			<td><strong>{#MAIN_TITLE_SEARCH#}</strong></td>
-			<td nowrap="nowrap">
-				<input style="width:160px" type="text" name="QueryTitel" value="{$smarty.request.QueryTitel|escape|stripslashes}" />&nbsp;
-				<input title="{#MAIN_SEARCH_HELP#}" type="button" class="button basicBtn topDir" value="?" />
+			<td><strong>{#MAIN_TITLE_SEARCH#}&nbsp;<a href="javascript:void(0);" style="cursor:help;"  class="topDir link" title="{#MAIN_SEARCH_HELP#}">[?]</a></strong></td>
+			<td>
+				<div class="pr12"><input type="text" name="QueryTitel" value="{$smarty.request.QueryTitel|escape|stripslashes}" placeholder="{#MAIN_TITLE_DOC_NAME#}" /></div>
 			</td>
 			<td><strong>{#MAIN_SELECT_RUBRIK#}</strong></td>
 			<td>
-				<select name="rubric_id" style="width:185px">
+				<select name="rubric_id" id="rubric_id">
 					<option value="all">{#MAIN_ALL_RUBRUKS#}</option>
 					{foreach from=$rubrics item=rubric}
 						<option value="{$rubric->Id}" {if $smarty.request.rubric_id==$rubric->Id}selected{/if}>{$rubric->rubric_title|escape}</option>
@@ -110,11 +105,11 @@
 		</tr>
 
 		<tr>
-			<td nowrap="nowrap">
-				<div class="pr12"><input id="document_expire" name="document_expire" type="text" value="{$smarty.request.document_expire|date_format:"%d.%m.%Y"}" /></div>
+			<td>
+				<div class="pr12"><input id="document_expire" name="document_expire" type="text" value="{$smarty.request.document_expire|date_format:"%d.%m.%Y"}" placeholder="{#MAIN_TIME_END#}" /></div>
 			</td>
 			<td><strong>{#MAIN_ID_SEARCH#}</strong></td>
-			<td><input style="width:160px" type="text" name="doc_id" value="{$smarty.request.doc_id|escape|stripslashes}" /></td>
+			<td><input style="width:80px" type="text" name="doc_id" value="{$smarty.request.doc_id|escape|stripslashes}" placeholder="{#MAIN_TITLE_DOC_ID#}" /></td>
 			<td><strong>{#MAIN_DOCUMENT_STATUS#}</strong></td>
 			<td>
 				<select style="width:185px" name="status">
@@ -128,7 +123,7 @@
 
 		<tr>
 			<td colspan="6"><label>{#MAIN_RESULTS_ON_PAGE#}</label>&nbsp;
-				<select style="width:95px" name="Datalimit">
+				<select style="width:70px" name="Datalimit">
 					{section loop=150 name=dl step=15}
 						<option value="{$smarty.section.dl.index+15}" {if $smarty.request.Datalimit==$smarty.section.dl.index+15}selected{/if}>{$smarty.section.dl.index+15}</option>
 					{/section}

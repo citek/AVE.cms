@@ -127,6 +127,7 @@
 	padding:0;
 	position:relative;
 	display:block;
+	background: #fff;
 }
 /* right to left enviroment */
 .elfinder-rtl {
@@ -826,10 +827,15 @@
 	border-right:0 solid;
 	font-weight:normal;
 	font-size:10px;
-	padding:2px 12px;
 	cursor:move;
 	position:relative;
 	text-align:left;
+	background: url(../img/titleBg.png) repeat-x;
+	height: 38px;
+	font-size: 16px;
+	padding: 0 12px 0 12px;
+	line-height: 38px;
+	color: #fff;
 }
 .elfinder-rtl .dialogelfinder-drag {
 	text-align:right;

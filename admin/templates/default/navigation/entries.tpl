@@ -40,7 +40,21 @@ $(function(){ldelim}
     	'update': function(event,ui)
     	        {ldelim}
     	          	var order = $("#sort").sortable('serialize');
-    	          	$('#AjaxResult').load("index.php?do=navigation&action=entries&cp={$sess}&id={$smarty.request.id|escape}&save=pos&"+order);
+						$.ajax({ldelim}
+						    url: ave_path+'admin/index.php?do=navigation&action=entries&cp={$sess}&id={$smarty.request.id|escape}&save=pos&'+order,
+						    type: 'POST',
+						    dataType: "json",
+						    data: ({ldelim}
+						    	templateCache: 1,
+						    	templateCompiledTemplate: 1,
+						    	moduleCache: 1,
+						    	sqlCache: 1
+						    	{rdelim}),
+						    success: function (data) {ldelim}
+						    	$.alerts._overlay('hide');
+	                            $.jGrowl(saveMessageOk,{ldelim}theme: 'accept'{rdelim});
+						    {rdelim}
+						{rdelim});
     	       {rdelim}
     {rdelim});
     $("#sort").disableSelection();
@@ -54,11 +68,11 @@ $(document).ready(function(){ldelim}
 	{rdelim});
 
 	$('textarea.expand').focusin(function () {ldelim}
-	    $(this).animate({ldelim} height: "4em" {rdelim}, 500);
+	    $(this).animate({ldelim} height: "4em" {rdelim}, 250);
 	{rdelim});
 
 	$('textarea.expand').focusout(function () {ldelim}
-	    $(this).animate({ldelim} height: "1em" {rdelim}, 500);
+	    $(this).animate({ldelim} height: "14px" {rdelim}, 250);
 	{rdelim});
  	$('input[type="text"]').mousedown(function(e){ldelim}e.stopPropagation();{rdelim});
  	$('textarea').mousedown(function(e){ldelim}e.stopPropagation();{rdelim})	
@@ -82,14 +96,14 @@ $(document).ready(function(){ldelim}
 	<div class="breadCrumb module">
 	    <ul>
 			<li class="firstB"><a href="index.php" title="{#MAIN_PAGE#}">{#MAIN_PAGE#}</a></li>
-	        <li><a href="index.php?do=navigation&amp;cp={$sess}" title="">{#NAVI_SUB_TITLE#}</a></li>
+	        <li><a href="index.php?do=navigation&cp={$sess}" title="">{#NAVI_SUB_TITLE#}</a></li>
 	        <li>{#NAVI_SUB_TITLE2#}</li>
 	        <li><strong class="code">{$NavigatonName|escape|stripslashes}</strong></li>
 	    </ul>
 	</div>
 </div>
 
-<form name="navquicksave" method="post" action="index.php?do=navigation&amp;action=quicksave&amp;id={$smarty.request.id|escape}&amp;cp={$sess}" class="mainForm">
+<form name="navquicksave" method="post" action="index.php?do=navigation&action=quicksave&id={$smarty.request.id|escape}&cp={$sess}" class="mainForm">
 <fieldset>
 <div class="widget first">
 <div class="head"><h5 class="iFrames">{#NAVI_ITEMS_TIP#}</h5></div>
@@ -135,9 +149,9 @@ $(document).ready(function(){ldelim}
 		<tr>
 			<td><div class="pr12"><textarea class="expand" rows="1" cols="10" name="descr_N[]"></textarea></div></td>	
 			<td><div class="pr12"><input name="Img_N[]" type="text" id="Img_N" value="" /></div></td>
-			<td><input value="{#NAVI_BUTTON_CHANGE#}" title="{#NAVI_LINK_IMGTL#}" class="basicBtn topDir" onclick="openFileWindow('Img_N','Img_N');" type="button"></td></td>
+			<td><input value="{#NAVI_BUTTON_CHANGE#}" title="{#NAVI_LINK_IMGTL#}" class="basicBtn topDir" onclick="openFileWindow('Img_N','Img_N');" type="button"></td>
 			<td><input style="width:85%" name="Img_id_N[]" type="text" id="Img_id_N" value="" /></td>
-			<td><input type="submit" class="basicBtn" value="{#NAVI_BUTTON_ADD#}" /></td>
+			<td><input type="submit" class="blackBtn" value="{#NAVI_BUTTON_ADD#}" /></td>
 		</tr>
 		
 		</tbody>
@@ -146,7 +160,7 @@ $(document).ready(function(){ldelim}
 </div>
 
 <div class="widget first">
-<div class="head"><h5 class="iFrames">{#NAVI_LIST#}</h5><div class="num"><a class="basicNum" href="index.php?do=navigation&amp;action=templates&amp;cp={$sess}&amp;id={$smarty.request.id}">{#NAVI_EDIT_TEMPLATE#}</a></div></div>
+<div class="head"><h5 class="iFrames">{#NAVI_LIST#}</h5><div class="num"><a class="basicNum" href="index.php?do=navigation&action=templates&cp={$sess}&id={$smarty.request.id}">{#NAVI_EDIT_TEMPLATE#}</a></div></div>
 <div class="body">{#NAVI_LIST_TIP#}</div>
 
 	<table cellpadding="0" cellspacing="0" width="100%" id="sort" class="tableStatic">
@@ -166,7 +180,7 @@ $(document).ready(function(){ldelim}
 			<td width="100"></td>
 			<td width="110"></td>
 			<td width="100"></td>
-			<td width="45" align="center"><div align="center"><a title="{#NAVI_MARK_ACTIVE#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_unlock"></a></div></td>
+			<td width="45" align="center"><div align="center"><a title="{#NAVI_MARK_ACTIVE#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_ok"></a></div></td>
 			<td  width="45" align="center"><div align="center"><a title="{#NAVI_MARK_DELETE#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_delete"></a></div></td>
 		</tr>
 		</thead>
@@ -192,7 +206,7 @@ $(document).ready(function(){ldelim}
 
 				<td valign="top">{#NAVI_LINK_IMAGE#}<div class="pr12"><input name="Img[{$item->Id}]" type="text" id="Img{$item->Id}" value="{$item->navi_item_Img|escape:html|stripslashes}" /></div></td>
 				
-				<td align="center" valign="top">&nbsp;<input value="{#NAVI_BUTTON_CHANGE#}" title="{#NAVI_LINK_IMGTL#}" class="basicBtn topDir" onclick="openFileWindow('Img{$item->Id}','Img{$item->Id}');" type="button"></td>
+				<td align="center" valign="top">&nbsp;<input value="{#NAVI_BUTTON_CHANGE#}" title="{#NAVI_LINK_IMGTL#}" class="greenBtn topDir" onclick="openFileWindow('Img{$item->Id}','Img{$item->Id}');" type="button"></td>
 				
 				<td align="center" valign="top">{#NAVI_LINK_IMGID#}<div class="pr12"><input name="Img_id[{$item->Id}]" type="text" id="Img_id{$item->Id}" value="{$item->navi_item_Img_id|escape:html|stripslashes}" /></div></td>
 				
@@ -201,16 +215,16 @@ $(document).ready(function(){ldelim}
 				<td align="center" colspan="2" valign="top">{#NAVI_OPEN_IN_NEW#}<input name="navi_item_target[{$item->Id}]" id="Ziel_{$item->Id}" type="checkbox" value="_blank" {if $item->navi_item_target=='_blank'}checked="checked"{/if} /></td>
 			</tr>
 
-			<tr id="Neu_2_{$item->Id}" style="display:none; background-color:#bedcc5;">
+			<tr id="Neu_2_{$item->Id}" style="display:none; background-color: #bedcc5;">
 				<input type="hidden" name="Url_Neu_2[{$item->Id}]" id="Url_Neu_2_{$item->Id}" value="" />
 				<td class="level2"><div class="pr12"><input style="width:100%" name="Titel_Neu_2[{$item->Id}]" type="text" id="Titel_Neu_2_{$item->Id}" value="" /></div></td>
 				<td><div class="pr12"><input style="width:100%" name="Link_Neu_2[{$item->Id}]" type="text" id="Link_Neu_2_{$item->Id}" value="" /></div></td>
-				<td nowrap>
+				<td nowrap align="center">
 				<input title="{#NAVI_BROWSE_DOCUMENTS#}" onclick="openLinkWindow('Link_Neu_2_{$item->Id}','Titel_Neu_2_{$item->Id}','Url_Neu_2_{$item->Id}');" type="button" class="greenBtn topDir" value="... " />
 				<input title="{#NAVI_BROWSE_MEDIAPOOL#}" onclick="openFileWindow('Link_Neu_2_{$item->Id}','Link_Neu_2_{$item->Id}','Url_Neu_2_{$item->Id}');" type="button" class="greenBtn topDir" value="#" />
 				</td>
 				<td ></td>
-				<td align="center"><input title="{#NAVI_BUTTON_OPTION#}" type="button" class="basicBtn topDir opentr" rel="Neu_2_{$item->Id}" value="{#NAVI_BUTTON_OPTION#}" /></td>
+				<td align="center"><input title="{#NAVI_BUTTON_OPTION#}" type="button" class="greenBtn topDir opentr" rel="Neu_2_{$item->Id}" value="{#NAVI_BUTTON_OPTION#}" /></td>
 				<td>&nbsp;</td>
 				<td>&nbsp;</td>
 			</tr>
@@ -220,7 +234,7 @@ $(document).ready(function(){ldelim}
 				
 				<td valign="top">{#NAVI_LINK_IMAGE#}<div class="pr12"><input name="Img_Neu_2[{$item->Id}]" type="text" id="Img_Neu_2{$item->Id}" value="" /></div></td>
 				
-				<td align="center" valign="top">&nbsp;<input value="{#NAVI_BUTTON_CHANGE#}" title="{#NAVI_LINK_IMGTL#}" class="basicBtn topDir" onclick="openFileWindow('Img_Neu_2{$item->Id}','Img_Neu_2{$item->Id}');" type="button"></td>
+				<td align="center" valign="top">&nbsp;<input value="{#NAVI_BUTTON_CHANGE#}" title="{#NAVI_LINK_IMGTL#}" class="greenBtn topDir" onclick="openFileWindow('Img_Neu_2{$item->Id}','Img_Neu_2{$item->Id}');" type="button"></td>
 				
 				<td align="center" valign="top">{#NAVI_LINK_IMGID#}<div class="pr12"><input name="Img_id_Neu_2[{$item->Id}]" type="text" id="Img_id_Neu_2{$item->Id}" value="" /></div></td>
 				
@@ -236,14 +250,14 @@ $(document).ready(function(){ldelim}
 					
 					<td><div class="pr12"><input style="width:100%" name="navi_item_link[{$item_2->Id}]" type="text" id="Link_{$item_2->Id}" value="{$item_2->navi_item_link|escape|stripslashes}" /></div></td>
 					
-					<td nowrap>
+					<td nowrap align="center">
 					<input title="{#NAVI_BROWSE_DOCUMENTS#}" onclick="openLinkWindow('Link_{$item_2->Id}','Titel_{$item_2->Id}','Url_{$item_2->Id}');" type="button" class="greenBtn topDir" value="... " />
 					<input title="{#NAVI_BROWSE_MEDIAPOOL#}" onclick="openFileWindow('Link_{$item_2->Id}','Link_{$item_2->Id}','Url_{$item_2->Id}');" type="button" class="greenBtn topDir" value="#" />
 					</td>
 					
 					<td align="center"><input title="{#NAVI_ADD_SUBITEM#}" type="button" class="greenBtn topDir" onclick="document.getElementById('Neu_3_{$item_2->Id}').style.display='';" value="{#NAVI_BUTTON_SUBITEM#}" /></td>
 					
-					<td align="center"><input title="{#NAVI_BUTTON_OPTION#}" type="button" class="basicBtn topDir opentr" rel="{$item_2->Id}" value="{#NAVI_BUTTON_OPTION#}" /></td>
+					<td align="center"><input title="{#NAVI_BUTTON_OPTION#}" type="button" class="greenBtn topDir opentr" rel="{$item_2->Id}" value="{#NAVI_BUTTON_OPTION#}" /></td>
 					
 					<td align="center"><input name="navi_item_status[{$item_2->Id}]" type="checkbox" value="1" {if $item_2->navi_item_status==1}checked="checked" {/if}/></td>
 					
@@ -255,7 +269,7 @@ $(document).ready(function(){ldelim}
 					
 					<td valign="top">{#NAVI_LINK_IMAGE#}<div class="pr12"><input name="Img[{$item_2->Id}]" type="text" id="Img{$item_2->Id}" value="{$item_2->navi_item_Img|escape:html|stripslashes}" /></div></td>
 
-					<td align="center" valign="top">&nbsp;<input value="{#NAVI_BUTTON_CHANGE#}" title="{#NAVI_LINK_IMGTL#}" class="basicBtn topDir" onclick="openFileWindow('Img{$item_2->Id}','Img{$item_2->Id}');" type="button"></td>
+					<td align="center" valign="top">&nbsp;<input value="{#NAVI_BUTTON_CHANGE#}" title="{#NAVI_LINK_IMGTL#}" class="greenBtn topDir" onclick="openFileWindow('Img{$item_2->Id}','Img{$item_2->Id}');" type="button"></td>
 					
 					<td align="center" valign="top">{#NAVI_LINK_IMGID#}<div class="pr12"><input name="Img_id[{$item_2->Id}]" type="text" id="Img_id{$item_2->Id}" value="{$item_2->navi_item_Img_id|escape:html|stripslashes}" /></div></td>
 					
@@ -269,13 +283,13 @@ $(document).ready(function(){ldelim}
 						<input type="hidden" name="document_alias[{$item_3->Id}]" id="Url_{$item_3->Id}" value="{$item_3->document_alias|stripslashes}" />
 						<td class="level3"><div class="pr12"><input style="width:100%" name="title[{$item_3->Id}]" type="text" id="Titel_{$item_3->Id}" value="{$item_3->title|stripslashes}" /></div></td>
 						<td><div class="pr12"><input style="width:100%" name="navi_item_link[{$item_3->Id}]" type="text" id="Link_{$item_3->Id}" value="{$item_3->navi_item_link|escape|stripslashes}" /></div></td>
-						<td nowrap>
+						<td nowrap align="center">
 						<input title="{#NAVI_BROWSE_DOCUMENTS#}" onclick="openLinkWindow('Link_{$item_3->Id}','Titel_{$item_3->Id}','Url_{$item_3->Id}');" type="button" class="greyishBtn topDir" value="... " />
 						<input title="{#NAVI_BROWSE_MEDIAPOOL#}" onclick="openFileWindow('Link_{$item_3->Id}','Link_{$item_3->Id}','Url_{$item_3->Id}');" type="button" class="greyishBtn topDir" value="#" />
 						</td>
 				
 						<td ></td>
-						<td align="center"><input title="{#NAVI_BUTTON_OPTION#}" type="button" class="basicBtn topDir opentr" rel="{$item_3->Id}" value="{#NAVI_BUTTON_OPTION#}" /></td>
+						<td align="center"><input title="{#NAVI_BUTTON_OPTION#}" type="button" class="greyishBtn topDir opentr" rel="{$item_3->Id}" value="{#NAVI_BUTTON_OPTION#}" /></td>
 						
 						<td align="center"><input name="navi_item_status[{$item_3->Id}]" type="checkbox" id="del[{$item_3->Id}]" value="1" {if $item_3->navi_item_status==1}checked="checked" {/if}/></td>
 						<td align="center"><input name="del[{$item_3->Id}]" type="checkbox" value="1" /></td>
@@ -286,7 +300,7 @@ $(document).ready(function(){ldelim}
 
 						<td valign="top">{#NAVI_LINK_IMAGE#}<div class="pr12"><input name="Img[{$item_3->Id}]" type="text" id="Img{$item_3->Id}" value="{$item_3->navi_item_Img|escape:html|stripslashes}" /></div></td>
 						
-						<td align="center" valign="top">&nbsp;<input value="{#NAVI_BUTTON_CHANGE#}" title="{#NAVI_LINK_IMGTL#}" class="basicBtn topDir" onclick="openFileWindow('Img{$item_3->Id}','Img{$item_3->Id}');" type="button"></td>
+						<td align="center" valign="top">&nbsp;<input value="{#NAVI_BUTTON_CHANGE#}" title="{#NAVI_LINK_IMGTL#}" class="greyishBtn topDir" onclick="openFileWindow('Img{$item_3->Id}','Img{$item_3->Id}');" type="button"></td>
 						
 						<td align="center" valign="top">{#NAVI_LINK_IMGID#}<div class="pr12"><input name="Img_id[{$item_3->Id}]" type="text" id="Img_id{$item_3->Id}" value="{$item_3->navi_item_Img_id|escape:html|stripslashes}" /></div></td>
 						
@@ -302,12 +316,12 @@ $(document).ready(function(){ldelim}
 
 					<td><div class="pr12"><input style="width:100%" name="Link_Neu_3[{$item_2->Id}]" type="text" id="Link_Neu_3_{$item_2->Id}" value="" /></div></td>
 
-					<td nowrap>
+					<td nowrap align="center">
 					<input title="{#NAVI_BROWSE_DOCUMENTS#}" onclick="openLinkWindow('Link_Neu_3_{$item_2->Id}','Titel_Neu_3_{$item_2->Id}','Url_Neu_3_{$item_2->Id}');" type="button" class="greyishBtn topDir" value="... " />
 					<input title="{#NAVI_BROWSE_MEDIAPOOL#}" onclick="openFileWindow('Link_Neu_3_{$item_2->Id}','Link_Neu_3_{$item_2->Id}','Url_Neu_3_{$item_2->Id}');" type="button" class="greyishBtn topDir" value="#" />
 					</td>
 					<td ></td>
-					<td align="center"><input title="{#NAVI_BUTTON_OPTION#}" type="button" class="basicBtn topDir opentr" rel="Neu_3_{$item_2->Id}" value="{#NAVI_BUTTON_OPTION#}" /></td>
+					<td align="center"><input title="{#NAVI_BUTTON_OPTION#}" type="button" class="greyishBtn topDir opentr" rel="Neu_3_{$item_2->Id}" value="{#NAVI_BUTTON_OPTION#}" /></td>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
 				</tr>
@@ -317,7 +331,7 @@ $(document).ready(function(){ldelim}
 
 					<td valign="top">{#NAVI_LINK_IMAGE#}<div class="pr12"><input name="Img_Neu_3[{$item_2->Id}]" type="text" id="Img_Neu_3{$item_2->Id}" value="" /></div></td>
 
-					<td align="center" valign="top">&nbsp;<input value="{#NAVI_BUTTON_CHANGE#}" title="{#NAVI_LINK_IMGTL#}" class="basicBtn topDir" onclick="openFileWindow('Img_Neu_3{$item_2->Id}','Img_Neu_3{$item_2->Id}');" type="button"></td>
+					<td align="center" valign="top">&nbsp;<input value="{#NAVI_BUTTON_CHANGE#}" title="{#NAVI_LINK_IMGTL#}" class="greyishBtn topDir" onclick="openFileWindow('Img_Neu_3{$item_2->Id}','Img_Neu_3{$item_2->Id}');" type="button"></td>
 
 					<td align="center" valign="top">{#NAVI_LINK_IMGID#}<div class="pr12"><input name="Img_id_Neu_3[{$item_2->Id}]" type="text" id="Img_id_Neu_3{$item_2->Id}" value="" /></div></td>
 

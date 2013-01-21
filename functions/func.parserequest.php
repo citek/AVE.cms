@@ -118,7 +118,7 @@
 		");
 	}
 
-	return $retval;
+	return @$retval;
 }
 
   /*
@@ -247,7 +247,7 @@ global $AVE_DB;
 				{
 					$item = preg_replace_callback('/\[tag:sysblock:(\d+)\]/', 'parse_sysblock', $template);
 					$item = preg_replace('/\[tag:rfld:([a-zA-Z0-9-_]+)]\[(more|esc|img|[0-9-]+)]/e', "request_get_document_field(\"$1\", $row->Id, \"$2\")", $item);
-					$item = preg_replace_callback('/\[tag:([r|c|f]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $item);
+					$item = preg_replace_callback('/\[tag:([r|c|f|t]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $item);
 					//if(!file_exists(dirname($cachefile_docid)))mkdir(dirname($cachefile_docid),0777,true);
 					//file_put_contents($cachefile_docid,$item);
 				}
@@ -268,11 +268,11 @@ global $AVE_DB;
 			$item = preg_replace('/\[tag:date:([a-zA-Z0-9-]+)\]/e', "RusDate(date('$1', ".$row->document_published."))", $item);
 			$item = str_replace('[tag:docauthor]', get_username_by_id($row->document_author_id), $item);
 			$item = str_replace('[tag:docauthorid]', $row->document_author_id, $item);
+			$item = preg_replace('/\[tag:docauthoravatar:(\d+)\]/e', "getAvatar(".intval($row->document_author_id).",\"$1\")", $item);
 			$item = str_replace('[tag:docviews]', $row->document_count_view, $item);
 			$item = str_replace('[tag:doccomments]', isset($row->nums) ? $row->nums : '', $item);
 			$item = str_replace('[tag:docvotes]', isset($row->votes) ? $row->votes : '', $item);
 			$item = str_replace('[tag:docdayviews]', isset($row->dayviews) ? $row->dayviews : '', $item);
-
 		return $item;	
 }
 
@@ -289,6 +289,9 @@ function request_parse($id,$params=Array())
 	global $AVE_Core, $AVE_DB, $request_documents;
 //Доберусь - надо сделать фишку чтобы если афтар не активен или удален то документы его в реквесте не выводятся
 //по идее это бы надстройкой к рекесту сделать чтобы новости не побить и т.д.
+
+	$gen_time = microtime();
+
 	$return = '';
 
 	if (is_array($id)) $id = $id[1];
@@ -303,7 +306,7 @@ function request_parse($id,$params=Array())
 	{
 
 		$ttl=(int)$row_ab->request_cache_lifetime;
-		$limit = (intval($params['LIMIT'])>0 ? intval($params['LIMIT']) : (($row_ab->request_items_per_page > 0) ? $row_ab->request_items_per_page : 0));
+		$limit = (isset($params['LIMIT'])&&intval($params['LIMIT'])>0 ? intval($params['LIMIT']) : (($row_ab->request_items_per_page > 0) ? $row_ab->request_items_per_page : 0));
 		$main_template = $row_ab->request_template_main;
 		$item_template = $row_ab->request_template_item;
 		$request_order_by = $row_ab->request_order_by;
@@ -324,7 +327,7 @@ function request_parse($id,$params=Array())
 
 		$x=0;
 
-		if (is_array($params['SORT']))
+		if (!empty($params['SORT'])&&is_array($params['SORT']))
 			foreach($params['SORT'] as $k=>$v)
 				if(intval($k)>0){
 					$x++;
@@ -342,6 +345,7 @@ function request_parse($id,$params=Array())
 				}
 		/* ----------- */
 		$request_order = addslashes($request_order1 . $request_order);
+		$request_order2 = '';
 		/* ----------- */
 		//Этот кусок для того чтобы можно было параметрами попросить произвольный статус досумента
 		//- например в личном кабинете попросить архивные документы
@@ -356,10 +360,10 @@ function request_parse($id,$params=Array())
 			? unserialize($row_ab->request_where_cond)
 			: unserialize(request_get_condition_sql_string($row_ab->Id));
 		$where_cond['from'] = str_replace('%%PREFIX%%', PREFIX, $where_cond['from']);
-		$where_cond['where'] = str_replace('%%PREFIX%%', PREFIX, $where_cond['where']);
-		$whFromUser=(intval($params['USER_ID'])>0 ? ' AND a.document_author_id='.intval($params['USER_ID']) : '')
+		@$where_cond['where'] = str_replace('%%PREFIX%%', PREFIX, $where_cond['where']);
+		$whFromUser=(isset($params['USER_ID'])&&intval($params['USER_ID'])>0 ? ' AND a.document_author_id='.intval($params['USER_ID']) : '')
 					.(isset($params['USER_WHERE'])&& $params['USER_WHERE']>'' ? ' AND '.$params['USER_WHERE'] : '')
-					.(intval($params['PARENT'])>0 ? ' AND a.document_parent='.intval($params['PARENT']) : '');
+					.(isset($params['PARENT'])&&intval($params['PARENT'])>0 ? ' AND a.document_parent='.intval($params['PARENT']) : '');
 
 		$other_fields='';
 		$other_tables='';
@@ -382,41 +386,41 @@ function request_parse($id,$params=Array())
 				if($params['VOTE_ORDER']>'')$request_order2=(count(explode(',',$other_fields))-1).' '.$params['VOTE_ORDER'];
 		}
 
-		if (!empty($AVE_Core->install_modules['comment']->Status)){
+		if (!empty($AVE_Core->install_modules['comment']->ModuleStatus)){
 
 				$other_tables.="
 					LEFT JOIN
-						" . PREFIX . "_modul_comment_info AS b
-							ON b.document_id = a.Id ". ($params['COMMENT'] ? " and b.comment_published>".(strtotime($params['COMMENT'])) : '')."
+						" . PREFIX . "_module_comment_info AS b
+							ON b.document_id = a.Id ". (!empty($params['COMMENT']) ? " and b.comment_published>".(strtotime($params['COMMENT'])) : '')."
 					";
 				$other_fields.="COUNT(b.document_id) AS nums,
 				";
-				if($params['COMMENT_ORDER']>'')$request_order1=(count(explode(',',$other_fields))-1).' '.$params['COMMENT_ORDER'].',';
+				if(!empty($params['COMMENT_ORDER']))$request_order1=(count(explode(',',$other_fields))-1).' '.$params['COMMENT_ORDER'].',';
 			}
 
-			$request_order = addslashes($request_order1 .($request_order2>'' ? ($request_order1 ? $request_order2.',' : $request_order2) : ''). $request_order);
+		$request_order = addslashes($request_order1 .($request_order2>'' ? ($request_order1 ? $request_order2.',' : $request_order2) : ''). $request_order);
+
+		$num = $AVE_DB->Query( eval2var( " ?>
+			SELECT COUNT(*)
+			FROM
+			".($where_cond['from'] ? $where_cond['from'] : '')."
+			" . PREFIX . "_documents AS a
+			WHERE
+				a.Id != '1'
+			AND a.Id != '" . PAGE_NOT_FOUND_ID . "'
+			AND a.rubric_id = '" . $row_ab->rubric_id . "'
+			AND a.document_deleted != '1'
+			" . $docstatus . "
+			" . $whFromUser . "
+			" . $where_cond['where'] . "
+			" . $doctime . "
+		<?php " ),$ttl,'rub_'.$row_ab->rubric_id)->GetCell();
 
 		if ($row_ab->request_show_pagination == 1)
 		{
-			$num = $AVE_DB->Query( eval2var( " ?>
-				SELECT COUNT(*)
-				FROM
-				".($where_cond['from'] ? $where_cond['from'] : '')."
-				" . PREFIX . "_documents AS a
-				WHERE
-					a.Id != '1'
-				AND a.Id != '" . PAGE_NOT_FOUND_ID . "'
-				AND a.rubric_id = '" . $row_ab->rubric_id . "'
-				AND a.document_deleted != '1'
-				" . $docstatus . "
-				" . $whFromUser . "
-				" . $where_cond['where'] . "
-				" . $doctime . "
-			<?php " ),$ttl,'rub_'.$row_ab->rubric_id)->GetCell();
+			$num_pages = $limit>0 ? ceil($num / $limit):0;
 
-			$num_pages = ceil($num / $limit);
-
-			$GLOBALS['page_id'][$_REQUEST['id']]['apage']=($GLOBALS['page_id'][$_REQUEST['id']]['apage']>$num_pages ? $GLOBALS['page_id'][$_REQUEST['id']]['apage'] : $num_pages);
+			@$GLOBALS['page_id'][$_REQUEST['id']]['apage']=($GLOBALS['page_id'][$_REQUEST['id']]['apage']>$num_pages ? $GLOBALS['page_id'][$_REQUEST['id']]['apage'] : $num_pages);
 
 			if (isset($_REQUEST['apage']) && is_numeric($_REQUEST['apage']) && $_REQUEST['apage'] > $num_pages)
 			{
@@ -464,7 +468,6 @@ function request_parse($id,$params=Array())
 			".($limit>0 ? "LIMIT " . $start . "," . $limit : '').
 		" <?php ";
 		$q=eval2var($q);
-
 		$q=$AVE_DB->Query($q,$ttl,'rub_'.$row_ab->rubric_id);
 		if ($q->NumRows() > 0)
 		{
@@ -521,6 +524,10 @@ function request_parse($id,$params=Array())
 
 		$return = $AVE_Core->coreModuleTagParse($return);
 	}
+
+	$gen_time = microtime()-$gen_time;
+	$GLOBALS['block_generate'][] = array('REQUEST_'.$id=>$gen_time);
+
 	return $return;
 }
 

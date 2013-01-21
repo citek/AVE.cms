@@ -21,7 +21,7 @@ if (!isset($_SESSION['user_id']))
 	exit;
 }
 $max_size = 128; // максимальный размер миниатюры
-$thumb_size = '-c' . $max_size . 'x' . $max_size; // формат миниатюр
+$thumb_size = '-t' . $max_size . 'x' . $max_size; // формат миниатюр
 $images_ext =  array('jpg', 'jpeg', 'png', 'gif');
 
 $upload_path = BASE_DIR . '/' . UPLOAD_DIR;

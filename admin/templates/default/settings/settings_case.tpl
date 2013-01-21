@@ -10,42 +10,47 @@
 	<div class="breadCrumb module">
 	    <ul>
 	        <li class="firstB"><a href="index.php" title="{#MAIN_PAGE#}">{#MAIN_PAGE#}</a></li>
-	        <li><a href="index.php?do=settings&amp;cp={$sess}">{#SETTINGS_MAIN_TITLE#}</a></li>
+	        <li><a href="index.php?do=settings&cp={$sess}">{#SETTINGS_MAIN_TITLE#}</a></li>
 			<li>{#SETTINGS_CASE_TITLE#}</li>
 	    </ul>
 	</div>
 </div>
 
-<div class="widget first">
-<div class="head"><h5 class="iFrames">{#SETTINGS_INFO#}</h5></div>
-    <div class="body">
-		<a href="index.php?do=settings&amp;cp={$sess}" title="" class="btnIconLeft mr10"><img src="{$tpl_dir}/images/icons/cog3.png" alt="" class="icon" /><span>{#SETTINGS_MAIN_SETTINGS#}</span></a>
-		<a href="index.php?do=settings&amp;sub=countries&amp;cp={$sess}" title="" class="btnIconLeft mr10"><img src="{$tpl_dir}/images/icons/cog3.png" alt="" class="icon" /><span>{#MAIN_COUNTRY_EDIT#}</span></a>
-		<a href="#" title="" class="btnIconLeft mr10 clearCacheSess"><img src="{$tpl_dir}/images/icons/cog3.png" alt="" class="icon"><span>{#MAIN_STAT_CLEAR_CACHE_FULL#}</span></a>
-		<a href="#" title="" class="btnIconLeft mr10 clearThumb"><img src="{$tpl_dir}/images/icons/cog3.png" alt="" class="icon"><span>{#MAIN_STAT_CLEAR_THUMB#}</span></a>
-    </div>
-</div>
-
-
 <form id="settings" name="settings" method="post" action="index.php?do=settings&cp={$sess}&sub=save&dop=case" class="mainForm">
 <fieldset>
 <div class="widget first">
 
-<div class="head"><h5 class="iFrames">{#SETTINGS_CASE_TITLE#}</h5></div>
-<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
-	<tbody>
+	<ul class="inact_tabs">
+	    <li><a href="index.php?do=settings&cp={$sess}">{#SETTINGS_MAIN_SETTINGS#}</a></li>
+	    <li class="activeTab"><a href="index.php?do=settings&sub=case&cp={$sess}">{#SETTINGS_CASE_TITLE#}</a></li>
+	    <li><a href="index.php?do=settings&sub=countries&cp={$sess}">{#MAIN_COUNTRY_EDIT#}</a></li>
+	    <div class="num"><a class="basicNum clearCacheSess" href="javascript:void(0);">{#MAIN_STAT_CLEAR_CACHE_FULL#}</a></div>
+	    <div class="num"><a class="basicNum clearThumb" href="javascript:void(0);">{#MAIN_STAT_CLEAR_THUMB#}</a></div>
+	</ul>
 
-		{foreach from=$CMS_CONFIG item=def key=_var}
+<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+<col width="300" />
+<col />
+
+<thead>
 <tr>
-<td width="300">{$def.DESCR} <br /><small>{$_var}</small></td>
+	<td>{#SETTINGS_NAME#}</td>
+	<td><div class="pr12">{#SETTINGS_VALUE#}</div></td>
+</tr>
+</thead>
+<tbody>
+	{foreach from=$CMS_CONFIG item=def key=_var}
+	<tr>
+	<td>{$def.DESCR} <br /><small>{$_var}</small></td>
         <td>
 			{if $def.TYPE=="dropdown"}
-				<select name="GLOB[{$_var}]" style="width: 250px;"/>
+				<select name="GLOB[{$_var}]" style="width: 250px;">
 					{foreach from=$def.VARIANT item=elem}
 						<option value="{$elem}"
 							{php}
 								echo (constant($this->_tpl_vars['_var'])==$this->_tpl_vars['elem'] ? 'selected' :'' );
-							{/php}>{$elem}</option>
+							{/php}>{$elem}
+						</option>
 					{/foreach}
 				</select>
 			{/if}
@@ -60,12 +65,10 @@
 				<input type="radio" name="GLOB[{$_var}]" value="0" {php} echo(constant($this->_tpl_vars['_var']) ? '' : "checked");{/php} /><label style="cursor: pointer;">{#SETTINGS_NO#}</label>
 			{/if}
         </td>
-      </tr>
+    </tr>
 		{/foreach}
     </tbody>
 </table>
-
-
 
 <div class="rowElem">
 	<input type="submit" class="basicBtn SaveSettings" value="{#SETTINGS_BUTTON_SAVE#}" />
@@ -124,7 +127,7 @@ function Request(){ldelim}
 
 function Response(){ldelim}
 	$.alerts._overlay('hide');
-	$.jGrowl('{#SETTINGS_SAVED#}');
+	$.jGrowl('{#SETTINGS_SAVED#}',{ldelim}theme: 'accept'{rdelim});
 {rdelim}
 
 </script>

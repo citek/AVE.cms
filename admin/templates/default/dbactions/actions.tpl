@@ -57,7 +57,7 @@ $(document).ready(function(){ldelim}
 	<tbody>
 		<tr>
 			<td rowspan="3" style="width: 20%;">
-				<select style="width:300px" size="15" name="ta[]" multiple="multiple">
+				<select style="width:300px" class="select" size="15" name="ta[]" multiple="multiple">
 					{$tables}
 				</select>
 			</td>
@@ -90,7 +90,7 @@ $(document).ready(function(){ldelim}
 	</tbody>
 </table>
 <div class="rowElem">
-	{#MAIN_STAT_MYSQL#} <strong>{$db_size}</strong>
+	{#MAIN_STAT_MYSQL#} <strong><span class="cmsStats">{$db_size}</span></strong>
 	<div class="fix"></div>
 </div>
 <div class="rowElem">
@@ -110,7 +110,7 @@ $(document).ready(function(){ldelim}
 
 <div class="widget first">
 	<form action="index.php?do=dbsettings&cp={$sess}" method="post" enctype="multipart/form-data" class="mainForm" id="DBreset">
-	<div class="head"><h5 class="iFrames">{#DB_RESTORE_TITLE#}</b></h5></div>
+	<div class="head"><h5 class="iFrames">{#DB_RESTORE_TITLE#}</h5></div>
 
 <div class="rowElem">
 	<input type="file" name="file" class="fileInput" id="fileInput" />

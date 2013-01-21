@@ -43,6 +43,10 @@ switch($_REQUEST['action'])
 					break;	
 
 				case 'save':
+					$AVE_Template->config_load(
+						BASE_DIR . '/admin/lang/' . $_SESSION['admin_language'] . '/settings.txt',
+						'settings'
+					);
 					if ($_REQUEST['dop']) {
 						$AVE_Settings->settingsCase();
 					} else {
@@ -53,6 +57,10 @@ switch($_REQUEST['action'])
 					break;
 
 				case 'countries':
+					$AVE_Template->config_load(
+						BASE_DIR . '/admin/lang/' . $_SESSION['admin_language'] . '/settings.txt',
+						'settings'
+					);
 					if (isset($_REQUEST['save']) && $_REQUEST['save'] == 1)
 					{
 						$AVE_Settings->settingsCountriesSave();
@@ -60,24 +68,15 @@ switch($_REQUEST['action'])
 						header('Location:index.php?do=settings&sub=countries&cp=' . SESSION);
 						exit;
 					}
-					$AVE_Template->config_load(
-						BASE_DIR . '/admin/lang/' . $_SESSION['admin_language'] . '/settings.txt',
-						'settings'
-					);
 					$AVE_Settings->settingsCountriesList();
 					break;
 
 				case 'clearcache':
-					if (isset($_REQUEST['templateCacheClear'])) $AVE_Template->templateCacheClear();
-					if (isset($_REQUEST['templateCompiledTemplateClear'])) $AVE_Template->templateCompiledTemplateClear();
-					if (isset($_REQUEST['moduleCacheClear'])) $AVE_Template->moduleCacheClear();
-					if (isset($_REQUEST['sqlCacheClear'])) $AVE_Template->sqlCacheClear();
-					if (isset($_REQUEST['sessionClear'])) $AVE_Template->sessionClear();
+					$AVE_Template->CacheClear();
 					exit;
 
 				case 'clearthumb':
-					$thumb_dirs = bfglob(BASE_DIR . '/' . UPLOAD_DIR . '/', THUMBNAIL_DIR, GLOB_NOSORT+GLOB_ONLYDIR, -1);
-					foreach ($thumb_dirs as $thumb_dir) rrmdir($thumb_dir);
+					$AVE_Template->ThumbnailsClear();
 					exit;
 
 				case 'showcache':

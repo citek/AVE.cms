@@ -3,10 +3,11 @@
 	<link rel="stylesheet" href="{$ABS_PATH}admin/redactor/elrte/css/elrte.full.css" type="text/css" media="screen" />
 	<script src="{$ABS_PATH}admin/redactor/elrte/js/elrte.full.js" type="text/javascript"></script>
 	<script src="{$ABS_PATH}admin/redactor/elrte/js/i18n/elrte.ru.js" type="text/javascript"></script>
-	
+
 	<!-- elfinder -->
    	<link rel="stylesheet" href="{$ABS_PATH}admin/redactor/elfinder/css/elfinder.full.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="{$ABS_PATH}admin/redactor/elfinder/css/theme.css" type="text/css" media="screen" />
+	
 	<script src="{$ABS_PATH}admin/redactor/elfinder/js/elfinder.full.js" type="text/javascript"></script>
 	<script src="{$ABS_PATH}admin/redactor/elfinder/js/i18n/elfinder.ru.js" type="text/javascript"></script>
 	<script src="{$ABS_PATH}admin/redactor/elfinder/js/jquery.dialogelfinder.js" type="text/javascript"></script>
@@ -17,13 +18,13 @@
     <!-- liveeditor -->
 {if $smarty.session.use_editor == 2}
 {literal}
-<style>
-.istoolbar_container { padding:0; margin:0}
-.istoolbar_container tbody tr { border-top: 0px !important; background:transparent !important}
-.istoolbar_container tbody tr:hover { background:transparent !important}		
-.istoolbar_container tbody td { border-left:0px !important}
-.istoolbar_container tbody td:hover { background:transparent !important}
-</style>
+	<style>
+	.istoolbar_container { padding:0; margin:0}
+	.istoolbar_container tbody tr { border-top: 0px !important; background:transparent !important}
+	.istoolbar_container tbody tr:hover { background:transparent !important}		
+	.istoolbar_container tbody td { border-left:0px !important}
+	.istoolbar_container tbody td:hover { background:transparent !important}
+	</style>
 {/literal}
     
     <script src="{$ABS_PATH}admin/liveeditor/scripts/language/ru-RU/editor_lang.js"></script>
@@ -33,7 +34,7 @@
 {/if}
 
 {if $smarty.session.use_editor == 3}
-	<script type="text/javascript" src="{$ABS_PATH}admin/ckeditor3/ckeditor.js"></script>
+	<script type="text/javascript" src="{$ABS_PATH}admin/ckeditor/ckeditor.js"></script>
 {/if}
 
 <script type="text/javascript">
@@ -85,6 +86,33 @@ $(document).ready(function(){ldelim}
 					if (b){ldelim}
 						$.alerts._overlay('show');
 						window.location = href;
+					{rdelim}
+				{rdelim}
+			);
+	{rdelim});
+
+	$(".СonfirmDeleteRev").click( function(e) {ldelim}
+		e.preventDefault();
+		var revission = $(this).attr('rev');
+		var href = $(this).attr('href');
+		var title = $(this).attr('dir');
+		var confirm = $(this).attr('name');
+		jConfirm(
+				confirm,
+				title,
+				function(b){ldelim}
+					if (b){ldelim}
+                        $.alerts._overlay('hide');
+                        $.alerts._overlay('show');
+						$.ajax({ldelim}
+						    url: ave_path+'admin/'+href+'&ajax=run',
+						    type: 'POST',
+						    success: function (data) {ldelim}
+						    	$.alerts._overlay('hide');
+								$.jGrowl(revission,{ldelim}theme: 'accept'{rdelim});	
+								$("#"+revission).remove();
+						    {rdelim}
+						{rdelim});
 					{rdelim}
 				{rdelim}
 			);
@@ -152,13 +180,8 @@ $(document).ready(function(){ldelim}
 	{/if}
 
 	$('#document_published').datetimepicker({ldelim}
-		timeOnlyTitle: 'Выберите время',
-		timeText: 'Время',
-		hourText: 'Часы',
-		minuteText: 'Минуты',
-		secondText: 'Секунды',
-		currentText: 'Теперь',
-		closeText: 'Закрыть',
+		changeMonth: true,
+    	changeYear: true,
 
 		onClose: function(dateText, inst) {ldelim}
         var endDateTextBox = $('#document_expire');
@@ -178,15 +201,9 @@ $(document).ready(function(){ldelim}
 	    {rdelim}
 	{rdelim});
 
-
 	$('#document_expire').datetimepicker({ldelim}
-		timeOnlyTitle: 'Выберите время',
-		timeText: 'Время',
-		hourText: 'Часы',
-		minuteText: 'Минуты',
-		secondText: 'Секунды',
-		currentText: 'Теперь',
-		closeText: 'Закрыть',
+		changeMonth: true,
+    	changeYear: true,
 
 		onClose: function(dateText, inst) {ldelim}
         var startDateTextBox = $('#document_published');
@@ -204,6 +221,14 @@ $(document).ready(function(){ldelim}
         var end = $(this).datetimepicker('getDate');
         $('#document_published').datetimepicker('option', 'maxDate', new Date(end.getTime()) );
     {rdelim}
+	{rdelim});
+
+	$(".alias a").click(function() {ldelim}
+		var link = $(this).attr("href");
+		var parent = $(this).attr("data-id");
+		$("#document_alias").val(link+'/{$document->rubric_url_prefix}');
+		$("#document_parent").val(parent);
+		return false;
 	{rdelim});
 
 {rdelim});
@@ -224,12 +249,12 @@ $(document).ready(function(){ldelim}
 	        <li><a href="index.php?do=docs&cp={$sess}">{#DOC_SUB_TITLE#}</a></li>
 			{if $smarty.request.action=='edit'}
 	        <li>{#DOC_EDIT_DOCUMENT#}</li>
-			<li><strong>Рубрика</strong> &gt; {$document->rubric_title|escape}</li>
+			<li><strong>{#DOC_IN_RUBRIK#}</strong> &gt; {$document->rubric_title|escape}</li>
 			<li><strong class="code">{$document->document_title}</strong></li>
 			{else}
 	        <li>{#DOC_ADD_DOCUMENT#}</li>
-			<li><strong>Рубрика</strong> &gt; {$document->rubric_title|escape}</li>
-			<li><strong class="code">{$smarty.request.document_title}</strong></li>
+			<li><strong>{#DOC_IN_RUBRIK#}</strong> &gt; {$document->rubric_title|escape}</li>
+			<li><strong class="code">{if $smarty.request.document_title != ""}{$smarty.request.document_title}{else}{#DOC_IN_NEW#}{/if}</strong></li>
 			{/if}
 	    </ul>
 	</div>
@@ -245,9 +270,9 @@ $(document).ready(function(){ldelim}
 		<col>
 		<tbody>
 		<tr class="noborder">
-			<td>{#DOC_NAME#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir icon_sprite ico_info" title=""></a></td>
+			<td>{#DOC_NAME#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link" title="{#DOC_META_TITLE#}">[?]</a></td>
 			<td colspan="3"><div class="pr12"><input name="doc_title" type="text" id="doc_title" size="40" value="{if $smarty.request.action == 'edit'}{$document->document_title|escape}{else}{$smarty.request.document_title}{/if}" /></div></td>
-			<td rowspan="11" valign="top" style="vertical-align: top;">
+			<td {if $document_alias}rowspan="12"{else}rowspan="11"{/if} valign="top" style="vertical-align: top;">
 				<h4>{#DOC_QUERIES#}</h4>
 					<br />
 					{foreach from=$conditions item=cond}
@@ -261,16 +286,27 @@ $(document).ready(function(){ldelim}
 		{/if}
 
 		<tr>
-			<td>{#DOC_URL#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir icon_sprite ico_info" title="{#DOC_URL_INFO#}"></a></td>
+			<td>{#DOC_URL#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link" title="{#DOC_URL_INFO#}">[?]</a></td>
 			<td nowrap="nowrap" colspan="3">
 				<div class="pr12"><input name="document_alias" {$dis} type="text" id="document_alias" size="40" style="width:{if $smarty.request.Id != 1 && $smarty.request.Id != $PAGE_NOT_FOUND_ID}400px{else}100%{/if}" value="{if $smarty.request.action=='edit'}{$document->document_alias}{else}{$document->rubric_url_prefix}{/if}" />{if $smarty.request.Id != 1 && $smarty.request.Id != $PAGE_NOT_FOUND_ID}&nbsp;&nbsp;<input type="button" class="basicBtn" id="translit" value="{#DOC_ALIAS_CREATE#}" />{/if}</div>
 				<span id="loading" style="display:none"></span>
 				<span id="checkResult"></span>
 			</td>
 		</tr>
-
+		{if $document_alias}
 		<tr>
-			<td>{#DOC_META_KEYWORDS#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir icon_sprite ico_info" title="{#DOC_META_KEYWORDS_INFO#}"></a></td>
+			<td>{#DOC_URL_LINK#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link" title="">[?]</a></td>
+			<td nowrap="nowrap" colspan="3">
+				<div class="alias" style="width:10%">
+					{foreach from=$document_alias item=alias}
+						<a href="{$alias->document_alias}" data-id="{$alias->Id}" style="border-bottom:1px dotted #666;margin-right:10px;float:left">{if $alias->document_breadcrum_title}{$alias->document_breadcrum_title}{else}{$alias->document_title}{/if}</a>
+					{/foreach}
+				</div>
+			</td>
+		</tr>
+		{/if}
+		<tr>
+			<td>{#DOC_META_KEYWORDS#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link" title="{#DOC_META_KEYWORDS_INFO#}">[?]</a></td>
 			<td colspan="3">
 				<div class="pr12">
 				<textarea style="width:100%; height:40px" name="document_meta_keywords" id="document_meta_keywords">{$document->document_meta_keywords|escape}</textarea>
@@ -279,7 +315,7 @@ $(document).ready(function(){ldelim}
 		</tr>
 
 		<tr>
-			<td>{#DOC_META_DESCRIPTION#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir icon_sprite ico_info" title="{#DOC_META_DESCRIPTION_INFO#}"></a></td>
+			<td>{#DOC_META_DESCRIPTION#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link" title="{#DOC_META_DESCRIPTION_INFO#}">[?]</a></td>
 			<td colspan="3">
 				<div class="pr12">
 				<textarea style="width:100%; height:40px" name="document_meta_description" id="document_meta_description" >{$document->document_meta_description|escape}</textarea>
@@ -335,7 +371,7 @@ $(document).ready(function(){ldelim}
 						{assign var=sel_2 value='selected="selected"'}
 					{/if}
 				{/if}
-				<select style="width:300px" name="document_status" id="document_status"{if $document->dontChangeStatus==1} disabled="disabled"{/if}>
+				<select style="width:150px" name="document_status" id="document_status"{if $document->dontChangeStatus==1} disabled="disabled"{/if}>
 					<option value="1" {$sel_1}>{#DOC_STATUS_ACTIVE#}</option>
 					<option value="0" {$sel_2}>{#DOC_STATUS_INACTIVE#}</option>
 				</select>
@@ -343,10 +379,9 @@ $(document).ready(function(){ldelim}
 		</tr>
 
 		<tr>
-			<td>{#DOC_USE_NAVIGATION#} </td>
+			<td>{#DOC_USE_NAVIGATION#} <a href="javascript:void(0);" style="cursor:help;" class="rightDir link" title="{#DOC_NAVIGATION_INFO#}">[?]</a></td>
 			<td colspan="3">
-				{include file='navigation/tree.tpl'}&nbsp;
-				<input title="{#DOC_NAVIGATION_INFO#}" class="basicBtn rightDir" style="cursor:help" type="button" value="?" />
+				{include file='navigation/tree.tpl'}
 			</td>
 		</tr>
 		<tr>
@@ -357,7 +392,12 @@ $(document).ready(function(){ldelim}
 			<td>{#DOC_USE_BREADCRUMB#}</td>
 			<td colspan="3">
 				<input name="document_parent" type="text" id="document_parent" value="{$document->document_parent}" size="4" maxlength="10" style="width: 50px;" />&nbsp;
-				<span class="button basicBtn" onClick="openLinkWinId('document_parent','document_parent');">выбрать</span> {if $document->parent}Связан с «<a href="{$ABS_PATH}index.php?id={$document->parent->Id}" target="_blank">{$document->parent->document_title}</a>»{/if}
+				{if $smarty.const.ADMIN_MODAL}
+					<a class="iframe btn basicBtn" href="index.php?idonly=1&do=docs&action=showsimple&doc=doc_title&target=document_parent&pop=1&cp={$sess}">{#DOC_BREADCRUMB_BTN#}</a>
+				{else}
+					<span class="button basicBtn" onClick="openLinkWinId('document_parent','document_parent');">{#DOC_BREADCRUMB_BTN#}</span>
+				{/if}
+				&nbsp;{if $document->parent}{#DOC_BREADCRUMB_WITH#} «<a href="{$ABS_PATH}index.php?id={$document->parent->Id}" target="_blank">{$document->parent->document_title}</a>»{/if}
 			</td>
 		</tr>
 		</tbody>
@@ -370,7 +410,7 @@ $(document).ready(function(){ldelim}
 		{else}
 			<input type="submit" class="basicBtn" value="{#DOC_BUTTON_ADD_DOCUMENT#}" />
 		{/if}
-		&nbsp;или&nbsp;
+		{#DOC_OR#}
 		{if $smarty.request.action=='edit'}
 			<input type="submit" class="blackBtn" name="next_edit" value="{#DOC_BUTTON_EDIT_DOCUMENT_NEXT#}" />
 		{else}
@@ -388,7 +428,7 @@ $(document).ready(function(){ldelim}
 		<col>
 		<tbody>
 		{foreach from=$document->fields item=document_field}
-			<tr>
+			<tr class="field_row_{$document_field->Id}">
 				<td><strong>{$document_field->rubric_field_title|escape}</strong></td>
 				<td colspan="2">{$document_field->Feld}</td>
 			</tr>
@@ -403,7 +443,7 @@ $(document).ready(function(){ldelim}
 		{else}
 			<input type="submit" class="basicBtn" value="{#DOC_BUTTON_ADD_DOCUMENT#}" />
 		{/if}
-		&nbsp;или&nbsp;
+		{#DOC_OR#}
 		{if $smarty.request.action=='edit'}
 			<input type="submit" class="blackBtn" name="next_edit" value="{#DOC_BUTTON_EDIT_DOCUMENT_NEXT#}" />
 		{else}
@@ -432,12 +472,12 @@ $(document).ready(function(){ldelim}
 		<tbody>
 		{if $document_rev}
 		{foreach from=$document_rev item=document_rev}
-			<tr>
+			<tr id="{$document_rev->doc_revision}">
 				<td align="center"><span class="date_text dgrey">{$document_rev->doc_revision|date_format:$TIME_FORMAT|pretty_date}</span></td>
 				<td align="center">{$document_rev->user_id}</td>
 				<td><a class="topleftDir icon_sprite ico_look" title="{#DOC_REVISSION_VIEW#}" href="../?id={$document_rev->doc_id}&revission={$document_rev->doc_revision}" target="_blank"></a></td>
 				<td><a class="topleftDir ConfirmRecover icon_sprite ico_copy" title="{#DOC_REVISSION_RECOVER#}" dir="{#DOC_REVISSION_RECOVER#}" name="{#DOC_REVISSION_RECOVER_T#}" href="index.php?do=docs&action=recover&doc_id={$document_rev->doc_id}&revission={$document_rev->doc_revision}&rubric_id={$smarty.request.rubric_id}&cp={$sess}"></a></td>
-				<td><a class="topleftDir ConfirmDelete icon_sprite ico_delete" title="{#DOC_REVISSION_DELETE#}" dir="{#DOC_REVISSION_DELETE#}" name="{#DOC_REVISSION_DELETE_T#}" href="index.php?do=docs&action=recover_del&doc_id={$document_rev->doc_id}&revission={$document_rev->doc_revision}&rubric_id={$smarty.request.rubric_id}&cp={$sess}"></a></td>
+				<td><a class="topleftDir СonfirmDeleteRev icon_sprite ico_delete" title="{#DOC_REVISSION_DELETE#}" dir="{#DOC_REVISSION_DELETE#}" rev="{$document_rev->doc_revision}" name="{#DOC_REVISSION_DELETE_T#}" href="index.php?do=docs&action=recover_del&doc_id={$document_rev->doc_id}&revission={$document_rev->doc_revision}&rubric_id={$smarty.request.rubric_id}&cp={$sess}"></a></td>
 			</tr>
 		{/foreach}
 		{else}

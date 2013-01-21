@@ -81,18 +81,18 @@ CREATE TABLE `%%PRFX%%_documents` (
 
 CREATE TABLE `%%PRFX%%_module` (
   `Id` smallint(3) unsigned NOT NULL auto_increment,
-  `ModulName` char(50) NOT NULL,
-  `Status` enum('1','0') NOT NULL default '1',
-  `CpEngineTag` char(255) NOT NULL,
-  `CpPHPTag` char(255) NOT NULL,
-  `ModulFunktion` char(255) NOT NULL,
-  `IstFunktion` enum('1','0') NOT NULL default '1',
-  `ModulPfad` char(50) NOT NULL,
-  `Version` char(20) NOT NULL default '1.0',
-  `Template` smallint(3) unsigned NOT NULL default '1',
-  `AdminEdit` enum('0','1') NOT NULL default '0',
+  `ModuleName` char(50) NOT NULL,
+  `ModuleStatus` enum('1','0') NOT NULL default '1',
+  `ModuleAveTag` char(255) NOT NULL,
+  `ModulePHPTag` char(255) NOT NULL,
+  `ModuleFunction` char(255) NOT NULL,
+  `ModuleIsFunction` enum('1','0') NOT NULL default '1',
+  `ModuleSysName` char(50) NOT NULL,
+  `ModuleVersion` char(20) NOT NULL default '1.0',
+  `ModuleTemplate` smallint(3) unsigned NOT NULL default '1',
+  `ModuleAdminEdit` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`Id`),
-  UNIQUE KEY `ModulName` (`ModulName`)
+  UNIQUE KEY `ModuleName` (`ModuleName`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 PACK_KEYS=0;#inst#
 
 CREATE TABLE `%%PRFX%%_navigation` (
@@ -215,7 +215,11 @@ CREATE TABLE `%%PRFX%%_rubrics` (
   `rubric_code_start` text NOT NULL,
   `rubric_code_end` text NOT NULL,
   `rubric_teaser_template` text NOT NULL,
+  `rubric_admin_teaser_template` text NOT NULL,
   `rubric_header_template` text NOT NULL,
+  `rubric_linked_rubric` int(11) unsigned NOT NULL DEFAULT '0',
+  `rubric_description` text NOT NULL,
+  `rubric_position` int(11) unsigned NOT NULL DEFAULT '100',
   PRIMARY KEY (`Id`),
   KEY `rubric_template_id` (`rubric_template_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 PACK_KEYS=0;#inst#

@@ -68,7 +68,6 @@ function user_login($login, $password, $attach_ip = 0, $keep_in = 0, $sleep = 0)
 
 //	$_SESSION['admin_theme'] = DEFAULT_ADMIN_THEME_FOLDER;
 //	$_SESSION['admin_language']  = DEFAULT_LANGUAGE;
-
 	if ($keep_in == 1)
 	{
 		$expire = $time + COOKIE_LIFETIME;

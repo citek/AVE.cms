@@ -58,10 +58,11 @@ switch($_REQUEST['action'])
 					$Rtemplate = $_POST['rubric_template'];
 					$Htemplate = $_POST['rubric_header_template'];
 					$Ttemplate = $_POST['rubric_teaser_template'];
-					$check_code = strtolower($Rtemplate);
+					$Atemplate = $_POST['rubric_admin_teaser_template'];
+					$check_code = strtolower($Rtemplate.$Htemplate.$Ttemplate.$Atemplate);
 					$ok = true;
 
-					if((is_php_code($check_code)&&strtolower($Htemplate)&&strtolower($Ttemplate)) && !check_permission('rubric_php') )
+					if((is_php_code($check_code)) && !check_permission('rubric_php') )
 					{
 						$AVE_Template->assign('php_forbidden', 1);
 						$ok = false;
@@ -73,7 +74,7 @@ switch($_REQUEST['action'])
 					}
 					else
 					{
-						$AVE_Rubric->rubricTemplateSave($Rtemplate, $Htemplate, $Ttemplate);
+						$AVE_Rubric->rubricTemplateSave($Rtemplate, $Htemplate, $Ttemplate, $Atemplate);
 					}
 					break;
 			}
@@ -117,8 +118,16 @@ switch($_REQUEST['action'])
 							$AVE_Rubric->rubricFieldSave((int)$_REQUEST['Id']);
 							break;
 
+						case 'linked_rubric':
+							$AVE_Rubric->rubricShow((int)$_REQUEST['RubLink']);
+							break;
+
 						case 'code':
 							$AVE_Rubric->rubricCode((int)$_REQUEST['Id']);
+							break;
+
+						case 'description':
+							$AVE_Rubric->rubricDesc((int)$_REQUEST['Id']);
 							break;
 
 						case 'next':

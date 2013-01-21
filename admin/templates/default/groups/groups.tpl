@@ -76,23 +76,23 @@ $(document).ready(function(){ldelim}
 			<td>
 				{if check_permission('group_edit')}
 					{if $g->user_group > 2}
-						<a title="{#UGROUP_EDIT#}" href="index.php?do=groups&amp;action=grouprights&amp;cp={$sess}&amp;Id={$g->user_group}" class="topDir docname"><strong>{$g->user_group_name|escape}</strong></a>
+						<a title="{#UGROUP_EDIT#}" href="index.php?do=groups&action=grouprights&cp={$sess}&Id={$g->user_group}" class="topDir link"><strong>{$g->user_group_name|escape}</strong></a>
 					{else}
-						<a title="{#UGROUP_NAME_EDIT#}" href="index.php?do=groups&amp;action=grouprights&amp;cp={$sess}&amp;Id={$g->user_group}" class="topDir docname"><strong>{$g->user_group_name|escape}</strong></a>
+						<a title="{#UGROUP_NAME_EDIT#}" href="index.php?do=groups&action=grouprights&cp={$sess}&Id={$g->user_group}" class="topDir link"><strong>{$g->user_group_name|escape}</strong></a>
 					{/if}
 				{else}
 					<strong>{$g->user_group_name|escape}</strong>
 				{/if}
 			</td>
 
-			<td align="center">{if check_permission('user')}{if $g->user_group==2 || $g->UserCount < 1}-{else}<a title="{#UGROUP_IN_GROUP#}" href="index.php?do=user&amp;cp={$sess}&amp;user_group={$g->user_group}" class="topDir">{$g->UserCount}</a>{/if}{else}<strong>{$g->UserCount}</strong>{/if}</td>
+			<td align="center">{if check_permission('user')}{if $g->user_group==2 || $g->UserCount < 1}-{else}<a title="{#UGROUP_IN_GROUP#}" href="index.php?do=user&cp={$sess}&user_group={$g->user_group}" class="topDir">{$g->UserCount}</a>{/if}{else}<strong>{$g->UserCount}</strong>{/if}</td>
 
 			<td align="center" width="25">
 				{if check_permission('group_edit')}
 					{if $g->user_group > 2}
-						<a title="{#UGROUP_EDIT#}" href="index.php?do=groups&amp;action=grouprights&amp;cp={$sess}&amp;Id={$g->user_group}" class="topleftDir icon_sprite ico_edit"></a>
+						<a title="{#UGROUP_EDIT#}" href="index.php?do=groups&action=grouprights&cp={$sess}&Id={$g->user_group}" class="topleftDir icon_sprite ico_edit"></a>
 					{else}
-						<a title="{#UGROUP_NAME_EDIT#}" href="index.php?do=groups&amp;action=grouprights&amp;cp={$sess}&amp;Id={$g->user_group}" class="topleftDir icon_sprite ico_edit"></a>
+						<a title="{#UGROUP_NAME_EDIT#}" href="index.php?do=groups&action=grouprights&cp={$sess}&Id={$g->user_group}" class="topleftDir icon_sprite ico_edit"></a>
 					{/if}
 				{else}
 					<a title="{#UGROUP_NO_PERMISSION#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_edit_no"></a>
@@ -105,7 +105,7 @@ $(document).ready(function(){ldelim}
 						{if $g->UserCount > 0}
 							<a title="{#UGROUP_USERS_IN_GROUP#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_delete_no"></a>
 						{else}
-							<a title="{#UGROUP_DELETE#}" dir="{#UGROUP_DELETE#}" name="{#UGROUP_DELETE_CONFIRM#}" href="index.php?do=groups&amp;action=delete&amp;cp={$sess}&amp;Id={$g->user_group}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
+							<a title="{#UGROUP_DELETE#}" dir="{#UGROUP_DELETE#}" name="{#UGROUP_DELETE_CONFIRM#}" href="index.php?do=groups&action=delete&cp={$sess}&Id={$g->user_group}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
 						{/if}
 					{else}
 						<a title="{#UGROUP_NO_DELETABLE#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_delete_no"></a>
@@ -122,7 +122,7 @@ $(document).ready(function(){ldelim}
 
 
 		<div id="tab2" class="tab_content" style="display: none;">
-			<form id="add_user_group" method="post" action="index.php?do=groups&amp;action=new&amp;cp={$sess}" class="mainForm">
+			<form id="add_user_group" method="post" action="index.php?do=groups&action=new&cp={$sess}" class="mainForm">
 			<div class="rowElem">
 				<label>{#UGROUP_NEW_NAME#}</label>
 				<div class="formRight"><input placeholder="{#UGROUP_NAME#}" name="user_group_name" type="text" id="user_group_name" value="{$g_name|escape}" style="width: 400px">

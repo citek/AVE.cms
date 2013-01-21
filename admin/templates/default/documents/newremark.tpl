@@ -3,11 +3,6 @@
 
 <div class="title"><h5>{#DOC_NOTICE#}</h5></div>
 
-<div class="widget" style="margin-top: 0px;">
-    <div class="body">
-		{#DOC_NOTICE_NEW_LINK#}
-    </div>
-</div>
 
 <div class="breadCrumbHolder module">
 	<div class="breadCrumb module">
@@ -20,42 +15,48 @@
 
 {if $answers}
 <div class="widget first">
-	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
-		{foreach from=$answers item=answer}
-			<tr>
-				<td>{#DOC_NOTICE_AUTHOR#}{$answer.remark_author} ({$answer.remark_published|date_format:$TIME_FORMAT|pretty_date})</td>
-			</tr>
-			<tr>
-				<td style="line-height:1.3em">
-					{if $answer.remark_title}<strong>{$answer.remark_title}</strong><br />{/if}
-					<br />
-					{$answer.remark_text}<br />
-					{if check_permission("remark_del")}
-						<div align="right">&raquo;&nbsp;<strong><a href="index.php?do=docs&action=remark_del&Id={$smarty.request.Id|escape}&CId={$answer.Id}&remark_first={$answer.remark_first}&pop=1&cp={$sess}">{#DOC_NOTICE_DELETE_LINK#}</a></strong></div>
-					{/if}
-				</td>
-			</tr>
-		{/foreach}
-	</table>
+	<ul class="messagesOne">
+	    {foreach from=$answers item=answer}
+	    <li {if $answer.remark_author_id == $smarty.session.user_id}class="by_me"{else}class="by_user"{/if}>
+	        <a href="#" title=""><img src="{$answer.remark_avatar}" alt="" class="rounded" /></a>
+	            <div class="messageArea">
+	            <span class="aro"></span>
+	                <div class="infoRow">
+	                    <span class="name"><strong>{$answer.remark_author}</strong> пишет: <strong>{$answer.remark_title}</strong></span>
+	                    <a href="index.php?do=docs&action=remark_del&Id={$smarty.request.Id|escape}&CId={$answer.Id}&remark_first={$answer.remark_first}&pop=1&cp={$sess}">
+	                    	<span title="{#DOC_NOTICE_DELETE_LINK#}" class="topDir icon_sprite ico_delete floatright"></span>
+	                    </a>
+	                    <span class="time">{$answer.remark_published|date_format:$TIME_FORMAT|pretty_date} </span>
+	                    <div class="clear"></div>
+	                </div>
+	            {$answer.remark_text}
+	            </div>
+	        <div class="clear"></div>
+	    </li>
+	    {/foreach}
+	</ul>
 </div>
-{/if}
-<div class="widget first">
+
 	{if check_permission("comments_openlose")}
-		<form method="post" action="index.php?do=docs&action=remark_status&Id={$smarty.request.Id|escape}&pop=1&cp={$sess}" class="mainForm">
-	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
-			<tr>
-				<td>
-					<input class="float" name="remark_status" type="checkbox" id="remark_status" value="1" {if $remark_status==1}checked="checked" {/if}/>&nbsp;<label>{#DOC_ALLOW_NOTICE#}</label>
-				</td>
-			</tr>
-			<tr>
-				<td>
-				<input type="submit" class="basicBtn" value="{#DOC_BUTTON_NOTICE#}" />
-				</td>
-			</tr>
-	</table>
-		</form>
+		<div class="widget first">
+			<form method="post" action="index.php?do=docs&action=remark_status&Id={$smarty.request.Id|escape}&pop=1&cp={$sess}" class="mainForm">
+		<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+				<tr class="noborder">
+					<td>
+						<input class="float" name="remark_status" type="checkbox" id="remark_status" value="1" {if $remark_status==1}checked="checked" {/if}/>&nbsp;<label>{#DOC_ALLOW_NOTICE#}</label>
+					</td>
+				</tr>
+				<tr>
+					<td>
+					<input type="submit" class="basicBtn" value="{#DOC_BUTTON_NOTICE#}" />
+					</td>
+				</tr>
+		</table>
+			</form>
+		</div>
 	{/if}
+
+{/if}
 
 {if $page_nav}
 	<div class="pagination">
@@ -65,7 +66,6 @@
 	</div>
 {/if}
 
-</div>
 
 {/if}
 

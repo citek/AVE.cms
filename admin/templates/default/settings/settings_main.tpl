@@ -15,30 +15,40 @@
 	</div>
 </div>
 
-<div class="widget first">
-<div class="head"><h5 class="iFrames">{#SETTINGS_INFO#}</h5></div>
-	<div class="body">
-		<a href="index.php?do=settings&amp;sub=case&amp;cp={$sess}" title="" class="btnIconLeft mr10"><img src="{$tpl_dir}/images/icons/cog3.png" alt="" class="icon"><span>{#SETTINGS_CASE_TITLE#}</span></a>
-		<a href="index.php?do=settings&amp;sub=countries&amp;cp={$sess}" title="" class="btnIconLeft mr10"><img src="{$tpl_dir}/images/icons/cog3.png" alt="" class="icon"><span>{#MAIN_COUNTRY_EDIT#}</span></a>
-		<a href="#" title="" class="btnIconLeft mr10 clearCacheSess"><img src="{$tpl_dir}/images/icons/cog3.png" alt="" class="icon"><span>{#MAIN_STAT_CLEAR_CACHE_FULL#}</span></a>
-		<a href="#" title="" class="btnIconLeft mr10 clearThumb"><img src="{$tpl_dir}/images/icons/cog3.png" alt="" class="icon"><span>{#MAIN_STAT_CLEAR_THUMB#}</span></a>
-	</div>
-</div>
+
 
 <form id="settings" name="settings" method="post" action="index.php?do=settings&cp={$sess}&sub=save" class="mainForm">
 <fieldset>
 
 <div class="widget first">
-<div class="head"><h5 class="iFrames">{#SETTINGS_MAIN_SETTINGS#}</h5></div>
+
+	<ul class="inact_tabs">
+	    <li class="activeTab"><a href="index.php?do=settings&cp={$sess}">{#SETTINGS_MAIN_SETTINGS#}</a></li>
+	    <li><a href="index.php?do=settings&sub=case&cp={$sess}">{#SETTINGS_CASE_TITLE#}</a></li>
+	    <li><a href="index.php?do=settings&sub=countries&cp={$sess}">{#MAIN_COUNTRY_EDIT#}</a></li>
+	    <div class="num"><a class="basicNum clearCacheSess" href="javascript:void(0);">{#MAIN_STAT_CLEAR_CACHE_FULL#}</a></div>
+	    <div class="num"><a class="basicNum clearThumb" href="javascript:void(0);">{#MAIN_STAT_CLEAR_THUMB#}</a></div>
+	</ul>
+
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+<col width="300" />
+<col />
+
+<thead>
+<tr>
+	<td>{#SETTINGS_NAME#}</td>
+	<td><div class="pr12">{#SETTINGS_VALUE#}</div></td>
+</tr>
+</thead>
+
 <tbody>
-<tr class="noborder">
-	<td width="300">{#SETTINGS_SITE_NAME#}</td>
+<tr>
+	<td>{#SETTINGS_SITE_NAME#}</td>
 	<td><div class="pr12"><input type="text" name="site_name" id="site_name" value="{$row.site_name}" maxlength="200" class="mousetrap"></div></td>
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_SITE_COUNTRY#}</td>
+	<td>{#SETTINGS_SITE_COUNTRY#}</td>
 	<td>
 		<div class="pr12">
 	<select name="default_country" style="width: 300px;">
@@ -51,7 +61,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_DATE_FORMAT#}</td>
+	<td>{#SETTINGS_DATE_FORMAT#}</td>
 	<td>
 		<div class="pr12">
 	<select name="date_format" style="width: 300px;">
@@ -64,7 +74,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_TIME_FORMAT#}</td>
+	<td>{#SETTINGS_TIME_FORMAT#}</td>
 	<td>
 		<div class="pr12">
 	<select name="time_format" style="width: 300px;">
@@ -77,7 +87,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_USE_DOCTIME#}</td>
+	<td>{#SETTINGS_USE_DOCTIME#}</td>
 	<td>
 		<div class="pr12">
 			<input type="radio" name="use_doctime" value="1"{if $row.use_doctime==1} checked{/if} /><label style="cursor: pointer;">{#SETTINGS_YES#}</label> <input type="radio" name="use_doctime" value="0"{if $row.use_doctime==0} checked{/if} /><label style="cursor: pointer;">{#SETTINGS_NO#}</label>
@@ -86,7 +96,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_USE_EDITOR#}</td>
+	<td>{#SETTINGS_USE_EDITOR#}</td>
 	<td>
 		<div class="pr12">
 			<input type="radio" name="use_editor" value="0"{if $row.use_editor==0} checked{/if} /><label style="cursor: pointer;">{#SETTINGS_EDITOR_STANDART#}</label>
@@ -98,7 +108,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_ERROR_PAGE#}</td>
+	<td>{#SETTINGS_ERROR_PAGE#}</td>
 	<td>
 		<div class="pr12">
 			<input name="page_not_found_id" type="text" id="page_not_found_id" value="{$row.page_not_found_id}" size="4" maxlength="10" readonly style="width: 200px" class="mousetrap" />&nbsp;<input onClick="openLinkWindow('page_not_found_id','page_not_found_id');" type="button" class="basicBtn" value="... " />&nbsp;&nbsp;&nbsp;{#SETTINGS_PAGE_DEFAULT#}
@@ -107,7 +117,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_TEXT_PERM#}</td>
+	<td>{#SETTINGS_TEXT_PERM#}</td>
 	<td>
 		<div class="pr12">
 			<textarea name="message_forbidden" id="message_forbidden" rows="8" cols class="mousetrap">{$row.message_forbidden|stripslashes}</textarea>
@@ -116,7 +126,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_HIDDEN_TEXT#}</td>
+	<td>{#SETTINGS_HIDDEN_TEXT#}</td>
 	<td>
 		<div class="pr12">
 			<textarea name="hidden_text" id="hidden_text" rows="8" cols class="mousetrap">{$row.hidden_text|stripslashes}</textarea>
@@ -130,9 +140,18 @@
 <div class="widget first">
 <div class="head"><h5 class="iFrames">{#SETTINGS_MAIN_MAIL#}</h5></div>
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+<col width="300" />
+<col />
+
+<thead>
+<tr>
+	<td>{#SETTINGS_NAME#}</td>
+	<td><div class="pr12">{#SETTINGS_VALUE#}</div></td>
+</tr>
+</thead>
 <tbody>
 <tr>
-	<td width="300">{#SETTINGS_EMAIL_NAME#}</td>
+	<td>{#SETTINGS_EMAIL_NAME#}</td>
 	<td>
 		<div class="pr12">
 		  <input type="text" name="mail_from_name" id="mail_from_name" value="{$row.mail_from_name}" style="width: 250px;" class="mousetrap">
@@ -141,7 +160,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_EMAIL_SENDER#}</td>
+	<td>{#SETTINGS_EMAIL_SENDER#}</td>
 	<td>
 		<div class="pr12">
 			<input type="text" name="mail_from" id="mail_from" value="{$row.mail_from}" style="width: 250px;" class="mousetrap">
@@ -151,7 +170,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_TEXT_EMAIL#}<br /><small>{#SETTINGS_TEXT_INFO#}</small></td>
+	<td>{#SETTINGS_TEXT_EMAIL#}<br /><small>{#SETTINGS_TEXT_INFO#}</small></td>
 	<td>
 		<div class="pr12">
 			<textarea name="mail_new_user" id="mail_new_user" rows="12" cols class="mousetrap">{$row.mail_new_user|stripslashes}</textarea>
@@ -160,7 +179,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_EMAIL_FOOTER#}</td>
+	<td>{#SETTINGS_EMAIL_FOOTER#}</td>
 	<td>
 		<div class="pr12">
 			<textarea name="mail_signature" id="mail_signature" rows="8" cols class="mousetrap">{$row.mail_signature|stripslashes}</textarea>
@@ -169,7 +188,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_SYMBOL_BREAK#}</td>
+	<td>{#SETTINGS_SYMBOL_BREAK#}</td>
 	<td>
 		<div class="pr12">
 			<input type="text" name="mail_word_wrap" id="mail_word_wrap" value="{$row.mail_word_wrap}" max="1000" style="width: 50px;float:left;" class="mousetrap">
@@ -179,7 +198,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_MAIL_TRANSPORT#}</td>
+	<td>{#SETTINGS_MAIL_TRANSPORT#}</td>
 	<td>
 		<div class="pr12">
 			<select name="mail_type" id="mail_type" style="width: 250px;">
@@ -192,7 +211,7 @@
 </tr>
 
 <tr class="smtp_group">
-	<td width="300">{#SETTINGS_SMTP_SERVER#}</td>
+	<td>{#SETTINGS_SMTP_SERVER#}</td>
 	<td>
 		<div class="pr12">
 			<input type="text" name="mail_host" value="{$row.mail_host}" style="width: 250px;" class="mousetrap">
@@ -201,7 +220,7 @@
 </tr>
 
 <tr class="smtp_group">
-	<td width="300">{#SETTINGS_MAIL_PORT#}</td>
+	<td>{#SETTINGS_MAIL_PORT#}</td>
 	<td>
 		<div class="pr12">
 			<input type="text" name="mail_port" value="{$row.mail_port}" maxlength="5" style="width: 250px;" class="mousetrap">
@@ -210,7 +229,7 @@
 </tr>
 
 <tr class="smtp_group">
-	<td width="300">{#SETTINGS_SMTP_NAME#}</td>
+	<td>{#SETTINGS_SMTP_NAME#}</td>
 	<td>
 		<div class="pr12">
 			<input type="text" name="mail_smtp_login" value="{$row.mail_smtp_login}" style="width: 250px;" class="mousetrap">
@@ -219,7 +238,7 @@
 </tr>
 
 <tr class="smtp_group">
-	<td width="300">{#SETTINGS_SMTP_PASS#}</td>
+	<td>{#SETTINGS_SMTP_PASS#}</td>
 	<td>
 		<div class="pr12">
 			<input type="text" name="mail_smtp_pass" value="{$row.mail_smtp_pass}" style="width: 250px;" class="mousetrap">
@@ -228,7 +247,7 @@
 </tr>
 
 <tr class="smtp_group">
-	<td width="300">{#SETTINGS_SMTP_ENCRYPT#}</td>
+	<td>{#SETTINGS_SMTP_ENCRYPT#}</td>
 	<td>
 		<div class="pr12">
 			<select name="mail_smtp_encrypt" style="width: 250px;" class="mousetrap">
@@ -241,7 +260,7 @@
 </tr>
 
 <tr class="sendmail_group">
-	<td width="300">{#SETTINGS_MAIL_PATH#}</td>
+	<td>{#SETTINGS_MAIL_PATH#}</td>
 	<td>
 		<div class="pr12">
 			<input type="text" name="mail_sendmail_path" id="mail_sendmail_path" value="{$row.mail_sendmail_path}" style="width: 250px;" class="mousetrap">
@@ -255,9 +274,18 @@
 <div class="widget first">
 <div class="head"><h5 class="iFrames">{#SETTINGS_MAIN_PAGENAVI#}</h5></div>
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+<col width="300" />
+<col />
+
+<thead>
+<tr>
+	<td>{#SETTINGS_NAME#}</td>
+	<td><div class="pr12">{#SETTINGS_VALUE#}</div></td>
+</tr>
+</thead>
 <tbody>
 <tr>
-	<td width="300">{#SETTINGS_NAVI_BOX#}</td>
+	<td>{#SETTINGS_NAVI_BOX#}</td>
 	<td>
 		<div class="pr12">
 			<input type="text" name="navi_box" id="navi_box" value="{$row.navi_box|escape|stripslashes}" class="mousetrap">
@@ -266,7 +294,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_PAGE_BEFORE#}</td>
+	<td>{#SETTINGS_PAGE_BEFORE#}</td>
 	<td>
 		<div class="pr12">
 			<input type="text" name="total_label" id="total_label" value="{$row.total_label|escape|stripslashes}" style="width: 250px;" class="mousetrap">
@@ -275,7 +303,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_PAGE_START#}</td>
+	<td>{#SETTINGS_PAGE_START#}</td>
 	<td>
 		<div class="pr12">
 			<input type="text" name="start_label" id="start_label" value="{$row.start_label|stripslashes}" style="width: 250px;" class="mousetrap">
@@ -284,7 +312,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_PAGE_END#}</td>
+	<td>{#SETTINGS_PAGE_END#}</td>
 	<td>
 		<div class="pr12">
 			<input type="text" name="end_label" id="end_label" value="{$row.end_label|stripslashes}" style="width: 250px;" class="mousetrap">
@@ -293,7 +321,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_PAGE_SEPARATOR#}</td>
+	<td>{#SETTINGS_PAGE_SEPARATOR#}</td>
 	<td>
 		<div class="pr12">
 			<input type="text" name="separator_label" id="separator_label" value="{$row.separator_label|stripslashes}" style="width: 250px;" class="mousetrap">
@@ -302,7 +330,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_PAGE_NEXT#}</td>
+	<td>{#SETTINGS_PAGE_NEXT#}</td>
 	<td>
 		<div class="pr12">
 			<input type="text" name="next_label" id="next_label" value="{$row.next_label|stripslashes}" style="width: 250px;" class="mousetrap">
@@ -311,7 +339,7 @@
 </tr>
 
 <tr>
-	<td width="300">{#SETTINGS_PAGE_PREV#}</td>
+	<td>{#SETTINGS_PAGE_PREV#}</td>
 	<td>
 		<div class="pr12">
 			<input type="text" name="prev_label" id="prev_label" value="{$row.prev_label|stripslashes}" style="width: 250px;" class="mousetrap">
@@ -398,7 +426,7 @@ function Request(){ldelim}
 
 function Response(){ldelim}
 	$.alerts._overlay('hide');
-	$.jGrowl('{#SETTINGS_SAVED#}');
+	$.jGrowl('{#SETTINGS_SAVED#}',{ldelim}theme: 'accept'{rdelim});
 {rdelim}
 
 function openLinkWindow(target,doc) {ldelim}

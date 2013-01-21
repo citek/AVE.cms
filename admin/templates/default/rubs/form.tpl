@@ -25,7 +25,7 @@
 	<div class="breadCrumb module">
 	    <ul>
 	        <li class="firstB"><a href="index.php" title="{#MAIN_PAGE#}">{#MAIN_PAGE#}</a></li>
-	        <li><a href="index.php?do=rubs&amp;cp={$sess}">{#RUBRIK_SUB_TITLE#}</a></li>
+	        <li><a href="index.php?do=rubs&cp={$sess}">{#RUBRIK_SUB_TITLE#}</a></li>
 			{if $smarty.request.action=='new'}
 	        <li>{#RUBRIK_TEMPLATE_NEW#}</li>
 			<li><strong class="code">{$row->rubric_title|escape}</strong></li>
@@ -53,8 +53,8 @@
 {/if}
 
 <div class="widget first">
-<div class="head"><h5>{#RUBRIK_HTML_2#}</h5><div class="num"><a class="basicNum" href="index.php?do=rubs&action=edit&Id={$smarty.request.Id|escape}&cp={$sess}">{#RUBRIK_EDIT#}</a></div></div>
-
+<div class="head closed active"><h5>{#RUBRIK_HTML_2#}</h5></div>
+	<div style="display: block;">
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 <col width="18%" />
 <col width="82%" />
@@ -147,6 +147,7 @@
 </tbody>
 </table>
 
+
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 <col width="3%" />
 <col width="15%" />
@@ -182,6 +183,7 @@
 			<input type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#RUBRIK_BUTTON_TPL_NEXT#}" />
 		</div>
 	<div class="fix"></div>
+</div>
 </div>
 
 <div class="widget first">
@@ -318,7 +320,7 @@
 		<div class="rowElem">
 			<input type="hidden" name="Id" value="{$smarty.request.Id|escape}" />
 			<input class="basicBtn" type="submit" value="{#RUBRIK_BUTTON_TPL#}" />
-			&nbsp;или&nbsp;
+			{#RUBRIK_OR#}
 			<input type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#RUBRIK_BUTTON_TPL_NEXT#}" />
 		</div>
 	<div class="fix"></div>
@@ -326,8 +328,8 @@
 
 
 <div class="widget first">
-<div class="head"><h5>{#RUBRIK_HTML_3#}</h5><div class="num"><a class="basicNum" href="index.php?do=rubs&action=edit&Id={$smarty.request.Id|escape}&cp={$sess}">{#RUBRIK_EDIT#}</a></div></div>
-
+<div class="head{if $row->rubric_teaser_template == ""} closed active{/if}"><h5>{#RUBRIK_HTML_3#}</h5></div>
+<div style="display: block;">
 <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 <col width="18%" />
 <col width="82%" />
@@ -436,13 +438,133 @@
 		<div class="rowElem">
 			<input type="hidden" name="Id" value="{$smarty.request.Id|escape}" />
 			<input class="basicBtn" type="submit" value="{#RUBRIK_BUTTON_TPL#}" />
-			&nbsp;или&nbsp;
+			{#RUBRIK_OR#}
 			<input type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#RUBRIK_BUTTON_TPL_NEXT#}" />
 		</div>
 
 	<div class="fix"></div>
 </div>
+</div>
 
+<div class="widget first">
+<div class="head closed active"><h5>{#RUBRIK_HTML_4#}</h5></div>
+<div style="display: block;">
+<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+<col width="18%" />
+<col width="82%" />
+	<thead>
+		<tr class="noborder">
+			<td>{#RUBRIK_TAGS#}</td>
+			<td>{#RUBRIK_HTML_T#}</td>
+		</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td><strong><a title="{#REQUEST_RUB_INFO#}" class="rightDir" href="javascript:void(0);" onclick="jAlert('{#REQUEST_SELECT_IN_LIST#}','{#REQUEST_TEMPLATE_ITEMS#}');">[tag:rfld:ID][XXX]</a></strong></td>
+		<td rowspan="13"><textarea {$dis} name="rubric_admin_teaser_template" id="rubric_admin_teaser_template" wrap="off" style="width:100%; height:340px">{$row->rubric_admin_teaser_template|escape|default:''}</textarea></td>
+	</tr>
+	<tr>
+		<td><strong><a title="{#REQUEST_DOCID_INFO#}" class="rightDir" href="javascript:void(0);" onclick="textSelection4('[tag:docid]', '');">[tag:docid]</a></strong></td>
+	</tr>
+	<tr>
+		<td><strong><a title="{#REQUEST_DOCTITLE_INFO#}" class="rightDir" href="javascript:void(0);" onclick="textSelection4('[tag:doctitle]', '');">[tag:doctitle]</a></strong></td>
+	</tr>
+	<tr>
+		<td><strong><a title="{#REQUEST_LINK_INFO#}" class="rightDir" href="javascript:void(0);" onclick="textSelection4('[tag:link]', '');">[tag:link]</a></strong></td>
+	</tr>
+	<tr>
+		<td><strong><a title="{#REQUEST_DOCDATE_INFO#}" class="rightDir" href="javascript:void(0);" onclick="textSelection4('[tag:docdate]', '');">[tag:docdate]</a></strong></td>
+	</tr>
+	<tr>
+		<td><strong><a title="{#REQUEST_DOCTIME_INFO#}" class="rightDir" href="javascript:void(0);" onclick="textSelection4('[tag:doctime]', '');">[tag:doctime]</a></strong></td>
+	</tr>
+	<tr>
+		<td><strong><a title="{#REQUEST_DATE_INFO#}" class="rightDir" href="javascript:void(0);" onclick="textSelection4('[tag:date:', ']');">[tag:date:X]</a></strong></td>
+	</tr>
+	<tr>
+		<td><strong><a title="{#REQUEST_DOCAUTHOR_INFO#}" class="rightDir" href="javascript:void(0);" onclick="textSelection4('[tag:docauthor]', '');">[tag:docauthor]</a></strong></td>
+	</tr>
+	<tr>
+		<td><strong><a title="{#REQUEST_VIEWS_INFO#}" class="rightDir" href="javascript:void(0);" onclick="textSelection4('[tag:docviews]', '');">[tag:docviews]</a></strong></td>
+	</tr>
+	<tr>
+		<td><strong><a title="{#REQUEST_COMMENTS_INFO#}" class="rightDir" href="javascript:void(0);" onclick="textSelection4('[tag:doccomments]', '');">[tag:doccomments]</a></strong></td>
+	</tr>
+	<tr>
+		<td><strong><a title="{#REQUEST_PATH#}" class="rightDir" href="javascript:void(0);" onclick="textSelection4('[tag:path]', '');">[tag:path]</a></strong></td>
+	</tr>
+	<tr>
+		<td><strong><a title="{#REQUEST_MEDIAPATH#}" class="rightDir" href="javascript:void(0);" onclick="textSelection4('[tag:mediapath]', '');">[tag:mediapath]</a></strong></td>
+	</tr>
+	<tr>
+		<td><strong><a title="{#REQUEST_THUMBNAIL#}" class="rightDir" href="javascript:void(0);" onclick="textSelection4('[tag:X000x000:YYY]', '');">[tag:X000x000:[tag:rfld:XXX[XXX]]</a></strong></td>
+	</tr>
+    <tr>
+    	<td><strong>HTML Tags</strong></td>
+    	<td>
+        |&nbsp;
+        <a href="javascript:void(0);" onclick="textSelection4('<ol>', '</ol>');"><strong>OL</strong></a>&nbsp;|&nbsp;
+        <a href="javascript:void(0);" onclick="textSelection4('<ul>', '</ul>');"><strong>UL</strong></a>&nbsp;|&nbsp;
+        <a href="javascript:void(0);" onclick="textSelection4('<li>', '</li>');"><strong>LI</strong></a>&nbsp;|&nbsp;
+		<a href="javascript:void(0);" onclick="textSelection4('<p class=&quot;&quot;>', '</p>');"><strong>P</strong></a>&nbsp;|&nbsp;
+		<a href="javascript:void(0);" onclick="textSelection4('<strong>', '</strong>');"><strong>B</strong></a>&nbsp;|&nbsp;
+		<a href="javascript:void(0);" onclick="textSelection4('<em>', '</em>');"><strong>I</strong></a>&nbsp;|&nbsp;
+		<a href="javascript:void(0);" onclick="textSelection4('<h1>', '</h1>');"><strong>H1</strong></a>&nbsp;|&nbsp;
+		<a href="javascript:void(0);" onclick="textSelection4('<h2>', '</h2>');"><strong>H2</strong></a>&nbsp;|&nbsp;
+		<a href="javascript:void(0);" onclick="textSelection4('<h3>', '</h3>');"><strong>H3</strong></a>&nbsp;|&nbsp;
+		<a href="javascript:void(0);" onclick="textSelection4('<h4>', '</h4>');"><strong>H4</strong></a>&nbsp;|&nbsp;
+		<a href="javascript:void(0);" onclick="textSelection4('<h5>', '</h5>');"><strong>H5</strong></a>&nbsp;|&nbsp;
+		<a href="javascript:void(0);" onclick="textSelection4('<div class=&quot;&quot; id=&quot;&quot;>', '</div>');"><strong>DIV</strong></a>&nbsp;|&nbsp;
+		<a href="javascript:void(0);" onclick="textSelection4('<a href=&quot;&quot; title=&quot;&quot;>', '</a>');"><strong>A</strong></a>&nbsp;|&nbsp;
+		<a href="javascript:void(0);" onclick="textSelection4('<img src=&quot;&quot; alt=&quot;&quot; />', '');"><strong>IMG</strong></a>&nbsp;|&nbsp;
+		<a href="javascript:void(0);" onclick="textSelection4('<span>', '</span>');"><strong>SPAN</strong></a>&nbsp;|&nbsp;
+		<a href="javascript:void(0);" onclick="textSelection4('<pre>', '</pre>');"><strong>PRE</strong></a>&nbsp;|&nbsp;
+		<a href="javascript:void(0);" onclick="textSelection4('<br />', '');"><strong>BR</strong></a>&nbsp;|&nbsp;
+		<a href="javascript:void(0);" onclick="textSelection4('\t', '');"><strong>TAB</strong></a>&nbsp;|&nbsp;
+		<a href="javascript:void(0);" onclick="textSelection4('<img src=&quot;[tag:c50x50:[tag:rfld:XXX][img]]&quot; style=&quot;float: left; margin-right: 15px;&quot; alt=&quot;&quot; class=&quot;rounded&quot;/>\r\n<h6>[tag:doctitle]</h6>\r\n[tag:rfld:XXX][-100]\r\n', '');"><strong>Default Teaser</strong></a>&nbsp;|
+    	</td>
+    </tr>
+</tbody>
+</table>
+
+<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+<col width="3%" />
+<col width="15%" />
+<col width="25%" />
+<col width="57%" />
+	<thead>
+		<tr>
+			<td align="center"><strong>{#RUBRIK_ID#}</strong></td>
+			<td align="center"><strong>{#RUBRIK_TAGS#}</strong></td>
+			<td align="center"><strong>{#RUBRIK_FIELD_NAME#}</strong></td>
+			<td align="center"><strong>{#RUBRIK_FIELD_TYPE#}</strong></td>
+		</tr>
+	</thead>
+	<tbody>
+		{foreach from=$tags item=tag}
+			<tr>
+				<td align="center">{$tag->Id}</td>
+				<td><a class="rightDir" title="{#RUBRIK_INSERT_HELP#}" href="javascript:void(0);" onclick="textSelection4('[tag:rfld:{if $tag->rubric_field_alias}{$tag->rubric_field_alias}{else}{$tag->Id}{/if}][150]', '');"><strong>[tag:rfld:{if $tag->rubric_field_alias}{$tag->rubric_field_alias}{else}{$tag->Id}{/if}][150]</strong></a></td>
+				<td><strong>{$tag->rubric_field_title}</strong></td>
+				<td>
+					{section name=feld loop=$feld_array}
+						{if $tag->rubric_field_type == $feld_array[feld].id}{$feld_array[feld].name}{/if}
+					{/section}
+				</td>
+			</tr>
+		{/foreach}
+	</tbody>
+</table>
+		<div class="rowElem">
+			<input type="hidden" name="Id" value="{$smarty.request.Id|escape}" />
+			<input class="basicBtn" type="submit" value="{#RUBRIK_BUTTON_TPL#}" />
+			{#RUBRIK_OR#}
+			<input type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#RUBRIK_BUTTON_TPL_NEXT#}" />
+		</div>
+
+	<div class="fix"></div>
+</div>
+</div>
 </form>
 <div class="fix"></div>
     <script language="Javascript" type="text/javascript">
@@ -458,7 +580,7 @@
 
 	function Response(){ldelim}
 		$.alerts._overlay('hide');
-		$.jGrowl('{#RUBRIK_TEMPLATE_SAVED#}');
+		$.jGrowl('{#RUBRIK_TEMPLATE_SAVED#}',{ldelim}theme: 'accept'{rdelim});
 	{rdelim}
 
 	$(document).ready(function(){ldelim}
@@ -575,6 +697,35 @@
       }
 
       var hlLine3 = editor3.setLineClass(0, "activeline");
+
+      var editor4 = CodeMirror.fromTextArea(document.getElementById("rubric_admin_teaser_template"), {
+      	extraKeys: {"Ctrl-S": function(cm){$("#f_tpl").ajaxSubmit(sett_options);}},
+        lineNumbers: true,
+		lineWrapping: true,
+        matchBrackets: true,
+        mode: "application/x-httpd-php",
+        indentUnit: 4,
+        indentWithTabs: true,
+        enterMode: "keep",
+        tabMode: "shift",
+        onChange: function(){editor4.save();},
+		onCursorActivity: function() {
+		  editor4.setLineClass(hlLine4, null, null);
+		  hlLine4 = editor4.setLineClass(editor4.getCursor().line, null, "activeline");
+		}
+      });
+	  editor4.setSize("100%", 420);
+      function getSelectedRange4() {
+        return { from: editor4.getCursor(true), to: editor4.getCursor(false) };
+      }
+
+      function textSelection4(startTag,endTag) {
+        var range = getSelectedRange4();
+        editor4.replaceRange(startTag + editor4.getRange(range.from, range.to) + endTag, range.from, range.to)
+        editor4.setCursor(range.from.line, range.from.ch + startTag.length);
+      }
+
+      var hlLine4 = editor4.setLineClass(0, "activeline");
 {/literal}
     </script>
 

@@ -14,8 +14,12 @@
 function parse_navigation($navi_tag)
 {
 	global $AVE_DB, $AVE_Core;
+	
+	$gen_time = microtime();
+
 	// извлекаем id из аргумента
 	$navi_id  = (int)$navi_tag[1];
+
 	// извлекаем level из аргумента
 	$navi_print_level = $navi_tag[2];
 
@@ -194,6 +198,9 @@ function parse_navigation($navi_tag)
 	// удаляем переводы строк и табуляции
 	$navi = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $navi);
 	$navi = str_replace(array("\n","\r"),'',$navi);
+
+	$gen_time = microtime()-$gen_time;
+	$GLOBALS['block_generate'][] = array('NAVIGATION_'.$navi_id=>$gen_time);
 
 	return $navi;
 }

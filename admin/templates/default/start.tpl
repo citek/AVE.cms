@@ -4,30 +4,42 @@
 
 <div class="widgets">
 
-			{if $log_svn}
-                <div class="widget">
-                    <div class="head">
-                        <h5>Вышла новая версия <a href="http://www.overdoze.ru/index.php?module=forums" target="_blank" class="botDir" title="{#MAIN_SVN_FORUM#}">{$smarty.const.APP_VERSION}</a>! <a href="{$svn_url}" target="_blank" class="rightDir" title="{#MAIN_SVN_REPOS#}">Рекомендуется обновиться!</a></h5>
-                    </div>
-                    <div style="overflow-y:auto;max-height:200px;">
-                      <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
-                          <tbody>
-                              {foreach from=$log_svn item=revision}
-                              <tr>
-                                  <td><span class="webStatsLink"><a href="{$revision.url}" target="_blank" class="toprightDir" title="{#MAIN_SVN_LOOK#}">{$revision.version}</a></span></td>
-                                  <td><strong><a href="mailto:{$revision.author|escape}" class="topDir" target="_blank" title="{#MAIN_SVN_MAILTO#}">{$revision.author|escape}</a></strong></td>
-                                  <td style="white-space:pre-wrap">{$revision.comment|escape}</td>
-                              </tr>
-                              {/foreach}
-                          </tbody>
-                      </table>
-                    </div>
-                </div>
-			{/if}
+        <ul class="messages first">
+            <li class="highlight yellow hidden" id="update">
+
+            <script type="text/javascript">
+            $(document).ready(function(){ldelim}
+                $.ajax({ldelim}
+                    url: 'http://ave-cms.ru/version.php?jsoncallback=?',
+                    dataType: "jsonp",
+                    success: function (data) {ldelim}
+                        var current_version = {$smarty.const.APP_VERSION};
+                        var stable_version = data.version;
+                        var newstext = data.newstext;
+                        if (current_version < stable_version) {ldelim}
+                            $("#update").removeClass("hidden").html(newstext);
+                        {rdelim}
+                    {rdelim}
+                {rdelim});
+            {rdelim});
+            </script> 
+
+            </li>
+        </ul>
+
+        {if $login_menu && $online_users > "1"}
+        <ul class="messages first">
+            <li class="highlight grey">{#MAIN_USERS_LAST_TIME#} 
+              {foreach from=$online_users item=item name=online_users}
+                <a href="index.php?do=user&action=edit&Id={$item->Id}" class="topDir link" title="{$item->user_group_name}">{if $item->user_group == "1"}<strong>{$item->user_name}</strong>{else}{$item->user_name}{/if}</a>{if !$smarty.foreach.online_users.last}, {/if}
+              {/foreach}
+            </li>
+        </ul>
+        {/if}
 
 		<div class="widget">
 			<div class="head">
-				<h5>Последние документы</h5>
+				<h5>{#MAIN_START_DOC_TITLE#}</h5>
 			</div>
 			<div class="dataTables_wrapper" id="example_wrapper">
 			<div class="">
@@ -35,41 +47,50 @@
 			<form method="get" id="doc_search" action="index.php">
 				<input type="hidden" name="do" value="docs" />
 				<input type="hidden" name="rubric_id" value="all" />
-			<label>Поиск: <input type="text" placeholder="Искать документ" name="QueryTitel" style="width: 350px;"><div class="srch"></div></label>
+			<label>{#MAIN_START_SEARCH#} <input type="text" placeholder="{#MAIN_START_SEARCH_T#} " name="QueryTitel" style="width: 350px;"><div class="srch"></div></label>
 			</form>
 			</div>
 			</div>
 			<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 				<col width="10" />
 				<col />
-				<col width="250" />
+				<col width="200" />
 				<col width="150" />
 				<col width="150" />
 				<thead>
 					<tr>
-						<td>id</td>
-						<td>Наименование</td>
-						<td>Рубрика</td>
-						<td>Опубликован</td>
-						<td>Автор</td>
+						<td>{#MAIN_START_DOC_ID#}</td>
+						<td>{#MAIN_START_DOC_NAME#}</td>
+						<td>{#MAIN_START_DOC_RUBRIC#}</td>
+						<td>{#MAIN_START_DOC_DATE#}</td>
+						<td>{#MAIN_START_DOC_AUTOR#}</td>
 					</tr>
 				</thead>
 				{foreach from=$doc_start item=item}
 					<tr>
-						<td nowrap="nowrap"><strong><a class="toprightDir" title="{#DOC_SHOW_TITLE#}" href="../{if $item->Id!=1}index.php?id={$item->Id}&amp;cp={$sess}{/if}" target="_blank">{$item->Id}</a></strong></td>
+						<td nowrap="nowrap"><strong><a class="toprightDir" title="{#DOC_SHOW_TITLE#}" href="../{if $item->Id!=1}index.php?id={$item->Id}&cp={$sess}{/if}" target="_blank">{$item->Id}</a></strong></td>
 						<td>
-							<strong>
+							<div  class="docaction">
 							{if $item->cantEdit==1}
-								<a class="docname" href="index.php?do=docs&action=edit&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}">{if $item->document_breadcrum_title != ""}{$item->document_breadcrum_title}{else}{$item->document_title}{/if}</a>
+                                {if $item->rubric_admin_teaser_template != ""}
+                                {$item->rubric_admin_teaser_template}
+                                {else}
+                                <strong>
+								<a class="docname" href="index.php?do=docs&action=edit&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}">
+                                    {if $item->document_breadcrum_title != ""}{$item->document_breadcrum_title}{else}{$item->document_title}{/if}
+                                </a>
+                                </strong>
+                                <br />
+                                <a href="../{if $item->Id!=1}{$item->document_alias}{/if}" target="_blank"><span class="dgrey doclink">{$item->document_alias}</span></a>
+                                {/if}
 							{else}
 								{$item->document_title}
 							{/if}
-							</strong><br />
-								<a href="../{if $item->Id!=1}{$item->document_alias}{/if}" target="_blank"><span class="dgrey doclink">{$item->document_alias}</span></a>
+                            </div>
 						</td>
 						<td align="center">
 							{if check_permission('rubric_edit')}
-								<a href="index.php?do=rubs&action=edit&Id={$item->rubric_id}&cp={$sess}">{$item->rubric_title|escape:html}</a>
+								<a href="index.php?do=rubs&action=edit&Id={$item->rubric_id}&cp={$sess}" class="link">{$item->rubric_title|escape:html}</a>
 							{else}
 								{$item->rubric_title|escape:html}
 							{/if}
@@ -82,9 +103,11 @@
 			</table>
 		</div>
 	</div>
+</div>
 
+<div class="widgets">
 			<!-- Left widgets -->
-            <div class="left">
+            <div class="oneThree">
 
                 <!-- Statistics -->
                 <div class="widget">
@@ -92,30 +115,32 @@
                         <h5>{#MAIN_STAT_SYSTEM_INFO#}</h5>
                     </div>
                     <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+                        <col width="40%"/>
+                        <col/>
                         <tbody>
                             <tr class="noborder">
-                                <td width="50%">{#MAIN_STAT_AVE#}</td>
-                                <td align="right"><span class="webStatsLink">{$smarty.const.APP_VERSION}</span></td>
+                                <td>{$smarty.const.APP_NAME}</td>
+                                <td align="right"><span class="cmsStats">{$smarty.const.APP_VERSION}</span></td>
                             </tr>
 							<tr>
-                                <td>{#MAIN_STAT_AVEREV#}</td>
-                                <td align="right"><span class="webStatsLink">{$smarty.const.BILD_VERSION}</span></td>
+                                <td>{#MAIN_STAT_DOMEN#}</td>
+                                <td align="right"><span class="cmsStats">{$domain}</span></td>
                             </tr>
                             <tr>
                                 <td>{#MAIN_STAT_PHP#}</td>
-                                <td align="right"><span class="webStatsLink">{$php_version}</span></td>
+                                <td align="right"><span class="cmsStats">{$php_version}</span></td>
                             </tr>
                             <tr>
                                 <td>{#MAIN_STAT_MYSQL_VERSION#}</td>
-                                <td align="right"><span class="webStatsLink">{$mysql_version}</span></td>
+                                <td align="right"><span class="cmsStats">{$mysql_version}</span></td>
                             </tr>
                             <tr>
                                 <td>{#MAIN_STAT_MYSQL#}</td>
-                                <td align="right"><span class="webStatsLink">{$mysql_size}</span></td>
+                                <td align="right"><span class="cmsStats">{$mysql_size}</span></td>
                             </tr>
                             <tr>
                                 <td>{#MAIN_STAT_CACHE#}</td>
-                                <td align="right"><span class="webStatsLink" id="cachesize"><a href="javascript:void(0);" id="cacheShow">Показать</a></span></td>
+                                <td align="right"><span class="cmsStats" id="cachesize"><a href="javascript:void(0);" class="link" id="cacheShow">{#MAIN_STAT_CACHE_SHOW#}</a></span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -124,7 +149,7 @@
             </div>
 
             <!-- Right widgets -->
-            <div class="right">
+            <div class="oneThree">
 
                 <!-- User widget -->
                 <div class="widget">
@@ -132,43 +157,70 @@
                         <h5>{#MAIN_STAT#}</h5>
                     </div>
                     <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+                        <col width="40%"/>
+                        <col/>
                         <tbody>
                             <tr class="noborder">
-                                <td width="50%">{#MAIN_STAT_DOCUMENTS#}</td>
-                                <td align="right"><span class="webStatsLink">{$cnts.documents}</span></td>
+                                <td>{#MAIN_STAT_DOCUMENTS#}</td>
+                                <td align="right"><span class="cmsStats">{$cnts.documents}</span></td>
                             </tr>
                             <tr>
                                 <td>{#MAIN_STAT_RUBRICS#}</td>
-                                <td align="right"><span class="webStatsLink">{$cnts.rubrics}</span></td>
+                                <td align="right"><span class="cmsStats">{$cnts.rubrics}</span></td>
                             </tr>
                             <tr>
                                 <td>{#MAIN_STAT_QUERIES#}</td>
-                                <td align="right"><span class="webStatsLink">{$cnts.request}</span></td>
+                                <td align="right"><span class="cmsStats">{$cnts.request}</span></td>
                             </tr>
                             <tr>
                                 <td>{#MAIN_STAT_TEMPLATES#}</td>
-                                <td align="right"><span class="webStatsLink">{$cnts.templates}</span></td>
+                                <td align="right"><span class="cmsStats">{$cnts.templates}</span></td>
                             </tr>
                             <tr>
                                 <td>{#MAIN_STAT_MODULES#}</td>
-                                <td align="right"><span class="webStatsLink">{$cnts.modules_0+$cnts.modules_1}</span></td>
+                                <td align="right"><span class="cmsStats">{$cnts.modules_0+$cnts.modules_1}</span></td>
                             </tr>
 							{if $cnts.modules_0}
                             <tr>
-                                <td>{#MAIN_STAT_MODULES_OFF#}</td>
-                                <td align="right"><span class="webStatsLink">{$cnts.modules_0|default:0}</span></td>
+                                <td><span class="ml20 dotted btext">{#MAIN_STAT_MODULES_OFF#}</span></td>
+                                <td align="right"><span class="cmsStatsAlert">{$cnts.modules_0|default:0}</span></td>
                             </tr>
 							{/if}
                             <tr>
                                 <td>{#MAIN_STAT_USERS#}</td>
-                                <td align="right"><span class="webStatsLink">{$cnts.users_0+$cnts.users_1}</span></td>
+                                <td align="right"><span class="cmsStats">{$cnts.users_0+$cnts.users_1}</span></td>
                             </tr>
 							{if $cnts.users_0}
                             <tr>
-                                <td>{#MAIN_STAT_USERS_WAIT#}</td>
-                                <td align="right"><span class="webStatsLink">{$cnts.users_0|default:0}</span></td>
+                                <td><span class="ml20 dotted btext">{#MAIN_STAT_USERS_WAIT#}</span></td>
+                                <td align="right"><span class="cmsStatsAlert">{$cnts.users_0|default:0}</span></td>
                             </tr>
 							{/if}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+
+            <!-- Right widgets -->
+            <div class="oneThree">
+
+                <!-- User widget -->
+                <div class="widget">
+                    <div class="head">
+                        <h5>{#MAIN_LOGS#}</h5>
+                    </div>
+                    <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+                        <col width="10"/>
+                        <col/>
+                        <tbody>
+                            {foreach key=k from=$logs item=logs name=logs}
+                            <tr>
+                                <td align="center">{$k}</td>
+                                <td><span class="topDir" title="{$logs.log_time|date_format:$TIME_FORMAT|pretty_date} - {$logs.log_text}">{$logs.log_text|truncate:50}</span></td>
+                            </tr>
+                            {/foreach}
                         </tbody>
                     </table>
                 </div>
@@ -179,7 +231,3 @@
 
 
 </div>
-
-
-
-

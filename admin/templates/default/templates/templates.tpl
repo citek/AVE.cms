@@ -78,19 +78,19 @@ $(document).ready(function(){ldelim}
 	{foreach from=$items item=tpl}
 		<tr>
 			<td width="10" align="center">{$tpl->Id}</td>
-			<td><strong>{if check_permission('template_edit')}<a title="{#TEMPLATES_EDIT#}" href="index.php?do=templates&amp;action=edit&amp;Id={$tpl->Id}&amp;cp={$sess}" class="topDir docname">{$tpl->template_title|escape}</a>{else}{$tpl->template_title|escape}{/if}</strong></td>
+			<td><strong>{if check_permission('template_edit')}<a title="{#TEMPLATES_EDIT#}" href="index.php?do=templates&action=edit&Id={$tpl->Id}&cp={$sess}" class="topDir link">{$tpl->template_title|escape}</a>{else}{$tpl->template_title|escape}{/if}</strong></td>
 			<td align="center">{$tpl->template_author}</td>
 			<td align="center"><span class="date_text dgrey">{$tpl->template_created|date_format:$TIME_FORMAT|pretty_date}</span></td>
 			<td nowrap="nowrap" width="1%" align="center">
 				{if check_permission('template_edit')}
-					<a title="{#TEMPLATES_EDIT#}" href="index.php?do=templates&amp;action=edit&amp;Id={$tpl->Id}&amp;cp={$sess}" class="topDir icon_sprite ico_edit"></a>
+					<a title="{#TEMPLATES_EDIT#}" href="index.php?do=templates&action=edit&Id={$tpl->Id}&cp={$sess}" class="topDir icon_sprite ico_edit"></a>
 				{else}
 					<a title="{#TEMPLATES_NO_CHANGE#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_edit_no"></a>
 				{/if}
 			</td>
 			<td nowrap="nowrap" width="1%" align="center">
 				{if check_permission('template_multi')}
-					<a title="{#TEMPLATES_COPY#}" href="index.php?do=templates&amp;action=multi&amp;sub=save&amp;Id={$tpl->Id}&amp;cp={$sess}" class="topleftDir CopyTempl icon_sprite ico_copy"></a>
+					<a title="{#TEMPLATES_COPY#}" href="index.php?do=templates&action=multi&sub=save&Id={$tpl->Id}&cp={$sess}" class="topleftDir CopyTempl icon_sprite ico_copy"></a>
 				{else}
 					<a title="{#TEMPLATES_NO_COPY#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_copy_no"></a>
 				{/if}
@@ -101,7 +101,7 @@ $(document).ready(function(){ldelim}
 				{else}
 					{if $tpl->can_deleted==1}
 						{if check_permission('template_del')}
-							<a title="{#TEMPLATES_DELETE#}" dir="{#TEMPLATES_DELETE#}" name="{#TEMPLATES_DELETE_CONF#}" href="index.php?do=templates&amp;action=delete&amp;Id={$tpl->Id}&amp;cp={$sess}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
+							<a title="{#TEMPLATES_DELETE#}" dir="{#TEMPLATES_DELETE#}" name="{#TEMPLATES_DELETE_CONF#}" href="index.php?do=templates&action=delete&Id={$tpl->Id}&cp={$sess}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
 						{else}
 							<a title="{#TEMPLATES_NO_DELETE3#}" href="javascript:void(0);" class="topleftDir icon_sprite ico_delete_no"></a>
 						{/if}
@@ -118,7 +118,7 @@ $(document).ready(function(){ldelim}
 
 		<div id="tab2" class="tab_content" style="display:none;">
 		{if check_permission('template_new')}
-			<form id="add_templ" method="post" action="index.php?do=templates&amp;action=new&amp;cp={$sess}" class="mainForm">
+			<form id="add_templ" method="post" action="index.php?do=templates&action=new&cp={$sess}" class="mainForm">
 			<div class="rowElem">
 				<label>{#TEMPLATES_NAME3#}</label>
 				<div class="formRight"><input placeholder="{#TEMPLATES_NAME#}" name="TempName" type="text" id="TempName" value="{$g_name|escape}" style="width: 400px">
@@ -138,14 +138,14 @@ $(document).ready(function(){ldelim}
 			{foreach from=$css_files item=css_files}
 			<tr>
 				<td>
-					<a title="{#TEMPLATES_EDIT_FILE#}" href="index.php?do=templates&amp;action=edit_css&amp;sub=edit&amp;name_file={$css_files}&amp;cp={$sess}" class="toprightDir"><strong>{$css_files}</strong></a>
+					<a title="{#TEMPLATES_EDIT_FILE#}" href="index.php?do=templates&action=edit_css&sub=edit&name_file={$css_files}&cp={$sess}" class="toprightDir link"><strong>{$css_files}</strong></a>
 				</td>
 				<td nowrap="nowrap" width="1%" align="center">
-					<a title="{#TEMPLATES_EDIT_FILE#}" href="index.php?do=templates&amp;action=edit_css&amp;sub=edit&amp;name_file={$css_files}&amp;cp={$sess}" class="topDir icon_sprite ico_edit"></a>
+					<a title="{#TEMPLATES_EDIT_FILE#}" href="index.php?do=templates&action=edit_css&sub=edit&name_file={$css_files}&cp={$sess}" class="topDir icon_sprite ico_edit"></a>
 				</td>
 
 				<td nowrap="nowrap" width="1%" align="center">
-					<a title="{#TEMPLATES_DEL_FILE#}" dir="{#TEMPLATES_DEL_FILE#}" name="{#TEMPLATES_DELETE_CONF#}" href="index.php?do=templates&amp;action=edit_css&amp;sub=delete&amp;name_file={$css_files}&amp;cp={$sess}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
+					<a title="{#TEMPLATES_DEL_FILE#}" dir="{#TEMPLATES_DEL_FILE#}" name="{#TEMPLATES_DELETE_CONF#}" href="index.php?do=templates&action=edit_css&sub=delete&name_file={$css_files}&cp={$sess}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
 				</td>
 			</tr>
 			{/foreach}
@@ -170,15 +170,15 @@ $(document).ready(function(){ldelim}
 			{foreach from=$js_files item=js_files}
 			<tr>
 				<td>
-					<a title="{#TEMPLATES_EDIT_FILE#}" href="index.php?do=templates&amp;action=edit_js&amp;sub=edit&amp;name_file={$js_files}&amp;cp={$sess}" class="toprightDir"><strong>{$js_files}</strong></a>
+					<a title="{#TEMPLATES_EDIT_FILE#}" href="index.php?do=templates&action=edit_js&sub=edit&name_file={$js_files}&cp={$sess}" class="toprightDir link"><strong>{$js_files}</strong></a>
 				</td>
 
 				<td nowrap="nowrap" width="1%" align="center">
-					<a title="{#TEMPLATES_EDIT_FILE#}" href="index.php?do=templates&amp;action=edit_js&amp;sub=edit&amp;name_file={$js_files}&amp;cp={$sess}" class="topDir icon_sprite ico_edit"></a>
+					<a title="{#TEMPLATES_EDIT_FILE#}" href="index.php?do=templates&action=edit_js&sub=edit&name_file={$js_files}&cp={$sess}" class="topDir icon_sprite ico_edit"></a>
 				</td>
 
 				<td nowrap="nowrap" width="1%" align="center">
-					<a title="{#TEMPLATES_DEL_FILE#}" dir="{#TEMPLATES_DEL_FILE#}" name="{#TEMPLATES_DELETE_CONF#}" href="index.php?do=templates&amp;action=edit_js&amp;sub=delete&amp;name_file={$js_files}&amp;cp={$sess}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
+					<a title="{#TEMPLATES_DEL_FILE#}" dir="{#TEMPLATES_DEL_FILE#}" name="{#TEMPLATES_DELETE_CONF#}" href="index.php?do=templates&action=edit_js&sub=delete&name_file={$js_files}&cp={$sess}" class="topleftDir ConfirmDelete icon_sprite ico_delete"></a>
 				</td>
 			</tr>
 			{/foreach}

@@ -24,7 +24,7 @@ if (isset($_REQUEST['do']) && $_REQUEST['do'] == 'logout')
 {
 	// Завершение работы в админке
 	reportLog($_SESSION['user_name'] . ' - закончил сеанс в Панели управления', 2, 2);
-	@session_destroy();
+	user_logout();
 	header('Location:admin.php');
 }
 
@@ -57,7 +57,7 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'login')
 		
 		if ($captcha_ok)
 		{
-			if (true === user_login($_POST['user_login'], $_POST['user_pass'], 1))
+			if (true === user_login($_POST['user_login'], $_POST['user_pass'], 1,(int)(isset($_POST['SaveLogin']) && $_POST['SaveLogin'] == '1')))
 			{
 			
 	            if (!empty($_SESSION['redirectlink']))
