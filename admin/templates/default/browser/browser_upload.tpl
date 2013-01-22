@@ -34,9 +34,9 @@
     </script>
 
 	<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
-	<script type="text/javascript" src="/lib/scripts/uploader/plupload.full.js"></script>
-	<script type="text/javascript" src="/lib/scripts/uploader/i18n/{$smarty.session.admin_language}.js"></script>
-	<script type="text/javascript" src="/lib/scripts/uploader/jquery.plupload.queue.js"></script>
+	<script type="text/javascript" src="{$ABS_PATH}lib/scripts/uploader/plupload.full.js"></script>
+	<script type="text/javascript" src="{$ABS_PATH}lib/scripts/uploader/i18n/{$smarty.session.admin_language}.js"></script>
+	<script type="text/javascript" src="{$ABS_PATH}lib/scripts/uploader/jquery.plupload.queue.js"></script>
 
 <script language="javascript">
 {literal}

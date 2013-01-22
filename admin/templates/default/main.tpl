@@ -29,7 +29,7 @@
 	<!-- JS files -->
 	{include file='scripts.tpl'}
 	
-	<script type="text/javascript" src="/admin/lang/{$smarty.session.admin_language}/scripts.js"></script>
+	<script type="text/javascript" src="{$ABS_PATH}admin/lang/{$smarty.session.admin_language}/scripts.js"></script>
 	<script src="{$tpl_dir}/js/main.js" type="text/javascript"></script>
 
 	<!-- JS Scripts -->
