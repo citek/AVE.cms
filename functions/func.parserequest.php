@@ -121,25 +121,29 @@
 	return @$retval;
 }
 
-  /*
-  * Функция принимает строку, и возвращает
-  * адрес первого изображения, которую найдет
-  */
- function getImgSrc ($data) {
+/*
+* Функция принимает строку, и возвращает
+* адрес первого изображения, которую найдет
+*/
+
+function getImgSrc($data)
+{
     preg_match('@.*<img(.*?)>@i', $data, $matches);
     $host = @$matches[1];
     preg_match('@.*src\s*=\s*("|\')(.*?)("|\')@i', $host, $matches);
     $host = @$matches[2];
-
     preg_match('@/index\.php\?.*thumb=(.*?)\&@i', $host, $matches);
-    //$host = $matches[1];
     if (@$matches[1]) {
         return $matches[1];
     } else {
-        return $host;
+        preg_match('@(.+)thumbnail\/(.+)-.\d+x\d+(\..+)@i', $host, $matches);
+        if (@$matches[1]) {
+            return $matches[1] . $matches[2] . $matches[3];
+        } else {
+            return $host;
+        }
     }
- }
-
+}
 
 /**
  * Функция обработки тэгов полей с использованием шаблонов
