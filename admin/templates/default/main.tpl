@@ -230,7 +230,7 @@
             	{if $user_avatar}
             		<img src="{$user_avatar}" class="avatar" alt="{$smarty.session.user_name|escape}" />
 				{else}
-					<img src="{$tpl_dir}/images/userPic.png" alt="" />
+					<img src="{$tpl_dir}/images/userPic.png" class="avatar" alt="" />
             	{/if}
             	<span>{#MAIN_USER_ONLINE#} <strong>{$smarty.session.user_name|escape}</strong></span>
 			</div>

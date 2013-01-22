@@ -18,7 +18,7 @@
 	<ul class="messagesOne">
 	    {foreach from=$answers item=answer}
 	    <li {if $answer.remark_author_id == $smarty.session.user_id}class="by_me"{else}class="by_user"{/if}>
-	        <a href="#" title=""><img src="{$answer.remark_avatar}" alt="" class="rounded" /></a>
+	        <a href="#" title="">{if $answer.remark_avatar}<img src="{ $answer.remark_avatar}" class="rounded">{else}<img src="{$tpl_dir}/images/user.png" class="rounded" alt="" />{/if}</a>
 	            <div class="messageArea">
 	            <span class="aro"></span>
 	                <div class="infoRow">

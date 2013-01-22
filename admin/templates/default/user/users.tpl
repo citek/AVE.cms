@@ -131,7 +131,7 @@ $(document).ready(function(){ldelim}
 			<tr>
 				<td align="center">{$user->Id}</td>
 				<td align="center"><input title="{#USER_MARK_DELETE#}" class="topDir" name="del[{$user->Id}]" type="checkbox" id="del[{$user->Id}]" value="1" {if !check_permission('user_loesch') || $user->user_group==1 || $user->Id==$smarty.session.user_id}disabled="disabled"{/if} /></td>
-				<td align="center">{if $user->avatar}<img src="{$user->avatar}" class="rounded">{/if}</td>
+				<td align="center">{if $user->avatar}<img src="{$user->avatar}" class="rounded">{else}<img src="{$tpl_dir}/images/user.png" class="rounded" alt="" />{/if}</td>
 				<td>
 					{if check_permission('user_edit')}
 						<a title="{#USER_EDIT#}" href="index.php?do=user&action=edit&Id={$user->Id}&cp={$sess}" class="topDir link">

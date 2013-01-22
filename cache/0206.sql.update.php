@@ -22,7 +22,7 @@ if($res->_result===false)
 		$AVE_DB->Real_Query($v,false);
 }
 
-$CheckSQL="SELECT rubric_admin_teaser_template FROM ".PREFIX."_rubrics";
+$CheckSQL="SELECT rubric_position FROM ".PREFIX."_rubrics";
 $UpdateSQL=Array();
 
 $UpdateSQL[]="ALTER TABLE `".PREFIX."_rubrics`
@@ -31,22 +31,28 @@ $UpdateSQL[]="ALTER TABLE `".PREFIX."_rubrics`
 	 text NOT NULL default '' AFTER
 		`rubric_teaser_template`
 	";
-$UpdateSQL[]="ALTER TABLE `".PREFIX."_rubrics`
-	ADD
-		`rubric_description`
-	 text NOT NULL default '' 
-	";
+
 $UpdateSQL[]="ALTER TABLE `".PREFIX."_rubrics`
 	ADD
 		`rubric_linked_rubric`
-	 int(11) NOT NULL DEFAULT '0'
+	 int(11) NOT NULL DEFAULT '0' AFTER
+		`rubric_header_template`
 	";
+
+$UpdateSQL[]="ALTER TABLE `".PREFIX."_rubrics`
+	ADD
+		`rubric_description`
+	 text NOT NULL default '' AFTER
+		`rubric_linked_rubric`
+	";
+
 $UpdateSQL[]="ALTER TABLE `".PREFIX."_rubrics`
 	ADD
 		`rubric_position`
-	 int(11) NOT NULL DEFAULT '100' 
+	 int(11) NOT NULL DEFAULT '100' AFTER
+		`rubric_description`
 	";
-	
+
 $res=$AVE_DB->Real_Query($CheckSQL,false);
 if($res->_result===false)
 {
