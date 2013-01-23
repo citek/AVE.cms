@@ -277,20 +277,6 @@ $(document).ready(function(){ldelim}
 					</a>
 					{/if}
 
-					<div class="doc_message">
-						{if $item->ist_remark!='0'}
-							<div class="remarks"><span title="{#DOC_ICON_COMMENT#}" class="icon_sprite_doc icon_comment topDir"></span></div>
-						{/if}
-
-						{if $item->document_status!='1'}
-							<div class="public"><span title="{#DOC_ICON_PUBLIC#}" class="icon_sprite_doc icon_public_on topDir"></span></div>
-						{/if}
-
-						{if $item->document_deleted!='0'}
-							<div class="recylce"><span title="{#DOC_ICON_RECYCLE#}" class="icon_sprite_doc icon_recylce topDir"></span></div>
-						{/if}
-
-					</div>
 
 					<div class="actions" style="display: none;">
 
@@ -386,7 +372,26 @@ $(document).ready(function(){ldelim}
 
 			<td align="center"><span class="date_text dgrey">{$item->document_published|date_format:$TIME_FORMAT|pretty_date}<br />{$item->document_changed|date_format:$TIME_FORMAT|pretty_date}</span></td>
 
-			<td align="center"><strong>{$item->document_count_view}</strong></td>
+			<td align="center">
+				<div class="docaction">
+
+					<div class="doc_message">
+						{if $item->ist_remark!='0'}
+							<div class="remarks"><span title="{#DOC_ICON_COMMENT#}" class="icon_sprite_doc icon_comment topDir"></span></div>
+						{/if}
+
+						{if $item->document_status!='1'}
+							<div class="public"><span title="{#DOC_ICON_PUBLIC#}" class="icon_sprite_doc icon_public_on topDir"></span></div>
+						{/if}
+
+						{if $item->document_deleted!='0'}
+							<div class="recylce"><span title="{#DOC_ICON_RECYCLE#}" class="icon_sprite_doc icon_recylce topDir"></span></div>
+						{/if}
+					</div>
+
+					<strong>{$item->document_count_view}</strong>
+				</div>
+			</td>
 
 			{*<td align="center">{$item->document_count_print}</td>*}
 

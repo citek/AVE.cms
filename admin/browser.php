@@ -32,6 +32,7 @@ $lang = empty($_SESSION['admin_language']) ? 'ru' : $_SESSION['admin_language'];
 $AVE_Template = new AVE_Template(BASE_DIR . '/admin/templates/' . $theme . '/browser');
 $AVE_Template->config_load(BASE_DIR . '/admin/lang/' . $lang . '/main.txt');
 $AVE_Template->assign('tpl_dir', 'templates/' . $theme);
+$AVE_Template->assign('ABS_PATH', '../');
 
 
 if (!isset($_REQUEST['action'])) $_REQUEST['action'] = '';

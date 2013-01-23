@@ -113,13 +113,7 @@ function changeRub(select) {ldelim}
 					<input type="checkbox" name="reedit" value="1" checked="checked" class="float" /> <label>{#REQUEST_ACTION_AFTER#}</label>
 				{/if}
 				{if $iframe!='no'}
-
-					{if $smarty.const.ADMIN_MODAL}
-						<a class="iframe btn basicBtn" href="index.php?do=request&action=konditionen&rubric_id={$smarty.request.rubric_id|escape}&Id={$smarty.request.Id|escape}&pop=1&cp={$sess}">{#REQUEST_BUTTON_COND#}</a>
-					{else}
-						<input name="button" type="button" class="basicBtn" onclick="windowOpen('index.php?do=request&action=konditionen&rubric_id={$smarty.request.rubric_id|escape}&Id={$smarty.request.Id|escape}&pop=1&cp={$sess}','920','620','1')" value="{#REQUEST_BUTTON_COND#}" />
-					{/if}
-
+						<input name="button" type="button" class="basicBtn" onclick="windowOpen('index.php?do=request&action=konditionen&rubric_id={$smarty.request.rubric_id|escape}&Id={$smarty.request.Id|escape}&pop=1&cp={$sess}','960','620','1')" value="{#REQUEST_BUTTON_COND#}" />
 				{/if}
 			</td>
 		</tr>

@@ -803,6 +803,21 @@ class AVE_Core
 			}
 			$out = str_replace('[tag:maincontent]', $main_content, $this->_coreDocumentTemplateGet(RUB_ID));
 		}	// /вывод документа
+
+		//Работа с условиями
+		$out = preg_replace('/\[tag:if_exp:?(.*)\]/u', '<?php 
+	$my_exp000=true;
+	$my_exp0001=\'$my_exp000=\'. str_replace(\'#var#\',\'$\',<<<BLOCK
+$1;
+BLOCK
+);
+	@eval($my_exp0001);
+	if($my_exp000==true)
+		{
+?>', $out);
+		$out = str_replace('[tag:if_exp_else]', '<?php }else{ ?>', $out);
+		$out = str_replace('[tag:/if_exp]', '<?php } ?>', $out);
+
 		// Тут мы вводим в хеадер иньекцию скриптов.
 		if(defined('RUB_ID')){
 			$rubheader=$AVE_DB->Query("

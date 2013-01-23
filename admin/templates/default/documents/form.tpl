@@ -270,7 +270,7 @@ $(document).ready(function(){ldelim}
 		<col>
 		<tbody>
 		<tr class="noborder">
-			<td>{#DOC_NAME#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link" title="{#DOC_META_TITLE#}">[?]</a></td>
+			<td>{#DOC_NAME#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link btext" title="{#DOC_META_TITLE#}">[?]</a></td>
 			<td colspan="3"><div class="pr12"><input name="doc_title" type="text" id="doc_title" size="40" value="{if $smarty.request.action == 'edit'}{$document->document_title|escape}{else}{$smarty.request.document_title}{/if}" /></div></td>
 			<td {if $document_alias}rowspan="12"{else}rowspan="11"{/if} valign="top" style="vertical-align: top;">
 				<h4>{#DOC_QUERIES#}</h4>
@@ -286,7 +286,7 @@ $(document).ready(function(){ldelim}
 		{/if}
 
 		<tr>
-			<td>{#DOC_URL#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link" title="{#DOC_URL_INFO#}">[?]</a></td>
+			<td>{#DOC_URL#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link btext" title="{#DOC_URL_INFO#}">[?]</a></td>
 			<td nowrap="nowrap" colspan="3">
 				<div class="pr12"><input name="document_alias" {$dis} type="text" id="document_alias" size="40" style="width:{if $smarty.request.Id != 1 && $smarty.request.Id != $PAGE_NOT_FOUND_ID}400px{else}100%{/if}" value="{if $smarty.request.action=='edit'}{$document->document_alias}{else}{$document->rubric_url_prefix}{/if}" />{if $smarty.request.Id != 1 && $smarty.request.Id != $PAGE_NOT_FOUND_ID}&nbsp;&nbsp;<input type="button" class="basicBtn" id="translit" value="{#DOC_ALIAS_CREATE#}" />{/if}</div>
 				<span id="loading" style="display:none"></span>
@@ -295,7 +295,7 @@ $(document).ready(function(){ldelim}
 		</tr>
 		{if $document_alias}
 		<tr>
-			<td>{#DOC_URL_LINK#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link" title="">[?]</a></td>
+			<td>{#DOC_URL_LINK#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link btext" title="{#DOC_USE_RUB_ALIAS#}">[?]</a></td>
 			<td nowrap="nowrap" colspan="3">
 				<div class="alias" style="width:10%">
 					{foreach from=$document_alias item=alias}
@@ -306,7 +306,7 @@ $(document).ready(function(){ldelim}
 		</tr>
 		{/if}
 		<tr>
-			<td>{#DOC_META_KEYWORDS#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link" title="{#DOC_META_KEYWORDS_INFO#}">[?]</a></td>
+			<td>{#DOC_META_KEYWORDS#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link btext" title="{#DOC_META_KEYWORDS_INFO#}">[?]</a></td>
 			<td colspan="3">
 				<div class="pr12">
 				<textarea style="width:100%; height:40px" name="document_meta_keywords" id="document_meta_keywords">{$document->document_meta_keywords|escape}</textarea>
@@ -315,7 +315,7 @@ $(document).ready(function(){ldelim}
 		</tr>
 
 		<tr>
-			<td>{#DOC_META_DESCRIPTION#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link" title="{#DOC_META_DESCRIPTION_INFO#}">[?]</a></td>
+			<td>{#DOC_META_DESCRIPTION#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link btext" title="{#DOC_META_DESCRIPTION_INFO#}">[?]</a></td>
 			<td colspan="3">
 				<div class="pr12">
 				<textarea style="width:100%; height:40px" name="document_meta_description" id="document_meta_description" >{$document->document_meta_description|escape}</textarea>
@@ -379,7 +379,7 @@ $(document).ready(function(){ldelim}
 		</tr>
 
 		<tr>
-			<td>{#DOC_USE_NAVIGATION#} <a href="javascript:void(0);" style="cursor:help;" class="rightDir link" title="{#DOC_NAVIGATION_INFO#}">[?]</a></td>
+			<td>{#DOC_USE_NAVIGATION#} <a href="javascript:void(0);" style="cursor:help;" class="rightDir link btext" title="{#DOC_NAVIGATION_INFO#}">[?]</a></td>
 			<td colspan="3">
 				{include file='navigation/tree.tpl'}
 			</td>
@@ -392,11 +392,7 @@ $(document).ready(function(){ldelim}
 			<td>{#DOC_USE_BREADCRUMB#}</td>
 			<td colspan="3">
 				<input name="document_parent" type="text" id="document_parent" value="{$document->document_parent}" size="4" maxlength="10" style="width: 50px;" />&nbsp;
-				{if $smarty.const.ADMIN_MODAL}
-					<a class="iframe btn basicBtn" href="index.php?idonly=1&do=docs&action=showsimple&doc=doc_title&target=document_parent&pop=1&cp={$sess}">{#DOC_BREADCRUMB_BTN#}</a>
-				{else}
 					<span class="button basicBtn" onClick="openLinkWinId('document_parent','document_parent');">{#DOC_BREADCRUMB_BTN#}</span>
-				{/if}
 				&nbsp;{if $document->parent}{#DOC_BREADCRUMB_WITH#} «<a href="{$ABS_PATH}index.php?id={$document->parent->Id}" target="_blank">{$document->parent->document_title}</a>»{/if}
 			</td>
 		</tr>

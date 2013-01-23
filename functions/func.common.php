@@ -46,7 +46,11 @@ function SetAvatar($id,$ava){
 	$file_ext=explode('.',basename($ava));
 	$file_ext=$file_ext[count($file_ext)-1];
 	if (!file_exists($ava)) return false;
-	@file_put_contents(BASE_DIR.'/'. UPLOAD_DIR .'/avatars/'.md5($user->user_name).'.'.$file_ext,file_get_contents($ava));
+	$new_ava=BASE_DIR.'/'. UPLOAD_DIR .'/avatars/'.md5($user->user_name).'.'.$file_ext;
+//	var_dump($new_ava);
+//	var_dump($user);
+//	die();
+	@file_put_contents($new_ava,file_get_contents($ava));
 	@unlink($ava);
 	return true;
 }
@@ -629,7 +633,7 @@ function translit_string($st)
 //
 
 	$table=Array(
-	                'А' => 'A',
+	            'А' => 'A',
                 'Б' => 'B',
                 'В' => 'V',
                 'Г' => 'G',
@@ -740,7 +744,7 @@ function translit_string($st)
 }
 
 /**
- * Подготовка текста через API Яндекса
+ * Подготовка текста через API Яндекса (перевод с русского на английский)
  *
  * @param string $st
  * @return string
@@ -756,6 +760,25 @@ function y_translate($text) {
 		$translatedText
 	);
 	return $translatedText;
+}
+
+/**
+ * Переводит кирилицу в нижний регистр
+ *
+ * @param string $st строка для перевода в нижний регистр
+ * @return string
+ */
+function _strtolower($string)
+{
+    $small = array('а','б','в','г','д','е','ё','ж','з','и','й',
+                   'к','л','м','н','о','п','р','с','т','у','ф',
+                   'х','ч','ц','ш','щ','э','ю','я','ы','ъ','ь',
+                   'э', 'ю', 'я');
+    $large = array('А','Б','В','Г','Д','Е','Ё','Ж','З','И','Й',
+                   'К','Л','М','Н','О','П','Р','С','Т','У','Ф',
+                   'Х','Ч','Ц','Ш','Щ','Э','Ю','Я','Ы','Ъ','Ь',
+                   'Э', 'Ю', 'Я');
+    return str_replace($large, $small, $string);  
 }
 
 /**
@@ -779,8 +802,8 @@ function prepare_url($url)
                 '”' => ''
 				
     );
-    $new_url = str_replace(array_keys($table),  array_values($table), $new_url); 
-	if (defined('TRANSLIT_URL') && TRANSLIT_URL) $new_url = translit_string(trim(strtolower($new_url)));
+    $new_url = str_replace(array_keys($table),  array_values($table), $new_url);
+	if (defined('TRANSLIT_URL') && TRANSLIT_URL) $new_url = translit_string(trim(_strtolower($new_url)));
 
 	$new_url = preg_replace(
 		array('/^[\/-]+|[\/-]+$|^[\/_]+|[\/_]+$|[^\.a-zа-яеёA-ZА-ЯЕЁ0-9\/_-]/u', '/--+/', '/-*\/+-*/', '/\/\/+/'),
@@ -791,7 +814,7 @@ function prepare_url($url)
 
 	if (substr(URL_SUFF, 0, 1) != '/' && substr($url, -1) == '/') $new_url = $new_url . "/";
 	
-	return rtrim($new_url,'.');
+	return mb_strtolower(rtrim($new_url,'.'),'UTF-8');
 }
 
 /**
@@ -841,6 +864,14 @@ function rewrite_link($s)
 	return $s;
 }
 
+/**
+ * Запись события в лог
+ *
+ * @param string $meldung Текст сообщения
+ * @param int $typ тип сообщения
+ * @param int $rub номер рубрики
+ * @return 
+ */
 function reportLog($meldung, $typ = 0, $rub = 0)
 {
 	$logdata=array();
@@ -854,6 +885,14 @@ function reportLog($meldung, $typ = 0, $rub = 0)
 	file_put_contents($logfile,'<? $logdata='.var_export($logdata,true).' ?>');
 }
 
+/**
+ * Запись события в лог для 404 ошибок
+ *
+ * @param string $meldung Текст сообщения
+ * @param int $typ тип сообщения
+ * @param int $rub номер рубрики
+ * @return 
+ */
 function report404($meldung, $typ = 0, $rub = 0)
 {
 	$logdata=array();
@@ -867,8 +906,13 @@ function report404($meldung, $typ = 0, $rub = 0)
 	file_put_contents($logfile,'<? $logdata='.var_export($logdata,true).' ?>');
 }
 
-//Возвращаем истинное значение поля для документа
-//Истинное - AsIs в табличке
+/**
+ * Возвращаем истинное значение поля для документа
+ *
+ * @param int $id id документа
+ * @param string $field id поля или его алиас
+ * @return 
+ */
 function get_document_field($document_id,$field)
 {
 	$document_fields=get_document_fields($document_id);
@@ -879,6 +923,13 @@ function get_document_field($document_id,$field)
 	return $field_value;
 }
 
+/**
+ * Функция возвращает массив со значениями полей
+ *
+ * @param int $id id документа
+ * @param array $values если надо вернуть документ с произвольными значениями - используется для ревизий документов
+ * @return array
+ */
 function get_document_fields($document_id,$values=null)
 {
 	global $AVE_DB, $request_documents;
@@ -951,6 +1002,11 @@ function get_document_fields($document_id,$values=null)
 	return $document_fields[$document_id];
 }
 
+function ucfirst_utf8($str){
+        $string = mb_strtoupper(mb_substr($str, 0, 1)) . mb_substr($str, 1);
+        return $string;
+} 
+ 
 /**
  * Формирование строки имени пользователя
  * При наличии всех параметров пытается сформировать строку <b>Имя Фамилия</b>
@@ -967,11 +1023,6 @@ function get_document_fields($document_id,$values=null)
  * @param int $short {0|1} признак формирования короткой формы
  * @return string
  */
-function ucfirst_utf8($str){
-        $string = mb_strtoupper(mb_substr($str, 0, 1)) . mb_substr($str, 1);
-        return $string;
-} 
- 
 function get_username($login = '', $first_name = '', $last_name = '', $short = 1)
 {
 	if ($first_name != '' && $last_name != '')
@@ -998,11 +1049,11 @@ function get_username($login = '', $first_name = '', $last_name = '', $short = 1
 }
 
 /**
- * Возвращает запись из юзерс по идентификатору
+ * Возвращает запись для пользователя по идентификатору
  * не делает лишних запросов
  *
  * @param int $id - идентификатор пользователя
- * @return string
+ * @return object
  */
 
 function get_user_rec_by_id($id){
@@ -1026,11 +1077,11 @@ function get_user_rec_by_id($id){
 }
 
 /**
- * Возвращает запись из юзерс групс по идентификатору
+ * Возвращает параметры группы пользователей по идентификатору
  * не делает лишних запросов
  *
  * @param int $id - идентификатор группы
- * @return string
+ * @return object
  */
 
 function get_usergroup_rec_by_id($id){
@@ -1054,7 +1105,7 @@ function get_usergroup_rec_by_id($id){
 }
 
 /**
- * Возвращает имя пользователя по его идентификатору
+ * Возвращает login пользователя по его идентификатору
  *
  * @param int $id - идентификатор пользователя
  * @return string
@@ -1081,7 +1132,7 @@ function get_usergroup_by_id($id)
 }
 
 /**
- * Возвращает имя пользователя по его идентификатору
+ * Возвращает email пользователя по его идентификатору
  *
  * @param int $id - идентификатор пользователя
  * @return string
@@ -1479,7 +1530,6 @@ if (!defined('PHP_EOL')) {
  * </ul>
  * @return string
  */
-
 function make_thumbnail($params)
 {
 	if (empty($params['link'])) return;
@@ -1563,7 +1613,6 @@ function _var($var,$echo=false)
 /**
  * Функция записывает в указанную папку .htaccess с содержанием "Deny from all"
  *
- * @return bool превышение лимита использования памяти
  */
 function write_htaccess_deny($dir)
 {
@@ -1576,10 +1625,11 @@ function write_htaccess_deny($dir)
 }
 
 /**
- * Функция которая паникует если приблизились к мемори лимит
+ * Функция которая паникует если приблизились к memory_limit
  *
- * @param string $dir путь
- */function memory_panic(){
+ * @return bool превышение лимита использования памяти
+ */
+ function memory_panic(){
 	if(defined('MEMORY_LIMIT_PANIC')&&MEMORY_LIMIT_PANIC!=-1){
 		$use_mem=memory_get_usage();
 		$lim=MEMORY_LIMIT_PANIC*1024*1024;
@@ -1589,6 +1639,12 @@ function write_htaccess_deny($dir)
 	return false;
 }
 
+/**
+ * Функция возвращает каноническое имя страницы
+ *
+ * @param string $url текущий УРЛ
+ * @return string
+ */
 function canonical($url) { 
 	$link = preg_replace('/^(.+?)(\?.*?)?(#.*)?$/', '$1$3', $url);
 return $link;

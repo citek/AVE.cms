@@ -134,11 +134,7 @@
 		<tr>
 			<td colspan="4">
 				<input type="submit" value="{#BUTTON_SAVE#}" class="basicBtn" />
-				{if $smarty.const.ADMIN_MODAL}
-					<input onclick="parent.$.fancybox.close();" type="button" class="redBtn" value="{#REQUEST_BUTTON_CLOSE#}" />
-				{else}
-					<input onclick="self.close();" type="button" class="redBtn" value="{#REQUEST_BUTTON_CLOSE#}" />
-				{/if}
+				<input onclick="self.close();" type="button" class="redBtn" value="{#REQUEST_BUTTON_CLOSE#}" />
 			</td>
 		</tr>
 		</tbody>

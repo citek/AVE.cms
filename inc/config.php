@@ -31,8 +31,7 @@ $GLOBALS['CMS_CONFIG']['DEFAULT_THEME_FOLDER_COLOR'] = array('DESCR' =>'Цвет
 $GLOBALS['CMS_CONFIG']['ADMIN_MENU'] = array('DESCR' =>'Использовать плавующее боковое меню','default'=>true,'TYPE'=>'bool','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['ADMIN_FAVICON'] = array('DESCR' =>'Использовать для админки альтернативную admin.favicon.ico вместо favicon.ico','default'=>true,'TYPE'=>'bool','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['ADMIN_CAPTCHA'] = array('DESCR' =>'Использовать капчу при входе в админку','default'=>false,'TYPE'=>'bool','VARIANT'=>'');
-//$GLOBALS['CMS_CONFIG']['ADMIN_MODAL'] = array('DESCR' =>'Использовать модальные окна','default'=>false,'TYPE'=>'bool','VARIANT'=>'');
-$GLOBALS['CMS_CONFIG']['ADMIN_EDITMENU'] = array('DESCR' =>'Использовать "всплывающие Действия" в системе','default'=>false,'TYPE'=>'bool','VARIANT'=>'');
+$GLOBALS['CMS_CONFIG']['ADMIN_EDITMENU'] = array('DESCR' =>'Использовать всплывающие "Действия" в системе','default'=>true,'TYPE'=>'bool','VARIANT'=>'');
 
 $GLOBALS['CMS_CONFIG']['ATTACH_DIR'] = array('DESCR' =>'Директория для хранения вложений','default'=>'cache/attachments','TYPE'=>'string','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['UPLOAD_DIR'] = array('DESCR' =>'Директория для хранения файлов','default'=>'uploads','TYPE'=>'string','VARIANT'=>'');

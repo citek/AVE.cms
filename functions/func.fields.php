@@ -45,7 +45,7 @@ function get_field_kurztext($field_value,$type,$field_id='',$rubric_field_templa
 	{
 		case 'edit' :
 				$field  = '<a name="' . $field_id . '"></a>';
-				$field .= '<input id="feld_' . $field_id . '" type="text" style="width:' . $AVE_Document->_field_width . '" name="feld[' . $field_id . ']" value="' . htmlspecialchars($field_value, ENT_QUOTES) . '"> ';
+				$field .= '<div class="pr12"><input id="feld_' . $field_id . '" type="text" name="feld[' . $field_id . ']" value="' . htmlspecialchars($field_value, ENT_QUOTES) . '"></div> ';
 				$res=$field;
 			break;
 

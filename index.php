@@ -6,7 +6,7 @@
  * @package AVE.cms
  * @version 3.x
  * @filesource
- * @copyright � 2007-2013 AVE.CMS, http://www.ave-cms.ru
+ * @copyright © 2007-2013 AVE.CMS, http://www.ave-cms.ru
  *
  */
 
@@ -20,6 +20,8 @@ if (! empty($_REQUEST['thumb'])) { require(BASE_DIR . '/inc/thumb.php'); exit; }
 ob_start();
 
 require(BASE_DIR . '/inc/init.php');
+// не на всех хостингах настройки одинаковые ((((
+if (strpos($_SERVER['REQUEST_URI'],ABS_PATH.UPLOAD_DIR.'/')===0) { require(BASE_DIR . '/inc/thumb.php'); exit; }
 
 $AVE_Template = new AVE_Template(BASE_DIR . '/templates/' . DEFAULT_THEME_FOLDER);
 
@@ -38,13 +40,14 @@ if (!empty($_REQUEST['revission'])){
 $AVE_Core->coreSiteFetch(get_current_document_id());
 
 $content = ob_get_clean();
+file_put_contents(BASE_DIR.'/cache/doc-'.$_REQUEST['id'].'.html',$content);
 ob_start();
 eval('?>' . $content . '<?');
 $cont=ob_get_clean();
 $rubheader=(empty($GLOBALS["user_header"]) ? "" : implode(chr(10),$GLOBALS["user_header"]));
 $cont = str_replace('[tag:rubheader]', $rubheader, $cont);
 
-if ($_REQUEST['id'] == PAGE_NOT_FOUND_ID){
+if (isset($_REQUEST['id']) AND ($_REQUEST['id']) == PAGE_NOT_FOUND_ID){
 	report404(
 		"<strong class=\"code_red\">404 ERROR:</strong> "
 		. "<br />" .
