@@ -260,7 +260,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td><strong><a title="{#RUBRIK_THUMBNAIL#}" class="rightDir" href="javascript:void(0);" onclick="textSelection('[tag:X000x000:YYY]', '');">[tag:X000x000:[tag:fld:XXX]]</a></strong></td>
+		<td><strong><a title="{#RUBRIK_THUMBNAIL#}" class="rightDir" href="javascript:void(0);" onclick="textSelection('[tag:X000x000:YYY]', '');">[tag:X000x000:[tag:rfld:XXX][XXX]]</a></strong></td>
 	</tr>
 
     <tr>
@@ -378,7 +378,7 @@
 		<td><strong><a title="{#REQUEST_MEDIAPATH#}" class="rightDir" href="javascript:void(0);" onclick="textSelection3('[tag:mediapath]', '');">[tag:mediapath]</a></strong></td>
 	</tr>
 	<tr>
-		<td><strong><a title="{#REQUEST_THUMBNAIL#}" class="rightDir" href="javascript:void(0);" onclick="textSelection3('[tag:X000x000:YYY]', '');">[tag:X000x000:[tag:rfld:XXX[XXX]]</a></strong></td>
+		<td><strong><a title="{#REQUEST_THUMBNAIL#}" class="rightDir" href="javascript:void(0);" onclick="textSelection3('[tag:X000x000:YYY]', '');">[tag:X000x000:[tag:rfld:XXX][XXX]]</a></strong></td>
 	</tr>
     <tr>
     	<td><strong>HTML Tags</strong></td>
@@ -497,7 +497,9 @@
 		<td><strong><a title="{#REQUEST_MEDIAPATH#}" class="rightDir" href="javascript:void(0);" onclick="textSelection4('[tag:mediapath]', '');">[tag:mediapath]</a></strong></td>
 	</tr>
 	<tr>
-		<td><strong><a title="{#REQUEST_THUMBNAIL#}" class="rightDir" href="javascript:void(0);" onclick="textSelection4('[tag:X000x000:YYY]', '');">[tag:X000x000:[tag:rfld:XXX[XXX]]</a></strong></td>
+		<td>
+			<strong><a title="{#REQUEST_THUMBNAIL#}" class="rightDir" href="javascript:void(0);" onclick="textSelection4('[tag:X000x000:YYY]', '');">[tag:X000x000:[tag:rfld:XXX][XXX]]</a></strong>
+		</td>
 	</tr>
     <tr>
     	<td><strong>HTML Tags</strong></td>

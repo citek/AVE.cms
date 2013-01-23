@@ -158,7 +158,7 @@ $(document).ready(function(){ldelim}
 					<textarea wrap="off" style="width:100%; height:70px" name="rubric_field_template[{$rf->Id}]" id="rubric_field_template[{$rf->Id}]">{$rf->rubric_field_template|escape}</textarea>
                     	|&nbsp;
 						<a class="docname" href="javascript:void(0);" onclick="javascript:cp_insert('[tag:parametr:]', 'rubric_field_template[{$rf->Id}]', 'Rubric');"><strong>[tag:parametr:XXX]</strong></a>&nbsp;|&nbsp;
-						<a class="docname" href="javascript:void(0);" onclick="javascript:cp_insert('[tag:X000x000:[tag:parametr:]]', 'rubric_field_template[{$rf->Id}]', 'Rubric');"><strong>[tag:X000x000:[tag:parametr:XXX]]</strong></a>&nbsp;|&nbsp;
+						<a class="docname" href="javascript:void(0);" onclick="javascript:cp_insert('[tag:X000x000:[tag:parametr:]]', 'rubric_field_template[{$rf->Id}]', 'Rubric');"><strong>[tag:X000x000:[tag:rfld:XXX][XXX]]</strong></a>&nbsp;|&nbsp;
 						<a class="docname" href="javascript:void(0);" onclick="javascript:cp_insert('[tag:path]', 'rubric_field_template[{$rf->Id}]', 'Rubric');"><strong>[tag:path]</strong></a>&nbsp;|&nbsp;
 						<a class="docname" href="javascript:void(0);" onclick="javascript:cp_insert('[tag:docid]', 'rubric_field_template_request[{$rf->Id}]', 'Rubric');"><strong>[tag:docid]</strong></a>&nbsp;|&nbsp;
 						<a class="docname" href="javascript:void(0);" onclick="javascript:cp_tag('tag:if_empty', 'rubric_field_template[{$rf->Id}]', 'Rubric');"><strong>[tag:if_empty]&nbsp;[/tag:if_empty]</strong></a>&nbsp;|&nbsp;
@@ -184,7 +184,7 @@ $(document).ready(function(){ldelim}
 					<textarea wrap="off" style="width:100%; height:70px" name="rubric_field_template_request[{$rf->Id}]" id="rubric_field_template_request[{$rf->Id}]">{$rf->rubric_field_template_request|escape}</textarea>
                     	|&nbsp;
 						<a class="docname" href="javascript:void(0);" onclick="javascript:cp_insert('[tag:parametr:]', 'rubric_field_template_request[{$rf->Id}]', 'Rubric');"><strong>[tag:parametr:XXX]</strong></a>&nbsp;|&nbsp;
-						<a class="docname" href="javascript:void(0);" onclick="javascript:cp_insert('[tag:X000x000:[tag:parametr:]]', 'rubric_field_template_request[{$rf->Id}]', 'Rubric');"><strong>[tag:X000x000:[tag:parametr:XXX]]</strong></a>&nbsp;|&nbsp;
+						<a class="docname" href="javascript:void(0);" onclick="javascript:cp_insert('[tag:X000x000:[tag:parametr:]]', 'rubric_field_template_request[{$rf->Id}]', 'Rubric');"><strong>[tag:X000x000:[tag:rfld:XXX][XXX]]</strong></a>&nbsp;|&nbsp;
 						<a class="docname" href="javascript:void(0);" onclick="javascript:cp_insert('[tag:path]', 'rubric_field_template_request[{$rf->Id}]', 'Rubric');"><strong>[tag:path]</strong></a>&nbsp;|&nbsp;
 						<a class="docname" href="javascript:void(0);" onclick="javascript:cp_insert('[tag:docid]', 'rubric_field_template_request[{$rf->Id}]', 'Rubric');"><strong>[tag:docid]</strong></a>&nbsp;|&nbsp;
 						<a class="docname" href="javascript:void(0);" onclick="javascript:cp_tag('tag:if_empty', 'rubric_field_template_request[{$rf->Id}]', 'Rubric');"><strong>[tag:if_empty]&nbsp;[/tag:if_empty]</strong></a>&nbsp;|&nbsp;
