@@ -182,6 +182,8 @@ $(document).ready(function(){ldelim}
 	$('#document_published').datetimepicker({ldelim}
 		changeMonth: true,
     	changeYear: true,
+		stepHour: 1,
+		stepMinute: 1,
 
 		onClose: function(dateText, inst) {ldelim}
         var endDateTextBox = $('#document_expire');
@@ -194,16 +196,15 @@ $(document).ready(function(){ldelim}
         else {ldelim}
             endDateTextBox.val(dateText);
         {rdelim}
-	    {rdelim},
-	    onSelect: function (selectedDateTime){ldelim}
-	        var start = $(this).datetimepicker('getDate');
-	        $('#document_expire').datetimepicker('option', 'minDate', new Date(start.getTime()));
 	    {rdelim}
 	{rdelim});
 
 	$('#document_expire').datetimepicker({ldelim}
 		changeMonth: true,
     	changeYear: true,
+
+		stepHour: 1,
+		stepMinute: 1,
 
 		onClose: function(dateText, inst) {ldelim}
         var startDateTextBox = $('#document_published');

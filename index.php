@@ -40,7 +40,7 @@ if (!empty($_REQUEST['revission'])){
 $AVE_Core->coreSiteFetch(get_current_document_id());
 
 $content = ob_get_clean();
-file_put_contents(BASE_DIR.'/cache/doc-'.$_REQUEST['id'].'.html',$content);
+//file_put_contents(BASE_DIR.'/cache/doc-'.$_REQUEST['id'].'.html',$content);
 ob_start();
 eval('?>' . $content . '<?');
 $cont=ob_get_clean();

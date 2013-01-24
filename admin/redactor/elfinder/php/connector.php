@@ -200,7 +200,7 @@ $opts = array(
 			'mimeDetect' => 'internal',
 			'tmbCrop' => false,
 			'imgLib' => 'gd',
-			'utf8fix' => false,
+			'utf8fix' => true,
 			'attributes' => array(
 				array(
 					'pattern' => '/^\/\./',
@@ -208,7 +208,34 @@ $opts = array(
 					'write' => false,
 					'hidden' => true,
 					'locked' => true
-				)
+				),
+                array(
+                    'pattern' => '/.tmb/',
+                    'read' => false,
+                    'write' => false,
+                    'hidden' => true,
+                    'locked' => false
+                ),
+                array(
+                    'pattern' => '/\.php$/',
+                    'read' => false,
+                    'write' => false,
+                    'hidden' => true,
+                    'locked' => false
+                ),
+				array(
+                    'pattern' => '/.quarantine/',
+                    'read' => false,
+                    'write' => false,
+                    'hidden' => true,
+                    'locked' => false
+                ),
+                array(
+                    'pattern' => '/\.htaccess$/',
+                    'write' => false,
+                    'locked' => false,
+                    'hidden' => true
+                )
 			),
 		),
 		array(
@@ -228,7 +255,7 @@ $opts = array(
 			'mimeDetect' => 'internal',
 			'tmbCrop' => false,
 			'imgLib' => 'gd',
-			'utf8fix' => false,
+			'utf8fix' => true,
 			'attributes' => array(
 				array(
 					'pattern' => '/^\/\./',
@@ -236,7 +263,35 @@ $opts = array(
 					'write' => false,
 					'hidden' => true,
 					'locked' => true
-				)
+				),
+                array(
+                    'pattern' => '/.tmb/',
+                    'read' => false,
+                    'write' => false,
+                    'hidden' => true,
+                    'locked' => false
+                ),
+                array(
+                    'pattern' => '/\.php$/',
+                    'read' => false,
+                    'write' => false,
+                    'hidden' => true,
+                    'locked' => false
+                ),
+				array(
+                    'pattern' => '/.quarantine/',
+                    'read' => false,
+                    'write' => false,
+                    'hidden' => true,
+                    'locked' => false
+                ),
+                array(
+                    'pattern' => '/\.htaccess$/',
+                    'write' => false,
+                    'locked' => false,
+                    'hidden' => true
+                )
+
 			),
 		),
 	)

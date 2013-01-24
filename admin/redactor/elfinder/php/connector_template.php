@@ -186,8 +186,8 @@ $opts = array(
 		array(
 			// 'id' => 'x5',
 			'driver'  => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-			'path'    => '../../../../templates/'.DEFAULT_THEME_FOLDER,         // path to files (REQUIRED)
-			'URL'     => '/'.DEFAULT_THEME_FOLDER.'/', // URL to files (REQUIRED)
+			'path'    => '../../../../templates/'.DEFAULT_ADMIN_THEME_FOLDER,         // path to files (REQUIRED)
+			'URL'     => '/'.DEFAULT_ADMIN_THEME_FOLDER.'/', // URL to files (REQUIRED)
 			'alias'  => 'File system',
 			'disabled' => array(),
 			'acceptedName' => 'validName',
@@ -201,7 +201,7 @@ $opts = array(
 			'mimeDetect' => 'internal',
 			'tmbCrop' => false,
 			'imgLib' => 'gd',
-			'utf8fix' => false,
+			'utf8fix' => true,
 			'attributes' => array(
 				array(
 					'pattern' => '/^\/\./',
@@ -209,7 +209,34 @@ $opts = array(
 					'write' => false,
 					'hidden' => true,
 					'locked' => true
-				)
+				),
+                array(
+                    'pattern' => '/.tmb/',
+                    'read' => false,
+                    'write' => false,
+                    'hidden' => true,
+                    'locked' => false
+                ),
+                array(
+                    'pattern' => '/\.php$/',
+                    'read' => false,
+                    'write' => false,
+                    'hidden' => true,
+                    'locked' => false
+                ),
+				array(
+                    'pattern' => '/.quarantine/',
+                    'read' => false,
+                    'write' => false,
+                    'hidden' => true,
+                    'locked' => false
+                ),
+                array(
+                    'pattern' => '/\.htaccess$/',
+                    'write' => false,
+                    'locked' => false,
+                    'hidden' => true
+                )
 			),
 		)
 	)
