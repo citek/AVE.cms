@@ -182,7 +182,7 @@ function get_field_langtext($field_value,$type,$field_id='',$rubric_field_templa
 					case '3': // CKEditor
 						$oCKeditor = new CKeditor(); 
 						$oCKeditor->returnOutput = true;
-						$oCKeditor->config['toolbar'] = 'Small';
+						$oCKeditor->config['toolbar'] = 'Big';
 						$oCKeditor->config['height'] = 400;
 						$config = array();
 						$field = $oCKeditor->editor('feld[' . $field_id . ']', $field_value, $config);

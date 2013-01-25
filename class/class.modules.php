@@ -146,7 +146,7 @@ class AVE_Module
 			// Обновление информации о шаблоне модуля
 			$AVE_DB->Query("
 				UPDATE " . PREFIX . "_module
-				SET Template = '" . (int)$template_id . "'
+				SET ModuleTemplate = '" . (int)$template_id . "'
 				WHERE Id = '" . (int)$id . "'
 			");
 		}

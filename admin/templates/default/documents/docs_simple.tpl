@@ -1,10 +1,28 @@
 <script language="javascript" type="text/javascript">
+
+function getUrlParam(paramName)
+{ldelim}
+  var reParam = new RegExp('(?:[\?&]|&amp;)' + paramName + '=([^&]+)', 'i') ;
+  var match = window.location.search.match(reParam) ;
+ 
+  return (match && match.length > 1) ? match[1] : '' ;
+{rdelim}
+
 function insertLink(o) {ldelim}
 	for (var key in o) {ldelim}
 		$('#'+key, window.opener.document).val(o[key]);
 	{rdelim}
 	window.close();
 {rdelim}
+
+function insertLinkCK(data) {ldelim}
+	var funcNum = getUrlParam('CKEditorFuncNum');
+	//window.opener.CKEDITOR.tools.callFunction(funcNum, "data");
+	var fileUrl = data;
+	window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
+	window.close();
+{rdelim}
+
 </script>
 
 <div class="first"></div>
@@ -63,6 +81,8 @@ function insertLink(o) {ldelim}
 						<input onclick="insertLink({ldelim}{$smarty.request.target|escape}:'{$item->Id}'{rdelim});" class="whiteBtn" type="button" value="{#DOC_BUTTON_INSERT_LINK#}" />
 					{elseif $smarty.request.selurl==1}
 						<input onclick="insertLink({ldelim}{$smarty.request.target|escape}:'index.php?id={$item->Id}&doc={$item->document_alias}'{rdelim});" class="whiteBtn" type="button" value="{#DOC_BUTTON_INSERT_LINK#}" />
+					{elseif $smarty.request.selecturl==1}
+						<input onclick="insertLinkCK('index.php?id={$item->Id}&doc={$item->document_alias}');" class="whiteBtn" type="button" value="{#DOC_BUTTON_INSERT_LINK#}" />
 					{else}
 						<input onclick="insertLink({ldelim}{$smarty.request.target|escape}:'index.php?id={$item->Id}',{$smarty.request.doc|escape}:'{$item->document_title}',{$smarty.request.document_alias|escape}:'{$item->document_alias}'{rdelim});" class="whiteBtn" type="button" value="{#DOC_BUTTON_INSERT_LINK#}" />&nbsp;
 						<input onclick="insertLink({ldelim}{$smarty.request.target|escape}:'javascript:popup(\'index.php?id={$item->Id}&doc={$item->document_alias}\',\'{$item->document_title}\',\'800\',\'700\')',{$smarty.request.doc|escape}:'{$item->document_title}',{$smarty.request.document_alias|escape}:'{$item->document_alias}'{rdelim});" class="whiteBtn" type="button" value="{#DOC_BUTTON_LINK_POPUP#}" />

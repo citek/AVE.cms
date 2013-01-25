@@ -1,8 +1,3 @@
-﻿/**
- * Copyright (c) 2003-2012, CKSource - Frederico Knabben. All rights reserved.
- * For licensing, see LICENSE.html or http://ckeditor.com/license
- */
-
 CKEDITOR.editorConfig = function( config ) {
 
 config.protectedSource.push( /<\?[\s\S]*?\?>/g );   // PHP code
@@ -13,69 +8,74 @@ config.language = 'ru';
 
 config.emailProtection = 'mt(NAME,DOMAIN,SUBJECT,BODY)';
 
-config.removePlugins = 'scayt,menubutton,contextmenu';
+config.removePlugins = 'scayt,menubutton';
 
-config.toolbarCanCollapse = false;
+config.toolbarCanCollapse = true;
 config.disableNativeSpellChecker = false;
-//config.browserContextMenuOnCtrl = false;
-config.scayt_autoStartup = true;
+config.scayt_autoStartup = false;
 
 config.autoParagraph = false;
 config.autoUpdateElement = true;
 
-config.filebrowserUploadUrl = '';
-
-config.extraPlugins = 'jwplayer,syntaxhighlight,spoiler';
+config.extraPlugins = 'jwplayer,spoiler,syntaxhighlight,mediaembed';
 
 config.enterMode = CKEDITOR.ENTER_BR;
 config.shiftEnterMode = CKEDITOR.ENTER_P;
 
+config.autoGrow_minHeight = 300;
+
 config.toolbar_Big = [
-  ['Source','-','Save'],
-  ['Cut','Copy','Paste','PasteText','PasteWord'],
-  ['Undo','Redo'],
-  ['Bold','Italic','Underline','StrikeThrough'], '/',
-  ['OrderedList','UnorderedList','-','Outdent','Indent','Blockquote','CreateDiv'],
-  ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],['Link','Unlink','Anchor'], 
-  ['Image','Flash','Table','Rule','SpecialChar'], 
-  ['FontFormat','FontName','FontSize'],
-  ['TextColor','BGColor','RemoveFormat'], 
-  ['FitWindow','ShowBlocks'], 
-  ['AnchorMore','PageBreak','linebreaks']
+    { name: 'document',    items : [ 'Source','-','Save','NewPage','DocProps','Preview','Print','-','Templates' ] },
+    { name: 'clipboard',   items : [ 'Cut','Copy','Paste','PasteText','PasteFromWord','-','Undo','Redo' ] },
+    { name: 'editing',     items : [ 'Find','Replace','-','SelectAll' ] },
+    { name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
+    '/',
+    { name: 'paragraph',   items : [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote','CreateDiv','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' ] },
+    { name: 'links',       items : [ 'Link','Unlink','Anchor' ] },
+    { name: 'insert',      items : [ 'Image','Flash','jwplayer','MediaEmbed','Table','HorizontalRule','PageBreak','Spoiler','Code' ] },
+    '/',
+    { name: 'styles',      items : [ 'Styles','Format','Font','FontSize' ] },
+    { name: 'colors',      items : [ 'TextColor','BGColor' ] },
+    { name: 'tools',       items : [ 'ShowBlocks', 'Maximize' ] }
 ] ;
 
 config.toolbar_Small = [
   ['Source','-','Save'],
   ['Cut','Copy','Paste','PasteText','PasteFromWord'],
   ['Undo','Redo'],
-  ['Bold','Italic','Underline','StrikeThrough'],['OrderedList','UnorderedList'],
-  ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],['NumberedList','BulletedList','Blockquote','CreateDiv','Table','Rule'],['Outdent','Indent'],
-  ['Link','Unlink','Anchor','PageBreak'],['FontFormat','FontSize','TextColor','BGColor','RemoveFormat'],['Image','Flash','jwplayer'],['FitWindow','ShowBlocks'], ['Code','-','SpecialChar']
+  ['Bold','Italic','Underline','Strike'],
+  ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote','CreateDiv','Table'],
+  '/',
+  ['Format','FontSize'],
+
+  ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
+  ['TextColor','BGColor','RemoveFormat'],
+
+  ['Link','Unlink','Anchor'],
+  ['Image','Flash','jwplayer'],
+ 
+  ['Spoiler','PageBreak','SpecialChar'],
+  ['ShowBlocks','Maximize']
 ] ;
 
 config.toolbar_Verysmall = [
    ['Source','-','Save'],['Cut','Copy','Paste','PasteText','PasteWord'],['Undo','Redo'],['Bold','Italic','Underline','StrikeThrough'],['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],['Link','Unlink']
 ] ;
 
-config.autoGrow_minHeight = 300;
+//config.filebrowserBrowseUrl = "../../../../admin/browser.php?typ=bild&mode=fck&target=link";
+//config.filebrowserLinkBrowseUrl = "../../../../admin/browser.php?typ=bild&mode=fck&target=link";
+//config.filebrowserImageBrowseUrl = "../../../../admin/browser.php?typ=bild&mode=fck&target=txtUrl";
+//config.filebrowserFlashBrowseUrl = "../../../../admin/browser.php?typ=bild&mode=fck&target=txtUrl";
+//config.filebrowserLinkUploadUrl = "../../../../admin/browser.php?typ=bild&mode=fck&target=link";
+//config.filebrowserImageUploadUrl = "../../../../admin/browser.php?typ=bild&mode=fck&target=txtUrl";
 
-config.filebrowserLinkBrowseUrl = "../../../../admin/browser.php?typ=bild&mode=fck&target=link";
-config.filebrowserImageBrowseUrl = "../../../../admin/browser.php?typ=bild&mode=fck&target=txtUrl";
-config.filebrowserFlashBrowseUrl = "../../../../admin/browser.php?typ=bild&mode=fck&target=txtUrl";
-config.filebrowserLinkUploadUrl = "../../../../admin/browser.php?typ=bild&mode=fck&target=link";
-config.filebrowserImageUploadUrl = "../../../../admin/browser.php?typ=bild&mode=fck&target=txtUrl";
+config.filebrowserBrowseUrl = '../../../../admin/browser.php?typ=bild&mode=fck&target=txtUrl';
+config.filebrowserImageBrowseUrl = '../../../../admin/browser.php?typ=bild&mode=fck&target=txtUrl';
+config.filebrowserLinkBrowseUrl = '../../../../admin/index.php?do=docs&action=showsimple&selecturl=1&target=txtUrl&pop=1';
 
-config.LinkUpload  = false ;
-config.ImageUpload = false ;
-config.FlashUpload = false ;
-config.ImagesUpload = false ;
-config.StyleUpload = false ;
-config.CommentUpload = false ;
-config.PlayUpload = false ;
+config.removeDialogTabs = 'link:upload;image:Upload';
 
-config.toolbarCanCollapse = false;
-
-config.skin = 'kama' ;
+config.skin = 'moono' ;
 
 config.keystrokes =
 [

@@ -112,11 +112,9 @@ function submitTheForm() {ldelim}
 	else {ldelim}
 
 {if	$target=='link'}
-
 var funcNum = getUrlParam('CKEditorFuncNum');
 var fileUrl = '{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
 window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
-
 
 {elseif $target=='link_image'}
 window.opener.document.getElementById('txtLnkUrl').value = '{$cppath}/{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
@@ -125,7 +123,6 @@ window.opener.document.getElementById('txtLnkUrl').value = '{$cppath}/{$mediapat
 var funcNum = getUrlParam('CKEditorFuncNum');
 var fileUrl = '{$cppath}/{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value
 window.opener.CKEDITOR.tools.callFunction(funcNum, fileUrl);
-//window.opener.UpdatePreview();
 
 {elseif $target=='navi'}
 window.opener.document.getElementById('{$smarty.request.id|escape}').value = '{$cppath}/{$mediapath}' + document.bForm.bDirName.value + document.bForm.bFileName.value;
