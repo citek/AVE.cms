@@ -65,6 +65,7 @@ if (empty($_SESSION['admin_language']))
 get_editable_module();
 LoginModuleCheck();
 
+$AVE_Template->assign('use_editor', get_settings('use_editor'));
 $AVE_Template->assign('user_avatar', getAvatar($_SESSION['user_id'],25));
 
 /* Вывод информации на всех страницах */
@@ -81,7 +82,7 @@ $AVE_Template->assign('navi_top', $AVE_Template->fetch('navi/navi_top.tpl'));
 
 $allowed = array('index',   'start',    'templates',  'rubs', 'user', 'finder',
 				 'groups',  'docs',     'navigation', 'logs', 'request',
-				 'modules', 'settings', 'sysblocks', 'dbsettings', 'browse'
+				 'modules', 'settings', 'sysblocks', 'liveeditor', 'dbsettings', 'browse'
 );
 $do = (!empty($_REQUEST['do']) && in_array($_REQUEST['do'], $allowed)) ? $_REQUEST['do'] : 'start';
 

@@ -77,7 +77,7 @@
                                 {else}
                                 <strong>
 								<a class="docname" href="index.php?do=docs&action=edit&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}">
-                                    {if $item->document_breadcrum_title != ""}{$item->document_breadcrum_title}{else}{$item->document_title}{/if}
+                                    {if $item->document_breadcrum_title != ""}{$item->document_breadcrum_title}{elseif $item->document_title != ""}{$item->document_title}{else}{#DOC_SHOW3_TITLE#}{/if}
                                 </a>
                                 </strong>
                                 <br />
@@ -97,7 +97,6 @@
 						</td>
 						<td align="center"><span class="date_text dgrey">{$item->document_published|date_format:$TIME_FORMAT|pretty_date}</span></td>
 						<td align="center">{$item->document_author|escape}</td>
-
 					</tr>
 				{/foreach}
 			</table>

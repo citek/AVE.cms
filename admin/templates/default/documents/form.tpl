@@ -227,7 +227,11 @@ $(document).ready(function(){ldelim}
 	$(".alias a").click(function() {ldelim}
 		var link = $(this).attr("href");
 		var parent = $(this).attr("data-id");
-		$("#document_alias").val(link+'/{$document->rubric_url_prefix}');
+		{if $document->rubric_url_prefix == ""}
+			$("#document_alias").val(link);
+		{else}
+			$("#document_alias").val(link+'/{$document->rubric_url_prefix}');
+		{/if}
 		$("#document_parent").val(parent);
 		return false;
 	{rdelim});

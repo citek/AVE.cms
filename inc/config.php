@@ -6,7 +6,7 @@
  * @filesource
  */
 @define('APP_NAME', 'AVE.CMS 3.0RC2');
-@define('APP_VERSION', '1.2');
+@define('APP_VERSION', '1.3');
 @define('APP_INFO', '&copy; 2007-2013 <a target="_blank" href="http://www.ave-cms.ru/">Ave-Cms.Ru</a>');
 
 $GLOBALS['CMS_CONFIG']['IDS_LIB'] = array('DESCR' =>'Использовать систему обнаружения вторжений IDS для параноиков<br/>(существенно снижает производительность)','default'=>false,'TYPE'=>'bool','VARIANT'=>'');

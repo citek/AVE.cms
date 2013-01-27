@@ -27,6 +27,7 @@ DOC_EDIT_TITLE           = "Редактировать данный докуме
 DOC_CHANGE_RUBRIC        = "Перенести данный документ в дуругую рубрику"
 DOC_SHOW_TITLE           = "Просмотр документа (ссылка без ЧПУ)"
 DOC_SHOW2_TITLE          = "Просмотр документа (ссылка c ЧПУ)"
+DOC_SHOW3_TITLE          = "Документ без названия"
 DOC_CREATE_NOTICE_TITLE  = "Оставить заметку"
 DOC_REPLY_NOTICE_TITLE   = "Посмотреть/ответить на заметку"
 DOC_ENABLE_TITLE         = "Опубликовать документ"

@@ -262,13 +262,14 @@ $(document).ready(function(){ldelim}
 			<td>
 				<div class="docaction">
 				{if $item->cantEdit==1}
+
 					{if $item->rubric_admin_teaser_template != ""}
 						{$item->rubric_admin_teaser_template}
 					{else}
 					<strong>
 						<a class="toprightDir docname" title="{#DOC_EDIT_TITLE#}" href="index.php?do=docs&action=edit&rubric_id={$item->rubric_id}&Id={$item->Id}&cp={$sess}">
 							{if $item->document_breadcrum_title != ""}
-								{$item->document_breadcrum_title}{else}{$item->document_title}
+								{$item->document_breadcrum_title}{elseif $item->document_title != ""}{$item->document_title}{else}{#DOC_SHOW3_TITLE#}
 							{/if}
 						</a>
 					</strong><br />
@@ -278,7 +279,7 @@ $(document).ready(function(){ldelim}
 					{/if}
 
 
-					<div class="actions" style="display: none;">
+				<div class="actions" style="display: none;">
 
 				{if $smarty.const.ADMIN_EDITMENU}
 

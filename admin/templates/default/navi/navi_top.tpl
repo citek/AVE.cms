@@ -18,6 +18,10 @@
 	{include file='sysblocks/nav.tpl'}
 {/if}
 
+{if check_permission('liveeditor') &&  $use_editor == 2}
+	{include file='liveeditor/templates/nav.tpl'}
+{/if}
+
 {if check_permission('template')}
 	{include file='templates/nav.tpl'}
 {/if}

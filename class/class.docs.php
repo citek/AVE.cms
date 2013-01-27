@@ -238,7 +238,7 @@ class AVE_Document
 				{
 					if (strpos($und_wort, '+') !== false)
 					{
-						$ex_titel .= " AND ((UPPER(document_title) LIKE '%" . mb_strtoupper(substr($und_wort, 1)) . "%')OR(UPPER(document_alias) LIKE '%" . mb_strtoupper(substr($und_wort, 1)) . "%'))";
+						$ex_titel .= " AND ((UPPER(doc.document_title) LIKE '%" . mb_strtoupper(substr($und_wort, 1)) . "%')OR(UPPER(doc.document_alias) LIKE '%" . mb_strtoupper(substr($und_wort, 1)) . "%'))";
 					}
 				}
 
@@ -247,7 +247,7 @@ class AVE_Document
 				{
 					if (strpos($und_nicht_wort, '-') !== false)
 					{
-						$ex_titel .= " AND (document_title NOT LIKE '%" . substr($und_nicht_wort, 1) . "%')";
+						$ex_titel .= " AND (UPPER(doc.document_title) NOT LIKE '%" . mb_strtoupper($und_nicht_wort, 1) . "%')";
 					}
 				}
 
@@ -256,7 +256,7 @@ class AVE_Document
 				$start = $start[0];
 			}
 
-			$ex_titel = "AND ((UPPER(document_title) LIKE '%" . mb_strtoupper($start) . "%')OR(UPPER(document_alias) LIKE '%" . mb_strtoupper($start) . "%'))" . $ex_titel;
+			$ex_titel = "AND ((UPPER(doc.document_title) LIKE '%" . mb_strtoupper($start) . "%')OR(UPPER(doc.document_alias) LIKE '%" . mb_strtoupper($start) . "%'))" . $ex_titel;
 			$nav_titel = '&QueryTitel=' . urlencode($request);
 		}
 
@@ -264,7 +264,7 @@ class AVE_Document
 		if (isset($_REQUEST['rubric_id']) && $_REQUEST['rubric_id'] != 'all')
 		{
 			// Формируем условия, которые будут применены в запросе к БД
-			$ex_rub = " AND rubric_id = '" . $_REQUEST['rubric_id'] . "'";
+			$ex_rub = " AND doc.rubric_id = '" . $_REQUEST['rubric_id'] . "'";
 
 			// формируем условия, которые будут применены в ссылках
 			$nav_rub = '&rubric_id=' . (int)$_REQUEST['rubric_id'];
@@ -273,9 +273,9 @@ class AVE_Document
 		// Поиск с учётом условий настроек рубрик
 		if (!isset($_REQUEST['rubric_id']) && empty($_REQUEST['QueryTitel'])) {
 			// Формируем условия, которые будут применены в запросе к БД
-			$ex_rub = " AND rubric_docs_active = '1'";
+			$ex_rub = " AND rub.rubric_docs_active = '1'";
 
-			// формаируем условия для бд
+			// формируем условия для бд
 			$ex_db = "LEFT JOIN " . PREFIX . "_rubrics as rub on rub.Id = rubric_id";
 		}
 
@@ -288,7 +288,7 @@ class AVE_Document
 		if (@$_REQUEST['document_published'] && @$_REQUEST['document_expire'])
 		{
 			// Формируем условия, которые будут применены в запросе к БД
-			$ex_zeit = 'AND ((document_published BETWEEN ' . $this->_documentListStart() . ' AND ' . $this->_documentListEnd() . ') OR document_published = 0)';
+			$ex_zeit = 'AND ((doc.document_published BETWEEN ' . $this->_documentListStart() . ' AND ' . $this->_documentListEnd() . ') OR doc.document_published = 0)';
 
 			// формируем условия, которые будут применены в ссылках
 			$nav_zeit = '&TimeSelect=1'
@@ -310,27 +310,27 @@ class AVE_Document
 
 				// Только опубликованные
 				case 'Opened':
-					$ex_docstatus = "AND document_status = '1'";
+					$ex_docstatus = "AND doc.document_status = '1'";
 					$navi_docstatus = '&status=Opened';
 					break;
 
 				// Только неопубликованные
 				case 'Closed':
-					$ex_docstatus = "AND document_status = '0'";
+					$ex_docstatus = "AND doc.document_status = '0'";
 					$navi_docstatus = '&status=Closed';
 					break;
 
 				// Помеченные на удаление
 				case 'Deleted':
-					$ex_docstatus = "AND document_deleted = '1'";
+					$ex_docstatus = "AND doc.document_deleted = '1'";
 					$navi_docstatus = '&status=Deleted';
 					break;
 			}
 		}
 
 		// Определяем группу пользоваеля и id документа, если он присутствует в запросе
-		$ex_Geloescht = (UGROUP != 1) ? "AND document_deleted != '1'" : '' ;
-		$w_id = !empty($_REQUEST['doc_id']) ? " AND Id = '" . $_REQUEST['doc_id'] . "'" : '';
+		$ex_Geloescht = (UGROUP != 1) ? "AND doc.document_deleted != '1'" : '' ;
+		$w_id = !empty($_REQUEST['doc_id']) ? " AND doc.Id = '" . $_REQUEST['doc_id'] . "'" : '';
 
 		// Выполняем запрос к БД на получение количества документов соответствующих вышеопределенным условиям
 		$num = $AVE_DB->Query("
@@ -357,7 +357,7 @@ class AVE_Document
 		$seiten = ceil($num / $limit);
 		$start = get_current_page() * $limit - $limit;
 
-		$db_sort   = 'ORDER BY Id DESC';
+		$db_sort   = 'ORDER BY doc.Id DESC';
 		$navi_sort = '&sort=id_desc';
 
 		// Если в запросе используется параметр сортировки
@@ -368,116 +368,116 @@ class AVE_Document
 			{
 				// По id документа, по возрастанию
 				case 'id' :
-					$db_sort   = 'ORDER BY Id ASC';
+					$db_sort   = 'ORDER BY doc.Id ASC';
 					$navi_sort = '&sort=id';
 					break;
 
 				// По id документа, по убыванию
 				case 'id_desc' :
-					$db_sort   = 'ORDER BY Id DESC';
+					$db_sort   = 'ORDER BY doc.Id DESC';
 					$navi_sort = '&sort=id_desc';
 					break;
 
 				// По названию документа, в алфавитном порядке
 				case 'title' :
-					$db_sort   = 'ORDER BY document_title ASC';
+					$db_sort   = 'ORDER BY doc.document_title ASC';
 					$navi_sort = '&sort=title';
 					break;
 
 				// По названию документа, в обратном алфавитном порядке
 				case 'title_desc' :
-					$db_sort   = 'ORDER BY document_title DESC';
+					$db_sort   = 'ORDER BY doc.document_title DESC';
 					$navi_sort = '&sort=title_desc';
 					break;
 
 				// По url-адресу, в алфавитном порядке
 				case 'alias' :
-					$db_sort   = 'ORDER BY document_alias ASC';
+					$db_sort   = 'ORDER BY doc.document_alias ASC';
 					$navi_sort = '&sort=alias';
 					break;
 
 				// По url-адресу, в обратном алфавитном порядке
 				case 'alias_desc' :
-					$db_sort   = 'ORDER BY document_alias DESC';
+					$db_sort   = 'ORDER BY doc.document_alias DESC';
 					$navi_sort = '&sort=alias_desc';
 					break;
 
 				// По id рубрики, по возрастанию
 				case 'rubric' :
-					$db_sort   = 'ORDER BY rubric_id ASC';
+					$db_sort   = 'ORDER BY doc.rubric_id ASC';
 					$navi_sort = '&sort=rubric';
 					break;
 
 				// По id рубрики, по убыванию
 				case 'rubric_desc' :
-					$db_sort   = 'ORDER BY rubric_id DESC';
+					$db_sort   = 'ORDER BY doc.rubric_id DESC';
 					$navi_sort = '&sort=rubric_desc';
 					break;
 
 				// По дате публикации, по возрастанию
 				case 'published' :
-					$db_sort   = 'ORDER BY document_published ASC';
+					$db_sort   = 'ORDER BY doc.document_published ASC';
 					$navi_sort = '&sort=published';
 					break;
 
 				// По дате публикации, по убыванию
 				case 'published_desc' :
-					$db_sort   = 'ORDER BY document_published DESC';
+					$db_sort   = 'ORDER BY doc.document_published DESC';
 					$navi_sort = '&sort=published_desc';
 					break;
 
 				// По количеству просмотров, по возрастанию
 				case 'view' :
-					$db_sort   = 'ORDER BY document_count_view ASC';
+					$db_sort   = 'ORDER BY doc.document_count_view ASC';
 					$navi_sort = '&sort=view';
 					break;
 
 				// По количеству просмотров, по убыванию
 				case 'view_desc' :
-					$db_sort   = 'ORDER BY document_count_view DESC';
+					$db_sort   = 'ORDER BY doc.document_count_view DESC';
 					$navi_sort = '&sort=view_desc';
 					break;
 
 				// По количеству печати документа, по возрастанию
 				case 'print' :
-					$db_sort   = 'ORDER BY document_count_print ASC';
+					$db_sort   = 'ORDER BY doc.document_count_print ASC';
 					$navi_sort = '&sort=print';
 					break;
 
 				// По количеству печати документа, по убыванию
 				case 'print_desc' :
-					$db_sort   = 'ORDER BY document_count_print DESC';
+					$db_sort   = 'ORDER BY doc.document_count_print DESC';
 					$navi_sort = '&sort=print_desc';
 					break;
 
 				// По автору, по алфавитному возрастанию
 				case 'author' :
-					$db_sort   = 'ORDER BY document_author_id ASC';
+					$db_sort   = 'ORDER BY doc.document_author_id ASC';
 					$navi_sort = '&sort=author';
 					break;
 
 				// По автору, по алфавитному убыванию
 				case 'author_desc' :
-					$db_sort   = 'ORDER BY document_author_id DESC';
+					$db_sort   = 'ORDER BY doc.document_author_id DESC';
 					$navi_sort = '&sort=author_desc';
 					break;
 
 				// По дате последнего редактирования, по возрастанию
 				case 'changed':
-					$db_sort   = 'ORDER BY document_changed ASC';
+					$db_sort   = 'ORDER BY doc.document_changed ASC';
 					$navi_sort = '&sort=changed';
 					break;
 
 				// По дате последнего редактирования, по убыванию
 				case 'changed_desc':
-					$db_sort   = 'ORDER BY document_changed DESC';
+					$db_sort   = 'ORDER BY doc.document_changed DESC';
 					$navi_sort = '&sort=changed_desc';
 					break;
 
 				// По умолчанию, по дате последнего редактирования по убыванию.
 				// Последний отредактированный документ, будет первым в списке.
 				default :
-					$db_sort   = 'ORDER BY document_changed DESC';
+					$db_sort   = 'ORDER BY doc.document_changed DESC';
 					$navi_sort = '&sort=changed_desc';
 					break;
 			}

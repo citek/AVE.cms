@@ -233,11 +233,14 @@
 
             obj.saveForUndo(); /*undo/redo*/
 
-            if (sUrl == "") { oEditor.document.execCommand("unlink", false, null); return; }
-
-            var oSel;
             var oEl;
             var oSel = oEditor.document.selection.createRange();
+
+            //get A element
+            if (oSel.parentElement) oEl = GetElement(oSel.parentElement(), "A");
+            else oEl = GetElement(oSel.item(0), "A");
+
+            if (sUrl == "" && oEl) { oEditor.document.execCommand("unlink", false, null); return; }
 
             /* If no (text) selection, then build selection using the typed URL */
             if (oSel.parentElement) if (oSel.text == "") {
@@ -247,7 +250,7 @@
                 oSel.select();
             }
 
-            oSel.execCommand("CreateLink", false, sUrl);
+            oSel.execCommand("CreateLink", false, sUrl==""?"#":sUrl);
 
             //get A element
             if (oSel.parentElement) oEl = GetElement(oSel.parentElement(), "A");
@@ -255,6 +258,7 @@
 
             if (oEl) {
                 /* Target */
+                if (sUrl=="") oEl.removeAttribute("href", 0);
                 if (sTarget == "") { oEl.removeAttribute("target", 0); oEl.removeAttribute("rel", 0); };
                 if (sTarget == "_blank") { oEl.target = "_blank"; oEl.removeAttribute("rel", 0); };
                 if (sTarget == "lightbox") { oEl.removeAttribute("target", 0); oEl.rel = "lightbox"; };
@@ -284,12 +288,13 @@
 
             obj.saveForUndo(); /*undo/redo*/
 
-            if (sUrl == "") { oEditor.document.execCommand("unlink", false, null); return; }
 
             var oSel;
             var oEl;
             oSel = oEditor.getSelection();
             oEl = GetElement(parent.getSelectedElement(oSel), "A");
+
+            if (sUrl == "" && oEl) { oEditor.document.execCommand("unlink", false, null); return; }
 
             var range = oSel.getRangeAt(0);
 
@@ -328,7 +333,7 @@
 
             var isSelInMidText = (range.startContainer.nodeType == 3) && (range.startOffset > 0);  //3=Node.TEXT_NODE
 
-            oEditor.document.execCommand("CreateLink", false, sUrl);
+            oEditor.document.execCommand("CreateLink", false, sUrl==""?"#":sUrl);
 
             oSel = oEditor.getSelection();
             range = oSel.getRangeAt(0);
@@ -356,6 +361,9 @@
                 if (sTarget == "") { oEl.removeAttribute("target", 0); oEl.removeAttribute("rel", 0); };
                 if (sTarget == "_blank") { oEl.target = "_blank"; oEl.removeAttribute("rel", 0); };
                 if (sTarget == "lightbox") { oEl.removeAttribute("target", 0); oEl.rel = "lightbox"; };*/
+
+                if(sUrl=="") oEl.removeAttribute("href", 0);
+
                 if (sTarget == "") {
                     oEl.setAttribute("target", "");
                     oEl.setAttribute("rel", "");
@@ -398,12 +406,12 @@
 
             obj.saveForUndo(); /*undo/redo*/
 
-            if (sUrl == "") { oEditor.document.execCommand("unlink", false, null); return; }
-
             var oSel;
             var oEl;
             oSel = oEditor.getSelection();
             oEl = GetElement(parent.getSelectedElement(oSel), "A");
+
+            if (sUrl == "" && oEl) { oEditor.document.execCommand("unlink", false, null); return; }
 
             var range = oSel.getRangeAt(0);
 
@@ -459,7 +467,7 @@
 
             }
             else {
-                oEditor.document.execCommand("CreateLink", false, sUrl); //TDK Jalan kalau image ter-select
+                oEditor.document.execCommand("CreateLink", false, (sUrl==""?"#":sUrl)); //TDK Jalan kalau image ter-select
             }
 
             oSel = oEditor.getSelection();
@@ -469,7 +477,11 @@
 
                 if (oEl && oEl.tagName == "A") {
 
-                    oEl.href = sUrl;
+                    if(sUrl!="") {
+                    	oEl.href = sUrl;
+                    } else {
+                    	oEl.removeAttribute("href", 0);
+                    }
 
                     /* Target */
                     if (sTarget == "") { oEl.removeAttribute("target", 0); oEl.removeAttribute("rel", 0); };

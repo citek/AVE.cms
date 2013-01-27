@@ -44,6 +44,7 @@ class AVE_User
 		'mediapool', 'mediapool_del', 'finder',																// файловый менеджер
 		'dbactions',																						// база данных
 		'sysblocks',																						// системные блоки
+		'liveeditor',																						// настройки LiveEditor
 		'logs','logs_clear',																				// логи
 		'session_clear'																						// сессии и кеш
 	);

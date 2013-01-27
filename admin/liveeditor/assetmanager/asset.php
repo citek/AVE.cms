@@ -23,12 +23,11 @@
     <link href="//fonts.googleapis.com/css?family=Arvo" rel="stylesheet" type="text/css" />
 
     <link href="uploadify/uploadify.css" rel="stylesheet" type="text/css" />
-    <script src="uploadify/jquery.uploadify.v2.1.4.min.js" type="text/javascript"></script>
-    <script src="uploadify/swfobject.js" type="text/javascript"></script>
+    <script src="uploadify/jquery.uploadify.min.js" type="text/javascript"></script>
 
     <script language="javascript" type="text/javascript">
 
-        //var base = "/LiveEditor/images"; /*Relative to Root*/
+         //var base = "/LiveEditor/images"; /*Relative to Root*/
 		var base = "/uploads"; /*Relative to Root*/
 
         var readonly = false;
@@ -185,14 +184,12 @@
         function panelUpload() {
             $("#divUpload").html("<h3 style='margin-top:0px'>Upload Files</h3><input id='File1' type='file' />");
             $("#File1").uploadify({
-                'uploader': 'uploadify/uploadify.swf',
-                'script': 'server/upload.php',
-                'cancelImg': 'uploadify/cancel.png',
-                'folder': $("#active_folder").val(),
+                'swf': 'uploadify/uploadify.swf',
+                'uploader': 'server/upload.php',
+                'formData' : {"folder": $("#active_folder").val()},
                 'multi': true,
                 'auto': true,
-                'onComplete': function (event, ID, fileObj, response, data) {
-                    //alert('There are ' + data.fileCount + ' files remaining in the queue.');
+                'onUploadSuccess': function (file, data, response) {
                     refresh();
                 }
             });
