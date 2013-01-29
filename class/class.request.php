@@ -215,14 +215,14 @@ class AVE_Request
 						request_order_by_nat    = '" . $_REQUEST['request_order_by_nat'] . "',
 						request_description     = '" . $_REQUEST['request_description'] . "',
 						request_asc_desc        = '" . $_REQUEST['request_asc_desc'] . "',
-						request_show_pagination = '" . $_REQUEST['request_show_pagination'] . "',
+						request_show_pagination = '" . @$_REQUEST['request_show_pagination'] . "',
 						request_cache_lifetime  = '" . (int)($_REQUEST['request_cache_lifetime']>'' ? $_REQUEST['request_cache_lifetime'] : '-1') . "'
 					WHERE
 						Id = '" . $request_id . "'
 				");
-
+                $errors = array();
                 // Сохраняем системное сообщение в журнал
-                reportLog($_SESSION['user_name'] . ' - отредактировал запрос (' . stripslashes($_REQUEST['request_title']) . ')', 2, 2);
+                reportLog($_SESSION['user_name'] . ' - Отредактировал запрос (' . stripslashes($_REQUEST['request_title']) . ')', 2, 2);
 
 				// Если редактирование было в отдельном окне, закрываем его
                 if ($_REQUEST['pop'] == 1)
@@ -232,10 +232,10 @@ class AVE_Request
 				else
 				{
                     // В противном случае выполняем переход к списку запросов
-					if (!$_REQUEST['next_edit']) {
+					if (!$_REQUEST['ajax']) {
 						header('Location:index.php?do=request&cp=' . SESSION);
 					} else {
-						header('Location:index.php?do=request&action=edit&Id=' . $request_id . '&rubric_id='.$_REQUEST['rubric_id'].'&cp=' . SESSION);
+						echo json_encode(array(($AVE_Template->get_config_vars('REQUEST_TEMPLATE_SAVED')) . implode(',<br />', $errors), 'accept'));
 					}
 					exit;
 				}

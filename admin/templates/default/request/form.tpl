@@ -371,11 +371,11 @@ function changeRub(select) {ldelim}
 	{else}
 		<input {$dis} type="submit" class="basicBtn" value="{#REQUEST_BUTTON_ADD#}" />
 	{/if}
-	&nbsp;или&nbsp;
+	{#REQUEST_OR#}
 	{if $smarty.request.action=='edit'}
-		<input {$dis} type="submit" class="blackBtn SaveEdit" name="next_edit" value="{#REQUEST_BUTTON_SAVE_NEXT#}" />
+		<input {$dis} type="submit" class="blackBtn SaveEdit" value="{#REQUEST_BUTTON_SAVE_NEXT#}" />
 	{else}
-		<input {$dis} type="submit" class="blackBtn" name="next_edit" value="{#REQUEST_BUTTON_ADD_NEXT#}" />
+		<input {$dis} type="submit" class="blackBtn" value="{#REQUEST_BUTTON_ADD_NEXT#}" />
 	{/if}
 
 </div>
@@ -387,18 +387,19 @@ function changeRub(select) {ldelim}
 
     <script language="Javascript" type="text/javascript">
     var sett_options = {ldelim}
-		url: "{$formaction}",
+		url: "{$formaction}&ajax=run",
 		beforeSubmit: Request,
-        success: Response
+        success: Response,
+        dataType:  'json'
 	{rdelim}
 
 	function Request(){ldelim}
 		$.alerts._overlay('show');
 	{rdelim}
 
-	function Response(){ldelim}
+	function Response(data){ldelim}
 		$.alerts._overlay('hide');
-		$.jGrowl('{#REQUEST_TEMPLATE_SAVED#}');
+		$.jGrowl(data[0],{ldelim}theme: data[1]{rdelim});
 	{rdelim}
 
 	$(document).ready(function(){ldelim}

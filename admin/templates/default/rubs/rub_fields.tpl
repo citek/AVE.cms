@@ -279,7 +279,7 @@ $(document).ready(function(){ldelim}
 <div class="widget first">
 	<div class="head closed active"><h5>{#RUBRIK_LINK#}</h5></div>
 	<div style="display: block;">
-	<form id="newfld" action="index.php?do=rubs&amp;action=edit&amp;Id={$smarty.request.Id|escape}&amp;cp={$sess}" method="post" class="mainForm">
+	<form id="newfld" action="index.php?do=rubs&action=edit&Id={$smarty.request.Id|escape}&cp={$sess}" method="post" class="mainForm">
 	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 		<col width="50%">
 		<col width="50%">
@@ -290,10 +290,10 @@ $(document).ready(function(){ldelim}
 					{#RUBRIK_LINK_DESC#}
 				</div>
 			</td>
-
 			<td>
 				<div class="pr12">
 					<select name="RubLink" id="RubLink" style="width: 250px;">
+							<option value="0" {if $rubric->rubric_linked_rubric=='0'}selected{/if}>{#RUBRIK_NOLINK#}</option>
 						{foreach from=$rubs item=rub}
 							<option value="{$rub->Id}" {if $rubric->rubric_linked_rubric==$rub->Id}selected{/if}>{$rub->rubric_title}</option>
 						{/foreach}

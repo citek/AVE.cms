@@ -501,11 +501,11 @@ class AVE_Rubric
 	 *
 	 * @param int $rubric_id	идентификатор текущей рубрики
 	 */
-	function rubricShow($RubLink=0)
+	function rubricShow($RubLink=null)
 	{
 		global $AVE_DB;
 
-		if ($RubLink) {			
+		if ($RubLink!==null) {
 			$AVE_DB->Query("
 				UPDATE " . PREFIX . "_rubrics
 				SET
@@ -527,7 +527,6 @@ class AVE_Rubric
 			{
 				array_push($rubs,$row);
 			}
-
 			return $rubs;
 		}
 	}
