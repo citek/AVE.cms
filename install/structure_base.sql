@@ -217,7 +217,7 @@ CREATE TABLE `%%PRFX%%_rubrics` (
   `rubric_teaser_template` text NOT NULL,
   `rubric_admin_teaser_template` text NOT NULL,
   `rubric_header_template` text NOT NULL,
-  `rubric_linked_rubric` int(11) unsigned NOT NULL DEFAULT '0',
+  `rubric_linked_rubric` varchar(255) NOT NULL DEFAULT '0',
   `rubric_description` text NOT NULL,
   `rubric_position` int(11) unsigned NOT NULL DEFAULT '100',
   PRIMARY KEY (`Id`),

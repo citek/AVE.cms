@@ -119,7 +119,7 @@ switch($_REQUEST['action'])
 							break;
 
 						case 'linked_rubric':
-							$AVE_Rubric->rubricShow((int)$_REQUEST['RubLink']);
+							$AVE_Rubric->rubricShow(1);
 							break;
 
 						case 'code':

@@ -1190,16 +1190,27 @@ class AVE_Document
 						WHERE Id = '".$rubric_id."'
 					")->GetCell();
 
-					$sql = $AVE_DB->Query("
-						SELECT document_alias, document_title, document_breadcrum_title, Id
-						FROM " . PREFIX . "_documents
-						WHERE rubric_id = '".$linked_id."'
-					");
-
+					$linked_id = unserialize($linked_id);
 					$document_alias = array();
-					while ($row = $sql->FetchRow())
-					{
-						array_push($document_alias, $row);
+					if ($linked_id) {
+						foreach ($linked_id as $linked_id) {
+							$sql = $AVE_DB->Query("
+								SELECT doc.document_alias, doc.document_title, doc.document_breadcrum_title, doc.Id, rub.rubric_title
+								FROM " . PREFIX . "_documents as doc
+								JOIN " . PREFIX . "_rubrics as rub on rub.Id=doc.rubric_id
+								WHERE doc.rubric_id = '".$linked_id."'
+							");
+
+							while ($row = $sql->FetchRow())
+							{
+								$document_alias[$row->rubric_title][] = array(
+									'document_alias'=>$row->document_alias,
+									'document_title'=>$row->document_title,
+									'document_breadcrum_title'=>$row->document_breadcrum_title,
+									'Id'=>$row->Id
+								);
+							}
+						}
 					}
 					$AVE_Template->assign('document_alias', $document_alias);
 					// получения списка документов из связанной рубрики
@@ -1329,6 +1340,7 @@ class AVE_Document
 
 					// Формируем ряд переменных и передаем их в шаблон для вывода
 					$document->fields = $fields;
+					$document->document_alias = rewrite_link('index.php?id=' . $document->Id . '&amp;doc=' . (empty($document->document_alias) ? prepare_url($document->document_title) : $document->document_alias));
 					$document->rubric_title = $AVE_Rubric->rubricNameByIdGet($document->rubric_id)->rubric_title;
 					$document->rubric_url_prefix = $AVE_Rubric->rubricNameByIdGet($document->rubric_id)->rubric_alias;
 					$document->formaction = 'index.php?do=docs&action=edit&sub=save&Id=' . $document_id . '&cp=' . SESSION;
@@ -1356,19 +1368,30 @@ class AVE_Document
 					$linked_id = $AVE_DB->Query("
 						SELECT rubric_linked_rubric
 						FROM " . PREFIX . "_rubrics
-						WHERE Id = '".(int)$document->rubric_id."'
+						WHERE Id = '".$document->rubric_id."'
 					")->GetCell();
 
-					$sql = $AVE_DB->Query("
-						SELECT document_alias, document_title, Id
-						FROM " . PREFIX . "_documents
-						WHERE rubric_id = '".$linked_id."'
-					");
-
+					$linked_id = unserialize($linked_id);
 					$document_alias = array();
-					while ($row = $sql->FetchRow())
-					{
-						array_push($document_alias, $row);
+					if ($linked_id) {
+						foreach ($linked_id as $linked_id) {
+							$sql = $AVE_DB->Query("
+								SELECT doc.document_alias, doc.document_title, doc.document_breadcrum_title, doc.Id, rub.rubric_title
+								FROM " . PREFIX . "_documents as doc
+								JOIN " . PREFIX . "_rubrics as rub on rub.Id=doc.rubric_id
+								WHERE doc.rubric_id = '".$linked_id."'
+							");
+
+							while ($row = $sql->FetchRow())
+							{
+								$document_alias[$row->rubric_title][] = array(
+									'document_alias'=>$row->document_alias,
+									'document_title'=>$row->document_title,
+									'document_breadcrum_title'=>$row->document_breadcrum_title,
+									'Id'=>$row->Id
+								);
+							}
+						}
 					}
 					$AVE_Template->assign('document_alias', $document_alias);
 					// получения списка документов из связанной рубрики

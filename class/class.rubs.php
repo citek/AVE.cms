@@ -489,6 +489,7 @@ class AVE_Rubric
 			LIMIT 1
 		");
 		$rubrik = $sql->FetchRow();
+		@$rubrik->rubric_linked_rubric = unserialize($rubrik->rubric_linked_rubric);
 		$AVE_Template->assign('rubric', $rubrik);
 		$AVE_Template->assign('groups', $groups);
 		$AVE_Template->assign('felder', get_field_type());
@@ -509,7 +510,7 @@ class AVE_Rubric
 			$AVE_DB->Query("
 				UPDATE " . PREFIX . "_rubrics
 				SET
-					rubric_linked_rubric = '" . $RubLink . "'
+					rubric_linked_rubric = '" . serialize($_REQUEST['rubric_linked']) . "'
 				WHERE
 					Id = '" . (int)$_REQUEST['Id'] . "'
 			");

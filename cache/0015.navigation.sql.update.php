@@ -13,6 +13,21 @@ if($check === false)
 		AFTER
 			`navi_expand`
 	");
+	$AVE_DB->Real_Query("
+		ALTER TABLE `" . PREFIX . "_navigation_items`
+		ADD
+			`navi_item_Img` varchar(255) NOT NULL
+	");
+	$AVE_DB->Real_Query("
+		ALTER TABLE `" . PREFIX . "_navigation_items`
+		ADD
+			`navi_item_desc` text NOT NULL
+	");
+	$AVE_DB->Real_Query("
+		ALTER TABLE `" . PREFIX . "_navigation_items`
+		ADD
+			`navi_item_Img_id` varchar(50) NOT NULL
+	");
 	$sql = $AVE_DB->Real_Query("
 		SELECT id, navi_expand
 		FROM " . PREFIX . "_navigation

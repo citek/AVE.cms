@@ -292,12 +292,12 @@ $(document).ready(function(){ldelim}
 			</td>
 			<td>
 				<div class="pr12">
-					<select name="RubLink" id="RubLink" style="width: 250px;">
-							<option value="0" {if $rubric->rubric_linked_rubric=='0'}selected{/if}>{#RUBRIK_NOLINK#}</option>
-						{foreach from=$rubs item=rub}
-							<option value="{$rub->Id}" {if $rubric->rubric_linked_rubric==$rub->Id}selected{/if}>{$rub->rubric_title}</option>
-						{/foreach}
-					</select>
+					{foreach from=$rubs item=rub}
+					<div class="fix">
+						<input type="checkbox" class="float" {if @in_array($rub->Id, $rubric->rubric_linked_rubric)}checked="checked"{/if} name="rubric_linked[]" value="{$rub->Id}" /> 
+						<label>{$rub->rubric_title}</label>
+					</div>
+					{/foreach}
 				</div>
 			</td>
 		</tr>

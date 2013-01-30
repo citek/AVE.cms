@@ -255,7 +255,7 @@ $(document).ready(function(){ldelim}
 			{if $smarty.request.action=='edit'}
 	        <li>{#DOC_EDIT_DOCUMENT#}</li>
 			<li><strong>{#DOC_IN_RUBRIK#}</strong> &gt; {$document->rubric_title|escape}</li>
-			<li><strong class="code">{$document->document_title}</strong></li>
+			<li><strong class="code"><a href="{$document->document_alias}" target="_blank">{$document->document_title}</a></strong></li>
 			{else}
 	        <li>{#DOC_ADD_DOCUMENT#}</li>
 			<li><strong>{#DOC_IN_RUBRIK#}</strong> &gt; {$document->rubric_title|escape}</li>
@@ -302,9 +302,15 @@ $(document).ready(function(){ldelim}
 		<tr>
 			<td>{#DOC_URL_LINK#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link btext" title="{#DOC_USE_RUB_ALIAS#}">[?]</a></td>
 			<td nowrap="nowrap" colspan="3">
-				<div class="alias" style="width:10%">
-					{foreach from=$document_alias item=alias}
-						<a href="{$alias->document_alias}" data-id="{$alias->Id}" style="border-bottom:1px dotted #666;margin-right:10px;float:left">{if $alias->document_breadcrum_title}{$alias->document_breadcrum_title}{else}{$alias->document_title}{/if}</a>
+				<div class="alias">
+
+					{foreach from=$document_alias key=k item=v}
+						<div>{$k}</div>
+						
+						{section name=nov loop=$v}
+							<a href="{$v[nov].document_alias}" data-id="{$v[nov].Id}" style="border-bottom:1px dotted #666;margin-right:10px;float:left">{if $v[nov].document_breadcrum_title}{$v[nov].document_breadcrum_title}{else}{$v[nov].document_title}{/if}</a>
+						{/section}
+						<div class="wrapper"></div><br>
 					{/foreach}
 				</div>
 			</td>
