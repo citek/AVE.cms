@@ -15,4 +15,5 @@
 	<script src="{$ABS_PATH}lib/scripts/jquery.placeholder.min.js" type="text/javascript"></script>
 	<script src="{$ABS_PATH}lib/scripts/jquery.sticky.js" type="text/javascript"></script>
 	<script src="{$ABS_PATH}lib/scripts/jquery.fancybox.js" type="text/javascript"></script>
+	<script src="{$ABS_PATH}lib/scripts/jquery.autocomplete.js" type="text/javascript"></script>
 	<script src="{$ABS_PATH}lib/scripts/mousetrap.js" type="text/javascript"></script>

@@ -687,7 +687,7 @@ class AVE_Document
 					VALUES
 					(
 						'".intval($document_id)."',
-						UPPER('".clean_no_print_char($key)."')
+						'".clean_no_print_char($key)."'
 					)
 					");
 			}
@@ -2500,5 +2500,37 @@ class AVE_Document
 		$AVE_Template->assign($document);
 		$AVE_Template->assign('content', $AVE_Template->fetch('documents/form_after.tpl'));
 	}
+
+	/**
+	 * Метод, предназначенный для смены автора документа
+	 *
+	 * @param int $doc_id		идентификатор документа
+	 * @param int $user_id		идентификатор пользователя
+	 */
+	function changeAutorSave()
+	{
+		global $AVE_DB;
+
+		// Если id документа число и оно больше 0, тогда
+		if (is_numeric($_REQUEST['doc_id']) && $_REQUEST['doc_id'] > 0)
+		{
+			// Выполняем запрос к БД на обновление статуса у заметок
+			$AVE_DB->Query("
+				UPDATE " . PREFIX . "_documents
+				SET document_author_id  = '" . $_REQUEST['user_id'] . "'
+				WHERE Id = '" . $_REQUEST['doc_id'] . "'
+			");
+
+			$username = get_username_by_id($_REQUEST['user_id']);
+			echo "
+				<script>
+					window.opener.document.getElementById('doc_id_". $_REQUEST['doc_id'] ."').textContent = '$username';
+					window.close();
+				</script>
+			";
+		}
+		exit;
+	}
+
 }
 ?>

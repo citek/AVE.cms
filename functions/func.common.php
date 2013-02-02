@@ -882,7 +882,7 @@ function reportLog($meldung, $typ = 0, $rub = 0)
 	$logdata[]=array('log_time' =>time(),'log_ip'=>$_SERVER['REMOTE_ADDR'],'log_url'=>$_SERVER['QUERY_STRING'],'log_text'=>$meldung,'log_type'=>(int)$typ,'log_rubric'=>(int)$rub);
 	$messlimit=1000;
 	$logdata=array_slice($logdata,-1*$messlimit);
-	file_put_contents($logfile,'<? $logdata='.var_export($logdata,true).' ?>');
+	file_put_contents($logfile,'<?php $logdata='.var_export($logdata,true).' ?>');
 }
 
 /**
@@ -903,7 +903,7 @@ function report404($meldung, $typ = 0, $rub = 0)
 	$logdata[]=array('log_time' =>time(),'log_ip'=>$_SERVER['REMOTE_ADDR'],'log_url'=>$_SERVER['QUERY_STRING'],'log_text'=>$meldung,'log_type'=>(int)$typ,'log_rubric'=>(int)$rub);
 	$messlimit=1000;
 	$logdata=array_slice($logdata,-1*$messlimit);
-	file_put_contents($logfile,'<? $logdata='.var_export($logdata,true).' ?>');
+	file_put_contents($logfile,'<?php $logdata='.var_export($logdata,true).' ?>');
 }
 
 /**
@@ -1648,5 +1648,41 @@ function write_htaccess_deny($dir)
 function canonical($url) { 
 	$link = preg_replace('/^(.+?)(\?.*?)?(#.*)?$/', '$1$3', $url);
 return $link;
+}
+
+function findautor($string, $limit)
+{
+	global $AVE_DB;
+
+	$search = "
+		AND (UPPER(email) LIKE UPPER('%" . $string . "%')
+		OR UPPER(email) = UPPER('" . $string . "')
+		OR Id = '" . intval($string) . "'
+		OR UPPER(user_name) LIKE UPPER('" . $string . "%')
+		OR UPPER(firstname) LIKE UPPER('" . $string . "%')
+		OR UPPER(lastname) LIKE UPPER('" . $string . "%'))
+	";
+
+	$sql = $AVE_DB->Query("
+		SELECT *
+		FROM " . PREFIX . "_users
+		WHERE 1"
+		. $search
+	);
+
+	$users = array();
+	while ($row = $sql->FetchRow())
+	{
+		$ava=getAvatar($row->Id,40);
+		$users[]=array(
+			'userid'=>$row->Id,
+			'login'=>$row->user_name,
+			'email'=>$row->email,
+			'lastname'=>$row->lastname,
+			'firstname'=>$row->firstname,
+			'avatar'=>($ava ? $ava : ABS_PATH.'admin/templates/'.DEFAULT_ADMIN_THEME_FOLDER.'/images/user.png')
+		);
+	}
+	echo json_encode($users);
 }
 ?>

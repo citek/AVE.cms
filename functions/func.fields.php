@@ -368,7 +368,7 @@ function get_field_multidropdown($field_value,$type,$field_id='',$rubric_field_t
 				$cnt = sizeof($items);
 				for ($i=0;$i<$cnt;$i++)
 				{
-					if (in_array($items[$i], $field_value))
+					if (@in_array($items[$i], $field_value))
 					{
 						$field .= "<option value=\"" . htmlspecialchars($items[$i], ENT_QUOTES) .  "\" selected=\"selected\">" . htmlspecialchars($items[$i], ENT_QUOTES) . "</option>";
 					}else{
@@ -654,64 +654,6 @@ function get_field_docfromrubcheck($field_value,$type,$field_id='',$rubric_field
 	}	return ($res ? $res : $field_value);
 
 }
-
-//Документ из рубрики(CHECKBOX) Old edition
-/*function get_field_docfromrubcheck($field_value,$type,$field_id='',$rubric_field_template='',$tpl_field_empty=0,&$maxlength = '',$document_fields=0,$rubric_id=0,$dropdown=''){
-	global $AVE_DB,$AVE_Template, $AVE_Core, $AVE_Document;
-
-	$res=0;
-	switch ($type)
-	{
-		case 'edit' :
-				$sql="SELECT Id,document_title from ". PREFIX ."_documents WHERE rubric_id='".$dropdown."' order by document_title";
-				$field_value=unserialize($field_value);
-				$res=$AVE_DB->Query($sql);
-				$field = "";
-				while($row = $res->FetchRow()){
-					$field.="<div class=\"fix\"><input name=\"feld[" . $field_id . "][]\" value=\"".$row->Id."\" type=\"checkbox\"  class=\"float\" ".((in_array($row->Id, $field_value)==false) ? "" : "checked=checked")."><label>".htmlspecialchars($row->document_title, ENT_QUOTES)."</label></div>";
-				}
-				$field .= "";
-
-				$res=$field;
-			break;
-
-		case 'doc' :
-			$field_value1=unserialize($field_value);
-			if(is_array($field_value1)){
-				$res=$AVE_DB->Query("SELECT Id,document_title FROM " . PREFIX . "_documents WHERE Id IN (".implode(', ',$field_value1).")");
-				$result=Array();
-				while ($mfa=$res->FetchArray())$result[$mfa['Id']]=$mfa['document_title'];
-				$res='';
-				if ($tpl_field_empty)$res.='<ul>';
-				foreach($field_value1 as $k=>$v){
-					$field_value = htmlspecialchars($v, ENT_QUOTES);
-					$field_value = pretty_chars($field_value);
-					$field_value = clean_php($field_value);
-					if (!$tpl_field_empty)
-					{
-						$field_param = explode('|', $field_value);
-						$field_value = preg_replace('/\[tag:parametr:(\d+)\]/ie', '@$field_param[\\1]', $rubric_field_template);
-					}
-					else
-					{
-					  $field_value="<li>".$result[$field_value]."</li>";
-					}
-					$res.=$field_value;
-				}
-				if ($tpl_field_empty)$res.='</ul>';
-			}
-			break;
-
-			case 'req' :
-			$res=get_field_default($field_value,$type,$field_id,$rubric_field_template,$tpl_field_empty,$maxlength,$document_fields,$rubric_id);
-
-			break;
-		case 'name' :
-			$res='FIELD_DOCFROMRUB_CHECK';
-		break;
-	}	return ($res ? $res : $field_value);
-
-}*/
 
 //Дата
 function get_field_data($field_value,$type,$field_id='',$rubric_field_template='',$tpl_field_empty=0,&$maxlength = '',$document_fields=0,$rubric_id=0,$dropdown=''){

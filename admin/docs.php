@@ -202,6 +202,26 @@ switch($_REQUEST['action'])
 		}
 		break;
 
+	case 'change_user':
+		if (check_permission_acp('documents'))
+		{
+			switch($_REQUEST['sub'])
+			{
+				case 'save':
+					$AVE_Document->changeAutorSave();
+					break;
+			}
+			$AVE_Template->assign('content', $AVE_Template->fetch('documents/user.tpl'));
+		}
+		break;
+
+	case 'find_user':
+		if (check_permission_acp('documents'))
+		{
+			findautor($_REQUEST['q'], 10);
+		}
+		exit;
+
 	case 'editstatus':
 		if (check_permission_acp('documents'))
 		{
@@ -212,7 +232,7 @@ switch($_REQUEST['action'])
 	case 'image_import':
 		echo json_encode(array("respons"=>image_multi_import($_REQUEST['path']), "status"=>"error", "action"=>"return"));
 		exit;
-		
+
 	case 'translit':
 		echo($AVE_Document->documentAliasCreate());
 		exit;

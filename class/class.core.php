@@ -694,14 +694,14 @@ class AVE_Core
 				}
 				else
 				{
-					if (!isset ($_SESSION['doc_view[' . $id . ']']))
+					if (!isset ($_SESSION['doc_view'][$id]))
 					{	// увеличиваем счетчик просмотров (1 раз в пределах сессии)
 						$AVE_DB->Query("
 							UPDATE " . PREFIX . "_documents
 							SET document_count_view = document_count_view+1
 							WHERE Id = '" . $id . "'
 						");
-						$_SESSION['doc_view[' . $id . ']'] = 1;
+						$_SESSION['doc_view'][$id] = time();
 					}
 
 					$curdate=mktime(0, 0, 0, date("m")  , date("d"), date("Y"));
@@ -731,7 +731,7 @@ class AVE_Core
                                 )
                             ");
                         }
-						$_SESSION['doc_view_dayly['.$curdate.'][' . $id . ']'] = 1;
+						$_SESSION['doc_view_dayly['.$curdate.'][' . $id . ']'] = time();
 					}
 
 				}

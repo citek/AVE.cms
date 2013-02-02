@@ -218,7 +218,10 @@ function request_get_document_field($rubric_id, $document_id, $maxlength = '')
 }
 
 function showteaser($id){
-	return showrequestelement($id);
+	$item = showrequestelement($id);
+	$item = str_replace('[tag:path]', ABS_PATH, $item);
+	$item = str_replace('[tag:mediapath]', ABS_PATH . 'templates/' . THEME_FOLDER . '/', $item);
+	return eval2var($item);
 }
 
 function showrequestelement($mixed,$template=''){
@@ -251,6 +254,8 @@ global $AVE_DB;
 				{
 					$item = preg_replace_callback('/\[tag:sysblock:(\d+)\]/', 'parse_sysblock', $template);
 					$item = preg_replace('/\[tag:rfld:([a-zA-Z0-9-_]+)]\[(more|esc|img|[0-9-]+)]/e', "request_get_document_field(\"$1\", $row->Id, \"$2\")", $item);
+					$item = str_replace('[tag:path]', ABS_PATH, $item);
+					$item = str_replace('[tag:mediapath]', ABS_PATH . 'templates/' . THEME_FOLDER . '/', $item);
 					$item = preg_replace_callback('/\[tag:([r|c|f|t]\d+x\d+r*):(.+?)]/', 'callback_make_thumbnail', $item);
 					//if(!file_exists(dirname($cachefile_docid)))mkdir(dirname($cachefile_docid),0777,true);
 					//file_put_contents($cachefile_docid,$item);
@@ -313,6 +318,7 @@ function request_parse($id,$params=Array())
 		$limit = (isset($params['LIMIT'])&&intval($params['LIMIT'])>0 ? intval($params['LIMIT']) : (($row_ab->request_items_per_page > 0) ? $row_ab->request_items_per_page : 0));
 		$main_template = $row_ab->request_template_main;
 		$item_template = $row_ab->request_template_item;
+		$request_counter = @unserialize($row_ab->request_counter);
 		$request_order_by = $row_ab->request_order_by;
 		$request_asc_desc = $row_ab->request_asc_desc;
 		//строим списки подключаемых полей для сортировки
@@ -507,10 +513,31 @@ function request_parse($id,$params=Array())
 			array_push($rows, $row);
 		}
 		$items = '';
+		$x=0;
+		$counter=array();
+		if(is_array($request_counter))
+			foreach($request_counter as $v){
+				$counter[$v['name']]=array('default'=>$v['default'],'value'=>$v['value'],'per'=>$v['per_items']);
+			}
+		
 		foreach ($rows as $row)
 		{
-			$items.=showrequestelement($row,$item_template);
+			$x++;
+			$delimeter=array();
+			if(is_array($counter)&&count($counter))
+				foreach($counter as $k=>$v){
+					$xx=$x/$v['per'];
+					$delimeter[$k]=($xx==round($xx)) ? $v['value'] : $v['default'];
+				}
+			//var_dump($delimeter);	
+			$item=showrequestelement($row,$item_template);
+			//Завтра разберусь с каунтером - надо определить всем переменным значения
+			$item = preg_replace('/\[tag:delimeter:([a-zA-Z0-9-]+)\]/e', '$delimeter[$1]', $item);
+			$items.=$item;
+			
 		}
+//		$items = preg_replace_callback('/\[tag:teaser:(\d+)\]/', "showteaser", $items);
+
 		$main_template = preg_replace_callback('/\[tag:sysblock:(\d+)\]/', 'parse_sysblock', $main_template);
 		$main_template = str_replace('[tag:pages]', $page_nav, $main_template);
 		$main_template = preg_replace('/\[tag:date:([a-zA-Z0-9-]+)\]/e', "RusDate(date('$1', ".$AVE_Core->curentdoc->document_published."))", $main_template);

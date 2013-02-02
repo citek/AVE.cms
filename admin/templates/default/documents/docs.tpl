@@ -232,7 +232,6 @@ $(document).ready(function(){ldelim}
 	<col>
 	<col width="150">
 	<col width="180">
-	<col width="80">
 	{*<col width="100">*}
 	<col width="100">
 	{if !$smarty.const.ADMIN_EDITMENU}<col width="141">{/if}
@@ -247,7 +246,6 @@ $(document).ready(function(){ldelim}
 		<td>{#DOC_IN_RUBRIK#}</td>
 		<td>{#DOC_CREATED#}&nbsp;|&nbsp;{#DOC_EDIT#}</td>
 		<td>{#DOC_CLICKS#}</td>
-		<td>{#DOC_AUTHOR#}</td>
 		{if !$smarty.const.ADMIN_EDITMENU}<td {if $smarty.const.ADMIN_EDITMENU}colspan="7"{else}colspan="14"{/if} align="center">{#DOC_ACTIONS#}</td>{/if}
 	</tr>
 	</thead>
@@ -273,6 +271,7 @@ $(document).ready(function(){ldelim}
 							{/if}
 						</a>
 					</strong><br />
+					<span class="dgrey">url: </span>
 					<a class="toprightDir" title="{#DOC_SHOW2_TITLE#}" href="../{if $item->Id!=1}{$item->document_alias}{/if}" target="_blank">
 						<span class="dgrey doclink">{$item->document_alias}</span>
 					</a>
@@ -357,16 +356,26 @@ $(document).ready(function(){ldelim}
 
 			<td nowrap="nowrap" align="center">
 				{if $item->cantEdit==1}
+				<div class="pr12">
 					{foreach from=$rubrics item=rubric}
 						{if $item->rubric_id == $rubric->Id}
-							<a href="javascript:void(0);" title="{#DOC_CHANGE_RUBRIC#}" class="link topDir" onclick="cp_pop('index.php?do=docs&action=change&Id={$item->Id}&rubric_id={$item->rubric_id}&pop=1&cp={$sess}','550','550','1','docs');">
+							<a href="javascript:void(0);" title="{#DOC_CHANGE_RUBRIC#}" class="link topDir" onclick="cp_pop('index.php?do=docs&action=change&Id={$item->Id}&rubric_id={$item->rubric_id}&pop=1&cp={$sess}','650','550','1','docs');">
 								{$rubric->rubric_title|escape}
 							</a>
+							<br />
+							{if $smarty.const.UGROUP == 1}
+							<strong>{#DOC_AUTHOR#}:</strong> <a class="link topDir" title="{#DOC_CHANGE_AUTOR#}" href="javascript:void(0);" id="doc_id_{$item->Id}" onclick="cp_pop('index.php?do=docs&action=change_user&Id={$item->Id}&pop=1&cp={$sess}','750','500','1','docs');">{$item->document_author|escape}</a>
+							{else}
+							<strong>{#DOC_AUTHOR#}:</strong> {$item->document_author|escape}
+							{/if}
 						{/if}
 					{/foreach}
+				</div>
 				{else}
 					{foreach from=$rubrics item=rubric}
 						{if $item->rubric_id == $rubric->Id}{$rubric->rubric_title|escape}{/if}
+						<br />
+						<strong>{#DOC_AUTHOR#}:</strong> {$item->document_author|escape}
 					{/foreach}
 				{/if}
 			</td>
@@ -394,9 +403,6 @@ $(document).ready(function(){ldelim}
 				</div>
 			</td>
 
-			{*<td align="center">{$item->document_count_print}</td>*}
-
-			<td align="center">{$item->document_author|escape}</td>
 			{if !$smarty.const.ADMIN_EDITMENU}
 			<td align="center" nowrap="nowrap" class="actions">
 				{if check_permission("remarks")}
@@ -478,7 +484,7 @@ $(document).ready(function(){ldelim}
 	{if $docs}
 	<thead>
 	<tr>
-		<td><div align="center"><input type="checkbox" id="selall" value="1" /></div></td>
+		<td></td>
 		<td>{#DOC_ID#}</td>
 		<td nowrap="nowrap">
 			{#DOC_TITLE#}&nbsp;|&nbsp;{#DOC_URL_RUB#}
@@ -486,7 +492,6 @@ $(document).ready(function(){ldelim}
 		<td>{#DOC_IN_RUBRIK#}</td>
 		<td>{#DOC_CREATED#}&nbsp;|&nbsp;{#DOC_EDIT#}</td>
 		<td>{#DOC_CLICKS#}</td>
-		<td>{#DOC_AUTHOR#}</td>
 		{if !$smarty.const.ADMIN_EDITMENU}<td colspan="6" align="center">{#DOC_ACTIONS#}</td>{/if}
 	</tr>
 	</thead>

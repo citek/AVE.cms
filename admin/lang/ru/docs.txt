@@ -25,6 +25,7 @@ DOC_AUTHOR               = "Автор"
 DOC_ACTIONS              = "Действия"
 DOC_EDIT_TITLE           = "Редактировать данный документ"
 DOC_CHANGE_RUBRIC        = "Перенести данный документ в дуругую рубрику"
+DOC_CHANGE_AUTOR         = "Сменить автора документа"
 DOC_SHOW_TITLE           = "Просмотр документа (ссылка без ЧПУ)"
 DOC_SHOW2_TITLE          = "Просмотр документа (ссылка c ЧПУ)"
 DOC_SHOW3_TITLE          = "Документ без названия"
@@ -147,6 +148,10 @@ DOC_CHANGE_NEW_FIELD     = "Перенести в новое"
 DOC_CHANGE_DROP_FIELD    = "-- не переносить --"
 DOC_CHANGE_CREATE_FIELD  = "-- создать новое --"
 DOC_CHANGE_BUTTON        = "Изменить"
+
+DOC_CHANGE_AU_TITLE      = "Смена автора документа"
+DOC_CHANGE_AU_INFO       = "<strong>Внимание!</strong> При смене автора, предыдущий автор может лишиться прав на редактирование этого документа."
+DOC_CHANGE_BUTTON        = "Сохранить"
 
 DOC_IN_MENU              = "в меню"
 

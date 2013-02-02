@@ -16,6 +16,8 @@ AddDefaultCharset utf-8
 #	Ограничивает максимальный объем данных, получаемых от пользователя методом POST
 #	php_value post_max_size 20M
 
+#	Включаем у PHP короткие <?
+#	php_value short_open_tag On
 
 <FilesMatch "\.(class|functions|inc|modules|templates|cache|lib|session)$">
     Order allow,deny

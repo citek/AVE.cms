@@ -38,7 +38,7 @@
 <li>{$message}</li>
 </ul>
 {/foreach}
-
+{*
 {if $smarty.request.action=='new'}
 <div class="widget first">
 <div class="head"><h5 class="iFrames">{#TEMPLATES_LOAD_INFO#}</h5></div>
@@ -55,7 +55,7 @@
 	<div class="fix"></div>
 </div>
 {/if}
-
+*}
 <form name="f_tpl" id="f_tpl" method="post" action="{$formaction}" class="mainForm">
 
 <div class="widget first">

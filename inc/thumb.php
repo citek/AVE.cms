@@ -40,7 +40,7 @@ if($_REQUEST['thumb']){
 				.'/'.THUMBNAIL_DIR.'/'
 				.(str_replace(
 					'.',
-					(empty($_REQUEST['mode']) ? '-c' : '-'.$_REQUEST['mode']).((empty($_REQUEST['width'])&& empty($_REQUEST['height'])) ? '128' : intval($_REQUEST['width'])).'x'.((empty($_REQUEST['width'])&& empty($_REQUEST['height'])) ? '128' : intval($_REQUEST['height'])).'.',
+					(empty($_REQUEST['mode']) ? '-c' : '-'.$_REQUEST['mode']).((empty($_REQUEST['width'])&& empty($_REQUEST['height'])) ? '128' : intval(@$_REQUEST['width'])).'x'.((empty($_REQUEST['width'])&& empty($_REQUEST['height'])) ? '128' : intval(@$_REQUEST['height'])).'.',
 					basename($_REQUEST['thumb'])
 					)
 				),
@@ -94,7 +94,6 @@ $save = true;
 if (!file_exists("$imagePath/$imageName"))
 {
 	header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
-
 	$imageName = 'noimage.gif';
 	if (!file_exists("$imagePath/$imageName"))
 	{
