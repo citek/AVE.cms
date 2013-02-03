@@ -222,6 +222,13 @@ switch($_REQUEST['action'])
 		}
 		exit;
 
+	case 'keywords':
+		if (check_permission_acp('documents'))
+		{
+			searchKeywords($_REQUEST['q']);
+		}
+		exit;
+
 	case 'editstatus':
 		if (check_permission_acp('documents'))
 		{

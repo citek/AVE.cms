@@ -1685,4 +1685,26 @@ function findautor($string, $limit)
 	}
 	echo json_encode($users);
 }
+
+function searchKeywords($string)
+{
+	global $AVE_DB;
+
+	$search = "
+		AND (UPPER(keyword) LIKE UPPER('" . $string . "%'))
+	";
+
+	$sql = $AVE_DB->Query("
+		SELECT *
+		FROM " . PREFIX . "_document_keywords
+		WHERE 1"
+		. $search
+	);
+
+	while ($row = $sql->FetchRow())
+	{
+		$keyword = $row->keyword;
+		echo "$keyword\n";
+	}
+}
 ?>

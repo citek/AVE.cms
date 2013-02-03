@@ -236,6 +236,17 @@ $(document).ready(function(){ldelim}
 		return false;
 	{rdelim});
 
+	$("#document_meta_keywords").autocomplete("index.php?do=docs&action=keywords&ajax=run&cp={$sess}", {ldelim}
+		max: 20,
+		width: 300,
+		highlight: false,
+		multiple: true,
+		multipleSeparator: ", ",
+		autoFill: true,
+		scroll: true,
+		scrollHeight: 180
+	{rdelim});
+
 {rdelim});
 </script>
 

@@ -8,9 +8,9 @@ $(document).ready(function() {
 		function format(data) {
 			return "<div class='floatleft'><img src='" + data.avatar + "' class='rounded' /></div>"
 			+"<div class='floatleft pl12'>"
-			+"<span class='name'>Имя:&nbsp;"+data.firstname+" "+data.lastname+"&nbsp;(Id:&nbsp;"+data.userid+")</span>"
-			+"<span class='email'>Email:&nbsp;"+data.email+"</span>"
-			+"<span class='login'>Логин:&nbsp;"+data.login+"</span>"
+			+"<span class='name'><span class='btext'>Имя:</span>&nbsp;"+data.firstname+" "+data.lastname+"&nbsp;(Id:&nbsp;"+data.userid+")</span>"
+			+"<span class='email'><span class='btext'>Email:</span>&nbsp;"+data.email+"</span>"
+			+"<span class='login'><span class='btext'>Логин:</span>&nbsp;"+data.login+"</span>"
 			+"</div>";
 		}
 
@@ -34,8 +34,8 @@ $(document).ready(function() {
 			return data.userid
 		}
 
-		$("#find").autocomplete("index.php?do=docs&action=find_user&ajax=run", {
-			width: $("#find").outerWidth()-2,
+		$("#find").autocomplete("index.php?do=docs&action=find_user&ajax=run&cp={$sess}", {
+			width: $("#find").outerWidth(),
 			max: 10,
 			dataType: "json",
 			matchContains: "word",

@@ -255,7 +255,7 @@ $(document).ready(function(){ldelim}
 	{foreach from=$docs item=item}
 		<tr>
 			<td nowrap="nowrap"><input class="checkbox" name="document[{$item->Id}]" type="checkbox" value="1" {if ($item->cantEdit!=1 || $item->canOpenClose!=1 || $item->canEndDel!=1) && ($item->Id == 1 || $item->Id == $PAGE_NOT_FOUND_ID)}disabled{/if} /></td>
-			<td align="center" nowrap="nowrap"><strong><a class="toprightDir" title="{#DOC_SHOW_TITLE#}" href="../{if $item->Id!=1}index.php?id={$item->Id}&amp;cp={$sess}{/if}" target="_blank">{$item->Id}</a></strong></td>
+			<td align="center" nowrap="nowrap"><strong><a class="toprightDir" title="{#DOC_SHOW_TITLE#}" href="../{if $item->Id!=1}index.php?id={$item->Id}&cp={$sess}{/if}" target="_blank">{$item->Id}</a></strong></td>
 
 			<td>
 				<div class="docaction">

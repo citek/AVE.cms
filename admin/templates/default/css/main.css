@@ -66,6 +66,7 @@ p { padding: 12px 0 0 0; }
 .p12 { padding: 12px; }
 .pt12 { padding-top: 12px; }
 .pr12 { padding-right: 12px; }
+.pl12 { padding-left: 12px; }
 
 .legendLabel span { display: block; margin: 0 5px; }
 .legendColorBox { padding-left: 10px; }
@@ -792,7 +793,6 @@ li.plupload_droptext { background: transparent; text-align: center; vertical-ali
 .ico_recylce_on {background-position: -14px -182px; background-repeat:no-repeat;}
 .ico_recylce_no {background-position: -28px -182px; background-repeat:no-repeat;}
 
-
 .icon_sprite_doc {display: block; width: 16px; height: 16px; background: url(../images/sprites_doc.png) no-repeat; padding: 0px;}
 
 .icon_copy {background-position: 0px -48px; background-repeat:no-repeat;}
@@ -816,10 +816,20 @@ li.plupload_droptext { background: transparent; text-align: center; vertical-ali
 .formError { position: absolute; top: 300px; left: 280px; display: block; z-index: 5000; cursor: pointer; }
 .ajaxSubmit { padding: 20px; background: #55ea55; border: 1px solid #999; display: none; }
 
-
 #customWidget { position: relative; height: 36px; }
 
 .code { background-color: #e8f2ff; color: rgba(0, 0, 0, 0.75); padding: 1px 3px; }
 .code_red { background-color: #ff0000; color: rgba(255, 255, 255, 0.75); padding: 1px 5px; border-radius: 3px; -moz-border-radius: 3px; -webkit-border-radius: 3px;}
 
 .CodeMirror {font-size: 12px;}
+
+.ac_results { padding: 0px; border: 1px solid black; background-color: white; overflow: hidden; z-index: 99999; }
+.ac_results ul { width: 100%; list-style-position: outside; list-style: none; padding: 0; margin: 0; }
+.ac_results li { margin: 0px; padding: 2px 5px; cursor: default; display: block; overflow: hidden; line-height: 14px; }
+.ac_loading { background: white url('../images/loading.gif') right center no-repeat!important; }
+.ac_odd { background-color: #eee; }
+.ac_over { background-color: #336699; color: white; }
+.ac_results li span.name { display: block; }
+.ac_results li span.login { display: block; }
+.ac_results li span.email { display: block; }
+.ac_results li strong { border-bottom: 1px dotted; }

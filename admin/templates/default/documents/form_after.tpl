@@ -15,7 +15,7 @@ $(document).ready(function(){ldelim}
 
 <ul id="doclinks" style="padding-left:70px">
 	<li><span class="icon_sprite ico_edit floatleft"></span>&nbsp;<a href="index.php?do=docs&action=edit&Id={$document_id}&cp={$sess}">{#DOC_EDIT_THIS_DOCUMENT#}</a></li>
-	<li><span class="icon_sprite ico_look floatleft"></span>&nbsp;<a href="../index.php?id={$document_id}" target="_blank">{#DOC_DISPLAY_NEW_WINDOW#}</a><br /><br /></li>
+	<li><span class="icon_sprite ico_look floatleft"></span>&nbsp;<a href="../{if $document_id!=1}index.php?id={$document_id}&cp={$sess}{/if}" target="_blank">{#DOC_DISPLAY_NEW_WINDOW#}</a><br /><br /></li>
 	{if $innavi}
 		<li class="navig"><span class="icon_sprite ico_navigation floatleft"></span><a href="javascript:void(0);" onclick="$('#addInNav').toggle();">{#DOC_INCLUDE_NAVIGATION#}</a><br /><br /></li>
 	{/if}

@@ -167,3 +167,9 @@ ul.inact_tabs li a:hover { color: #fff; }
 .ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { background: url(theme_color_grey/titleBg.png) repeat-x 0 -39px; font-weight: normal; color: #d5d5d5; }
 .ui-state-hover a, .ui-state-hover a:hover { color: #797979; text-decoration: none; }
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { background: url(theme_color_grey/titleBg.png) repeat-x 0 -39px; font-weight: normal; color: #fff; }
+
+.ac_results { padding: 0px; border: none; background-color: #fff; overflow: hidden; z-index: 99999; }
+.ac_odd { background-color: #EBEBEB; }
+.ac_over { background-color: #D6D6D6; color: #484848; }
+.ac_results li { border: 1px solid #C2C2C2; border-top: none; }
+.ac_results li strong { border-bottom: 1px dotted; background-color: #C2C2C2;}

@@ -363,7 +363,7 @@ function get_field_multidropdown($field_value,$type,$field_id='',$rubric_field_t
 	{
 		case 'edit' :
 				$items = explode(',', $dropdown);
-				$field_value = unserialize($field_value);
+				@$field_value = unserialize($field_value);
 				$field = "<select size=\"10\" class=\"select\" style=\"min-width: 300px; max-width: 600px;\" multiple=\"multiple\" name=\"feld[" . $field_id . "][]\">";
 				$cnt = sizeof($items);
 				for ($i=0;$i<$cnt;$i++)

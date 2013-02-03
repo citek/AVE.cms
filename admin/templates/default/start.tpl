@@ -63,7 +63,6 @@
 						<td>{#MAIN_START_DOC_NAME#}</td>
 						<td>{#MAIN_START_DOC_RUBRIC#}</td>
 						<td>{#MAIN_START_DOC_DATE#}</td>
-						<td>{#MAIN_START_DOC_AUTOR#}</td>
 					</tr>
 				</thead>
 				{foreach from=$doc_start item=item}
@@ -91,12 +90,15 @@
 						<td align="center">
 							{if check_permission('rubric_edit')}
 								<a href="index.php?do=rubs&action=edit&Id={$item->rubric_id}&cp={$sess}" class="link">{$item->rubric_title|escape:html}</a>
+                                <br />
+                                <strong>{#MAIN_START_DOC_AUTOR#}:</strong> {$item->document_author|escape}
 							{else}
 								{$item->rubric_title|escape:html}
+                                <br />
+                                <strong>{#MAIN_START_DOC_AUTOR#}:</strong> {$item->document_author|escape}
 							{/if}
 						</td>
 						<td align="center"><span class="date_text dgrey">{$item->document_published|date_format:$TIME_FORMAT|pretty_date}</span></td>
-						<td align="center">{$item->document_author|escape}</td>
 					</tr>
 				{/foreach}
 			</table>
