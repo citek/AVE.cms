@@ -92,11 +92,11 @@ function document_get_field($field_id)
 
 		if ($wysmode)
 		{
-			$f_value .= '<link rel="stylesheet" href="inc/stdimage/gear.css" type="text/css" />';
-			$f_value .= '<div class="contextual-links-wrapper contextual-links-processed">';
-			$f_value .= '<a class="contextual-links-trigger" href="javascript:void(0);" onclick=window.open("'.ABS_PATH.'admin/index.php?do=docs&action=edit&closeafter=1&RubrikId=' . RUB_ID . '&Id=' . ((int)$_REQUEST['id'])
-				. '&pop=1&feld=' . $field_id . '#' . $field_id . '","EDIT","left=0,top=0,width=1300,height=900,scrollbars=1");></a>';
-			$f_value_end .= '</div>';
+			@$f_value .= '<link rel="stylesheet" href="inc/stdimage/gear.css" type="text/css" />';
+			@$f_value .= '<div class="contextual-links-wrapper contextual-links-processed">';
+			@$f_value .= '<a class="contextual-links-trigger" href="javascript:void(0);" onclick=window.open("'.ABS_PATH.'admin/index.php?do=docs&action=edit&closeafter=1&RubrikId=' . RUB_ID . '&Id=' . ((int)$_REQUEST['id'])
+				. '&pop=1&feld=' . @$field_id . '#' . @$field_id . '","EDIT","left=0,top=0,width=1300,height=900,scrollbars=1");></a>';
+			@$f_value_end .= '</div>';
 		}
 	}
 	return @$f_value.@$field_value.@$f_value_end;

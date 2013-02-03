@@ -1,3 +1,4 @@
+{debug}
 {if $smarty.session.use_editor == 1}
 	<!-- elrte -->
 	<link rel="stylesheet" href="{$ABS_PATH}admin/redactor/elrte/css/elrte.full.css" type="text/css" media="screen" />
@@ -266,7 +267,7 @@ $(document).ready(function(){ldelim}
 			{if $smarty.request.action=='edit'}
 	        <li>{#DOC_EDIT_DOCUMENT#}</li>
 			<li><strong>{#DOC_IN_RUBRIK#}</strong> &gt; {$document->rubric_title|escape}</li>
-			<li><strong class="code"><a href="{$document->document_alias}" target="_blank">{$document->document_title}</a></strong></li>
+			<li><strong class="code"><a href="{$document->document_alias_breadcramb}" target="_blank">{$document->document_title}</a></strong></li>
 			{else}
 	        <li>{#DOC_ADD_DOCUMENT#}</li>
 			<li><strong>{#DOC_IN_RUBRIK#}</strong> &gt; {$document->rubric_title|escape}</li>
@@ -304,7 +305,11 @@ $(document).ready(function(){ldelim}
 		<tr>
 			<td>{#DOC_URL#}&nbsp;<a href="javascript:void(0);" style="cursor:help;" class="rightDir link btext" title="{#DOC_URL_INFO#}">[?]</a></td>
 			<td nowrap="nowrap" colspan="3">
-				<div class="pr12"><input name="document_alias" {$dis} type="text" id="document_alias" size="40" style="width:{if $smarty.request.Id != 1 && $smarty.request.Id != $PAGE_NOT_FOUND_ID}400px{else}100%{/if}" value="{if $smarty.request.action=='edit'}{$document->document_alias}{else}{$document->rubric_url_prefix}{/if}" />{if $smarty.request.Id != 1 && $smarty.request.Id != $PAGE_NOT_FOUND_ID}&nbsp;&nbsp;<input type="button" class="basicBtn" id="translit" value="{#DOC_ALIAS_CREATE#}" />{/if}</div>
+				<div class="pr12"><input name="document_alias" {$dis} type="text" id="document_alias" size="40" style="width:{if $smarty.request.Id != 1 && $smarty.request.Id != $PAGE_NOT_FOUND_ID}400px{else}100%{/if}" value="{if $smarty.request.action=='edit'}{$document->document_alias}{else}{$document->rubric_url_prefix}{/if}" />
+					{if $smarty.request.Id != 1 && $smarty.request.Id != $PAGE_NOT_FOUND_ID}
+					&nbsp;&nbsp;<input type="button" class="basicBtn" id="translit" value="{#DOC_ALIAS_CREATE#}" />
+					{/if}
+				</div>
 				<span id="loading" style="display:none"></span>
 				<span id="checkResult"></span>
 			</td>

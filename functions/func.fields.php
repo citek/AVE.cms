@@ -380,7 +380,7 @@ function get_field_multidropdown($field_value,$type,$field_id='',$rubric_field_t
 			break;
 
 		case 'doc' :
-			$massa=unserialize($field_value);
+			@$massa=unserialize($field_value);
 			$res='';
 			if($massa!=false)
 				foreach($massa as $k=>$v)
