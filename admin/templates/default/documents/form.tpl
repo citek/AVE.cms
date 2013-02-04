@@ -1,4 +1,3 @@
-{debug}
 {if $smarty.session.use_editor == 1}
 	<!-- elrte -->
 	<link rel="stylesheet" href="{$ABS_PATH}admin/redactor/elrte/css/elrte.full.css" type="text/css" media="screen" />
@@ -267,7 +266,7 @@ $(document).ready(function(){ldelim}
 			{if $smarty.request.action=='edit'}
 	        <li>{#DOC_EDIT_DOCUMENT#}</li>
 			<li><strong>{#DOC_IN_RUBRIK#}</strong> &gt; {$document->rubric_title|escape}</li>
-			<li><strong class="code"><a href="{$document->document_alias_breadcramb}" target="_blank">{$document->document_title}</a></strong></li>
+			<li><strong class="code"><a href="{$document->document_alias_breadcrumb}" target="_blank">{$document->document_title}</a></strong></li>
 			{else}
 	        <li>{#DOC_ADD_DOCUMENT#}</li>
 			<li><strong>{#DOC_IN_RUBRIK#}</strong> &gt; {$document->rubric_title|escape}</li>

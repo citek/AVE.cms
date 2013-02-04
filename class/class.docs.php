@@ -1340,7 +1340,7 @@ class AVE_Document
 
 					// Формируем ряд переменных и передаем их в шаблон для вывода
 					$document->fields = $fields;
-					$document->document_alias_breadcramb = rewrite_link('index.php?id=' . $document->Id . '&amp;doc=' . (empty($document->document_alias) ? prepare_url($document->document_title) : $document->document_alias));
+					$document->document_alias_breadcrumb = rewrite_link('index.php?id=' . $document->Id . '&amp;doc=' . (empty($document->document_alias) ? prepare_url($document->document_title) : $document->document_alias));
 					$document->rubric_title = $AVE_Rubric->rubricNameByIdGet($document->rubric_id)->rubric_title;
 					$document->rubric_url_prefix = $AVE_Rubric->rubricNameByIdGet($document->rubric_id)->rubric_alias;
 					$document->formaction = 'index.php?do=docs&action=edit&sub=save&Id=' . $document_id . '&cp=' . SESSION;

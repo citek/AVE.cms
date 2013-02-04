@@ -7,8 +7,16 @@
  * @filesource
  */
 
-error_reporting(E_NONE);
-ini_set('display_errors',7);
+if (!PHP_DEBUGGING)
+{
+	error_reporting(E_NONE);
+	ini_set('display_errors',7);
+}
+else
+{
+	error_reporting(E_ALL);
+	ini_set('display_errors',1);
+}
 
 if (!defined('BASE_DIR')) exit;
 
