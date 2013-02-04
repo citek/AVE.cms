@@ -49,6 +49,7 @@ $GLOBALS['CMS_CONFIG']['PROFILING'] = array('DESCR' =>'Вывод статист
 $GLOBALS['CMS_CONFIG']['MEMORY_LIMIT_PANIC'] = array('DESCR' =>'Пытаться очистить память если выходит за пределы ("-1" выключенно) в Мегабайтах (увеличивается нагрузка на MySQL)','default'=>-1,'TYPE'=>'dropdown','VARIANT'=>array('-1','6','12','28','54','100'));
 $GLOBALS['CMS_CONFIG']['SEND_SQL_ERROR'] = array('DESCR' =>'Отправка писем с ошибками MySQL','default'=>false,'TYPE'=>'bool','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['SMARTY_COMPILE_CHECK'] = array('DESCR' =>'Контролировать изменения tpl файлов После настройки сайта установить - false','default'=>true,'TYPE'=>'bool','VARIANT'=>'');
+$GLOBALS['CMS_CONFIG']['PHP_DEBUGGING'] = array('DESCR' =>'Включить обработку ошибок PHP','default'=>true,'TYPE'=>'bool','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['SMARTY_DEBUGGING'] = array('DESCR' =>'Консоль отладки Smarty','default'=>false,'TYPE'=>'bool','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['SMARTY_USE_SUB_DIRS'] = array('DESCR' =>'Создание папок для кэширования Установите это в false если ваше окружение PHP не разрешает создание директорий от имени Smarty. Поддиректории более эффективны, так что используйте их, если можете.','default'=>true,'TYPE'=>'bool','VARIANT'=>'');
 $GLOBALS['CMS_CONFIG']['CACHE_DOC_TPL'] = array('DESCR' =>'Кэширование скомпилированных шаблонов документов','default'=>true,'TYPE'=>'bool','VARIANT'=>'');
