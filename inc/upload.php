@@ -20,7 +20,7 @@ if (!isset($_SESSION['user_id']))
 }
 
 // Settings
-$targetDir = BASE_DIR.'/uploads/'.$_REQUEST["path_upload"];
+$targetDir = BASE_DIR.'/'. UPLOAD_DIR .'/'.$_REQUEST["path_upload"];
 
 $cleanupTargetDir = true; // Remove old files
 $maxFileAge = 5 * 3600; // Temp file age in seconds

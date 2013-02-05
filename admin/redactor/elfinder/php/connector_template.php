@@ -236,6 +236,20 @@ $opts = array(
                     'write' => false,
                     'locked' => false,
                     'hidden' => true
+                ),
+                array(
+                    'pattern' => '/.uploader/',
+                    'read' => false,
+                    'write' => false,
+                    'hidden' => true,
+                    'locked' => false
+                ),
+                array(
+                    'pattern' => '/.temp/',
+                    'read' => false,
+                    'write' => false,
+                    'hidden' => true,
+                    'locked' => false
                 )
 			),
 		)

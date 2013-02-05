@@ -30,7 +30,7 @@ $().ready(function() {
 				}
 			}
 		})
-	});	
+	});
 
 	
 	$('#elFinder a').hover(
@@ -74,9 +74,9 @@ $().ready(function() {
                    oncomplete : 'destroy'
                }
 	           },
-	          getFileCallback: function(file) {callback(file['url']);}
+	          getFileCallback: callback
 	      })
-		}	
+		}
 	};
 	$('.editor').elrte(opt);
 
